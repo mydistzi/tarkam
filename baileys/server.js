@@ -22,8 +22,8 @@ const HOSTED_MEDIA_DIR = path.join(STATE_DIR, "hosted-media");
 const SENT_MESSAGE_INDEX_FILE = path.join(STATE_DIR, "sent-message-index.json");
 const CONTACT_INDEX_FILE = path.join(STATE_DIR, "contacts.json");
 
-const HOST = process.env.BAILEYS_HOST || "0.0.0.0";
-const PORT = Number(process.env.BAILEYS_PORT || 3010);
+const HOST = process.env.BAILEYS_HOST || process.env.HOST || "0.0.0.0";
+const PORT = Number(process.env.BAILEYS_PORT || process.env.PORT || 3010);
 const API_TOKEN = (process.env.BAILEYS_API_TOKEN || "").trim();
 const TARKAM_BOT_WEBHOOK_URL = (
   process.env.TARKAM_BOT_WEBHOOK_URL || "http://127.0.0.1:5000/webhook"
