@@ -185,7 +185,7 @@ function Footers({ site_name, author_name, copyRight, Year, instagram_url, faceb
       </div>
 
       <span onClick={topFunction} id="movetop" title="Go to top">
-        <img src="/src/assets/images/to-top.png" alt="Go to top" />
+        <img src="/to-top.png" alt="Go to top" />
       </span>
     </footer>
   );
