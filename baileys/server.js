@@ -16,11 +16,24 @@ import qrcode from "qrcode-terminal";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
-const AUTH_DIR = path.join(ROOT_DIR, ".baileys-auth");
-const STATE_DIR = path.join(ROOT_DIR, ".baileys-state");
-const HOSTED_MEDIA_DIR = path.join(STATE_DIR, "hosted-media");
-const SENT_MESSAGE_INDEX_FILE = path.join(STATE_DIR, "sent-message-index.json");
-const CONTACT_INDEX_FILE = path.join(STATE_DIR, "contacts.json");
+const BAILEYS_DATA_DIR = path.resolve(
+  process.env.BAILEYS_DATA_DIR || path.join(ROOT_DIR, ".baileys-data")
+);
+const AUTH_DIR = path.resolve(
+  process.env.BAILEYS_AUTH_DIR || path.join(BAILEYS_DATA_DIR, "auth")
+);
+const STATE_DIR = path.resolve(
+  process.env.BAILEYS_STATE_DIR || path.join(BAILEYS_DATA_DIR, "state")
+);
+const HOSTED_MEDIA_DIR = path.resolve(
+  process.env.BAILEYS_HOSTED_MEDIA_DIR || path.join(STATE_DIR, "hosted-media")
+);
+const SENT_MESSAGE_INDEX_FILE = path.resolve(
+  process.env.BAILEYS_SENT_MESSAGE_INDEX_FILE || path.join(STATE_DIR, "sent-message-index.json")
+);
+const CONTACT_INDEX_FILE = path.resolve(
+  process.env.BAILEYS_CONTACT_INDEX_FILE || path.join(STATE_DIR, "contacts.json")
+);
 
 const HOST = process.env.BAILEYS_HOST || process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.BAILEYS_PORT || process.env.PORT || 3010);
