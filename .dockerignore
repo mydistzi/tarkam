@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.gitignore
+.baileys-auth
+.baileys-state
+.baileys-data
+.tmp-upload-host-test
+README.md
