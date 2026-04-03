@@ -280,7 +280,7 @@ function App() {
       />
       <Navbar brandName={meta?.first_name ? meta.first_name : "Tarkam"} navItems={menus} />
         <Header sliders={slides} />
-        {meta?.about_description && <About description={meta.about_description} imageSrc={meta?.about_image || "/src/assets/images/about.jpg"} altText={meta?.about_image_alt || "about tarkam"} />}
+        {meta?.about_description && <About description={meta.about_description} imageSrc={meta?.about_image || "/about.jpg"} altText={meta?.about_image_alt || "about tarkam"} />}
         <Platform platforms={platforms} />
         <Leaderboards categories={leaderboardCategories} leaderboards={leaderboards} />
         <Blogs blogs={blogs} />
