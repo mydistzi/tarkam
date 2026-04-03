@@ -574,7 +574,7 @@ a:focus, a:hover {
 /*-- About --*/
 
 .distaboutaits {
-	background-image: url(./src/assets/images/tabs-bg.jpg);
+	background-image: url(./tabs-bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -724,7 +724,7 @@ a:focus, a:hover {
 /*-- Tabs --*/
 
 .zethtabsaits {
-	background-image: url(./src/assets/images/tabs-bg.jpg);
+	background-image: url(./tabs-bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -1277,7 +1277,7 @@ figure.effect-apollo:hover figcaption::before {
 /*-- Stats --*/
 
 .diststatsaits {
-	background: url("./src/assets/images/stats.jpg");
+	background: url("./stats.jpg");
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-position: center;
@@ -1388,7 +1388,7 @@ figure.effect-apollo:hover figcaption::before {
 /*-- Contact --*/
 
 .agilecontactdist {
-	background-image: url(./src/assets/images/tabs-bg.jpg);
+	background-image: url(./tabs-bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
