@@ -1,8 +1,8 @@
-# Tarkam Frontend + Baileys Bridge
+# Tarkam Frontend + Bridge Baileys
 
-Project `tarkam` tetap berfungsi sebagai frontend React/Vite, dan sekarang juga menyediakan bridge WhatsApp berbasis Baileys untuk dipakai oleh `tarkam-bot`.
+Proyek `tarkam` tetap berfungsi sebagai frontend React/Vite, dan sekarang juga menyediakan bridge WhatsApp berbasis Baileys untuk dipakai oleh `tarkam-bot`.
 
-## Baileys Bridge
+## Bridge Baileys
 
 Bridge ini menjalankan koneksi WhatsApp Web dengan Baileys lalu mengekspos endpoint HTTP yang kompatibel dengan kebutuhan `tarkam-bot`, seperti:
 
@@ -14,13 +14,13 @@ Bridge ini menjalankan koneksi WhatsApp Web dengan Baileys lalu mengekspos endpo
 - `POST /api/whatsapp/groups/:groupId/leave`
 - `GET /api/whatsapp/session`
 
-Script untuk menjalankannya:
+Perintah untuk menjalankannya:
 
 ```bash
 npm run whatsapp:baileys
 ```
 
-Environment yang umum dipakai:
+Variabel environment yang umum dipakai:
 
 - `BAILEYS_PORT=3010`
 - `BAILEYS_HOST=0.0.0.0`
@@ -33,7 +33,7 @@ Direktori sesi dan metadata lokal akan disimpan di:
 - `.baileys-auth/`
 - `.baileys-state/`
 
-Saat dipakai bersama `tarkam-bot`, set environment berikut di bot:
+Saat dipakai bersama `tarkam-bot`, atur environment berikut di bot:
 
 ```env
 WHATSAPP_PROVIDER=baileys
@@ -41,22 +41,22 @@ BAILEYS_BASE_API_URL=http://127.0.0.1:3010/api/whatsapp/
 BAILEYS_API_TOKEN=
 ```
 
-# React + TypeScript + Vite
+## React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Template ini menyediakan konfigurasi minimal agar React berjalan di Vite dengan HMR dan sejumlah aturan ESLint.
 
-Currently, two official plugins are available:
+Saat ini tersedia dua plugin resmi:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) menggunakan [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) menggunakan [SWC](https://swc.rs/)
 
 ## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+React Compiler belum diaktifkan pada template ini karena dampaknya terhadap performa pengembangan dan build. Jika ingin menambahkannya, lihat [dokumentasi ini](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+## Memperluas Konfigurasi ESLint
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Jika Anda mengembangkan aplikasi produksi, disarankan memperbarui konfigurasi agar mendukung aturan lint yang memahami tipe data:
 
 ```js
 export default defineConfig([
@@ -64,29 +64,29 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
-      // Other configs...
+      // Konfigurasi lain...
 
-      // Remove tseslint.configs.recommended and replace with this
+      // Hapus tseslint.configs.recommended lalu ganti dengan ini
       tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
+      // Alternatifnya, gunakan ini untuk aturan yang lebih ketat
       tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
+      // Opsional, tambahkan ini untuk aturan gaya penulisan
       tseslint.configs.stylisticTypeChecked,
 
-      // Other configs...
+      // Konfigurasi lain...
     ],
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname,
       },
-      // other options...
+      // Opsi lain...
     },
   },
 ])
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Anda juga bisa memasang [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) dan [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) untuk aturan lint yang lebih spesifik ke React:
 
 ```js
 // eslint.config.js
@@ -98,10 +98,10 @@ export default defineConfig([
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
-      // Other configs...
-      // Enable lint rules for React
+      // Konfigurasi lain...
+      // Aktifkan aturan lint untuk React
       reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
+      // Aktifkan aturan lint untuk React DOM
       reactDom.configs.recommended,
     ],
     languageOptions: {
@@ -109,67 +109,67 @@ export default defineConfig([
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname,
       },
-      // other options...
+      // Opsi lain...
     },
   },
 ])
 ```
 
-## Sitemap Generator
+## Generator Sitemap
 
-This project includes an automatic sitemap generator using Express and the sitemap package.
+Proyek ini menyertakan generator sitemap otomatis menggunakan Express dan paket `sitemap`.
 
-### Features
+### Fitur
 
-- **Dynamic Sitemap Generation**: Automatically generates sitemap.xml based on your API data
-- **API Integration**: Fetches blog posts, categories, and other content from your Laravel API
-- **SEO Optimized**: Includes proper priority, changefreq, and lastmod values
-- **Gzip Compression**: Serves compressed sitemaps for better performance
+- **Pembuatan Sitemap Dinamis**: Secara otomatis membuat `sitemap.xml` berdasarkan data dari API
+- **Integrasi API**: Mengambil data blog, kategori, dan konten lain dari Laravel API
+- **Dioptimalkan untuk SEO**: Menyertakan nilai `priority`, `changefreq`, dan `lastmod` yang sesuai
+- **Kompresi Gzip**: Menyajikan sitemap terkompresi untuk performa yang lebih baik
 
-### Usage
+### Cara Penggunaan
 
-#### Development
+#### Pengembangan
 
 ```bash
 npm run sitemap:dev
 ```
 
-This starts the sitemap server on port 3001 with localhost URLs.
+Perintah ini menjalankan server sitemap di port 3001 dengan URL localhost.
 
-#### Production
+#### Produksi
 
 ```bash
 npm run sitemap
 ```
 
-This starts the sitemap server with production URLs (set BASE_URL environment variable).
+Perintah ini menjalankan server sitemap dengan URL produksi, menggunakan variabel environment `BASE_URL`.
 
-#### Environment Variables
+#### Variabel Environment
 
-- `BASE_URL`: Your website's base URL (default: <http://localhost:5173>)
-- `PORT`: Server port (default: 3001)
+- `BASE_URL`: URL dasar website Anda. Nilai bawaan: <http://localhost:5173>
+- `PORT`: Port server. Nilai bawaan: `3001`
 
-### Endpoints
+### Endpoint
 
-- `GET /sitemap.xml` - Compressed sitemap
-- `GET /sitemap-plain.xml` - Uncompressed sitemap for debugging
-- `GET /health` - Health check endpoint
+- `GET /sitemap.xml` - Sitemap terkompresi
+- `GET /sitemap-plain.xml` - Sitemap tanpa kompresi untuk debugging
+- `GET /health` - Endpoint pemeriksaan kesehatan layanan
 
-### Integration
+### Integrasi
 
-The sitemap includes:
+Sitemap ini mencakup:
 
-- Homepage (/)
-- Individual blog posts (/blog/{id})
-- Categories (/category/{id})
-- Static pages (/about, /contact, /gallery, /platforms)
+- Halaman utama (`/`)
+- Halaman detail blog (`/blog/{id}`)
+- Halaman kategori (`/category/{id}`)
+- Halaman statis (`/about`, `/contact`, `/gallery`, `/platforms`)
 
-### API Dependencies
+### Dependensi API
 
-The sitemap generator expects your Laravel API to provide:
+Generator sitemap mengharapkan Laravel API Anda menyediakan:
 
-- `/api/v1/blogs` - Blog posts data
-- `/api/v1/categories` - Categories data
-- `/api/v1/web-setting` - Website settings
+- `/api/v1/blogs` - Data artikel blog
+- `/api/v1/categories` - Data kategori
+- `/api/v1/web-setting` - Data pengaturan website
 
-Make sure your API server is running when generating the sitemap.
+Pastikan server API Anda sedang berjalan saat proses pembuatan sitemap dilakukan.
