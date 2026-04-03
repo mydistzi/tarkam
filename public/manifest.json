@@ -1,0 +1,110 @@
+{
+	"name":"Tarkam Streaming and WAR",
+	"short_name":"Tarkam",
+	"description":"Fun Group Random Team",
+	"start_url":"/",
+	"lang":"en-US",
+	"display":"standalone",
+	"orientation":"portrait",
+	"theme_color":"#b69b16",
+	"background_color":"#04040f",
+	"icons": [
+		{
+			"purpose":"maskable",
+			"sizes":"72x72",
+			"src":"icons/maskable/logo72.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "96x96",
+			"src": "icons/maskable/logo96.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "128x128",
+			"src": "icons/maskable/logo128.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "144x144",
+			"src": "icons/maskable/logo144.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "152x152",
+			"src": "icons/maskable/logo152.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "192x192",
+			"src": "icons/maskable/logo192.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "384x384",
+			"src": "icons/maskable/logo384.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"maskable",
+			"sizes": "512x512",
+			"src": "icons/maskable/logo512.png",
+			"type": "image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"72x72",
+			"src":"icons/rounded/logo72.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"96x96",
+			"src":"icons/rounded/logo96.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"128x128",
+			"src":"icons/rounded/logo128.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"144x144",
+			"src":"icons/rounded/logo144.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"152x152",
+			"src":"icons/rounded/logo152.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"192x192",
+			"src":"icons/rounded/logo192.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"384x384",
+			"src":"icons/rounded/logo384.png",
+			"type":"image/png"
+		},
+		{
+			"purpose":"any",
+			"sizes":"512x512",
+			"src":"icons/rounded/logo512.png",
+			"type":"image/png"
+		}
+	],
+	"splash_pages": null
+}
