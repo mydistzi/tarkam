@@ -228,3 +228,35 @@ Jika belum ada SSL:
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d tarkam.fun -d www.tarkam.fun
 ```
+
+### Deploy Vercel
+
+Sitemap sekarang juga siap dijalankan langsung di Vercel melalui Vercel Functions tanpa perlu Express server terpisah.
+
+Route yang tersedia di Vercel:
+
+- `/sitemap.xml`
+- `/sitemap-plain.xml`
+- `/health-sitemap`
+
+File yang menangani route ini:
+
+- [api/sitemap.js](/D:/Work/Website/tarkam/api/sitemap.js)
+- [api/sitemap-plain.js](/D:/Work/Website/tarkam/api/sitemap-plain.js)
+- [api/health-sitemap.js](/D:/Work/Website/tarkam/api/health-sitemap.js)
+
+Langkah setup project Vercel:
+
+1. Import repo ke Vercel.
+2. Set `Root Directory` ke `tarkam`.
+3. Gunakan framework preset `Vite`.
+4. Set `Build Command` ke `npm run build`.
+5. Set `Output Directory` ke `dist`.
+6. Tambahkan environment variables:
+
+```env
+BASE_URL=https://tarkam.fun
+API_BASE_URL=https://tarkam-api-web-production.up.railway.app/api/v1
+```
+
+Routing sitemap di-handle oleh [vercel.json](/D:/Work/Website/tarkam/vercel.json), dan fallback SPA tetap dipertahankan untuk route frontend React.
