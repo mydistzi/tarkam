@@ -477,6 +477,7 @@ async function forwardIncomingMessageToTarkamBot(payload) {
     const responseText = await response.text();
     logger.warn(
       {
+        webhookTarget: TARKAM_BOT_WEBHOOK_URL,
         status: response.status,
         response: responseText.slice(0, 300),
       },
@@ -514,7 +515,15 @@ async function handleMessagesUpsert(event) {
     try {
       await forwardIncomingMessageToTarkamBot(normalizeIncomingPayload(message));
     } catch (error) {
-      logger.warn({ err: error }, "Failed to forward incoming Baileys message to tarkam-bot");
+      logger.warn(
+        {
+          err: error,
+          webhookTarget: TARKAM_BOT_WEBHOOK_URL,
+          messageId: message?.key?.id || null,
+          remoteJid: message?.key?.remoteJid || null,
+        },
+        "Failed to forward incoming Baileys message to tarkam-bot"
+      );
     }
   }
 }
@@ -1094,6 +1103,17 @@ app.use((error, req, res, _next) => {
 
 async function bootstrap() {
   await connectBaileys();
+
+  if (
+    !TARKAM_BOT_WEBHOOK_URL
+    || TARKAM_BOT_WEBHOOK_URL.includes("127.0.0.1")
+    || TARKAM_BOT_WEBHOOK_URL.includes("localhost")
+  ) {
+    logger.warn(
+      { webhookTarget: TARKAM_BOT_WEBHOOK_URL },
+      "TARKAM_BOT_WEBHOOK_URL looks local or empty; incoming Baileys messages may fail to reach tarkam-bot in Railway"
+    );
+  }
 
   app.listen(PORT, HOST, () => {
     logger.info(
