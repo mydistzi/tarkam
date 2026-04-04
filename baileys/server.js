@@ -11,6 +11,7 @@ import makeWASocket, {
   useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
 import pino from "pino";
+import QRCode from "qrcode";
 import qrcode from "qrcode-terminal";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +28,12 @@ const STATE_DIR = path.resolve(
 );
 const HOSTED_MEDIA_DIR = path.resolve(
   process.env.BAILEYS_HOSTED_MEDIA_DIR || path.join(STATE_DIR, "hosted-media")
+);
+const QR_DIR = path.resolve(
+  process.env.BAILEYS_QR_DIR || path.join(STATE_DIR, "qr")
+);
+const CURRENT_QR_IMAGE_FILE = path.resolve(
+  process.env.BAILEYS_QR_IMAGE_FILE || path.join(QR_DIR, "current-qr.png")
 );
 const SENT_MESSAGE_INDEX_FILE = path.resolve(
   process.env.BAILEYS_SENT_MESSAGE_INDEX_FILE || path.join(STATE_DIR, "sent-message-index.json")
@@ -75,6 +82,7 @@ app.use((error, req, res, next) => {
 fs.mkdirSync(AUTH_DIR, { recursive: true });
 fs.mkdirSync(STATE_DIR, { recursive: true });
 fs.mkdirSync(HOSTED_MEDIA_DIR, { recursive: true });
+fs.mkdirSync(QR_DIR, { recursive: true });
 
 app.use(
   "/hosted-media",
@@ -120,6 +128,31 @@ function printQrToTerminal(qrValue) {
   lastPrintedQr = qrText;
   logger.info("WhatsApp QR updated. Scan the QR shown below in your terminal.");
   qrcode.generate(qrText, { small: true });
+}
+
+async function saveQrToPng(qrValue) {
+  const qrText = String(qrValue || "").trim();
+  if (!qrText) {
+    return;
+  }
+
+  fs.mkdirSync(QR_DIR, { recursive: true });
+  await QRCode.toFile(CURRENT_QR_IMAGE_FILE, qrText, {
+    errorCorrectionLevel: "M",
+    margin: 2,
+    width: 512,
+    type: "png",
+  });
+}
+
+function clearSavedQrPng() {
+  try {
+    if (fs.existsSync(CURRENT_QR_IMAGE_FILE)) {
+      fs.unlinkSync(CURRENT_QR_IMAGE_FILE);
+    }
+  } catch (error) {
+    logger.warn({ err: error, file: CURRENT_QR_IMAGE_FILE }, "Failed to remove saved QR PNG");
+  }
 }
 
 function normalizePhone(value) {
@@ -744,6 +777,11 @@ async function connectBaileys() {
   nextSocket.ev.on("connection.update", async (update) => {
     if (update?.qr) {
       currentQr = update.qr;
+      try {
+        await saveQrToPng(update.qr);
+      } catch (error) {
+        logger.warn({ err: error }, "Failed to save QR PNG");
+      }
       printQrToTerminal(update.qr);
     }
 
@@ -754,6 +792,7 @@ async function connectBaileys() {
     if (update?.connection === "open") {
       currentQr = null;
       lastPrintedQr = null;
+      clearSavedQrPng();
       lastDisconnectInfo = null;
       logger.info({ user: nextSocket?.user || null }, "Baileys connection opened");
     }
@@ -815,10 +854,25 @@ app.get("/api/whatsapp/session", (_req, res) => {
       connection: connectionState,
       qr: currentQr,
       qrAvailable: Boolean(currentQr),
+      qrPngAvailable: fs.existsSync(CURRENT_QR_IMAGE_FILE),
+      qrPngPath: CURRENT_QR_IMAGE_FILE,
       user: sock?.user || null,
       lastDisconnect: lastDisconnectInfo,
     },
   });
+});
+
+app.get("/api/whatsapp/qr.png", (_req, res) => {
+  if (!fs.existsSync(CURRENT_QR_IMAGE_FILE)) {
+    res.status(404).json({
+      success: false,
+      error: "QR code PNG is not available.",
+      connection: connectionState,
+    });
+    return;
+  }
+
+  res.sendFile(CURRENT_QR_IMAGE_FILE);
 });
 
 app.post("/api/whatsapp/send-message", requireApiToken, async (req, res) => {
