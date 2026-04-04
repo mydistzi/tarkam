@@ -1,11 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import { createHmac } from "node:crypto";
+import { createHash, createHmac } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 import express from "express";
 import makeWASocket, {
   DisconnectReason,
+  downloadMediaMessage,
   fetchLatestBaileysVersion,
   proto,
   useMultiFileAuthState,
@@ -44,6 +45,9 @@ const CONTACT_INDEX_FILE = path.resolve(
 
 const HOST = process.env.BAILEYS_HOST || process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.BAILEYS_PORT || process.env.PORT || 3010);
+const BAILEYS_PUBLIC_BASE_URL = (
+  process.env.BAILEYS_PUBLIC_BASE_URL || `http://127.0.0.1:${PORT}`
+).trim().replace(/\/$/, "");
 const API_TOKEN = (process.env.BAILEYS_API_TOKEN || "").trim();
 const TARKAM_BOT_WEBHOOK_URL = (
   process.env.TARKAM_BOT_WEBHOOK_URL || "http://127.0.0.1:5000/webhook"
@@ -216,37 +220,63 @@ function isOwnJid(value) {
 }
 
 function detectMessageType(messageContent) {
+  const normalizedContent = unwrapMessageContent(messageContent);
+  if (!normalizedContent || typeof normalizedContent !== "object") {
+    return null;
+  }
+  return Object.keys(normalizedContent)[0] || null;
+}
+
+function unwrapMessageContent(messageContent) {
   if (!messageContent || typeof messageContent !== "object") {
     return null;
   }
-  return Object.keys(messageContent)[0] || null;
+
+  if (messageContent.ephemeralMessage?.message) {
+    return unwrapMessageContent(messageContent.ephemeralMessage.message);
+  }
+  if (messageContent.viewOnceMessage?.message) {
+    return unwrapMessageContent(messageContent.viewOnceMessage.message);
+  }
+  if (messageContent.viewOnceMessageV2?.message) {
+    return unwrapMessageContent(messageContent.viewOnceMessageV2.message);
+  }
+  if (messageContent.viewOnceMessageV2Extension?.message) {
+    return unwrapMessageContent(messageContent.viewOnceMessageV2Extension.message);
+  }
+  if (messageContent.documentWithCaptionMessage?.message) {
+    return unwrapMessageContent(messageContent.documentWithCaptionMessage.message);
+  }
+
+  return messageContent;
 }
 
 function extractMessageText(messageContent) {
-  if (!messageContent || typeof messageContent !== "object") {
+  const normalizedContent = unwrapMessageContent(messageContent);
+  if (!normalizedContent || typeof normalizedContent !== "object") {
     return "";
   }
 
-  if (typeof messageContent.conversation === "string") {
-    return messageContent.conversation;
+  if (typeof normalizedContent.conversation === "string") {
+    return normalizedContent.conversation;
   }
-  if (typeof messageContent.extendedTextMessage?.text === "string") {
-    return messageContent.extendedTextMessage.text;
+  if (typeof normalizedContent.extendedTextMessage?.text === "string") {
+    return normalizedContent.extendedTextMessage.text;
   }
-  if (typeof messageContent.imageMessage?.caption === "string") {
-    return messageContent.imageMessage.caption;
+  if (typeof normalizedContent.imageMessage?.caption === "string") {
+    return normalizedContent.imageMessage.caption;
   }
-  if (typeof messageContent.videoMessage?.caption === "string") {
-    return messageContent.videoMessage.caption;
+  if (typeof normalizedContent.videoMessage?.caption === "string") {
+    return normalizedContent.videoMessage.caption;
   }
-  if (typeof messageContent.buttonsResponseMessage?.selectedButtonId === "string") {
-    return messageContent.buttonsResponseMessage.selectedButtonId;
+  if (typeof normalizedContent.buttonsResponseMessage?.selectedButtonId === "string") {
+    return normalizedContent.buttonsResponseMessage.selectedButtonId;
   }
-  if (typeof messageContent.listResponseMessage?.title === "string") {
-    return messageContent.listResponseMessage.title;
+  if (typeof normalizedContent.listResponseMessage?.title === "string") {
+    return normalizedContent.listResponseMessage.title;
   }
-  if (typeof messageContent.reactionMessage?.text === "string") {
-    return messageContent.reactionMessage.text;
+  if (typeof normalizedContent.reactionMessage?.text === "string") {
+    return normalizedContent.reactionMessage.text;
   }
 
   return "";
@@ -264,6 +294,107 @@ function toEpochMilliseconds(value) {
     return Math.floor(numeric * 1000);
   }
   return Math.floor(numeric);
+}
+
+function guessMediaExtension(mimeType, fallbackExtension = ".bin") {
+  const normalizedMime = String(mimeType || "").split(";")[0].trim().toLowerCase();
+  const extensionMap = {
+    "image/jpeg": ".jpg",
+    "image/jpg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+    "video/mp4": ".mp4",
+    "video/quicktime": ".mov",
+    "video/webm": ".webm",
+  };
+  return extensionMap[normalizedMime] || fallbackExtension;
+}
+
+function buildHostedMediaUrl(fileName) {
+  return `${BAILEYS_PUBLIC_BASE_URL}/hosted-media/${encodeURIComponent(fileName)}`;
+}
+
+function cleanupHostedMediaDir(maxAgeMs = 60 * 60 * 1000) {
+  const now = Date.now();
+  try {
+    for (const fileName of fs.readdirSync(HOSTED_MEDIA_DIR)) {
+      const filePath = path.join(HOSTED_MEDIA_DIR, fileName);
+      const stats = fs.statSync(filePath, { throwIfNoEntry: false });
+      if (!stats?.isFile()) {
+        continue;
+      }
+      if (now - stats.mtimeMs > maxAgeMs) {
+        try {
+          fs.unlinkSync(filePath);
+        } catch (error) {
+          logger.warn({ err: error, filePath }, "Failed to clean stale hosted media");
+        }
+      }
+    }
+  } catch (error) {
+    logger.warn({ err: error, dir: HOSTED_MEDIA_DIR }, "Failed to scan hosted media directory");
+  }
+}
+
+async function maybeStoreIncomingMedia(message) {
+  const normalizedMessage = unwrapMessageContent(message?.message);
+  const messageType = detectMessageType(normalizedMessage);
+  if (!normalizedMessage || !["imageMessage", "videoMessage", "stickerMessage"].includes(messageType || "")) {
+    return null;
+  }
+
+  const mediaNode = normalizedMessage?.[messageType];
+  if (!mediaNode || typeof mediaNode !== "object") {
+    return null;
+  }
+
+  const fallbackExtension = messageType === "videoMessage"
+    ? ".mp4"
+    : messageType === "stickerMessage"
+      ? ".webp"
+      : ".jpg";
+  const mimeType = String(mediaNode.mimetype || "").trim().toLowerCase()
+    || (messageType === "videoMessage" ? "video/mp4" : messageType === "stickerMessage" ? "image/webp" : "image/jpeg");
+
+  try {
+    const downloaded = await downloadMediaMessage(
+      message,
+      "buffer",
+      {},
+      {
+        logger,
+        reuploadRequest: sock.updateMediaMessage,
+      }
+    );
+    const mediaBuffer = Buffer.isBuffer(downloaded) ? downloaded : Buffer.from(downloaded || []);
+    if (!mediaBuffer.length) {
+      return null;
+    }
+
+    cleanupHostedMediaDir();
+    const digest = createHash("sha1").update(mediaBuffer).digest("hex").slice(0, 16);
+    const extension = guessMediaExtension(mimeType, fallbackExtension);
+    const fileName = `${Date.now()}-${digest}${extension}`;
+    const filePath = path.join(HOSTED_MEDIA_DIR, fileName);
+    fs.writeFileSync(filePath, mediaBuffer);
+
+    return {
+      mediaUrl: buildHostedMediaUrl(fileName),
+      mediaMimeType: mimeType,
+      mediaFileName: String(mediaNode.fileName || fileName).trim() || fileName,
+    };
+  } catch (error) {
+    logger.warn(
+      {
+        err: error,
+        messageId: message?.key?.id || null,
+        remoteJid: message?.key?.remoteJid || null,
+        messageType,
+      },
+      "Failed to store incoming WhatsApp media for moderation"
+    );
+    return null;
+  }
 }
 
 function rememberContact(jid, updates = {}) {
@@ -397,7 +528,7 @@ function buildMessageKey(record, { forceFromMe = true } = {}) {
   };
 }
 
-function normalizeIncomingPayload(message) {
+async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
   const participantJid = String(message?.key?.participant || "").trim();
   const senderJid = participantJid || remoteJid;
@@ -406,7 +537,8 @@ function normalizeIncomingPayload(message) {
   const pushName = message?.pushName || contactIndex[senderJid]?.name || contactIndex[senderJid]?.pushName || plainPhone(senderJid);
   const timestamp = toEpochMilliseconds(message?.messageTimestamp);
   const reactionMessage = message?.message?.reactionMessage;
-  let normalizedMessage = message?.message || {};
+  let normalizedMessage = unwrapMessageContent(message?.message) || {};
+  const storedMedia = await maybeStoreIncomingMedia(message);
 
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
     const reactionTarget = reactionMessage.key;
@@ -448,6 +580,9 @@ function normalizeIncomingPayload(message) {
         pushName,
         messageType: detectMessageType(normalizedMessage),
         messageBody,
+        mediaUrl: storedMedia?.mediaUrl || null,
+        mediaMimeType: storedMedia?.mediaMimeType || null,
+        mediaFileName: storedMedia?.mediaFileName || null,
         message: normalizedMessage,
       },
     },
@@ -513,7 +648,7 @@ async function handleMessagesUpsert(event) {
     }
 
     try {
-      await forwardIncomingMessageToTarkamBot(normalizeIncomingPayload(message));
+      await forwardIncomingMessageToTarkamBot(await normalizeIncomingPayload(message));
     } catch (error) {
       logger.warn(
         {
