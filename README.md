@@ -147,6 +147,7 @@ Perintah ini menjalankan server sitemap dengan URL produksi, menggunakan variabe
 #### Variabel Environment
 
 - `BASE_URL`: URL dasar website Anda. Nilai bawaan: <http://localhost:5173>
+- `API_BASE_URL`: URL dasar Laravel API yang menyediakan data sitemap. Nilai bawaan: `https://tarkam-api-web-production.up.railway.app/api/v1`
 - `PORT`: Port server. Nilai bawaan: `3001`
 
 ### Endpoint
@@ -173,3 +174,57 @@ Generator sitemap mengharapkan Laravel API Anda menyediakan:
 - `/api/v1/web-setting` - Data pengaturan website
 
 Pastikan server API Anda sedang berjalan saat proses pembuatan sitemap dilakukan.
+
+### Deploy Railway
+
+Service sitemap paling aman dijalankan sebagai service Railway terpisah dari frontend Vite dan terpisah dari bridge Baileys.
+
+Konfigurasi yang disarankan:
+
+```env
+BASE_URL=https://tarkam.fun
+API_BASE_URL=https://tarkam-api-web-production.up.railway.app/api/v1
+PORT=3001
+```
+
+Start command:
+
+```bash
+npm run sitemap
+```
+
+Health check:
+
+- `/health`
+
+Endpoint publik yang perlu diproxy:
+
+- `/sitemap.xml`
+- `/sitemap-plain.xml`
+
+### Nginx Reverse Proxy
+
+Jika domain `tarkam.fun` tetap dilayani oleh Nginx/VPS, arahkan path sitemap ke service Railway sitemap.
+
+Contoh snippet ada di [deploy/nginx/tarkam.fun.sitemap.locations.conf](/D:/Work/Website/tarkam/deploy/nginx/tarkam.fun.sitemap.locations.conf).
+
+Jika Anda ingin satu file server block penuh untuk domain utama `tarkam.fun`, gunakan [deploy/nginx/tarkam.fun.conf](/D:/Work/Website/tarkam/deploy/nginx/tarkam.fun.conf) lalu ganti dua upstream berikut:
+
+- `https://tarkam-web-production.up.railway.app`
+- `https://tarkam-sitemap-production.up.railway.app`
+
+Contoh pemasangan di VPS:
+
+```bash
+sudo cp deploy/nginx/tarkam.fun.conf /etc/nginx/sites-available/tarkam.fun.conf
+sudo ln -s /etc/nginx/sites-available/tarkam.fun.conf /etc/nginx/sites-enabled/tarkam.fun.conf
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Jika belum ada SSL:
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d tarkam.fun -d www.tarkam.fun
+```

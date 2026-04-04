@@ -10,7 +10,7 @@ const port = process.env.PORT || 3001;
 const BASE_URL = process.env.BASE_URL || 'https://tarkam.fun';
 
 // API endpoints
-const API_BASE_URL = 'https://tarkam-api-web-production.up.railway.app/api/v1';
+const API_BASE_URL = process.env.API_BASE_URL || 'https://tarkam-api-web-production.up.railway.app/api/v1';
 
 // Function to fetch data from API
 async function fetchAPIData(endpoint) {
