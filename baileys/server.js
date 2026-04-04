@@ -45,9 +45,6 @@ const CONTACT_INDEX_FILE = path.resolve(
 
 const HOST = process.env.BAILEYS_HOST || process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.BAILEYS_PORT || process.env.PORT || 3010);
-const BAILEYS_PUBLIC_BASE_URL = (
-  process.env.BAILEYS_PUBLIC_BASE_URL || `http://127.0.0.1:${PORT}`
-).trim().replace(/\/$/, "");
 const API_TOKEN = (process.env.BAILEYS_API_TOKEN || "").trim();
 const TARKAM_BOT_WEBHOOK_URL = (
   process.env.TARKAM_BOT_WEBHOOK_URL || "http://127.0.0.1:5000/webhook"
@@ -57,6 +54,41 @@ const TARKAM_BOT_WEBHOOK_SECRET = (
 ).trim();
 const BAILEYS_LOG_LEVEL = process.env.BAILEYS_LOG_LEVEL || "silent";
 const MAX_MESSAGE_CACHE_SIZE = Number(process.env.BAILEYS_MESSAGE_CACHE_SIZE || 1000);
+const HOSTED_MEDIA_MAX_AGE_MS = Number(process.env.BAILEYS_HOSTED_MEDIA_MAX_AGE_MS || 300000);
+const NSFW_GROUP_STATUS_CACHE_TTL_MS = Number(process.env.BAILEYS_NSFW_GROUP_STATUS_CACHE_TTL_MS || 60000);
+
+function readTrimmedEnv(name) {
+  return String(process.env[name] || "").trim();
+}
+
+function isLoopbackUrl(rawValue) {
+  const value = String(rawValue || "").trim();
+  if (!value) {
+    return false;
+  }
+
+  try {
+    const parsed = new URL(value);
+    return ["127.0.0.1", "localhost", "0.0.0.0", "::1"].includes(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
+function resolveBaileysPublicBaseUrl() {
+  const explicit = readTrimmedEnv("BAILEYS_PUBLIC_BASE_URL");
+  if (explicit) {
+    return explicit.replace(/\/$/, "");
+  }
+
+  if (isLoopbackUrl(TARKAM_BOT_WEBHOOK_URL)) {
+    return `http://127.0.0.1:${PORT}`;
+  }
+
+  return "";
+}
+
+const BAILEYS_PUBLIC_BASE_URL = resolveBaileysPublicBaseUrl();
 
 const logger = pino({
   level: BAILEYS_LOG_LEVEL,
@@ -93,7 +125,7 @@ app.use(
   express.static(HOSTED_MEDIA_DIR, {
     fallthrough: false,
     etag: false,
-    maxAge: "1h",
+    maxAge: Math.max(HOSTED_MEDIA_MAX_AGE_MS, 0),
   })
 );
 
@@ -106,6 +138,8 @@ let currentQr = null;
 let connectionState = "connecting";
 let lastDisconnectInfo = null;
 let lastPrintedQr = null;
+let hostedMediaWarningLogged = false;
+const nsfwGroupStatusCache = new Map();
 
 function loadJsonFile(filePath, fallbackValue) {
   try {
@@ -311,10 +345,13 @@ function guessMediaExtension(mimeType, fallbackExtension = ".bin") {
 }
 
 function buildHostedMediaUrl(fileName) {
+  if (!BAILEYS_PUBLIC_BASE_URL) {
+    return "";
+  }
   return `${BAILEYS_PUBLIC_BASE_URL}/hosted-media/${encodeURIComponent(fileName)}`;
 }
 
-function cleanupHostedMediaDir(maxAgeMs = 60 * 60 * 1000) {
+function cleanupHostedMediaDir(maxAgeMs = HOSTED_MEDIA_MAX_AGE_MS) {
   const now = Date.now();
   try {
     for (const fileName of fs.readdirSync(HOSTED_MEDIA_DIR)) {
@@ -336,7 +373,105 @@ function cleanupHostedMediaDir(maxAgeMs = 60 * 60 * 1000) {
   }
 }
 
+function buildGroupNsfwStatusUrl(groupId) {
+  try {
+    return new URL(`/api/whatsapp/nsfw-groups/${encodeURIComponent(groupId)}`, TARKAM_BOT_WEBHOOK_URL).toString();
+  } catch {
+    return "";
+  }
+}
+
+async function isGroupNsfwModerationEnabled(groupId) {
+  const normalizedGroupId = normalizePhone(groupId);
+  if (!normalizedGroupId.endsWith("@g.us")) {
+    return false;
+  }
+
+  const now = Date.now();
+  const cached = nsfwGroupStatusCache.get(normalizedGroupId);
+  if (cached && now - cached.checkedAt < NSFW_GROUP_STATUS_CACHE_TTL_MS) {
+    return Boolean(cached.enabled);
+  }
+
+  const statusUrl = buildGroupNsfwStatusUrl(normalizedGroupId);
+  if (!statusUrl) {
+    return false;
+  }
+
+  const headers = {
+    Accept: "application/json",
+  };
+  if (API_TOKEN) {
+    headers.Authorization = `Bearer ${API_TOKEN}`;
+  }
+
+  try {
+    const response = await fetch(statusUrl, {
+      method: "GET",
+      headers,
+    });
+    if (!response.ok) {
+      logger.warn(
+        {
+          groupId: normalizedGroupId,
+          status: response.status,
+          statusUrl,
+        },
+        "Failed to fetch WhatsApp NSFW moderation state from tarkam-bot"
+      );
+      nsfwGroupStatusCache.set(normalizedGroupId, {
+        enabled: false,
+        checkedAt: now,
+      });
+      return false;
+    }
+
+    const payload = await response.json();
+    const enabled = Boolean(payload?.enabled);
+    nsfwGroupStatusCache.set(normalizedGroupId, {
+      enabled,
+      checkedAt: now,
+    });
+    return enabled;
+  } catch (error) {
+    logger.warn(
+      {
+        err: error,
+        groupId: normalizedGroupId,
+        statusUrl,
+      },
+      "Failed to check WhatsApp NSFW moderation state from tarkam-bot"
+    );
+    nsfwGroupStatusCache.set(normalizedGroupId, {
+      enabled: false,
+      checkedAt: now,
+    });
+    return false;
+  }
+}
+
 async function maybeStoreIncomingMedia(message) {
+  if (!BAILEYS_PUBLIC_BASE_URL) {
+    if (!hostedMediaWarningLogged) {
+      hostedMediaWarningLogged = true;
+      logger.warn(
+        {
+          webhookTarget: TARKAM_BOT_WEBHOOK_URL,
+        },
+        "Skipping hosted media generation because BAILEYS_PUBLIC_BASE_URL is unset and no local bot webhook target was detected"
+      );
+    }
+    return null;
+  }
+
+  const remoteJid = String(message?.key?.remoteJid || "").trim();
+  if (!remoteJid.endsWith("@g.us")) {
+    return null;
+  }
+  if (!(await isGroupNsfwModerationEnabled(remoteJid))) {
+    return null;
+  }
+
   const normalizedMessage = unwrapMessageContent(message?.message);
   const messageType = detectMessageType(normalizedMessage);
   if (!normalizedMessage || !["imageMessage", "videoMessage", "stickerMessage"].includes(messageType || "")) {
