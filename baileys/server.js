@@ -663,9 +663,60 @@ function buildMessageKey(record, { forceFromMe = true } = {}) {
   };
 }
 
+async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) {
+  // Jika participant bukan @lid, return as-is
+  if (!participantJid?.endsWith("@lid")) {
+    return participantJid;
+  }
+
+  // Coba gunakan senderPn dari message.key jika tersedia
+  const senderPn = String(message?.key?.senderPn || "").trim();
+  if (senderPn) {
+    return normalizePhone(senderPn);
+  }
+
+  // Fallback: coba gunakan groupMetadata untuk mencari participant
+  if (sock && remoteJid?.endsWith("@g.us")) {
+    try {
+      const groupMetadata = await sock.groupMetadata(remoteJid);
+      const participant = groupMetadata?.participants?.find((p) => {
+        const pLid = String(p?.id || "").trim();
+        return pLid === participantJid || pLid === participantJid.replace(/@lid$/, '');
+      });
+
+      if (participant) {
+        const participantPhone = String(participant?.id || "").trim();
+        if (participantPhone && !participantPhone.endsWith("@lid")) {
+          return normalizePhone(participantPhone);
+        }
+      }
+    } catch (error) {
+      logger.debug(
+        {
+          err: error,
+          participantJid,
+          remoteJid,
+        },
+        "Failed to resolve sender JID from group metadata"
+      );
+    }
+  }
+
+  // Jika tidak bisa resolve, return normalized version dari @lid
+  // Extract nomor dari @lid format (contoh: "1234567890@lid" -> "1234567890")
+  const lidNumber = participantJid.replace(/@lid$/, "");
+  return normalizePhone(lidNumber);
+}
+
 async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
-  const participantJid = String(message?.key?.participant || "").trim();
+  let participantJid = String(message?.key?.participant || "").trim();
+  
+  // Resolve @lid to @s.whatsapp.net if needed
+  if (participantJid?.endsWith("@lid")) {
+    participantJid = await resolveSenderJidFromLid(participantJid, remoteJid, message);
+  }
+  
   const senderJid = participantJid || remoteJid;
   const isGroup = remoteJid.endsWith("@g.us");
   const messageBody = extractMessageText(message?.message);
