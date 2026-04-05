@@ -1263,6 +1263,36 @@ app.post("/api/whatsapp/groups/:groupId/leave", requireApiToken, async (req, res
   }
 });
 
+app.get("/api/whatsapp/groups/:groupId", requireApiToken, async (req, res) => {
+  try {
+    const activeSocket = ensureSocketReady();
+    const groupId = String(req.params.groupId || "").trim();
+    const groupMetadata = await activeSocket.groupMetadata(groupId);
+
+    const botJid = activeSocket.user?.id;
+    const participants = groupMetadata?.participants || [];
+    const botParticipant = participants.find(p => p.id === botJid);
+    const isBotAdmin = botParticipant?.admin === "admin" || botParticipant?.admin === "superadmin";
+
+    res.json({
+      success: true,
+      data: {
+        provider: "baileys",
+        groupId,
+        subject: groupMetadata?.subject,
+        participants: participants.length,
+        isBotAdmin,
+        botJid,
+      },
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      error: error.message || "Failed to get WhatsApp group info.",
+    });
+  }
+});
+
 app.get("/api/whatsapp/contacts/:phone", requireApiToken, async (req, res) => {
   try {
     const activeSocket = ensureSocketReady();
