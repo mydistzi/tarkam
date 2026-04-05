@@ -668,66 +668,18 @@ async function normalizeIncomingPayload(message) {
   const participantJid = String(message?.key?.participant || "").trim();
   const senderJid = participantJid || remoteJid;
   const isGroup = remoteJid.endsWith("@g.us");
-
   const messageBody = extractMessageText(message?.message);
-
-  const pushName =
-    message?.pushName ||
-    contactIndex[senderJid]?.name ||
-    contactIndex[senderJid]?.pushName ||
-    plainPhone(senderJid);
-
+  const pushName = message?.pushName || contactIndex[senderJid]?.name || contactIndex[senderJid]?.pushName || plainPhone(senderJid);
   const timestamp = toEpochMilliseconds(message?.messageTimestamp);
   const reactionMessage = message?.message?.reactionMessage;
-
   let normalizedMessage = unwrapMessageContent(message?.message) || {};
   const storedMedia = await maybeStoreIncomingMedia(message);
 
-  // 🔥 RESOLVE PHONE (INI BAGIAN PALING PENTING)
-  const extractPhone = (jid) => {
-    if (!jid) return null;
-    if (jid.endsWith("@s.whatsapp.net")) {
-      return jid.split("@")[0];
-    }
-    return null;
-  };
-
-  let phone = null;
-
-  // 1️⃣ PRIORITAS: senderPn
-  if (message?.key?.senderPn?.endsWith("@s.whatsapp.net")) {
-    phone = extractPhone(message.key.senderPn);
-  }
-
-  // 2️⃣ fallback: participant / remoteJid
-  if (!phone) {
-    const jid = isGroup ? participantJid : remoteJid;
-
-    if (jid && !jid.endsWith("@lid")) {
-      phone = extractPhone(jid);
-    }
-  }
-
-  // 3️⃣ fallback terakhir (kalau tetap LID)
-  if (!phone) {
-    phone = null; // jangan paksa parse
-  }
-
-  // 🔥 tentukan participant final
-  const finalParticipant =
-    participantJid && !participantJid.endsWith("@lid")
-      ? participantJid
-      : message?.key?.senderPn || participantJid || remoteJid;
-
-  // 🔁 reaction normalize
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
     const reactionTarget = reactionMessage.key;
-
-    const derivedFromMe =
-      Boolean(reactionTarget.fromMe) ||
-      isOwnJid(reactionTarget.participant) ||
-      (!reactionTarget.participant &&
-        isOwnJid(reactionTarget.remoteJid));
+    const derivedFromMe = Boolean(reactionTarget.fromMe)
+      || isOwnJid(reactionTarget.participant)
+      || (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
 
     normalizedMessage = {
       ...normalizedMessage,
@@ -752,12 +704,9 @@ async function normalizeIncomingPayload(message) {
           msgId: message?.key?.id || null,
           remoteJid,
           fromMe: Boolean(message?.key?.fromMe),
-
-          // ✅ FIXED
-          participant: finalParticipant,
-
-          cleanedSenderPn: phone || undefined,
-          cleanedParticipantPn: phone || undefined,
+          participant: participantJid || undefined,
+          cleanedSenderPn: plainPhone(senderJid) || undefined,
+          cleanedParticipantPn: participantJid ? plainPhone(participantJid) : undefined,
         },
         remoteJid,
         msgId: message?.key?.id || null,
