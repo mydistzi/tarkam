@@ -208,6 +208,7 @@ function normalizePhone(value) {
 function plainPhone(value) {
   return String(value || "")
     .replace(/\s+/g, "")
+    .trim()
     .replace(/^\+/, "")
     .replace(/@s\.whatsapp\.net$/, "")
     .replace(/@g\.us$/, "")
@@ -1165,7 +1166,7 @@ function buildContactVcard(contact = {}) {
 
 function buildMessageContent(payload, quotedRecord = null) {
   const normalizedMentions = Array.isArray(payload?.mentions)
-    ? payload.mentions.map((value) => normalizePhone(value)).filter(Boolean)
+    ? payload.mentions.map((value) => plainPhone(value)).filter(Boolean)
     : [];
 
   const contextInfo = buildReplyContextInfo(quotedRecord);
