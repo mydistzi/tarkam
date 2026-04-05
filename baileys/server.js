@@ -695,8 +695,26 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
 
   // Coba gunakan signalRepository.lidMapping.getPNForLID jika tersedia
   if (sock?.signalRepository?.lidMapping) {
+    logger.debug(
+      {
+        method: "signalRepository",
+        inputParticipantJid: participantJid,
+        signalRepositoryAvailable: Boolean(sock.signalRepository),
+        lidMappingAvailable: Boolean(sock.signalRepository.lidMapping),
+      },
+      "[LID-RESOLVE] Signal repository available, attempting LID mapping lookup"
+    );
     try {
       const pnJid = await sock.signalRepository.lidMapping.getPNForLID(participantJid);
+      logger.debug(
+        {
+          method: "signalRepository",
+          inputParticipantJid: participantJid,
+          pnJid,
+          pnJidType: typeof pnJid,
+        },
+        "[LID-RESOLVE] LID mapping lookup result"
+      );
       if (pnJid) {
         const resolved = normalizePhone(pnJid);
         logger.info(
@@ -709,9 +727,17 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
           "[LID-RESOLVE] ✓ Resolved via signalRepository LID mapping"
         );
         return resolved;
+      } else {
+        logger.debug(
+          {
+            method: "signalRepository",
+            inputParticipantJid: participantJid,
+          },
+          "[LID-RESOLVE] No PN found in LID mapping store"
+        );
       }
     } catch (error) {
-      logger.debug(
+      logger.warn(
         {
           err: error,
           method: "signalRepository",
@@ -720,6 +746,16 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
         "[LID-RESOLVE] Failed to resolve via signalRepository"
       );
     }
+  } else {
+    logger.debug(
+      {
+        inputParticipantJid: participantJid,
+        sockExists: Boolean(sock),
+        signalRepositoryExists: Boolean(sock?.signalRepository),
+        lidMappingExists: Boolean(sock?.signalRepository?.lidMapping),
+      },
+      "[LID-RESOLVE] Signal repository not available for LID mapping"
+    );
   }
 
   // Fallback: coba gunakan groupMetadata untuk mencari participant
@@ -793,7 +829,47 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
   // Jika tidak bisa resolve, return normalized version dari @lid
   // Extract nomor dari @lid format (contoh: "1234567890@lid" -> "1234567890")
   const lidNumber = participantJid.replace(/@lid$/, "");
-  const resolved = normalizePhone(lidNumber);
+  let resolved = normalizePhone(lidNumber);
+
+  // Verifikasi dengan onWhatsApp jika tersedia
+  if (sock?.onWhatsApp) {
+    try {
+      const onWhatsAppResult = await sock.onWhatsApp(lidNumber);
+      logger.debug(
+        {
+          method: "onWhatsApp",
+          lidNumber,
+          onWhatsAppResult,
+          exists: Array.isArray(onWhatsAppResult) ? onWhatsAppResult[0]?.exists : false,
+          jid: Array.isArray(onWhatsAppResult) ? onWhatsAppResult[0]?.jid : null,
+        },
+        "[LID-RESOLVE] Verified extracted number with onWhatsApp"
+      );
+      if (Array.isArray(onWhatsAppResult) && onWhatsAppResult[0]?.exists && onWhatsAppResult[0]?.jid) {
+        resolved = normalizePhone(onWhatsAppResult[0].jid);
+        logger.info(
+          {
+            method: "onWhatsApp",
+            inputParticipantJid: participantJid,
+            lidNumber,
+            verifiedJid: onWhatsAppResult[0].jid,
+            resolvedJid: resolved,
+          },
+          "[LID-RESOLVE] ✓ Verified and updated via onWhatsApp"
+        );
+      }
+    } catch (error) {
+      logger.debug(
+        {
+          err: error,
+          method: "onWhatsApp",
+          lidNumber,
+        },
+        "[LID-RESOLVE] Failed to verify with onWhatsApp"
+      );
+    }
+  }
+
   logger.info(
     {
       method: "fallback",
