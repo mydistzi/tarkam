@@ -673,6 +673,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
     {
       inputParticipantJid: participantJid,
       remoteJid,
+      isOwnJid: isOwnJid(participantJid),
     },
     "[LID-RESOLVE] Starting @lid resolution"
   );
@@ -695,7 +696,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
 
   // Coba gunakan signalRepository.lidMapping.getPNForLID jika tersedia
   if (sock?.signalRepository?.lidMapping) {
-    logger.debug(
+    logger.info(
       {
         method: "signalRepository",
         inputParticipantJid: participantJid,
@@ -706,7 +707,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
     );
     try {
       const pnJid = await sock.signalRepository.lidMapping.getPNForLID(participantJid);
-      logger.debug(
+      logger.info(
         {
           method: "signalRepository",
           inputParticipantJid: participantJid,
@@ -728,7 +729,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
         );
         return resolved;
       } else {
-        logger.debug(
+        logger.info(
           {
             method: "signalRepository",
             inputParticipantJid: participantJid,
@@ -747,7 +748,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
       );
     }
   } else {
-    logger.debug(
+    logger.info(
       {
         inputParticipantJid: participantJid,
         sockExists: Boolean(sock),
@@ -784,7 +785,7 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
           return resolved;
         }
 
-        logger.warn(
+        logger.info(
           {
             method: "groupMetadata",
             inputParticipantJid: participantJid,
