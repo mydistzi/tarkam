@@ -198,7 +198,12 @@ function normalizePhone(value) {
   if (!raw) {
     return "";
   }
-  if (raw.endsWith("@g.us") || raw.endsWith("@s.whatsapp.net") || raw.endsWith("@lid")) {
+  if (
+    raw.endsWith("@g.us") ||
+    raw.endsWith("@s.whatsapp.net") ||
+    raw.endsWith("@whatsapp.net") ||
+    raw.endsWith("@lid")
+  ) {
     return raw;
   }
   const withoutPlus = raw.startsWith("+") ? raw.slice(1) : raw;
@@ -212,6 +217,7 @@ function plainPhone(value) {
     .replace(/^\+/, "")
     .split(":")[0]
     .replace(/@s\.whatsapp\.net$/, "")
+    .replace(/@whatsapp\.net$/, "")
     .replace(/@g\.us$/, "")
     .replace(/@lid$/, "");
 }
