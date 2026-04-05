@@ -666,68 +666,29 @@ function buildMessageKey(record, { forceFromMe = true } = {}) {
 async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
   const participantJid = String(message?.key?.participant || "").trim();
-  const phoneJid = String(
-    message?.key?.senderPn ||
-    message?.participant ||
-    message?.user?.id ||
-    ""
-  ).trim();
-
   const senderJid = participantJid || remoteJid;
   const isGroup = remoteJid.endsWith("@g.us");
-
   const messageBody = extractMessageText(message?.message);
-
-  const pushName =
-    message?.pushName ||
-    contactIndex[senderJid]?.name ||
-    contactIndex[senderJid]?.pushName ||
-    plainPhone(senderJid);
-
+  const pushName = message?.pushName || contactIndex[senderJid]?.name || contactIndex[senderJid]?.pushName || plainPhone(senderJid);
   const timestamp = toEpochMilliseconds(message?.messageTimestamp);
   const reactionMessage = message?.message?.reactionMessage;
-
   let normalizedMessage = unwrapMessageContent(message?.message) || {};
   const storedMedia = await maybeStoreIncomingMedia(message);
 
-  // 🔥 FIX: ambil participant yang benar
-  let phone = null;
-
-  if (isGroup && participantJid) {
-    try {
-      const groupMetadata = await sock.groupMetadata(remoteJid);
-
-      const participant = groupMetadata.participants.find(
-        p => p.id === participantJid
-      );
-
-      // kalau metadata punya phone_number
-      phone = participant?.phone_number || null;
-
-    } catch (err) {
-      console.error("groupMetadata error:", err);
-    }
-  }
-
-  // 🔥 FALLBACK: extract dari JID (INI YANG PALING PENTING)
-  const extractPhoneFromJid = (jid) => {
+  const extractPhone = (jid) => {
     if (!jid) return null;
-    return jid.split("@")[0]; // 628xxxx
-  };
+      return jid.split("@")[0];
+    };
 
-  const finalPhone =
-    extractPhoneFromJid(participantJid) ||
-    extractPhoneFromJid(phoneJid) ||
-    extractPhoneFromJid(remoteJid) ||
-    phone;
+  const phone = isGroup
+    ? extractPhone(participantJid)
+    : extractPhone(remoteJid);
 
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
     const reactionTarget = reactionMessage.key;
-
-    const derivedFromMe =
-      Boolean(reactionTarget.fromMe) ||
-      isOwnJid(reactionTarget.participant) ||
-      (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
+    const derivedFromMe = Boolean(reactionTarget.fromMe)
+      || isOwnJid(reactionTarget.participant)
+      || (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
 
     normalizedMessage = {
       ...normalizedMessage,
@@ -752,14 +713,9 @@ async function normalizeIncomingPayload(message) {
           msgId: message?.key?.id || null,
           remoteJid,
           fromMe: Boolean(message?.key?.fromMe),
-
-          // 🔥 FIXED
-          participant: finalPhone || participantJid || undefined,
-
-          cleanedSenderPn: plainPhone(finalPhone) || undefined,
-          cleanedParticipantPn: participantJid
-            ? plainPhone(finalPhone)
-            : undefined,
+          participant: phone || undefined,
+          cleanedSenderPn: plainPhone(senderJid),
+          cleanedParticipantPn: phone ? plainPhone(phone) : undefined,
         },
         remoteJid,
         msgId: message?.key?.id || null,
