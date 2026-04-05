@@ -675,6 +675,9 @@ async function normalizeIncomingPayload(message) {
   const reactionMessage = message?.message?.reactionMessage;
   let normalizedMessage = unwrapMessageContent(message?.message) || {};
   const storedMedia = await maybeStoreIncomingMedia(message);
+  const groupMetadata = await sock.groupMetadata(remoteJid);
+  const participant = groupMetadata.participants.find(p => p.id === 'user_lid@lid');
+  const phone = participant?.phone_number || null;
 
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
     const reactionTarget = reactionMessage.key;
@@ -705,9 +708,9 @@ async function normalizeIncomingPayload(message) {
           msgId: message?.key?.id || null,
           remoteJid,
           fromMe: Boolean(message?.key?.fromMe),
-          participant: participantJid || undefined,
-          cleanedSenderPn: plainPhone(senderJid || phoneJid) || undefined,
-          cleanedParticipantPn: participantJid ? plainPhone(participantJid) : undefined,
+          participant: participantJid || phoneJid || phone || undefined,
+          cleanedSenderPn: plainPhone(senderJid || phoneJid || phone) || undefined,
+          cleanedParticipantPn: participantJid ? plainPhone(participantJid || phoneJid || phone) : undefined,
         },
         remoteJid,
         msgId: message?.key?.id || null,
