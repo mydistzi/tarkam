@@ -669,10 +669,28 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
     return participantJid;
   }
 
+  logger.info(
+    {
+      inputParticipantJid: participantJid,
+      remoteJid,
+    },
+    "[LID-RESOLVE] Starting @lid resolution"
+  );
+
   // Coba gunakan senderPn dari message.key jika tersedia
   const senderPn = String(message?.key?.senderPn || "").trim();
   if (senderPn) {
-    return normalizePhone(senderPn);
+    const resolved = normalizePhone(senderPn);
+    logger.info(
+      {
+        method: "senderPn",
+        inputParticipantJid: participantJid,
+        senderPn,
+        resolvedJid: resolved,
+      },
+      "[LID-RESOLVE] ✓ Resolved via senderPn"
+    );
+    return resolved;
   }
 
   // Fallback: coba gunakan groupMetadata untuk mencari participant
@@ -687,34 +705,94 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
       if (participant) {
         const participantPhone = String(participant?.id || "").trim();
         if (participantPhone && !participantPhone.endsWith("@lid")) {
-          return normalizePhone(participantPhone);
+          const resolved = normalizePhone(participantPhone);
+          logger.info(
+            {
+              method: "groupMetadata",
+              inputParticipantJid: participantJid,
+              participantPhone,
+              resolvedJid: resolved,
+              groupId: remoteJid,
+            },
+            "[LID-RESOLVE] ✓ Resolved via groupMetadata"
+          );
+          return resolved;
         }
+
+        logger.warn(
+          {
+            method: "groupMetadata",
+            inputParticipantJid: participantJid,
+            foundParticipantId: participantPhone,
+            groupId: remoteJid,
+          },
+          "[LID-RESOLVE] ⚠ Found participant but ID still ends with @lid"
+        );
+      } else {
+        logger.warn(
+          {
+            inputParticipantJid: participantJid,
+            groupId: remoteJid,
+            totalParticipants: groupMetadata?.participants?.length || 0,
+          },
+          "[LID-RESOLVE] ⚠ Participant not found in group metadata"
+        );
       }
     } catch (error) {
-      logger.debug(
+      logger.warn(
         {
           err: error,
-          participantJid,
+          method: "groupMetadata",
+          inputParticipantJid: participantJid,
           remoteJid,
         },
-        "Failed to resolve sender JID from group metadata"
+        "[LID-RESOLVE] ⚠ Failed to resolve sender JID from group metadata"
       );
     }
+  } else {
+    logger.debug(
+      {
+        inputParticipantJid: participantJid,
+        remoteJid,
+        isGroupJid: remoteJid?.endsWith("@g.us"),
+        sockReady: Boolean(sock),
+      },
+      "[LID-RESOLVE] No groupMetadata available (not a group or socket not ready)"
+    );
   }
 
   // Jika tidak bisa resolve, return normalized version dari @lid
   // Extract nomor dari @lid format (contoh: "1234567890@lid" -> "1234567890")
   const lidNumber = participantJid.replace(/@lid$/, "");
-  return normalizePhone(lidNumber);
+  const resolved = normalizePhone(lidNumber);
+  logger.info(
+    {
+      method: "fallback",
+      inputParticipantJid: participantJid,
+      lidNumber,
+      resolvedJid: resolved,
+    },
+    "[LID-RESOLVE] ℹ Using fallback - extracted number from @lid and normalized"
+  );
+  return resolved;
 }
 
 async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
   let participantJid = String(message?.key?.participant || "").trim();
+  const originalParticipantJid = participantJid;
   
   // Resolve @lid to @s.whatsapp.net if needed
   if (participantJid?.endsWith("@lid")) {
     participantJid = await resolveSenderJidFromLid(participantJid, remoteJid, message);
+    logger.info(
+      {
+        originalJid: originalParticipantJid,
+        resolvedJid: participantJid,
+        wasSenderPnAvailable: Boolean(message?.key?.senderPn),
+      },
+      "[PAYLOAD-NORMALIZE] @lid participant resolved"
+    );
   }
   
   const senderJid = participantJid || remoteJid;
@@ -744,7 +822,7 @@ async function normalizeIncomingPayload(message) {
     };
   }
 
-  return {
+  const payload = {
     event: isGroup ? "messages-group.received" : "messages.upsert",
     provider: "baileys",
     timestamp,
@@ -773,6 +851,19 @@ async function normalizeIncomingPayload(message) {
       },
     },
   };
+
+  logger.debug(
+    {
+      participantJid,
+      senderJid,
+      pushName,
+      isGroup,
+      event: payload.event,
+    },
+    "[PAYLOAD-NORMALIZE] Normalized payload ready to forward to tarkam-bot"
+  );
+
+  return payload;
 }
 
 async function forwardIncomingMessageToTarkamBot(payload) {
@@ -781,6 +872,21 @@ async function forwardIncomingMessageToTarkamBot(payload) {
     "Content-Type": "application/json",
     "X-WhatsApp-Provider": "baileys",
   };
+
+  const participantJid = payload?.data?.messages?.key?.participant;
+  const cleanedSenderPn = payload?.data?.messages?.key?.cleanedSenderPn;
+  const remoteJid = payload?.data?.messages?.remoteJid;
+
+  logger.info(
+    {
+      event: payload?.event,
+      participantJid,
+      cleanedSenderPn,
+      remoteJid,
+      messageBody: payload?.data?.messages?.messageBody?.slice(0, 50),
+    },
+    "[WEBHOOK-FORWARD] Forwarding to tarkam-bot"
+  );
 
   if (TARKAM_BOT_WEBHOOK_SECRET) {
     headers["X-Webhook-Signature"] = createHmac("sha256", TARKAM_BOT_WEBHOOK_SECRET)
@@ -801,8 +907,18 @@ async function forwardIncomingMessageToTarkamBot(payload) {
         webhookTarget: TARKAM_BOT_WEBHOOK_URL,
         status: response.status,
         response: responseText.slice(0, 300),
+        participantJid,
       },
-      "Forwarding incoming Baileys webhook to tarkam-bot returned an unexpected status"
+      "[WEBHOOK-FORWARD] ⚠ Returned unexpected status"
+    );
+  } else {
+    logger.info(
+      {
+        status: response.status,
+        participantJid,
+        remoteJid,
+      },
+      "[WEBHOOK-FORWARD] ✓ Successfully forwarded to tarkam-bot"
     );
   }
 }
