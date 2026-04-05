@@ -694,7 +694,7 @@ async function normalizeIncomingPayload(message) {
   }
 
   return {
-    event: isGroup ? "messages-group.received" : "messages.upsert",
+    event: isGroup ? "group.upsert" : "messages.upsert",
     provider: "baileys",
     timestamp,
     data: {
