@@ -665,7 +665,7 @@ function buildMessageKey(record, { forceFromMe = true } = {}) {
 
 async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
-  const participantJid = String(message?.key?.participant || "").trim();
+  const participantJid = String(message?.key?.participant || message?.participant || message?.key?.senderPn || message?.user?.id || message?.key?.participant?.phone_number || "").trim();
   const senderJid = participantJid || remoteJid;
   const isGroup = remoteJid.endsWith("@g.us");
   const messageBody = extractMessageText(message?.message);
