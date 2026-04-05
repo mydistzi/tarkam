@@ -663,244 +663,9 @@ function buildMessageKey(record, { forceFromMe = true } = {}) {
   };
 }
 
-async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) {
-  // Jika participant bukan @lid, return as-is
-  if (!participantJid?.endsWith("@lid")) {
-    return participantJid;
-  }
-
-  logger.info(
-    {
-      inputParticipantJid: participantJid,
-      remoteJid,
-      isOwnJid: isOwnJid(participantJid),
-    },
-    "[LID-RESOLVE] Starting @lid resolution"
-  );
-
-  // Coba gunakan senderPn dari message.key jika tersedia
-  const senderPn = String(message?.key?.senderPn || "").trim();
-  if (senderPn) {
-    const resolved = normalizePhone(senderPn);
-    logger.info(
-      {
-        method: "senderPn",
-        inputParticipantJid: participantJid,
-        senderPn,
-        resolvedJid: resolved,
-      },
-      "[LID-RESOLVE] ✓ Resolved via senderPn"
-    );
-    return resolved;
-  }
-
-  // Coba gunakan signalRepository.lidMapping.getPNForLID jika tersedia
-  if (sock?.signalRepository?.lidMapping) {
-    logger.info(
-      {
-        method: "signalRepository",
-        inputParticipantJid: participantJid,
-        signalRepositoryAvailable: Boolean(sock.signalRepository),
-        lidMappingAvailable: Boolean(sock.signalRepository.lidMapping),
-      },
-      "[LID-RESOLVE] Signal repository available, attempting LID mapping lookup"
-    );
-    try {
-      const pnJid = await sock.signalRepository.lidMapping.getPNForLID(participantJid);
-      logger.info(
-        {
-          method: "signalRepository",
-          inputParticipantJid: participantJid,
-          pnJid,
-          pnJidType: typeof pnJid,
-        },
-        "[LID-RESOLVE] LID mapping lookup result"
-      );
-      if (pnJid) {
-        const resolved = normalizePhone(pnJid);
-        logger.info(
-          {
-            method: "signalRepository",
-            inputParticipantJid: participantJid,
-            pnJid,
-            resolvedJid: resolved,
-          },
-          "[LID-RESOLVE] ✓ Resolved via signalRepository LID mapping"
-        );
-        return resolved;
-      } else {
-        logger.info(
-          {
-            method: "signalRepository",
-            inputParticipantJid: participantJid,
-          },
-          "[LID-RESOLVE] No PN found in LID mapping store"
-        );
-      }
-    } catch (error) {
-      logger.warn(
-        {
-          err: error,
-          method: "signalRepository",
-          inputParticipantJid: participantJid,
-        },
-        "[LID-RESOLVE] Failed to resolve via signalRepository"
-      );
-    }
-  } else {
-    logger.info(
-      {
-        inputParticipantJid: participantJid,
-        sockExists: Boolean(sock),
-        signalRepositoryExists: Boolean(sock?.signalRepository),
-        lidMappingExists: Boolean(sock?.signalRepository?.lidMapping),
-      },
-      "[LID-RESOLVE] Signal repository not available for LID mapping"
-    );
-  }
-
-  // Fallback: coba gunakan groupMetadata untuk mencari participant
-  if (sock && remoteJid?.endsWith("@g.us")) {
-    try {
-      const groupMetadata = await sock.groupMetadata(remoteJid);
-      const participant = groupMetadata?.participants?.find((p) => {
-        const pLid = String(p?.id || "").trim();
-        return pLid === participantJid || pLid === participantJid.replace(/@lid$/, '');
-      });
-
-      if (participant) {
-        const participantPhone = String(participant?.id || "").trim();
-        if (participantPhone && !participantPhone.endsWith("@lid")) {
-          const resolved = normalizePhone(participantPhone);
-          logger.info(
-            {
-              method: "groupMetadata",
-              inputParticipantJid: participantJid,
-              participantPhone,
-              resolvedJid: resolved,
-              groupId: remoteJid,
-            },
-            "[LID-RESOLVE] ✓ Resolved via groupMetadata"
-          );
-          return resolved;
-        }
-
-        logger.info(
-          {
-            method: "groupMetadata",
-            inputParticipantJid: participantJid,
-            foundParticipantId: participantPhone,
-            groupId: remoteJid,
-          },
-          "[LID-RESOLVE] ⚠ Found participant but ID still ends with @lid"
-        );
-      } else {
-        logger.warn(
-          {
-            inputParticipantJid: participantJid,
-            groupId: remoteJid,
-            totalParticipants: groupMetadata?.participants?.length || 0,
-          },
-          "[LID-RESOLVE] ⚠ Participant not found in group metadata"
-        );
-      }
-    } catch (error) {
-      logger.warn(
-        {
-          err: error,
-          method: "groupMetadata",
-          inputParticipantJid: participantJid,
-          remoteJid,
-        },
-        "[LID-RESOLVE] ⚠ Failed to resolve sender JID from group metadata"
-      );
-    }
-  } else {
-    logger.debug(
-      {
-        inputParticipantJid: participantJid,
-        remoteJid,
-        isGroupJid: remoteJid?.endsWith("@g.us"),
-        sockReady: Boolean(sock),
-      },
-      "[LID-RESOLVE] No groupMetadata available (not a group or socket not ready)"
-    );
-  }
-
-  // Jika tidak bisa resolve, return normalized version dari @lid
-  // Extract nomor dari @lid format (contoh: "1234567890@lid" -> "1234567890")
-  const lidNumber = participantJid.replace(/@lid$/, "");
-  let resolved = normalizePhone(lidNumber);
-
-  // Verifikasi dengan onWhatsApp jika tersedia
-  if (sock?.onWhatsApp) {
-    try {
-      const onWhatsAppResult = await sock.onWhatsApp(lidNumber);
-      logger.debug(
-        {
-          method: "onWhatsApp",
-          lidNumber,
-          onWhatsAppResult,
-          exists: Array.isArray(onWhatsAppResult) ? onWhatsAppResult[0]?.exists : false,
-          jid: Array.isArray(onWhatsAppResult) ? onWhatsAppResult[0]?.jid : null,
-        },
-        "[LID-RESOLVE] Verified extracted number with onWhatsApp"
-      );
-      if (Array.isArray(onWhatsAppResult) && onWhatsAppResult[0]?.exists && onWhatsAppResult[0]?.jid) {
-        resolved = normalizePhone(onWhatsAppResult[0].jid);
-        logger.info(
-          {
-            method: "onWhatsApp",
-            inputParticipantJid: participantJid,
-            lidNumber,
-            verifiedJid: onWhatsAppResult[0].jid,
-            resolvedJid: resolved,
-          },
-          "[LID-RESOLVE] ✓ Verified and updated via onWhatsApp"
-        );
-      }
-    } catch (error) {
-      logger.debug(
-        {
-          err: error,
-          method: "onWhatsApp",
-          lidNumber,
-        },
-        "[LID-RESOLVE] Failed to verify with onWhatsApp"
-      );
-    }
-  }
-
-  logger.info(
-    {
-      method: "fallback",
-      inputParticipantJid: participantJid,
-      lidNumber,
-      resolvedJid: resolved,
-    },
-    "[LID-RESOLVE] ℹ Using fallback - extracted number from @lid and normalized"
-  );
-  return resolved;
-}
-
 async function normalizeIncomingPayload(message) {
   const remoteJid = String(message?.key?.remoteJid || "").trim();
-  let participantJid = String(message?.key?.participant || "").trim();
-  const originalParticipantJid = participantJid;
-  
-  // Resolve @lid to @s.whatsapp.net if needed
-  if (participantJid?.endsWith("@lid")) {
-    participantJid = await resolveSenderJidFromLid(participantJid, remoteJid, message);
-    logger.info(
-      {
-        originalJid: originalParticipantJid,
-        resolvedJid: participantJid,
-        wasSenderPnAvailable: Boolean(message?.key?.senderPn),
-      },
-      "[PAYLOAD-NORMALIZE] @lid participant resolved"
-    );
-  }
-  
+  const participantJid = String(message?.key?.participant || "").trim();
   const senderJid = participantJid || remoteJid;
   const isGroup = remoteJid.endsWith("@g.us");
   const messageBody = extractMessageText(message?.message);
@@ -916,12 +681,10 @@ async function normalizeIncomingPayload(message) {
       || isOwnJid(reactionTarget.participant)
       || (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
 
-    // Convert incoming Baileys format to outgoing format for tarkam-bot
-    // Incoming from Baileys: { reactionMessage: { text, key } }
-    // Outgoing format expected: { react: { text, key } }
     normalizedMessage = {
-      react: {
-        text: String(reactionMessage.text || "").trim(),
+      ...normalizedMessage,
+      reactionMessage: {
+        ...reactionMessage,
         key: {
           ...reactionTarget,
           fromMe: derivedFromMe,
@@ -930,7 +693,7 @@ async function normalizeIncomingPayload(message) {
     };
   }
 
-  const payload = {
+  return {
     event: isGroup ? "messages-group.received" : "messages.upsert",
     provider: "baileys",
     timestamp,
@@ -959,19 +722,6 @@ async function normalizeIncomingPayload(message) {
       },
     },
   };
-
-  logger.debug(
-    {
-      participantJid,
-      senderJid,
-      pushName,
-      isGroup,
-      event: payload.event,
-    },
-    "[PAYLOAD-NORMALIZE] Normalized payload ready to forward to tarkam-bot"
-  );
-
-  return payload;
 }
 
 async function forwardIncomingMessageToTarkamBot(payload) {
@@ -980,21 +730,6 @@ async function forwardIncomingMessageToTarkamBot(payload) {
     "Content-Type": "application/json",
     "X-WhatsApp-Provider": "baileys",
   };
-
-  const participantJid = payload?.data?.messages?.key?.participant;
-  const cleanedSenderPn = payload?.data?.messages?.key?.cleanedSenderPn;
-  const remoteJid = payload?.data?.messages?.remoteJid;
-
-  logger.info(
-    {
-      event: payload?.event,
-      participantJid,
-      cleanedSenderPn,
-      remoteJid,
-      messageBody: payload?.data?.messages?.messageBody?.slice(0, 50),
-    },
-    "[WEBHOOK-FORWARD] Forwarding to tarkam-bot"
-  );
 
   if (TARKAM_BOT_WEBHOOK_SECRET) {
     headers["X-Webhook-Signature"] = createHmac("sha256", TARKAM_BOT_WEBHOOK_SECRET)
@@ -1015,18 +750,8 @@ async function forwardIncomingMessageToTarkamBot(payload) {
         webhookTarget: TARKAM_BOT_WEBHOOK_URL,
         status: response.status,
         response: responseText.slice(0, 300),
-        participantJid,
       },
-      "[WEBHOOK-FORWARD] ⚠ Returned unexpected status"
-    );
-  } else {
-    logger.info(
-      {
-        status: response.status,
-        participantJid,
-        remoteJid,
-      },
-      "[WEBHOOK-FORWARD] ✓ Successfully forwarded to tarkam-bot"
+      "Forwarding incoming Baileys webhook to tarkam-bot returned an unexpected status"
     );
   }
 }
