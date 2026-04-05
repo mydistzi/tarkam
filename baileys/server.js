@@ -693,6 +693,35 @@ async function resolveSenderJidFromLid(participantJid, remoteJid, message = {}) 
     return resolved;
   }
 
+  // Coba gunakan signalRepository.lidMapping.getPNForLID jika tersedia
+  if (sock?.signalRepository?.lidMapping) {
+    try {
+      const pnJid = await sock.signalRepository.lidMapping.getPNForLID(participantJid);
+      if (pnJid) {
+        const resolved = normalizePhone(pnJid);
+        logger.info(
+          {
+            method: "signalRepository",
+            inputParticipantJid: participantJid,
+            pnJid,
+            resolvedJid: resolved,
+          },
+          "[LID-RESOLVE] ✓ Resolved via signalRepository LID mapping"
+        );
+        return resolved;
+      }
+    } catch (error) {
+      logger.debug(
+        {
+          err: error,
+          method: "signalRepository",
+          inputParticipantJid: participantJid,
+        },
+        "[LID-RESOLVE] Failed to resolve via signalRepository"
+      );
+    }
+  }
+
   // Fallback: coba gunakan groupMetadata untuk mencari participant
   if (sock && remoteJid?.endsWith("@g.us")) {
     try {
