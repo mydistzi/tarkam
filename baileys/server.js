@@ -208,7 +208,6 @@ function normalizePhone(value) {
 function plainPhone(value) {
   return String(value || "")
     .replace(/\s+/g, "")
-    .replace(" ", "")
     .replace(/^\+/, "")
     .replace(/@s\.whatsapp\.net$/, "")
     .replace(/@g\.us$/, "")
