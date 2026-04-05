@@ -208,7 +208,6 @@ function normalizePhone(value) {
 function plainPhone(value) {
   return String(value || "")
     .replace(/\s+/g, "")
-    .trim()
     .replace(/^\+/, "")
     .replace(/@s\.whatsapp\.net$/, "")
     .replace(/@g\.us$/, "")
@@ -917,10 +916,12 @@ async function normalizeIncomingPayload(message) {
       || isOwnJid(reactionTarget.participant)
       || (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
 
+    // Convert incoming Baileys format to outgoing format for tarkam-bot
+    // Incoming from Baileys: { reactionMessage: { text, key } }
+    // Outgoing format expected: { react: { text, key } }
     normalizedMessage = {
-      ...normalizedMessage,
-      reactionMessage: {
-        ...reactionMessage,
+      react: {
+        text: String(reactionMessage.text || "").trim(),
         key: {
           ...reactionTarget,
           fromMe: derivedFromMe,
@@ -1166,7 +1167,7 @@ function buildContactVcard(contact = {}) {
 
 function buildMessageContent(payload, quotedRecord = null) {
   const normalizedMentions = Array.isArray(payload?.mentions)
-    ? payload.mentions.map((value) => plainPhone(value)).filter(Boolean)
+    ? payload.mentions.map((value) => normalizePhone(value)).filter(Boolean)
     : [];
 
   const contextInfo = buildReplyContextInfo(quotedRecord);
