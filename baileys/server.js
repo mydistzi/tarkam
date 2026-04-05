@@ -705,11 +705,7 @@ async function normalizeIncomingPayload(message) {
           remoteJid,
           fromMe: Boolean(message?.key?.fromMe),
           participant: participantJid || undefined,
-<<<<<<< HEAD
-          cleanedSenderPn: plainPhone(senderJid) || undefined,
-=======
           cleanedSenderPn: plainPhone(senderJid),
->>>>>>> parent of aa93299 (add const phoneJid)
           cleanedParticipantPn: participantJid ? plainPhone(participantJid) : undefined,
         },
         remoteJid,
