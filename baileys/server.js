@@ -754,7 +754,7 @@ async function normalizeIncomingPayload(message) {
           fromMe: Boolean(message?.key?.fromMe),
 
           // 🔥 FIXED
-          participant: participantJid || finalPhone || undefined,
+          participant: finalPhone || participantJid || undefined,
 
           cleanedSenderPn: plainPhone(finalPhone) || undefined,
           cleanedParticipantPn: participantJid
