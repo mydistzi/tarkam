@@ -202,13 +202,15 @@ function normalizePhone(value) {
     return raw;
   }
   const withoutPlus = raw.startsWith("+") ? raw.slice(1) : raw;
-  return `${withoutPlus}@s.whatsapp.net`;
+  const withoutDevice = withoutPlus.split(":")[0];
+  return `${withoutDevice}@s.whatsapp.net`;
 }
 
 function plainPhone(value) {
   return String(value || "")
     .replace(/\s+/g, "")
     .replace(/^\+/, "")
+    .split(":")[0]
     .replace(/@s\.whatsapp\.net$/, "")
     .replace(/@g\.us$/, "")
     .replace(/@lid$/, "");
