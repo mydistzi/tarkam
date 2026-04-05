@@ -780,7 +780,7 @@ async function handleMessagesUpsert(event) {
       });
     }
 
-    rememberMessage(message, { persistSentIndex: Boolean(message?.key?.fromMe) });
+    rememberMessage(message, { persistSentIndex: true });
 
     if (message?.key?.fromMe) {
       continue;
@@ -1220,7 +1220,7 @@ app.delete("/api/whatsapp/messages/:messageId", requireApiToken, async (req, res
     }
 
     await activeSocket.sendMessage(record.remoteJid, {
-      delete: buildMessageKey(record),
+      delete: buildMessageKey(record, { forceFromMe: false }),
     });
 
     delete sentMessageIndex[record.id];
