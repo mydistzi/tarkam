@@ -41,6 +41,14 @@ BAILEYS_BASE_API_URL=http://127.0.0.1:3010/api/whatsapp/
 BAILEYS_API_TOKEN=
 ```
 
+Bridge `GET /api/whatsapp/contacts/:phone` juga dipakai oleh command sinkronisasi identitas member di `tarkam-bot`, termasuk:
+
+- `getUser <phone_number>` untuk resolve satu nomor
+- `sync wa tunisia [limit]` di WhatsApp owner mode
+- `+sync tunisia [limit]` di Discord judge/owner mode
+
+Jika Baileys berhasil meresolusikan nomor Indonesia menjadi nomor `216...`, bot akan menyimpan hasilnya ke kolom `tunisia_phone` tanpa mengubah `phone_number` kanonik Indonesia.
+
 ## React + TypeScript + Vite
 
 Template ini menyediakan konfigurasi minimal agar React berjalan di Vite dengan HMR dan sejumlah aturan ESLint.
