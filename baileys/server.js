@@ -790,6 +790,37 @@ async function handleMessagesUpsert(event) {
       continue;
     }
 
+    if (!message.message) {
+      continue;
+    }
+
+    const msgType = Object.keys(message.message || {})[0];
+
+    if (!msgType || msgType === "protocolMessage") {
+      continue;
+    }
+
+    const allowedTypes = [
+      "conversation",
+      "extendedTextMessage",
+      "imageMessage",
+      "videoMessage",
+      "audioMessage",
+      "documentMessage",
+      "buttonsResponseMessage",
+      "listResponseMessage"
+    ];
+
+    if (!allowedTypes.includes(msgType)) {
+      continue;
+    }
+
+    const text = extractMessageText(message.message);
+
+    if (!text || !text.trim()) {
+      continue;
+    }
+
     try {
       await forwardIncomingMessageToTarkamBot(await normalizeIncomingPayload(message));
     } catch (error) {
