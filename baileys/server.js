@@ -1296,33 +1296,40 @@ app.get("/api/whatsapp/groups/:groupId", requireApiToken, async (req, res) => {
 app.get("/api/whatsapp/contacts/:phone", requireApiToken, async (req, res) => {
   try {
     const activeSocket = ensureSocketReady();
-    const jid = normalizePhone(req.params.phone);
-    const storedContact = contactIndex[jid] || null;
-
-    let pictureUrl = null;
-    try {
-      pictureUrl = await activeSocket.profilePictureUrl(jid, "image");
-    } catch (_error) {
-      pictureUrl = null;
-    }
+    const requestedJid = normalizePhone(req.params.phone);
 
     let onWhatsApp = null;
     try {
-      onWhatsApp = await activeSocket.onWhatsApp(jid);
+      onWhatsApp = await activeSocket.onWhatsApp(requestedJid);
     } catch (_error) {
       onWhatsApp = null;
+    }
+
+    const resolvedMatch = Array.isArray(onWhatsApp) && onWhatsApp.length > 0
+      ? onWhatsApp.find((entry) => entry?.exists) || onWhatsApp[0]
+      : null;
+    const resolvedJid = normalizePhone(resolvedMatch?.jid || resolvedMatch?.lid || requestedJid);
+    const storedContact = contactIndex[resolvedJid] || contactIndex[requestedJid] || null;
+
+    let pictureUrl = null;
+    try {
+      pictureUrl = await activeSocket.profilePictureUrl(resolvedJid, "image");
+    } catch (_error) {
+      pictureUrl = null;
     }
 
     res.json({
       success: true,
       provider: "baileys",
-      jid,
-      phone: plainPhone(jid),
-      name: storedContact?.name || storedContact?.pushName || plainPhone(jid),
-      pushName: storedContact?.pushName || null,
+      requestedJid,
+      requestedPhone: plainPhone(requestedJid),
+      jid: resolvedJid,
+      phone: plainPhone(resolvedJid),
+      name: storedContact?.name || storedContact?.pushName || resolvedMatch?.notify || resolvedMatch?.verifiedName || resolvedMatch?.name || null,
+      pushName: storedContact?.pushName || resolvedMatch?.notify || null,
       shortName: storedContact?.shortName || null,
       imgUrl: pictureUrl,
-      exists: Array.isArray(onWhatsApp) ? Boolean(onWhatsApp[0]?.exists) : null,
+      exists: resolvedMatch ? Boolean(resolvedMatch.exists) : null,
     });
   } catch (error) {
     res.status(error.statusCode || 500).json({
