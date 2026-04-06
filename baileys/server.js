@@ -808,7 +808,7 @@ async function handleMessagesUpsert(event) {
 
 async function handleGroupParticipantsUpdate(update = {}) {
   const action = String(update?.action || "").trim().toLowerCase();
-  if (!["add", "invite", "join"].includes(action)) {
+  if (!["add", "invite", "join", "remove", "leave", "kick"].includes(action)) {
     return;
   }
 
@@ -826,7 +826,7 @@ async function handleGroupParticipantsUpdate(update = {}) {
   }
 
   const payload = {
-    event: "group.joined",
+    event: ["remove", "leave", "kick"].includes(action) ? "group.left" : "group.joined",
     data: {
       id: groupId,
       action,
