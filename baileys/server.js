@@ -887,6 +887,98 @@ async function handleMessagesUpsert(event) {
   }
 }
 
+function buildSyntheticReactionMessageFromUpdate(entry = {}) {
+  const key = entry?.key && typeof entry.key === "object" ? entry.key : {};
+  const update = entry?.update && typeof entry.update === "object" ? entry.update : {};
+  const updateMessage = update?.message && typeof update.message === "object" ? update.message : {};
+
+  let reactionMessage = null;
+  if (updateMessage?.reactionMessage && typeof updateMessage.reactionMessage === "object") {
+    reactionMessage = updateMessage.reactionMessage;
+  } else if (Array.isArray(update?.reactions) && update.reactions.length > 0) {
+    const firstReaction = update.reactions.find((value) => value && typeof value === "object");
+    if (firstReaction) {
+      reactionMessage = {
+        text: firstReaction.text || firstReaction.emoji || firstReaction.reactionText || "",
+        key: firstReaction.key || firstReaction.messageKey || {},
+      };
+    }
+  }
+
+  if (!reactionMessage || !reactionMessage.text) {
+    return null;
+  }
+
+  return {
+    key: {
+      id: key.id || update?.id || null,
+      remoteJid: key.remoteJid || update?.remoteJid || null,
+      participant: key.participant || update?.participant || null,
+      fromMe: Boolean(key.fromMe ?? false),
+    },
+    pushName:
+      update?.pushName ||
+      contactIndex[key.participant || key.remoteJid || ""]?.name ||
+      contactIndex[key.participant || key.remoteJid || ""]?.pushName ||
+      null,
+    messageTimestamp: update?.messageTimestamp || Date.now(),
+    message: {
+      reactionMessage,
+    },
+  };
+}
+
+async function handleMessagesUpdate(event) {
+  const updates = Array.isArray(event)
+    ? event
+    : Array.isArray(event?.messages)
+      ? event.messages
+      : Array.isArray(event?.updates)
+        ? event.updates
+        : [];
+
+  for (const entry of updates) {
+    const syntheticMessage = buildSyntheticReactionMessageFromUpdate(entry);
+    if (!syntheticMessage?.key?.id || !syntheticMessage?.key?.remoteJid) {
+      continue;
+    }
+
+    logger.info(
+      {
+        messageId: syntheticMessage.key.id,
+        remoteJid: syntheticMessage.key.remoteJid,
+        participant: syntheticMessage.key.participant || null,
+        reactionText: syntheticMessage.message?.reactionMessage?.text || null,
+      },
+      "Baileys received messages.update reaction event"
+    );
+
+    try {
+      const normalizedPayload = await normalizeIncomingPayload(syntheticMessage);
+      logger.info(
+        {
+          messageId: syntheticMessage.key.id,
+          forwardedEvent: normalizedPayload?.event || null,
+          forwardedType: normalizedPayload?.data?.messages?.messageType || null,
+          forwardedBody: normalizedPayload?.data?.messages?.messageBody || null,
+        },
+        "Baileys forwarding messages.update reaction event to tarkam-bot"
+      );
+      await forwardIncomingMessageToTarkamBot(normalizedPayload);
+    } catch (error) {
+      logger.warn(
+        {
+          err: error,
+          webhookTarget: TARKAM_BOT_WEBHOOK_URL,
+          messageId: syntheticMessage?.key?.id || null,
+          remoteJid: syntheticMessage?.key?.remoteJid || null,
+        },
+        "Failed to forward messages.update reaction event to tarkam-bot"
+      );
+    }
+  }
+}
+
 async function handleGroupParticipantsUpdate(update = {}) {
   const action = String(update?.action || "").trim().toLowerCase();
   if (!["add", "invite", "join", "remove", "leave", "kick"].includes(action)) {
@@ -1122,6 +1214,7 @@ async function connectBaileys() {
 
   nextSocket.ev.on("creds.update", saveCreds);
   nextSocket.ev.on("messages.upsert", handleMessagesUpsert);
+  nextSocket.ev.on("messages.update", handleMessagesUpdate);
   nextSocket.ev.on("group-participants.update", handleGroupParticipantsUpdate);
   nextSocket.ev.on("contacts.upsert", (contacts = []) => {
     for (const contact of contacts) {
