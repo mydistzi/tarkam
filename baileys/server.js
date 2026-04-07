@@ -261,6 +261,65 @@ function isOwnJid(value) {
   return candidates.has(raw) || candidates.has(normalized);
 }
 
+function buildOwnPhoneCandidates() {
+  const candidates = new Set();
+  const values = [
+    sock?.user?.id,
+    sock?.user?.lid,
+  ];
+
+  for (const value of values) {
+    const raw = String(value || "").trim();
+    const plain = plainPhone(raw);
+    if (plain) {
+      candidates.add(plain);
+    }
+  }
+
+  return candidates;
+}
+
+function participantMatchesOwnJid(participant = {}) {
+  const ownPhones = buildOwnPhoneCandidates();
+  const candidates = [
+    participant?.id,
+    participant?.jid,
+    participant?.userJid,
+    participant?.lid,
+    participant?.participant,
+    participant?.pnJid,
+  ];
+
+  for (const value of candidates) {
+    const raw = String(value || "").trim();
+    if (!raw) {
+      continue;
+    }
+    if (isOwnJid(raw)) {
+      return true;
+    }
+    const plain = plainPhone(raw);
+    if (plain && ownPhones.has(plain)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function participantHasAdminPrivileges(participant = {}) {
+  const adminValue = String(participant?.admin || "").trim().toLowerCase();
+  const rankValue = String(participant?.rank || "").trim().toLowerCase();
+  return Boolean(
+    participant?.isAdmin
+    || participant?.isSuperAdmin
+    || adminValue === "admin"
+    || adminValue === "superadmin"
+    || rankValue === "admin"
+    || rankValue === "superadmin"
+  );
+}
+
 function detectMessageType(messageContent) {
   const normalizedContent = unwrapMessageContent(messageContent);
   if (!normalizedContent || typeof normalizedContent !== "object") {
@@ -1570,8 +1629,31 @@ app.get("/api/whatsapp/groups/:groupId", requireApiToken, async (req, res) => {
 
     const botJid = activeSocket.user?.id;
     const participants = groupMetadata?.participants || [];
-    const botParticipant = participants.find(p => p.id === botJid);
-    const isBotAdmin = botParticipant?.admin === "admin" || botParticipant?.admin === "superadmin";
+    const botParticipant = participants.find((participant) => participantMatchesOwnJid(participant)) || null;
+    const isBotAdmin = participantHasAdminPrivileges(botParticipant);
+
+    logger.info(
+      {
+        groupId,
+        botJid: botJid || null,
+        botLid: activeSocket.user?.lid || null,
+        matchedParticipant: botParticipant
+          ? {
+              id: botParticipant.id || null,
+              jid: botParticipant.jid || null,
+              userJid: botParticipant.userJid || null,
+              lid: botParticipant.lid || null,
+              participant: botParticipant.participant || null,
+              admin: botParticipant.admin || null,
+              isAdmin: Boolean(botParticipant.isAdmin),
+              isSuperAdmin: Boolean(botParticipant.isSuperAdmin),
+              rank: botParticipant.rank || null,
+            }
+          : null,
+        participantCount: participants.length,
+      },
+      "Baileys group admin status lookup"
+    );
 
     res.json({
       success: true,
