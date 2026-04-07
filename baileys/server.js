@@ -328,6 +328,16 @@ function detectMessageType(messageContent) {
   return Object.keys(normalizedContent)[0] || null;
 }
 
+function isMediaMessageType(messageType) {
+  return [
+    "imageMessage",
+    "videoMessage",
+    "audioMessage",
+    "documentMessage",
+    "stickerMessage",
+  ].includes(String(messageType || "").trim());
+}
+
 function unwrapMessageContent(messageContent) {
   if (!messageContent || typeof messageContent !== "object") {
     return null;
@@ -442,7 +452,7 @@ function cleanupHostedMediaDir(maxAgeMs = HOSTED_MEDIA_MAX_AGE_MS) {
 
 function buildGroupNsfwStatusUrl(groupId) {
   try {
-    return new URL(`/api/whatsapp/nsfw-groups/${encodeURIComponent(groupId)}`, TARKAM_BOT_WEBHOOK_URL).toString();
+    return new URL(`/api/whatsapp/nsfw-channels/${encodeURIComponent(groupId)}`, TARKAM_BOT_WEBHOOK_URL).toString();
   } catch {
     return "";
   }
@@ -450,7 +460,7 @@ function buildGroupNsfwStatusUrl(groupId) {
 
 async function isGroupNsfwModerationEnabled(groupId) {
   const normalizedGroupId = normalizePhone(groupId);
-  if (!normalizedGroupId.endsWith("@g.us")) {
+  if (!normalizedGroupId) {
     return false;
   }
 
@@ -532,16 +542,13 @@ async function maybeStoreIncomingMedia(message) {
   }
 
   const remoteJid = String(message?.key?.remoteJid || "").trim();
-  if (!remoteJid.endsWith("@g.us")) {
-    return null;
-  }
   if (!(await isGroupNsfwModerationEnabled(remoteJid))) {
     return null;
   }
 
   const normalizedMessage = unwrapMessageContent(message?.message);
   const messageType = detectMessageType(normalizedMessage);
-  if (!normalizedMessage || !["imageMessage", "videoMessage", "stickerMessage"].includes(messageType || "")) {
+  if (!normalizedMessage || !["imageMessage", "videoMessage", "stickerMessage", "documentMessage", "audioMessage"].includes(messageType || "")) {
     return null;
   }
 
@@ -554,9 +561,23 @@ async function maybeStoreIncomingMedia(message) {
     ? ".mp4"
     : messageType === "stickerMessage"
       ? ".webp"
-      : ".jpg";
+      : messageType === "audioMessage"
+        ? guessMediaExtension(String(mediaNode.mimetype || "").trim().toLowerCase(), ".ogg")
+      : messageType === "documentMessage"
+        ? guessMediaExtension(String(mediaNode.mimetype || "").trim().toLowerCase(), ".bin")
+        : ".jpg";
   const mimeType = String(mediaNode.mimetype || "").trim().toLowerCase()
-    || (messageType === "videoMessage" ? "video/mp4" : messageType === "stickerMessage" ? "image/webp" : "image/jpeg");
+    || (
+      messageType === "videoMessage"
+        ? "video/mp4"
+        : messageType === "stickerMessage"
+          ? "image/webp"
+          : messageType === "audioMessage"
+            ? "audio/ogg"
+          : messageType === "documentMessage"
+            ? "application/octet-stream"
+            : "image/jpeg"
+    );
 
   try {
     const downloaded = await downloadMediaMessage(
@@ -866,7 +887,8 @@ async function handleMessagesUpsert(event) {
       continue;
     }
 
-    const msgType = Object.keys(message.message || {})[0];
+    const normalizedContent = unwrapMessageContent(message.message);
+    const msgType = detectMessageType(normalizedContent);
 
     if (!msgType || msgType === "protocolMessage") {
       continue;
@@ -879,6 +901,7 @@ async function handleMessagesUpsert(event) {
       "videoMessage",
       "audioMessage",
       "documentMessage",
+      "stickerMessage",
       "buttonsResponseMessage",
       "listResponseMessage",
       "reactionMessage",
@@ -905,7 +928,7 @@ async function handleMessagesUpsert(event) {
       );
     }
 
-    if (!text || !text.trim()) {
+    if ((!text || !text.trim()) && !isMediaMessageType(msgType)) {
       if (msgType === "reactionMessage") {
         logger.warn(
           {
