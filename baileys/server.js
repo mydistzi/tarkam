@@ -685,9 +685,19 @@ async function normalizeIncomingPayload(message) {
 
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
     const reactionTarget = reactionMessage.key;
+    const reactionTargetId = String(
+      reactionTarget.id
+      || reactionTarget.stanzaId
+      || reactionTarget.msgId
+      || ""
+    ).trim();
+    const storedTargetRecord = getStoredMessageRecord(reactionTargetId);
+    const targetParticipant = reactionTarget.participant || storedTargetRecord?.participant || null;
+    const targetRemoteJid = reactionTarget.remoteJid || storedTargetRecord?.remoteJid || remoteJid || null;
     const derivedFromMe = Boolean(reactionTarget.fromMe)
-      || isOwnJid(reactionTarget.participant)
-      || (!reactionTarget.participant && isOwnJid(reactionTarget.remoteJid));
+      || Boolean(storedTargetRecord?.fromMe)
+      || isOwnJid(targetParticipant)
+      || (!targetParticipant && isOwnJid(targetRemoteJid));
 
     normalizedMessage = {
       ...normalizedMessage,
@@ -695,6 +705,9 @@ async function normalizeIncomingPayload(message) {
         ...reactionMessage,
         key: {
           ...reactionTarget,
+          id: reactionTargetId || reactionTarget.id || undefined,
+          participant: targetParticipant || undefined,
+          remoteJid: targetRemoteJid || undefined,
           fromMe: derivedFromMe,
         },
       },
