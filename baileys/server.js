@@ -979,6 +979,117 @@ async function handleMessagesUpdate(event) {
   }
 }
 
+function buildSyntheticReactionMessageFromEvent(entry = {}) {
+  const eventKey = entry?.key && typeof entry.key === "object" ? entry.key : {};
+  const reaction = entry?.reaction && typeof entry.reaction === "object" ? entry.reaction : {};
+  const targetKey = reaction?.key && typeof reaction.key === "object" ? reaction.key : {};
+  const remoteJid = String(
+    eventKey.remoteJid
+    || targetKey.remoteJid
+    || ""
+  ).trim();
+  const participant = String(
+    eventKey.participant
+    || eventKey.participantPn
+    || reaction.participant
+    || reaction.participantPn
+    || ""
+  ).trim();
+  const reactionText = String(reaction.text || "").trim();
+  const senderTimestampMs = String(reaction.senderTimestampMs || "").trim();
+  const syntheticMessageId = [
+    "reaction",
+    targetKey.id || eventKey.id || "unknown",
+    participant || "unknown",
+    senderTimestampMs || Date.now(),
+  ].join(":");
+
+  if (!remoteJid || !reactionText) {
+    return null;
+  }
+
+  return {
+    key: {
+      id: syntheticMessageId,
+      remoteJid,
+      participant: participant || undefined,
+      fromMe: Boolean(eventKey.fromMe ?? false),
+      participantPn: eventKey.participantPn || reaction.participantPn || undefined,
+      remoteJidAlt: targetKey.remoteJid || undefined,
+    },
+    pushName:
+      contactIndex[participant]?.name
+      || contactIndex[participant]?.pushName
+      || plainPhone(participant),
+    messageTimestamp: Number(reaction.senderTimestampMs || Date.now()),
+    message: {
+      reactionMessage: {
+        text: reactionText,
+        key: {
+          ...targetKey,
+          id: targetKey.id || eventKey.id || undefined,
+          remoteJid: targetKey.remoteJid || remoteJid || undefined,
+          fromMe: Boolean(targetKey.fromMe),
+          participant: targetKey.participant || undefined,
+        },
+        senderTimestampMs: reaction.senderTimestampMs || undefined,
+      },
+    },
+  };
+}
+
+async function handleMessagesReaction(reactions = []) {
+  const entries = Array.isArray(reactions) ? reactions : [];
+
+  for (const entry of entries) {
+    logger.info(
+      {
+        eventKey: entry?.key || null,
+        reaction: entry?.reaction || null,
+      },
+      "Baileys received messages.reaction event"
+    );
+
+    const syntheticMessage = buildSyntheticReactionMessageFromEvent(entry);
+    if (!syntheticMessage?.key?.id || !syntheticMessage?.key?.remoteJid) {
+      logger.warn(
+        {
+          eventKey: entry?.key || null,
+          reaction: entry?.reaction || null,
+        },
+        "Baileys could not normalize messages.reaction event into forwardable payload"
+      );
+      continue;
+    }
+
+    rememberMessage(syntheticMessage, { persistSentIndex: true });
+
+    try {
+      const normalizedPayload = await normalizeIncomingPayload(syntheticMessage);
+      logger.info(
+        {
+          messageId: syntheticMessage.key.id,
+          forwardedEvent: normalizedPayload?.event || null,
+          forwardedType: normalizedPayload?.data?.messages?.messageType || null,
+          forwardedBody: normalizedPayload?.data?.messages?.messageBody || null,
+        },
+        "Baileys forwarding messages.reaction event to tarkam-bot"
+      );
+      await forwardIncomingMessageToTarkamBot(normalizedPayload);
+    } catch (error) {
+      logger.warn(
+        {
+          err: error,
+          webhookTarget: TARKAM_BOT_WEBHOOK_URL,
+          messageId: syntheticMessage?.key?.id || null,
+          remoteJid: syntheticMessage?.key?.remoteJid || null,
+        },
+        "Failed to forward messages.reaction event to tarkam-bot"
+      );
+    }
+  }
+}
+
 async function handleGroupParticipantsUpdate(update = {}) {
   const action = String(update?.action || "").trim().toLowerCase();
   if (!["add", "invite", "join", "remove", "leave", "kick"].includes(action)) {
@@ -1215,6 +1326,7 @@ async function connectBaileys() {
   nextSocket.ev.on("creds.update", saveCreds);
   nextSocket.ev.on("messages.upsert", handleMessagesUpsert);
   nextSocket.ev.on("messages.update", handleMessagesUpdate);
+  nextSocket.ev.on("messages.reaction", handleMessagesReaction);
   nextSocket.ev.on("group-participants.update", handleGroupParticipantsUpdate);
   nextSocket.ev.on("contacts.upsert", (contacts = []) => {
     for (const contact of contacts) {
