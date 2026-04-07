@@ -701,6 +701,8 @@ async function normalizeIncomingPayload(message) {
     };
   }
 
+  logger.info("FULL MESSAGE OBJECT: %s", json.dumps(message_obj))
+
   return {
     event: isGroup ? "messages-group.received" : "messages.upsert",
     provider: "baileys",
