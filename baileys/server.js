@@ -830,13 +830,49 @@ async function handleMessagesUpsert(event) {
     }
 
     const text = extractMessageText(message.message);
+    if (msgType === "reactionMessage") {
+      const reactionPayload = message?.message?.reactionMessage || {};
+      const reactionTarget = reactionPayload?.key || {};
+      logger.info(
+        {
+          messageId: message?.key?.id || null,
+          remoteJid: message?.key?.remoteJid || null,
+          participant: message?.key?.participant || null,
+          reactionText: reactionPayload?.text || null,
+          reactionTargetId: reactionTarget?.id || reactionTarget?.stanzaId || reactionTarget?.msgId || null,
+          reactionTargetFromMe: Boolean(reactionTarget?.fromMe),
+        },
+        "Baileys received reactionMessage event"
+      );
+    }
 
     if (!text || !text.trim()) {
+      if (msgType === "reactionMessage") {
+        logger.warn(
+          {
+            messageId: message?.key?.id || null,
+            remoteJid: message?.key?.remoteJid || null,
+          },
+          "Baileys skipped reactionMessage because extracted text was empty"
+        );
+      }
       continue;
     }
 
     try {
-      await forwardIncomingMessageToTarkamBot(await normalizeIncomingPayload(message));
+      const normalizedPayload = await normalizeIncomingPayload(message);
+      if (msgType === "reactionMessage") {
+        logger.info(
+          {
+            messageId: message?.key?.id || null,
+            forwardedEvent: normalizedPayload?.event || null,
+            forwardedType: normalizedPayload?.data?.messages?.messageType || null,
+            forwardedBody: normalizedPayload?.data?.messages?.messageBody || null,
+          },
+          "Baileys forwarding reactionMessage to tarkam-bot"
+        );
+      }
+      await forwardIncomingMessageToTarkamBot(normalizedPayload);
     } catch (error) {
       logger.warn(
         {
