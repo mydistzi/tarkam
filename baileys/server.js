@@ -980,26 +980,39 @@ async function handleMessagesUpdate(event) {
 }
 
 function buildSyntheticReactionMessageFromEvent(entry = {}) {
-  const eventKey = entry?.key && typeof entry.key === "object" ? entry.key : {};
+  const targetKey = entry?.key && typeof entry.key === "object" ? entry.key : {};
   const reaction = entry?.reaction && typeof entry.reaction === "object" ? entry.reaction : {};
-  const targetKey = reaction?.key && typeof reaction.key === "object" ? reaction.key : {};
+  const actorKey = reaction?.key && typeof reaction.key === "object" ? reaction.key : {};
   const remoteJid = String(
-    eventKey.remoteJid
-    || targetKey.remoteJid
+    targetKey.remoteJid
+    || actorKey.remoteJid
+    || reaction.remoteJid
+    || reaction.remoteJidAlt
+    || targetKey.participant
     || ""
   ).trim();
   const participant = String(
-    eventKey.participant
-    || eventKey.participantPn
+    actorKey.participant
+    || actorKey.participantPn
     || reaction.participant
     || reaction.participantPn
+    || (
+      !actorKey.fromMe
+        ? actorKey.remoteJid
+        : ""
+    )
+    || ""
+  ).trim();
+  const reactionTargetParticipant = String(
+    targetKey.participant
+    || targetKey.remoteJid
     || ""
   ).trim();
   const reactionText = String(reaction.text || "").trim();
   const senderTimestampMs = String(reaction.senderTimestampMs || "").trim();
   const syntheticMessageId = [
     "reaction",
-    targetKey.id || eventKey.id || "unknown",
+    targetKey.id || actorKey.id || "unknown",
     participant || "unknown",
     senderTimestampMs || Date.now(),
   ].join(":");
@@ -1013,9 +1026,9 @@ function buildSyntheticReactionMessageFromEvent(entry = {}) {
       id: syntheticMessageId,
       remoteJid,
       participant: participant || undefined,
-      fromMe: Boolean(eventKey.fromMe ?? false),
-      participantPn: eventKey.participantPn || reaction.participantPn || undefined,
-      remoteJidAlt: targetKey.remoteJid || undefined,
+      fromMe: Boolean(actorKey.fromMe ?? false),
+      participantPn: actorKey.participantPn || reaction.participantPn || undefined,
+      remoteJidAlt: targetKey.remoteJid || actorKey.remoteJid || undefined,
     },
     pushName:
       contactIndex[participant]?.name
@@ -1027,10 +1040,10 @@ function buildSyntheticReactionMessageFromEvent(entry = {}) {
         text: reactionText,
         key: {
           ...targetKey,
-          id: targetKey.id || eventKey.id || undefined,
+          id: targetKey.id || actorKey.id || undefined,
           remoteJid: targetKey.remoteJid || remoteJid || undefined,
           fromMe: Boolean(targetKey.fromMe),
-          participant: targetKey.participant || undefined,
+          participant: reactionTargetParticipant || undefined,
         },
         senderTimestampMs: reaction.senderTimestampMs || undefined,
       },
