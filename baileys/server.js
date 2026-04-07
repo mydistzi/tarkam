@@ -821,7 +821,8 @@ async function handleMessagesUpsert(event) {
       "audioMessage",
       "documentMessage",
       "buttonsResponseMessage",
-      "listResponseMessage"
+      "listResponseMessage",
+      "reactionMessage",
     ];
 
     if (!allowedTypes.includes(msgType)) {
