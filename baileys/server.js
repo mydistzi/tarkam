@@ -814,6 +814,12 @@ async function normalizeIncomingPayload(message) {
         messageId: message?.key?.id || null,
         messageTimestamp: timestamp,
         pushName,
+        botIdentity: {
+          jid: normalizeJidCandidate(sock?.user?.id || ""),
+          lid: normalizeJidCandidate(sock?.user?.lid || ""),
+          phone: plainPhone(sock?.user?.id || ""),
+          lidPhone: plainPhone(sock?.user?.lid || ""),
+        },
         messageType: detectMessageType(normalizedMessage),
         messageBody,
         mediaUrl: storedMedia?.mediaUrl || null,
