@@ -8,6 +8,8 @@ import makeWASocket, {
   DisconnectReason,
   downloadMediaMessage,
   fetchLatestBaileysVersion,
+  getUrlFromDirectPath,
+  normalizeMessageContent,
   proto,
   useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
@@ -338,6 +340,65 @@ function isMediaMessageType(messageType) {
   ].includes(String(messageType || "").trim());
 }
 
+function getUrlHostname(rawUrl) {
+  const value = String(rawUrl || "").trim();
+  if (!value) {
+    return "";
+  }
+
+  try {
+    return new URL(value).hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+function sanitizeWebhookMediaNode(mediaNode) {
+  if (!mediaNode || typeof mediaNode !== "object") {
+    return mediaNode;
+  }
+
+  const directPath = String(mediaNode.directPath || mediaNode.thumbnailDirectPath || "").trim();
+  const fallbackUrl = directPath ? getUrlFromDirectPath(directPath) : "";
+  const currentUrl = String(mediaNode.url || "").trim();
+  const currentHost = getUrlHostname(currentUrl);
+
+  if ((!currentUrl || currentHost === "web.whatsapp.net") && fallbackUrl) {
+    return {
+      ...mediaNode,
+      url: fallbackUrl,
+    };
+  }
+
+  if (currentUrl) {
+    return mediaNode;
+  }
+
+  return mediaNode;
+}
+
+function sanitizeWebhookMediaMessage(messageContent) {
+  if (!messageContent || typeof messageContent !== "object") {
+    return messageContent;
+  }
+
+  const messageType = detectMessageType(messageContent);
+  if (!isMediaMessageType(messageType)) {
+    return messageContent;
+  }
+
+  const mediaNode = messageContent?.[messageType];
+  const normalizedMediaNode = sanitizeWebhookMediaNode(mediaNode);
+  if (normalizedMediaNode === mediaNode) {
+    return messageContent;
+  }
+
+  return {
+    ...messageContent,
+    [messageType]: normalizedMediaNode,
+  };
+}
+
 function unwrapMessageContent(messageContent) {
   if (!messageContent || typeof messageContent !== "object") {
     return null;
@@ -546,7 +607,7 @@ async function maybeStoreIncomingMedia(message) {
     return null;
   }
 
-  const normalizedMessage = unwrapMessageContent(message?.message);
+  const normalizedMessage = normalizeMessageContent(message?.message) || unwrapMessageContent(message?.message);
   const messageType = detectMessageType(normalizedMessage);
   if (!normalizedMessage || !["imageMessage", "videoMessage", "stickerMessage", "documentMessage", "audioMessage"].includes(messageType || "")) {
     return null;
@@ -613,6 +674,9 @@ async function maybeStoreIncomingMedia(message) {
         messageId: message?.key?.id || null,
         remoteJid: message?.key?.remoteJid || null,
         messageType,
+        mediaUrlHost: getUrlHostname(mediaNode.url),
+        hasMediaUrl: Boolean(String(mediaNode.url || "").trim()),
+        hasDirectPath: Boolean(String(mediaNode.directPath || mediaNode.thumbnailDirectPath || "").trim()),
       },
       "Failed to store incoming WhatsApp media for moderation"
     );
@@ -760,7 +824,7 @@ async function normalizeIncomingPayload(message) {
   const pushName = message?.pushName || contactIndex[senderJid]?.name || contactIndex[senderJid]?.pushName || plainPhone(senderJid);
   const timestamp = toEpochMilliseconds(message?.messageTimestamp);
   const reactionMessage = message?.message?.reactionMessage;
-  let normalizedMessage = unwrapMessageContent(message?.message) || {};
+  let normalizedMessage = normalizeMessageContent(message?.message) || unwrapMessageContent(message?.message) || {};
   const storedMedia = await maybeStoreIncomingMedia(message);
 
   if (reactionMessage?.key && typeof reactionMessage.key === "object") {
@@ -793,6 +857,8 @@ async function normalizeIncomingPayload(message) {
       },
     };
   }
+
+  normalizedMessage = sanitizeWebhookMediaMessage(normalizedMessage);
 
   return {
     event: isGroup ? "messages-group.received" : "messages.upsert",
