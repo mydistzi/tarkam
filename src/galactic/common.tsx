@@ -478,8 +478,8 @@ const Footer = ({
               </div>
             </form>
             <ul className="footer-contact">
-              <li><span>Invite Bot ke:</span><Link className="default-btn" to="https://discord.com/oauth2/authorize?client_id=1478890368429850674&permissions=8&scope=bot">Server Discord <span /></Link></li>
-              <li><span>Atau ke:</span><Link className="default-btn" to="https://wa.me/message/PJEIVB5M56NGE1">Group WhatsApp <span /></Link></li>
+              <li><span>Invite Bot ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://discord.com/oauth2/authorize?client_id=1478890368429850674&permissions=8&scope=bot">Server Discord <span /></Link></li>
+              <li><span>Atau ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://wa.me/message/PJEIVB5M56NGE1">Group WhatsApp <span /></Link></li>
             </ul>
           </div>
         </div>
