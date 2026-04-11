@@ -4,7 +4,7 @@ export { default as BlogDetailsPage } from "./blog-details";
 export { default as BlogGridPage } from "./blog-grid";
 export { default as CartPage } from "./cart";
 export { default as CheckoutPage } from "./checkout";
-export { default as ContactPage } from "./contact";
+export { default as ContactPage } from "./hubungi-kami";
 export { default as WhatsAppPage } from "./whatsapp";
 export { default as Error404Page } from "./error404";
 export { default as FaqPage } from "./pusat-bantuan";

@@ -105,7 +105,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/news", element: <BlogClassicPage /> },
       { path: "/blog-details", element: <BlogDetailsPage /> },
       { path: "/blog-details/:blogId", element: <BlogDetailsPage /> },
-      { path: "/contact", element: <ContactPage /> },
+      { path: "/hubungi-kami", element: <ContactPage /> },
       { path: "/whatsapp", element: <WhatsAppPage /> },
       { path: "/syarat-dan-ketentuan", element: <TermsOfService /> },
       { path: "/kebijakan-privasi", element: <PrivacyPolicy /> },
