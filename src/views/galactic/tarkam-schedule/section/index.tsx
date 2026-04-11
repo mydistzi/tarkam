@@ -1,7 +1,7 @@
 import { CtaSection, LatestMatchesList, PageHeader, WatchLiveGrid } from "@/galactic/common";
-import { matches, type StreamItem } from "@/galactic/data";
+import type { MatchItem, StreamItem } from "@/galactic/data";
 
-const TarkamScheduleContent = ({ items }: { items: StreamItem[] }) => (
+const TarkamScheduleContent = ({ matches, streams }: { matches: MatchItem[]; streams: StreamItem[] }) => (
   <>
     <PageHeader
       eyebrow="Tarkam Mendatang"
@@ -11,7 +11,7 @@ const TarkamScheduleContent = ({ items }: { items: StreamItem[] }) => (
     <section className="latest-matches padding-top">
       <div className="container">
         <LatestMatchesList items={matches} />
-        <WatchLiveGrid items={items} />
+        <WatchLiveGrid items={streams} />
         <CtaSection />
       </div>
     </section>

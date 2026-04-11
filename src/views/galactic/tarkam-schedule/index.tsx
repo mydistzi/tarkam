@@ -3,11 +3,11 @@ import { useGalacticContent } from "../shared";
 import { TarkamScheduleContent } from "./section";
 
 const TarkamSchedulePage = () => {
-  const { streams } = useGalacticContent();
+  const { streams, matches } = useGalacticContent();
 
   return (
     <PageShell title="Jadwal Tarkam">
-      <TarkamScheduleContent items={streams} />
+      <TarkamScheduleContent matches={matches} streams={streams} />
     </PageShell>
   );
 };
