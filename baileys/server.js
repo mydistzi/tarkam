@@ -195,6 +195,22 @@ function clearSavedQrPng() {
   }
 }
 
+function clearAuthState() {
+  try {
+    if (fs.existsSync(AUTH_DIR)) {
+      fs.rmSync(AUTH_DIR, { recursive: true, force: true });
+    }
+    if (fs.existsSync(STATE_DIR)) {
+      fs.rmSync(STATE_DIR, { recursive: true, force: true });
+    }
+    currentQr = null;
+    lastPrintedQr = null;
+    logger.info("Cleared stale Baileys auth state");
+  } catch (error) {
+    logger.warn({ err: error }, "Failed to clear stale Baileys auth state");
+  }
+}
+
 function normalizePhone(value) {
   const raw = String(value || "").replace(/\s+/g, "").trim();
   if (!raw) {
@@ -1554,7 +1570,14 @@ async function connectBaileys() {
         return;
       }
 
-      logger.warn({ statusCode }, "Baileys logged out, waiting for a fresh login");
+      logger.warn({ statusCode }, "Baileys logged out, clearing stale auth state and restarting login");
+      clearAuthState();
+      setTimeout(() => {
+        connectBaileys().catch((error) => {
+          logger.error({ err: error }, "Failed to restart Baileys login after logout");
+        });
+      }, 1500);
+      return;
     }
   });
 }
