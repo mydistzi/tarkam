@@ -1,13 +1,13 @@
 {
-	"name":"Tarkam Streaming and WAR",
+	"name":"Tarkam",
 	"short_name":"Tarkam",
 	"description":"Fun Group Random Team",
 	"start_url":"/",
 	"lang":"en-US",
 	"display":"standalone",
 	"orientation":"portrait",
-	"theme_color":"#b69b16",
-	"background_color":"#04040f",
+	"theme_color":"#9841ff",
+	"background_color":"#0e0e2a",
 	"icons": [
 		{
 			"purpose":"maskable",
