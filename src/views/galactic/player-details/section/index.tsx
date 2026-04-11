@@ -201,21 +201,6 @@ const PlayerDetailsContent = ({
           </div>
         </div>
       </section>
-      <GameplaySection
-        title={
-          <>
-            Nonton <span>Gameplay</span> Player
-          </>
-        }
-        items={streams}
-      />
-      <div className="sponsor-section">
-        <div className="container">
-          <div className="outside-spacing">
-            <SponsorCarousel items={sponsors} />
-          </div>
-        </div>
-      </div>
     </>
   );
 };
