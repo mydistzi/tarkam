@@ -48,7 +48,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
               <div className="row cart-body pb-30" key={club.id}>
                 <div className="col-lg-6">
                   <div className="cart-item">
-                    {club.logo ? <img src={club.logo} alt={club.name || "Logo Klub"} /> : null}
+                    {club.logo ? <img src={club.logo} alt={club.name || "Logo Klub"} /> : <img src="/assets/images/placeholder-squad.png" alt="Logo Klub" />}
                     <div className="cart-content">
                       <h3>
                         <Link to={`/klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>

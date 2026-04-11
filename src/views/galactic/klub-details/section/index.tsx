@@ -31,7 +31,7 @@ const ClubsContent = ({ record, members }: ClubsContentProps) => {
   return (
     <>
       <PageHeader className="team-details" title={record.name || "Detail Klub"}>
-        {record.logo ? <img src={record.logo} alt={record.name || "Logo Klub"} /> : null}
+        {record.logo ? <img src={record.logo} alt={record.name || "Logo Klub"} /> : <img src="/assets/images/placeholder-squad.png" alt="Logo Klub" />}
       </PageHeader>
       <div className="team-details-info">
         <div className="container">
