@@ -504,7 +504,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
     {items.map((match) => (
       <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
         <div className="participate-team wow fade-in-left">
-          <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-squad.png")} alt={match.leftTeam} />
+          <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
         </div>
@@ -526,7 +526,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
         <div className="participate-team oponent wow fade-in-right">
           <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
-          <img src={getImageSource(match.rightLogo, "/assets/images/placeholder-squad.png")} alt={match.rightTeam} />
+          <img src={getImageSource(match.rightLogo, "/assets/images/placeholder-team.png")} alt={match.rightTeam} />
         </div>
       </li>
     ))}
@@ -538,7 +538,7 @@ const LatestMatchesList = ({ items }: { items: MatchItem[] }) => (
       <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
         <div className="latest-matches-list">
           <div className="matches-thumb">
-            <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-squad.png")} alt={match.leftTeam} />
+            <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
           </div>
           <div className="matches-content">
             <h3>{match.leftTeam} <span>vs</span> {match.rightTeam}</h3>

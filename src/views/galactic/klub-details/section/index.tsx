@@ -8,14 +8,20 @@ type ClubItem = {
   logo?: string;
   level?: string;
   points?: number;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
 };
 
 type ClubsContentProps = {
   record?: ClubItem;
   members: PlayerItem[];
+  clubWins: number;
+  clubLosses: number;
+  clubPoints: number;
 };
 
-const ClubsContent = ({ record, members }: ClubsContentProps) => {
+const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: ClubsContentProps) => {
   if (!record) {
     return (
       <section className="about-team-section padding-top">
@@ -36,19 +42,37 @@ const ClubsContent = ({ record, members }: ClubsContentProps) => {
       <div className="team-details-info">
         <div className="container">
           <div className="team-details-wrap">
+            <ul className="social-list">
+                <li>Follow:</li>
+                <li><a href={record.facebook || "#"}><i className="fab fa-facebook-f"></i></a></li>
+                <li><a href={record.instagram || "#"}><i className="fab fa-instagram"></i></a></li>
+                <li><a href={record.tiktok || "#"}><i className="fab fa-tiktok"></i></a></li>
+            </ul>
             <ul className="team-counter">
               <li className="counter-list">
-                <h3>{members.length}</h3>
-                <h4>Anggota</h4>
+                <h3><span className="odometer odometer-auto-theme" data-count={clubWins}>0</span></h3>
+                <h4>Menang</h4>
               </li>
               <li className="counter-list">
-                <h3>{record.points ?? 0}</h3>
+                <h3><span className="odometer odometer-auto-theme" data-count={clubLosses}>0</span></h3>
+                <h4>Kalah</h4>
+              </li>
+              <li className="counter-list">
+                <h3><span className="odometer odometer-auto-theme" data-count={clubPoints}>0</span></h3>
                 <h4>Poin</h4>
               </li>
               <li className="counter-list">
-                <h3>{record.level || "-"}</h3>
-                <h4>Level</h4>
+                <h3><span className="odometer odometer-auto-theme" data-count={members.length ?? 0}>0</span></h3>
+                <h4>Players</h4>
               </li>
+            </ul>
+            <ul className="rating">
+                <li>Ratings:</li>
+                <li><i className="las la-star"></i></li>
+                <li><i className="las la-star"></i></li>
+                <li><i className="las la-star"></i></li>
+                <li><i className="las la-star"></i></li>
+                <li><i className="las la-star"></i></li>
             </ul>
           </div>
         </div>

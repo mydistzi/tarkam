@@ -7,13 +7,24 @@ const ClubDetailsPage = () => {
   const { clubCode } = useParams();
   const { clubs, playerRecords } = useGalacticContent();
   const record = clubs.find((item) => String(item.code) === clubCode) || clubs[0];
-  const members = record
-    ? playerRecords.filter((player) => player.club?.id === record.id).map((player) => player.item)
+  const clubMembers = record
+    ? playerRecords.filter((player) => player.club?.id === record.id)
     : [];
+
+  const members = clubMembers.map((player) => player.item);
+  const clubWins = clubMembers.reduce((sum, player) => sum + player.wins, 0);
+  const clubLosses = clubMembers.reduce((sum, player) => sum + player.losses, 0);
+  const clubPoints = clubMembers.reduce((sum, player) => sum + player.points, 0);
 
   return (
     <PageShell title={record?.name || "Detail Klub"} image={record?.logo}>
-      <ClubsContent record={record} members={members} />
+      <ClubsContent
+        record={record}
+        members={members}
+        clubWins={clubWins}
+        clubLosses={clubLosses}
+        clubPoints={clubPoints}
+      />
     </PageShell>
   );
 };

@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/galactic/common";
 import { Link } from "react-router-dom";
 
@@ -15,6 +16,35 @@ type ClubsContentProps = {
 };
 
 const ClubsContent = ({ clubs }: ClubsContentProps) => {
+  const [visibleCount, setVisibleCount] = useState(5);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setVisibleCount(5);
+  }, [clubs]);
+
+  useEffect(() => {
+    if (!loadMoreRef.current || visibleCount >= clubs.length) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          setVisibleCount((current) => Math.min(current + 5, clubs.length));
+        }
+      },
+      {
+        rootMargin: "100px",
+      }
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [clubs.length, visibleCount]);
+
   if (!clubs?.length) {
     return (
       <section className="about-team-section padding-top">
@@ -26,6 +56,9 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
       </section>
     );
   }
+
+  const visibleClubs = clubs.slice(0, visibleCount);
+  const canLoadMore = visibleCount < clubs.length;
 
   return (
     <>
@@ -42,7 +75,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
             <div className="col-lg-1">Poin</div>
             <div className="col-lg-2">Kode</div>
           </div>
-          {clubs.map((club) => {
+          {visibleClubs.map((club) => {
             const clubSlug = club.code || String(club.id);
             return (
               <div className="row cart-body pb-30" key={club.id}>
@@ -75,6 +108,22 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
               </div>
             );
           })}
+
+          {canLoadMore && (
+            <div className="row justify-content-center mt-40">
+              <div className="col-lg-6 text-center">
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={() => setVisibleCount((count) => Math.min(count + 5, clubs.length))}
+                >
+                  Muat lebih banyak
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div ref={loadMoreRef} />
         </div>
       </section>
     </>
