@@ -30,20 +30,38 @@ type ClubsContentProps = {
 
 const OdometerCounter = ({ value }: { value: number }) => {
   const ref = useRef<HTMLSpanElement | null>(null);
+  const odometerInstanceRef = useRef<any>(null);
 
   useEffect(() => {
-    const odometerConstructor = window.Odometer;
-    if (!odometerConstructor || !ref.current) {
+    if (!ref.current) {
       return;
     }
 
-    const od = new odometerConstructor({
-      el: ref.current,
-      value: 0,
-      format: "(ddd)",
-    });
+    const initOdometer = async () => {
+      if (!window.Odometer) {
+        try {
+          await import("@/assets/js/odometer.min.js");
+        } catch {
+          return;
+        }
+      }
 
-    od.update(value);
+      if (!window.Odometer || !ref.current) {
+        return;
+      }
+
+      if (!odometerInstanceRef.current) {
+        odometerInstanceRef.current = new window.Odometer({
+          el: ref.current,
+          value: 0,
+          format: "(,ddd)",
+        });
+      }
+
+      odometerInstanceRef.current.update(value);
+    };
+
+    initOdometer();
   }, [value]);
 
   return <span ref={ref} className="odometer">0</span>;
