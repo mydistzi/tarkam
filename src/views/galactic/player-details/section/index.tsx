@@ -193,7 +193,7 @@ const PlayerDetailsContent = ({
         <div className="container">
           <div className="section-heading mb-30 text-center">
             <h3>Timeline Karier</h3>
-            <h3>Perjalanan <span>{player.name}</span> selama season ini.</h3>
+            <h2>Perjalanan <span>{player.name}</span> selama season ini.</h2>
           </div>
           <div className="row cart-body pb-30">
             {record.timeline.map((entry: { label: string; value: string }) => (
