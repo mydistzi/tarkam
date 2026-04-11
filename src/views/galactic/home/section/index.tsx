@@ -119,15 +119,11 @@ const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
             Menampilkan {filteredPlayers.length} dari {items.length} player
           </div>
           <div className="gender-filter">
-            <button type="button" className={selectedGender === "all" ? "active" : ""} onClick={() => setSelectedGender("all")}>
-              Semua
-            </button>
-            <button type="button" className={selectedGender === "male" ? "active" : ""} onClick={() => setSelectedGender("male")}>
-              Male
-            </button>
-            <button type="button" className={selectedGender === "female" ? "active" : ""} onClick={() => setSelectedGender("female")}>
-              Female
-            </button>
+            <select aria-label="Urutkan toko" className="orderby" defaultValue="date" name="orderby">
+                <option className={selectedGender === "all" ? "active" : ""} onSelect={() => setSelectedGender("all")} value="all">Semua</option>
+                <option className={selectedGender === "male" ? "active" : ""} onSelect={() => setSelectedGender("male")} value="male">Male</option>
+                <option className={selectedGender === "female" ? "active" : ""} onSelect={() => setSelectedGender("female")} value="female">Female</option>
+              </select>
           </div>
         </div>
         <PlayerCarousel items={filteredPlayers} />
