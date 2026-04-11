@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   HomePostGrid,
@@ -94,18 +95,46 @@ const HomeStreamsSection = ({ items }: { items: StreamItem[] }) => (
   </section>
 );
 
-const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => (
-  <section className="team-section padding-bottom">
-    <div className="container">
-      <SectionHeading
-        eyebrow="Gamer Kita"
-        title={<><span>Player</span> Minggu Ini</>}
-        description={<>Roster aktif dibuat dari player, member, klub, dan tim yang sedang jalan dalam minggu ini.</>}
-      />
-      <PlayerCarousel items={items} />
-    </div>
-  </section>
-);
+const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
+  const [selectedGender, setSelectedGender] = useState<"all" | "male" | "female">("all");
+
+  const filteredPlayers = useMemo(() => {
+    if (selectedGender === "all") {
+      return items;
+    }
+
+    return items.filter((player) => player.role?.toLowerCase().includes(selectedGender));
+  }, [items, selectedGender]);
+
+  return (
+    <section className="team-section padding-bottom">
+      <div className="container">
+        <SectionHeading
+          eyebrow="Gamer Kita"
+          title={<><span>Player</span> Minggu Ini</>}
+          description={<>Roster aktif dibuat dari player, member, klub, dan tim yang sedang jalan dalam minggu ini.</>}
+        />
+        <div className="product-shorting">
+          <div>
+            Menampilkan {filteredPlayers.length} dari {items.length} player
+          </div>
+          <div className="gender-filter">
+            <button type="button" className={selectedGender === "all" ? "active" : ""} onClick={() => setSelectedGender("all")}>
+              Semua
+            </button>
+            <button type="button" className={selectedGender === "male" ? "active" : ""} onClick={() => setSelectedGender("male")}>
+              Male
+            </button>
+            <button type="button" className={selectedGender === "female" ? "active" : ""} onClick={() => setSelectedGender("female")}>
+              Female
+            </button>
+          </div>
+        </div>
+        <PlayerCarousel items={filteredPlayers} />
+      </div>
+    </section>
+  );
+};
 
 const HomeJoinSection = () => <JoinMailSection />;
 
