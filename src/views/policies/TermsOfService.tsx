@@ -24,7 +24,7 @@ function TermsOfService() {
       <section className="about-section padding">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-md-6 sm-padding">
+            <div className="col-md-12 sm-padding">
               <div className="about-content">
                 <div className="section-heading">
                   <h3>Syarat & Ketentuan - Last Updated: March 16, 2026</h3>
@@ -87,7 +87,7 @@ function TermsOfService() {
                     dicabut dari server.
                   </p>
 
-                  <h2>3. Penggunaan Wajar</h2>
+                  <h2 className="mt-20">3. Penggunaan Wajar</h2>
                   <p>
                     Pengguna setuju untuk tidak menyalahgunakan Bot, termasuk
                     tapi tidak terbatas pada:
