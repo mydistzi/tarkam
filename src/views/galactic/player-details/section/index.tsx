@@ -2,11 +2,7 @@ import { useState } from "react";
 import { signImage, usaFlag } from "@/galactic/common";
 import type { PlayerRecord } from "../../shared";
 
-const PlayerDetailsContent = ({
-  record,
-}: {
-  record?: PlayerRecord;
-}) => {
+const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
   const [activeTab, setActiveTab] = useState<"home" | "profile">("home");
   if (!record) {
     return (
@@ -31,7 +27,11 @@ const PlayerDetailsContent = ({
           <div className="page-header-info player-details">
             <div className="player-thumb">
               <img
-                src={record.club?.logo || player.image || "/assets/images/placeholder-player.png"}
+                src={
+                  record.club?.logo ||
+                  player.image ||
+                  "/assets/images/placeholder-player.png"
+                }
                 alt={player.name}
               />
             </div>
@@ -54,24 +54,40 @@ const PlayerDetailsContent = ({
             <div className="player-team">
               <a href={`/klub/${clubSlug}`}>
                 <img
-                  src={record.club?.logo || "/assets/images/placeholder-squad.png"}
+                  src={
+                    record.club?.logo || "/assets/images/placeholder-squad.png"
+                  }
                   alt={record.club?.name || player.team || "Independent"}
                 />
               </a>
               <h3>
-                <a href={`/klub/${clubSlug}`}>{record.club?.name || player.team || "Independent"}</a>
+                <a href={`/klub/${clubSlug}`}>
+                  {record.club?.name || player.team || "Independent"}
+                </a>
               </h3>
             </div>
             <ul className="social-list">
               <li>Follow Me:</li>
-              <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
-              <li><a href="#"><i className="fab fa-twitter"></i></a></li>
-              <li><a href="#"><i className="fab fa-youtube"></i></a></li>
+              <li>
+                <a href="#">
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i className="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i className="fab fa-youtube"></i>
+                </a>
+              </li>
             </ul>
             <ul className="player-info">
               <li>
                 <div>
-                  <img className="flag" src={usaFlag} alt="flag" />{' '}
+                  <img className="flag" src={usaFlag} alt="flag" />{" "}
                   <span>{player.country || "Indonesia"}</span>
                 </div>
                 <h4>Kota: {player.country || player.team || "Jakarta"}</h4>
@@ -106,8 +122,9 @@ const PlayerDetailsContent = ({
                 </h2>
                 <p>{player.about}</p>
                 <p className="mt-20">
-                  Statistik sekarang: {record.wins} win, {record.losses} lose, {' '}
-                  {record.points} poin. Klub: {record.club?.name || "Independent"}.
+                  Statistik sekarang: {record.wins} win, {record.losses} lose,{" "}
+                  {record.points} poin. Klub:{" "}
+                  {record.club?.name || "Independent"}.
                 </p>
                 <img src={signImage} alt="sign" />
               </div>
@@ -126,7 +143,11 @@ const PlayerDetailsContent = ({
 
       <section className="product-description padding-top">
         <div className="container">
-          <ul className="nav tab-navigation" id="product-tab-navigation" role="tablist">
+          <ul
+            className="nav tab-navigation"
+            id="product-tab-navigation"
+            role="tablist"
+          >
             <li role="presentation">
               <button
                 className={activeTab === "home" ? "active" : ""}
@@ -161,26 +182,25 @@ const PlayerDetailsContent = ({
               role="tabpanel"
               aria-labelledby="home-tab"
             >
-              <div className="description">
-                <p>{player.about}</p>
-                <ul className="description-meta">
-                  <li>
-                    <span>Tier:</span> {record.member?.tier || "-"}
-                  </li>
-                  <li>
-                    <span>Alias:</span> {record.alias}
-                  </li>
-                  <li>
-                    <span>Gender:</span> {record.member?.gender || player.role || "-"}
-                  </li>
-                  <li>
-                    <span>Klub:</span> {record.club?.name || "Independent"}
-                  </li>
-                  <li>
-                    <span>Season:</span> {record.joinLabel}
-                  </li>
-                </ul>
-              </div>
+              <p>{player.about}</p>
+              <ul className="description-meta">
+                <li>
+                  <span>Tier:</span> {record.member?.tier || "-"}
+                </li>
+                <li>
+                  <span>Alias:</span> {record.alias}
+                </li>
+                <li>
+                  <span>Gender:</span>{" "}
+                  {record.member?.gender || player.role || "-"}
+                </li>
+                <li>
+                  <span>Klub:</span> {record.club?.name || "Independent"}
+                </li>
+                <li>
+                  <span>Season:</span> {record.joinLabel}
+                </li>
+              </ul>
             </div>
             <div
               className={`tab-pane fade${activeTab === "profile" ? " show active" : ""}`}
@@ -223,7 +243,9 @@ const PlayerDetailsContent = ({
         <div className="container">
           <div className="section-heading mb-30 text-center">
             <h3>Timeline Karier</h3>
-            <h2>Perjalanan <span>{player.name}</span> selama season ini.</h2>
+            <h2>
+              Perjalanan <span>{player.name}</span> selama season ini.
+            </h2>
           </div>
           <div className="row cart-body pb-30">
             {record.timeline.map((entry: { label: string; value: string }) => (
