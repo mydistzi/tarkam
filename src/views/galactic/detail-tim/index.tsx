@@ -9,7 +9,7 @@ const TeamDetailsPage = () => {
   const record = teams.find((item) => String(item.id) === teamId) || teams[0];
 
   return (
-    <PageShell title="Team Details" image={record?.logo}>
+    <PageShell title="Detail Tim" image={record?.logo}>
       <TeamDetailsContent record={record} />
     </PageShell>
   );

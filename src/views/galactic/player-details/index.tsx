@@ -9,7 +9,7 @@ const PlayerDetailsPage = () => {
   const record = playerRecords.find((item) => String(item.id) === playerId) || playerRecords[0];
 
   return (
-    <PageShell title="Player Details" type="profile" image={record?.item.image}>
+    <PageShell title="Detail Pemain" type="profile" image={record?.item.image}>
       <PlayerDetailsContent record={record} sponsors={sponsors} streams={streams.slice(0, 3)} />
     </PageShell>
   );

@@ -4,7 +4,7 @@ import type { MatchItem } from "@/galactic/data";
 const UpcomingMatchesContent = ({ items }: { items: MatchItem[] }) => (
   <>
     <PageHeader
-      eyebrow="Daftar Match"
+      eyebrow="Daftar Pertandingan"
       title="Pertandingan Mendatang"
       description="Kontes mendatang, skor, dan info pemenang ditampilkan langsung dari data terbaru Tarkam."
     />
@@ -12,7 +12,7 @@ const UpcomingMatchesContent = ({ items }: { items: MatchItem[] }) => (
       <div className="container">
         <MatchList items={items} />
         <div className="text-center mt-50">
-          <a className="default-btn" href="#top">Muat Lagi Match</a>
+          <a className="default-btn" href="#top">Muat Lagi Pertandingan</a>
         </div>
       </div>
     </section>

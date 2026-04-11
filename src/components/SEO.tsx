@@ -32,8 +32,8 @@ const SEO: React.FC<SEOProps> = ({
   articleTag = []
 }) => {
   // Default values
-  const defaultTitle = 'TARKAM | Streaming and WAR';
-  const defaultDescription = 'Tarkam community, gameplay, and rewards. Join us for fun and exciting gaming experiences.';
+  const defaultTitle = 'TARKAM | Streaming dan WAR';
+  const defaultDescription = 'Komunitas Tarkam, gameplay, dan rewards. Gabung untuk pengalaman gaming yang seru dan fun.';
   const defaultImage = '/logo.png'; // Default image for social sharing
   const defaultUrl = typeof window !== 'undefined' ? window.location.href : '';
 
@@ -94,7 +94,7 @@ const SEO: React.FC<SEOProps> = ({
 
       {/* Additional meta tags for better SEO */}
       <meta name="robots" content="index, follow" />
-      <meta name="language" content="English" />
+      <meta name="language" content="id" />
       <meta name="revisit-after" content="7 days" />
 
       {/* Mobile optimization */}

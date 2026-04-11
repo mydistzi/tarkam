@@ -357,7 +357,7 @@ const defaultMeta: SiteMeta = {
   title: brand.title,
   description: brand.description,
   keywords: ["galactic", "tarkam", "gaming", "esports"],
-  tagline: "Enjoy The Games",
+  tagline: "Nikmati Game-nya",
   author: brand.name,
   email: brand.contact.email,
   phone: brand.contact.phone,

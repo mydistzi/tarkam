@@ -109,10 +109,10 @@ const WhatsAppPage = () => {
   };
 
   return (
-    <PageShell title="WhatsApp Bridge">
+    <PageShell title="Jembatan WhatsApp">
       <>
         <PageHeader
-          eyebrow="WhatsApp Bridge"
+          eyebrow="Jembatan WhatsApp"
           title="Hubungkan Baileys dengan WhatsApp"
           description={meta.tagline || meta.description}
         />
@@ -131,7 +131,7 @@ const WhatsAppPage = () => {
                   ) : (
                     <>
                       <p>Provider: <strong>{session?.provider || "tidak tersedia"}</strong></p>
-                      <p>Connection: <strong>{session?.connection || "unknown"}</strong></p>
+                      <p>Koneksi: <strong>{session?.connection || "unknown"}</strong></p>
                       <p>Nomor terdaftar: <strong>{session?.user?.jid || "belum terhubung"}</strong></p>
                       {qrUrl ? (
                         <div className="qr-preview">

@@ -10,8 +10,8 @@ const MatchDetailsPage = () => {
 
   return (
     <PageShell
-      title="Match Details"
-      description={record ? `${record.item.leftTeam} vs ${record.item.rightTeam} match details.` : "Match details"}
+      title="Detail Pertandingan"
+      description={record ? `${record.item.leftTeam} vs ${record.item.rightTeam} detail pertandingan.` : "Detail pertandingan"}
       image={record?.item.leftLogo}
     >
       <MatchDetailsContent record={record} />

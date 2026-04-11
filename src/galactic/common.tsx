@@ -379,7 +379,7 @@ const HeaderMarkup = ({
             <i className="las la-search" />
           </div>
           <Link className="default-btn" to="/contact">
-            Join Our Team<span />
+            Gabung Tim Kami<span />
           </Link>
           <div className="mobile-menu-icon" onClick={onToggleMenu} onKeyDown={() => undefined} role="button" tabIndex={0}>
             <div className={`burger-menu${menuOpen ? " menu-open" : ""}`}>
@@ -397,7 +397,7 @@ const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }
   <div id="popup-search-box" className={open ? "toggled" : ""} onClick={onClose}>
     <div className="box-inner-wrap d-flex align-items-center" onClick={(event) => event.stopPropagation()}>
       <form id="form" action="#" method="get" role="search" onSubmit={preventSubmit}>
-        <input id="popup-search" type="text" name="s" placeholder="Type keywords here..." />
+        <input id="popup-search" type="text" name="s" placeholder="Ketik kata kunci..." />
         <button id="popup-search-button" type="submit" name="submit">
           <i className="las la-search" />
         </button>
@@ -408,7 +408,7 @@ const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }
 const Footer = ({
   logoUrl,
   siteName = brand.name,
-  description = "Our success in creating business solutions is due in large part to our talented and highly committed team.",
+  description = "Kesuksesan kami datang dari tim yang kreatif, dedikasi tinggi, dan semangat gaming yang nggak pernah padam.",
   socialLinks = brand.socialLinks,
   usefulLinks = [],
   contact = brand.contact,

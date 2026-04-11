@@ -42,8 +42,8 @@ const ContactContent = ({ address, email, phone }: ContactContentProps) => (
           </div>
           <div className="col-md-6 sm-padding">
             <div className="contact-title">
-              <h2>Drop Us A <span>Line</span></h2>
-              <p>Use the galactic contact form for the polished front-end experience while the live contact data stays in sync with the API settings.</p>
+              <h2>Kirim <span>Pesan</span></h2>
+              <p>Isi form kontak galactic ini buat pengalaman front-end yang mulus, sementara data kontak live tetap sinkron dengan pengaturan API.</p>
             </div>
             <ContactForm />
           </div>
