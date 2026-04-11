@@ -18,7 +18,7 @@ function normalizeApiBaseUrl(value: string | undefined): string {
 }
 
 const Api = axios.create({
-  baseURL: normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL) || DEFAULT_API_BASE_URL,
+  baseURL: normalizeApiBaseUrl(import.meta.env.BAILEYS_PUBLIC_BASE_URL) || DEFAULT_API_BASE_URL,
 });
 
 export default Api;
