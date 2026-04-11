@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { signImage, usaFlag } from "@/galactic/common";
 import type { PlayerRecord } from "../../shared";
 
@@ -6,6 +7,7 @@ const PlayerDetailsContent = ({
 }: {
   record?: PlayerRecord;
 }) => {
+  const [activeTab, setActiveTab] = useState<"home" | "profile">("home");
   if (!record) {
     return (
       <section className="about-team-section padding-top">
@@ -126,16 +128,39 @@ const PlayerDetailsContent = ({
         <div className="container">
           <ul className="nav tab-navigation" id="product-tab-navigation" role="tablist">
             <li role="presentation">
-              <button className="active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+              <button
+                className={activeTab === "home" ? "active" : ""}
+                id="home-tab"
+                type="button"
+                role="tab"
+                aria-controls="home"
+                aria-selected={activeTab === "home"}
+                onClick={() => setActiveTab("home")}
+              >
                 Deskripsi
               </button>
             </li>
             <li role="presentation">
-              <button id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Info tambahan</button>
+              <button
+                className={activeTab === "profile" ? "active" : ""}
+                id="profile-tab"
+                type="button"
+                role="tab"
+                aria-controls="profile"
+                aria-selected={activeTab === "profile"}
+                onClick={() => setActiveTab("profile")}
+              >
+                Info tambahan
+              </button>
             </li>
           </ul>
           <div className="tab-content" id="product-tab-content">
-            <div className="tab-pane fade show active description" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div
+              className={`tab-pane fade description${activeTab === "home" ? " show active" : ""}`}
+              id="home"
+              role="tabpanel"
+              aria-labelledby="home-tab"
+            >
               <div className="description">
                 <p>{player.about}</p>
                 <ul className="description-meta">
@@ -157,7 +182,12 @@ const PlayerDetailsContent = ({
                 </ul>
               </div>
             </div>
-            <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div
+              className={`tab-pane fade${activeTab === "profile" ? " show active" : ""}`}
+              id="profile"
+              role="tabpanel"
+              aria-labelledby="profile-tab"
+            >
               <div className="table-responsive">
                 <table className="table product-table">
                   <thead>
