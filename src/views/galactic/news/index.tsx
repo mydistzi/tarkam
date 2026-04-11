@@ -6,7 +6,7 @@ const BlogClassicPage = () => {
   const { blogCategories, posts } = useGalacticContent();
 
   return (
-    <PageShell title="Blog Classic">
+    <PageShell title="Blog Klasik">
       <BlogClassicContent posts={posts} categories={blogCategories} />
     </PageShell>
   );

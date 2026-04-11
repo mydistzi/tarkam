@@ -16,9 +16,9 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
       <section className="cart-section padding-top">
         <div className="container">
           <div className="row cart-header">
-            <div className="col-lg-6">Product</div>
-            <div className="col-lg-3">Quantity</div>
-            <div className="col-lg-1">Price</div>
+            <div className="col-lg-6">Produk</div>
+            <div className="col-lg-3">Jumlah</div>
+            <div className="col-lg-1">Harga</div>
             <div className="col-lg-1">Total</div>
             <div className="col-lg-1" />
           </div>
@@ -59,7 +59,7 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
                 <li><span>Total:</span>{formatCurrency(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>
-                  <Link className="default-btn" to="/checkout">Checkout<span /></Link>
+                  <Link className="default-btn" to="/checkout">Bayar Sekarang<span /></Link>
                 </li>
               </ul>
             </div>

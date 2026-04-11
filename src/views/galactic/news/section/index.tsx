@@ -9,7 +9,7 @@ type BlogClassicContentProps = {
 const BlogClassicContent = ({ posts, categories }: BlogClassicContentProps) => (
   <>
     <PageHeader
-      eyebrow="Blog Classic"
+      eyebrow="Blog Klasik"
       title={<>Berita Gaming &amp; Wawasan</>}
       description="Tampilan artikel klasik ini pakai sumber blog API yang sama, sambil tetap pakai layout galactic yang lebih lega."
     />

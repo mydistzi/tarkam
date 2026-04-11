@@ -852,16 +852,16 @@ const BlogSidebar = ({
   <>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Search Here</h3>
+        <h3>Cari Berita</h3>
       </div>
       <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" type="text" placeholder="Search..." />
+        <input className="form-control" type="text" placeholder="Cari..." />
         <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Categories</h3>
+        <h3>Kategori</h3>
       </div>
       <ul className="category-list">
         {categories.map((category, index) => (
@@ -871,7 +871,7 @@ const BlogSidebar = ({
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Recent Posts</h3>
+        <h3>Postingan Terbaru</h3>
       </div>
       <ul className="thumb-post">
         {recentPosts.map((post) => (
@@ -889,7 +889,7 @@ const BlogSidebar = ({
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Popular Tags</h3>
+        <h3>Tag Populer</h3>
       </div>
       <ul className="tags">
         {tags.map((tag) => (
@@ -911,13 +911,13 @@ const ClassicBlogSidebar = ({
   <>
     <div className="sidebar-widget">
       <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" type="text" placeholder="Search" />
+        <input className="form-control" type="text" placeholder="Cari" />
         <button className="search-btn" type="submit"><i className="fa fa-search" /></button>
       </form>
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Categories</h3>
+        <h3>Kategori</h3>
       </div>
       <ul className="category-list">
         {categories.map((category, index) => (
@@ -927,7 +927,7 @@ const ClassicBlogSidebar = ({
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Recent Articles</h3>
+        <h3>Artikel Terbaru</h3>
       </div>
       <ul className="thumb-post">
         {recentPosts.map((post) => (
@@ -945,7 +945,7 @@ const ClassicBlogSidebar = ({
     </div>
     <div className="sidebar-widget">
       <div className="widget-title">
-        <h3>Tags</h3>
+        <h3>Tag</h3>
       </div>
       <ul className="tags">
         {tags.map((tag) => (
@@ -960,17 +960,17 @@ const ContactForm = ({ className = "" }: { className?: string }) => (
     <form className="form-horizontal" onSubmit={preventSubmit}>
       <div className="contact-form-group">
         <div className="form-field">
-          <input type="text" id="username" name="username" autoComplete="username" className="form-control" placeholder="Your Name" required />
+          <input type="text" id="username" name="username" autoComplete="username" className="form-control" placeholder="Nama Anda" required />
         </div>
         <div className="form-field">
           <input type="email" id="email" name="email" autoComplete="email" className="form-control" placeholder="Email" required />
         </div>
         <div className="form-field message">
-          <textarea cols={30} rows={4} id="message" name="message" className="form-control" placeholder="Message" required />
+          <textarea cols={30} rows={4} id="message" name="message" className="form-control" placeholder="Pesan" required />
         </div>
         <div className="form-field">
           <button className="default-btn" type="submit">
-            Send Massage<span /><span />
+            Kirim Pesan<span /><span />
           </button>
         </div>
       </div>

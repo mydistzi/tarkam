@@ -2,7 +2,7 @@ import { PageShell } from "@/galactic/common";
 import { Error404Content } from "./section";
 
 const Error404Page = () => (
-  <PageShell title="404 Error">
+  <PageShell title="404 - Halaman Tidak Ditemukan">
     <Error404Content />
   </PageShell>
 );

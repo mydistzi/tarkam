@@ -131,7 +131,7 @@ const WhatsAppPage = () => {
                   ) : (
                     <>
                       <p>Provider: <strong>{session?.provider || "tidak tersedia"}</strong></p>
-                      <p>Koneksi: <strong>{session?.connection || "unknown"}</strong></p>
+                      <p>Koneksi: <strong>{session?.connection || "tidak diketahui"}</strong></p>
                       <p>Nomor terdaftar: <strong>{session?.user?.jid || "belum terhubung"}</strong></p>
                       {qrUrl ? (
                         <div className="qr-preview">

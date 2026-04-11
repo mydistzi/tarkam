@@ -15,7 +15,7 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
   return (
     <>
       <PageHeader
-        eyebrow="Checkout"
+        eyebrow="Pembayaran"
         title="Bayar Pesanan"
         description="Ringkasan tagihan dan pesanan sekarang tersambung ke data keranjang, jadi halaman ini bukan lagi template mati."
       />

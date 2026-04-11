@@ -173,7 +173,7 @@ export const menus: GalacticMenuItem[] = [
       { label: "Toko", path: "/shop" },
       { label: "Detail Produk", path: "/shop-details" },
       { label: "Keranjang", path: "/cart" },
-      { label: "Checkout", path: "/checkout" },
+      { label: "Pembayaran", path: "/checkout" },
     ],
   },
   {

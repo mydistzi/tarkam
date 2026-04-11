@@ -6,7 +6,7 @@ const CheckoutPage = () => {
   const { cartItems, meta } = useGalacticContent();
 
   return (
-    <PageShell title="Checkout">
+    <PageShell title="Pembayaran">
       <CheckoutContent items={cartItems} email={meta.email} phone={meta.phone} />
     </PageShell>
   );

@@ -11,7 +11,7 @@ const RouteErrorPage = () => {
       : "Halaman yang kamu cari nggak bisa ditemukan.";
 
   return (
-    <PageShell title="404 Error">
+    <PageShell title="404 - Halaman Tidak Ditemukan">
       <RouteErrorContent description={description} />
     </PageShell>
   );

@@ -70,9 +70,9 @@ const AboutContent = ({
     <section className="team-section padding-bottom">
       <div className="container">
         <SectionHeading
-          eyebrow="Our Gamers"
-          title={<>Meet Our <span>Gamers</span></>}
-          description={<>Rosters below come from the current members, clubs, and active player registrations in the Tarkam system.</>}
+          eyebrow="Gamer Kita"
+          title={<>Kenalan Sama <span>Gamer</span> Kita</>}
+          description={<>Roster di bawah ini berasal dari member, klub, dan registrasi tim aktif di sistem Tarkam.</>}
         />
         <PlayerCarousel items={players} />
       </div>
