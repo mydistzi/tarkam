@@ -310,6 +310,7 @@ type GalacticContentValue = {
   matches: MatchItem[];
   matchRecords: MatchRecord[];
   streams: StreamItem[];
+  tarkams: ApiTarkam[];
   players: PlayerItem[];
   playerRecords: PlayerRecord[];
   teams: TeamRecord[];
@@ -379,6 +380,7 @@ const defaultContent: GalacticContentValue = {
   matches: [],
   matchRecords: [],
   streams: [],
+  tarkams: [],
   players: [],
   playerRecords: [],
   teams: [],
@@ -868,6 +870,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           matches: matchRecords.map((item) => item.item),
           matchRecords,
           streams,
+          tarkams,
           players: playerRecords.map((item) => item.item),
           playerRecords,
           teams: teamRecords,
