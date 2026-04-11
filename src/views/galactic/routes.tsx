@@ -27,6 +27,10 @@ import {
   WhatsAppPage,
 } from "./index";
 import { GalacticDataProvider, useGalacticContent } from "./shared";
+import AcceptableUsePolicy from "../policies/AcceptableUsePolicy";
+import DataDeletionPolicy from "../policies/DataDeletionPolicy";
+import PrivacyPolicy from "../policies/PrivacyPolicy";
+import TermsOfService from "../policies/TermsOfService";
 
 const GalacticLayout = () => {
   const { footerLinks, menus, meta } = useGalacticContent();
@@ -103,6 +107,10 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/blog-details/:blogId", element: <BlogDetailsPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/whatsapp", element: <WhatsAppPage /> },
+      { path: "/policies/terms-of-service", element: <TermsOfService /> },
+      { path: "/policies/privacy-policy", element: <PrivacyPolicy /> },
+      { path: "/policies/acceptable-use-policy", element: <AcceptableUsePolicy /> },
+      { path: "/policies/data-deletion-policy", element: <DataDeletionPolicy /> },
       { path: "*", element: <Error404Page /> },
     ],
   },
