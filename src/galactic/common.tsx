@@ -141,8 +141,7 @@ const sponsorResponsive = {
 const smoothCarouselTransition = "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)";
 const templateHeaderDescription = (
   <>
-    Our success in creating business solutions is due in large part <br />
-    to our talented and highly committed team.
+    Kesuksesan kami bikin solusi bisnis datang dari tim yang jago dan sangat komit.
   </>
 );
 const pageBackground = (image = brand.background): CSSProperties => ({
@@ -455,23 +454,23 @@ const Footer = ({
         <div className="col-lg-3 col-sm-6 sm-padding">
           <div className="footer-item">
             <div className="widget-title">
-              <h3>Contact Us</h3>
+              <h3>Kontak</h3>
             </div>
             <ul className="footer-contact">
-              <li><span>Location:</span>{contact.location || brand.contact.location}</li>
-              <li><span>Join Us:</span>{contact.email || brand.contact.email}</li>
-              <li><span>Phone:</span>{contact.phone || brand.contact.phone}</li>
+              <li><span>Lokasi:</span>{contact.location || brand.contact.location}</li>
+              <li><span>Email:</span>{contact.email || brand.contact.email}</li>
+              <li><span>Telepon:</span>{contact.phone || brand.contact.phone}</li>
             </ul>
           </div>
         </div>
         <div className="col-lg-3 col-sm-6 sm-padding">
           <div className="footer-item subscribe-wrap">
             <div className="widget-title">
-              <h3>Newsletter Signup</h3>
+              <h3>Daftar Newsletter</h3>
             </div>
             <form action="#" className="subscribe-form" onSubmit={preventSubmit}>
-              <input className="form-control" type="email" id="email" name="EMAIL" placeholder="Your Email" autoComplete="email" required />
-              <button className="submit">Subscribe Now</button>
+              <input className="form-control" type="email" id="email" name="EMAIL" placeholder="Email kamu" autoComplete="email" required />
+              <button className="submit">Daftar Sekarang</button>
               <div className="clearfix" />
               <div id="subscribe-result">
                 <div className="subscription-success" />
@@ -715,10 +714,10 @@ const JoinMailSection = () => (
       <div className="row align-items-center">
         <div className="col-md-6 sm-padding">
           <div className="section-heading">
-            <h3>Send Us a Mail</h3>
-            <h2>Join Us As a Super Fans and Get all <span>the Benefits</span></h2>
+            <h3>Kirim Pesan ke Kami</h3>
+            <h2>Gabung Jadi Super Fans dan Dapatkan <span>Segala Keuntungannya</span></h2>
             <p>{templateHeaderDescription}</p>
-            <Link className="default-btn" to="/contact">Join Our Team <span /></Link>
+            <Link className="default-btn" to="/contact">Gabung Tim Kami <span /></Link>
           </div>
         </div>
         <div className="col-md-6 sm-padding">
@@ -732,9 +731,9 @@ const CtaSection = () => (
   <section className="cta-section">
     <div className="container">
       <div className="section-heading">
-        <h3>Connect With Our Gaming Team!</h3>
-        <h2>Join with us for upcoming<br />gaming tournaments!</h2>
-        <Link className="default-btn" to="/contact">Join Our Team</Link>
+        <h3>Terhubung dengan Tim Gaming Kami!</h3>
+        <h2>Ikut kami untuk turnamen<br />gaming yang bakal datang!</h2>
+        <Link className="default-btn" to="/contact">Gabung Tim Kami</Link>
       </div>
     </div>
   </section>
@@ -745,7 +744,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => (
       <img src={getImageSource(product.image, "/assets/images/placeholder-shop.png")} alt={product.name} />
       <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
       <Link className="default-btn" to="/cart">
-        Add To Cart<span />
+        Tambah ke Keranjang<span />
       </Link>
     </div>
     <div className="product-info">
@@ -815,7 +814,7 @@ const PostCard = ({ post }: { post: PostItem }) => (
       <div className="post-content">
         <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>
         <p>{post.excerpt}</p>
-        <Link className="read-more" to={post.path || "/blog-details"}>Read More</Link>
+        <Link className="read-more" to={post.path || "/blog-details"}>Baca Selengkapnya</Link>
       </div>
     </div>
   </div>

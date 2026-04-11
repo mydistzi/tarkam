@@ -11,8 +11,8 @@ const MatchDetailsContent = ({ record }: { record?: MatchRecord }) => {
         <div className="container">
           <div className="col-lg-8 offset-lg-2">
             <div className="match-details">
-              <h2>No match data available yet.</h2>
-              <p>The public contest feed has not returned any records yet. Please come back later.</p>
+              <h2>Belum ada data pertandingan.</h2>
+              <p>Feed kontes publik belum mengembalikan catatan apa pun. Coba lagi nanti.</p>
             </div>
           </div>
         </div>
@@ -45,31 +45,31 @@ const MatchDetailsContent = ({ record }: { record?: MatchRecord }) => {
             <div className="match-details">
               <ul className="post-meta">
                 <li><i className="las la-calendar" />{match.date}</li>
-                <li><i className="las la-gamepad" />{record?.contest?.gender || "Open Division"}</li>
-                <li><i className="las la-trophy" />{record?.winnerTeam?.name || "Winner pending"}</li>
+                <li><i className="las la-gamepad" />{record?.contest?.gender || "Divisi Terbuka"}</li>
+                <li><i className="las la-trophy" />{record?.winnerTeam?.name || "Pemenang belum ditentukan"}</li>
               </ul>
               <h2>{match.leftTeam} Vs {match.rightTeam}</h2>
               <p>
-                This detail page is now generated from the contest graph in the live Tarkam API. It combines the
-                contest entry, both connected teams, and the parent tarkam schedule into one match narrative.
+                Halaman detail ini sekarang dihasilkan dari graph kontes di API Tarkam live. Ia menggabungkan entri kontes,
+                kedua tim yang terhubung, dan jadwal induk Tarkam jadi satu narasi pertandingan.
               </p>
               <p>
-                {record?.tarkam?.description || "Schedule description has not been filled yet, so this page falls back to a clean neutral summary instead of breaking layout."}
+                {record?.tarkam?.description || "Deskripsi jadwal belum diisi, jadi halaman ini fallback ke ringkasan netral agar layout tetap rapi."}
               </p>
               <blockquote>
                 <i className="fas fa-quote-right" />
-                Winner: {record?.winner?.nickname || record?.winnerTeam?.name || "TBA"}
-                <span>- Prize: {record?.winner?.prize || "Awaiting update"}</span>
+                Pemenang: {record?.winner?.nickname || record?.winnerTeam?.name || "TBA"}
+                <span>- Hadiah: {record?.winner?.prize || "Menunggu update"}</span>
               </blockquote>
               <p>
-                Match score: {record?.contest?.score || "TBA"}. Tournament label: {record?.tarkam?.title || record?.tarkam?.week || match.group}.
-                This makes the detail page useful even if the source system only stores a small amount of structured information.
+                Skor pertandingan: {record?.contest?.score || "TBA"}. Label turnamen: {record?.tarkam?.title || record?.tarkam?.week || match.group}.
+                Ini membuat halaman detail tetap berguna meski sistem sumber hanya menyimpan sedikit informasi terstruktur.
               </p>
               <ul className="tags mb-30">
-                <li><a href="#">{record?.contest?.gender || "Open"}</a></li>
-                <li><a href="#">{record?.tarkam?.status || "Tournament"}</a></li>
-                <li><a href="#">{record?.winnerTeam?.name || "Result Pending"}</a></li>
-                <li><a href="#">{record?.tarkam?.week ? `Week ${record.tarkam.week}` : "Bracket"}</a></li>
+                <li><a href="#">{record?.contest?.gender || "Terbuka"}</a></li>
+                <li><a href="#">{record?.tarkam?.status || "Turnamen"}</a></li>
+                <li><a href="#">{record?.winnerTeam?.name || "Hasil menunggu"}</a></li>
+                <li><a href="#">{record?.tarkam?.week ? `Minggu ${record.tarkam.week}` : "Braket"}</a></li>
               </ul>
               <h3 className="comment-title">Community Notes</h3>
               <DisqusThread

@@ -87,7 +87,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                   </div>
                 </div>
                 <h3 className="comment-title">Komentar Artikel</h3>
-                <DisqusThread identifier={post.path || post.title || `blog-${post.date}`} title={post.title || "Blog Article"} />
+                <DisqusThread identifier={post.path || post.title || `blog-${post.date}`} title={post.title || "Artikel Blog"} />
               </div>
             </div>
           </div>

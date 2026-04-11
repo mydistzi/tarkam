@@ -57,11 +57,11 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
             <div className="col-lg-4 sm-padding">
               <ul className="cart-total">
                 <li><span>Subtotal:</span>{formatCurrency(subtotal)}</li>
-                <li><span>Estimated shipping:</span>$10.00</li>
+                <li><span>Perkiraan ongkir:</span>$10.00</li>
                 <li><span>Total:</span>{formatCurrency(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>
-                  <a className="default-btn" href="#">Checkout<span /></a>
+                  <a className="default-btn" href="#">Selesaikan Pembayaran<span /></a>
                 </li>
               </ul>
             </div>

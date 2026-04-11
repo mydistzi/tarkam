@@ -141,50 +141,50 @@ export const brand = {
 
 export const menus: GalacticMenuItem[] = [
   {
-    label: "Home",
+    label: "Beranda",
     children: [
-      { label: "Home Default", path: "/" },
-      { label: "Home eSports", path: "/index-2" },
+      { label: "Beranda Utama", path: "/" },
+      { label: "Beranda eSports", path: "/index-2" },
     ],
   },
   {
-    label: "Tournament",
+    label: "Turnamen",
     children: [
-      { label: "Upcoming Matches", path: "/upcoming-matches" },
-      { label: "Stream Schedule", path: "/stream-schedule" },
-      { label: "Match Details", path: "/match-details" },
-      { label: "Player Details", path: "/player-details" },
-      { label: "Team Details", path: "/team-details" },
+      { label: "Pertandingan Mendatang", path: "/upcoming-matches" },
+      { label: "Jadwal Streaming", path: "/stream-schedule" },
+      { label: "Detail Pertandingan", path: "/match-details" },
+      { label: "Detail Pemain", path: "/player-details" },
+      { label: "Detail Tim", path: "/team-details" },
     ],
   },
   {
-    label: "Pages",
+    label: "Halaman",
     children: [
-      { label: "About Us", path: "/about" },
-      { label: "Our Gamers", path: "/our-gamers" },
-      { label: "Sponsors", path: "/sponsors" },
-      { label: "Help & Faq's", path: "/faq-page" },
-      { label: "404 Error", path: "/404" },
+      { label: "Tentang Kami", path: "/about" },
+      { label: "Para Gamer Kami", path: "/our-gamers" },
+      { label: "Sponsor", path: "/sponsors" },
+      { label: "Bantuan & FAQ", path: "/faq-page" },
+      { label: "404", path: "/404" },
     ],
   },
   {
-    label: "Shop",
+    label: "Toko",
     children: [
-      { label: "Shop Grid", path: "/shop" },
-      { label: "Shop Details", path: "/shop-details" },
-      { label: "Add to Cart Page", path: "/cart" },
-      { label: "Checkout Page", path: "/checkout" },
+      { label: "Toko", path: "/shop" },
+      { label: "Detail Produk", path: "/shop-details" },
+      { label: "Keranjang", path: "/cart" },
+      { label: "Checkout", path: "/checkout" },
     ],
   },
   {
     label: "Blog",
     children: [
-      { label: "Grid Layout", path: "/blog-grid" },
-      { label: "Classic Layout", path: "/blog-classic" },
-      { label: "Blog Details", path: "/blog-details" },
+      { label: "Grid", path: "/blog-grid" },
+      { label: "Klasik", path: "/blog-classic" },
+      { label: "Detail Blog", path: "/blog-details" },
     ],
   },
-  { label: "Contact", path: "/contact" },
+  { label: "Kontak", path: "/contact" },
 ];
 
 export const matches: MatchItem[] = [

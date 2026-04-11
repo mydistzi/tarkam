@@ -19,14 +19,14 @@ const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentP
         <div className="row">
           <div className="col-lg-9 sm-padding">
             <div className="product-shorting">
-              <div>Showing 1-{products.length} of {products.length} results</div>
+              <div>Menampilkan 1-{products.length} dari {products.length} hasil</div>
               <div>
-                <select aria-label="Shop order" className="orderby" defaultValue="date" name="orderby">
-                  <option value="popularity">Sort by popularity</option>
-                  <option value="rating">Sort by average rating</option>
-                  <option value="date">Sort by latest</option>
-                  <option value="price">Sort by price: low to high</option>
-                  <option value="price-desc">Sort by price: high to low</option>
+                <select aria-label="Urutkan toko" className="orderby" defaultValue="date" name="orderby">
+                  <option value="popularity">Urutkan berdasarkan popularitas</option>
+                  <option value="rating">Urutkan berdasarkan rating rata-rata</option>
+                  <option value="date">Urutkan berdasarkan terbaru</option>
+                  <option value="price">Urutkan berdasarkan harga: rendah ke tinggi</option>
+                  <option value="price-desc">Urutkan berdasarkan harga: tinggi ke rendah</option>
                 </select>
               </div>
             </div>

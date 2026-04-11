@@ -7,7 +7,7 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
     return (
       <section className="shop-section single padding">
         <div className="container">
-          <h2>No product data available.</h2>
+          <h2>Data produk belum tersedia.</h2>
         </div>
       </section>
     );
@@ -49,12 +49,12 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                     <form>
                       <input defaultValue="1" max="100" min="1" step="1" type="number" />
                     </form>
-                    <div><Link className="purchase-btn" to="/cart">Add To Cart</Link></div>
+                    <div><Link className="purchase-btn" to="/cart">Tambah ke Keranjang</Link></div>
                   </div>
                   <ul className="product-meta">
                     <li>SKU:<a href="#">{product.sku}</a></li>
-                    <li>Categories:<a href="#">{product.category}</a></li>
-                    <li>Tags:<a href="#">{product.tags.join(", ")}</a></li>
+                    <li>Kategori:<a href="#">{product.category}</a></li>
+                    <li>Tag:<a href="#">{product.tags.join(", ")}</a></li>
                   </ul>
                   <ul className="social-list">
                     <li><a href="#"><i className="fab fa-facebook-f" /></a></li>
@@ -72,18 +72,18 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
       <section className="product-description padding-top">
         <div className="container">
           <ul className="nav tab-navigation" role="tablist">
-            <li role="presentation"><button className="active" type="button">Description</button></li>
-            <li role="presentation"><button type="button">Additional information</button></li>
+            <li role="presentation"><button className="active" type="button">Deskripsi</button></li>
+            <li role="presentation"><button type="button">Info tambahan</button></li>
           </ul>
           <div className="tab-content">
             <div className="tab-pane active">
               <div className="description">
                 <p>{product.description}</p>
                 <ul className="description-meta">
-                  <li><span>Availability:</span> {product.badge}</li>
-                  <li><span>Category:</span> {product.category}</li>
-                  <li><span>Tags:</span> {product.tags.join(", ")}</li>
-                  <li><span>Extra Info:</span> {product.additionalInfo || "No additional info yet."}</li>
+                  <li><span>Ketersediaan:</span> {product.badge}</li>
+                  <li><span>Kategori:</span> {product.category}</li>
+                  <li><span>Tag:</span> {product.tags.join(", ")}</li>
+                  <li><span>Info Tambahan:</span> {product.additionalInfo || "Belum ada info tambahan."}</li>
                 </ul>
               </div>
             </div>
