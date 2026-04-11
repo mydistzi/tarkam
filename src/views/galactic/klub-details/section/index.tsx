@@ -22,10 +22,12 @@ type ClubsContentProps = {
   clubPoints: number;
 };
 
-const AnimatedCounter = ({ value }: { value: number }) => {
+const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const previousValue = useRef(value);
   const frameId = useRef<number | null>(null);
+  const timeoutId = useRef<number | null>(null);
+  const startTime = useRef(0);
 
   useEffect(() => {
     const startValue = previousValue.current;
@@ -36,10 +38,9 @@ const AnimatedCounter = ({ value }: { value: number }) => {
     }
 
     const duration = 800;
-    const startTime = performance.now();
 
     const tick = (now: number) => {
-      const elapsed = Math.min(now - startTime, duration);
+      const elapsed = Math.min(now - startTime.current, duration);
       const progress = elapsed / duration;
       const eased = 1 - Math.pow(1 - progress, 2);
       setDisplayValue(Math.round(startValue + (endValue - startValue) * eased));
@@ -51,14 +52,20 @@ const AnimatedCounter = ({ value }: { value: number }) => {
       }
     };
 
-    frameId.current = requestAnimationFrame(tick);
+    timeoutId.current = window.setTimeout(() => {
+      startTime.current = performance.now();
+      frameId.current = requestAnimationFrame(tick);
+    }, delay);
 
     return () => {
+      if (timeoutId.current !== null) {
+        clearTimeout(timeoutId.current);
+      }
       if (frameId.current !== null) {
         cancelAnimationFrame(frameId.current);
       }
     };
-  }, [value]);
+  }, [value, delay]);
 
   return <span className="odometer">{displayValue}</span>;
 };
@@ -92,19 +99,19 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
             </ul>
             <ul className="team-counter">
               <li className="counter-list">
-                <h3><AnimatedCounter value={clubWins} /></h3>
+                <h3><AnimatedCounter value={clubWins} delay={400} /></h3>
                 <h4>Menang</h4>
               </li>
               <li className="counter-list">
-                <h3><AnimatedCounter value={clubLosses} /></h3>
+                <h3><AnimatedCounter value={clubLosses} delay={400} /></h3>
                 <h4>Kalah</h4>
               </li>
               <li className="counter-list">
-                <h3><AnimatedCounter value={clubPoints} /></h3>
+                <h3><AnimatedCounter value={clubPoints} delay={400} /></h3>
                 <h4>Poin</h4>
               </li>
               <li className="counter-list">
-                <h3><AnimatedCounter value={members.length ?? 0} /></h3>
+                <h3><AnimatedCounter value={members.length ?? 0} delay={400} /></h3>
                 <h4>Players</h4>
               </li>
             </ul>
