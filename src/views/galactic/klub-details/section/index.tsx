@@ -1,12 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PageHeader, PlayerCarousel } from "@/galactic/common";
 import type { PlayerItem } from "@/galactic/data";
-
-declare global {
-  interface Window {
-    Odometer?: any;
-  }
-}
 
 type ClubItem = {
   id: number;
@@ -28,43 +22,45 @@ type ClubsContentProps = {
   clubPoints: number;
 };
 
-const OdometerCounter = ({ value }: { value: number }) => {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const odometerInstanceRef = useRef<any>(null);
+const AnimatedCounter = ({ value }: { value: number }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const previousValue = useRef(value);
+  const frameId = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!ref.current) {
+    const startValue = previousValue.current;
+    const endValue = value;
+    if (startValue === endValue) {
+      setDisplayValue(endValue);
       return;
     }
 
-    const initOdometer = async () => {
-      if (!window.Odometer) {
-        try {
-          await import("@/assets/js/odometer.min.js");
-        } catch {
-          return;
-        }
-      }
+    const duration = 800;
+    const startTime = performance.now();
 
-      if (!window.Odometer || !ref.current) {
-        return;
-      }
+    const tick = (now: number) => {
+      const elapsed = Math.min(now - startTime, duration);
+      const progress = elapsed / duration;
+      const eased = 1 - Math.pow(1 - progress, 2);
+      setDisplayValue(Math.round(startValue + (endValue - startValue) * eased));
 
-      if (!odometerInstanceRef.current) {
-        odometerInstanceRef.current = new window.Odometer({
-          el: ref.current,
-          value: 0,
-          format: "(,ddd)",
-        });
+      if (elapsed < duration) {
+        frameId.current = requestAnimationFrame(tick);
+      } else {
+        previousValue.current = endValue;
       }
-
-      odometerInstanceRef.current.update(value);
     };
 
-    initOdometer();
+    frameId.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (frameId.current !== null) {
+        cancelAnimationFrame(frameId.current);
+      }
+    };
   }, [value]);
 
-  return <span ref={ref} className="odometer">0</span>;
+  return <span className="odometer">{displayValue}</span>;
 };
 
 const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: ClubsContentProps) => {
@@ -96,19 +92,19 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
             </ul>
             <ul className="team-counter">
               <li className="counter-list">
-                <h3><OdometerCounter value={clubWins} /></h3>
+                <h3><AnimatedCounter value={clubWins} /></h3>
                 <h4>Menang</h4>
               </li>
               <li className="counter-list">
-                <h3><OdometerCounter value={clubLosses} /></h3>
+                <h3><AnimatedCounter value={clubLosses} /></h3>
                 <h4>Kalah</h4>
               </li>
               <li className="counter-list">
-                <h3><OdometerCounter value={clubPoints} /></h3>
+                <h3><AnimatedCounter value={clubPoints} /></h3>
                 <h4>Poin</h4>
               </li>
               <li className="counter-list">
-                <h3><OdometerCounter value={members.length ?? 0} /></h3>
+                <h3><AnimatedCounter value={members.length ?? 0} /></h3>
                 <h4>Players</h4>
               </li>
             </ul>
