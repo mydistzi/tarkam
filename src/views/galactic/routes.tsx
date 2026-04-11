@@ -110,7 +110,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/syarat-dan-ketentuan", element: <TermsOfService /> },
       { path: "/kebijakan-privasi", element: <PrivacyPolicy /> },
       { path: "/ketentuan-penggunaan", element: <AcceptableUsePolicy /> },
-      { path: "/penghapusan-data", element: <DataDeletionPolicy /> },
+      { path: "/ketentuan-penghapusan-data", element: <DataDeletionPolicy /> },
       { path: "*", element: <Error404Page /> },
     ],
   },
