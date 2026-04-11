@@ -544,13 +544,20 @@ const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: S
             </div>
             <div className="latest-match-info">
                 <a href="#" className="match-category">{match.group}</a>
-                <h3>{match.leftTeam} <span>-</span> {match.rightTeam}</h3>
+                <h3>{match.leftTeam} {match.rightTeam}</h3>
                 <ul className="match-meta">
                     <li><a href="#">{match.date} - {match.time}</a></li>
                 </ul>
             </div>
             <div className="watch-info">
-                <a className="dl-video-popup" data-autoplay="true" data-vbtype="video" href={stream?.videoUrl || videoHref}>
+                <a
+                  className="dl-video-popup"
+                  data-autoplay="true"
+                  data-vbtype="video"
+                  data-video-title={stream?.title || "Watch Stream"}
+                  data-video-url={stream?.videoUrl || videoHref}
+                  href={stream?.videoUrl || videoHref}
+                >
                   <i className="lab la-youtube"></i>Watch Streem
                 </a>
             </div>
