@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { PageHeader } from "@/galactic/common";
+import { useGalacticContent } from "../../shared";
 import { Link } from "react-router-dom";
 
 type ClubItem = {
@@ -16,15 +17,32 @@ type ClubsContentProps = {
 };
 
 const ClubsContent = ({ clubs }: ClubsContentProps) => {
+  const { playerRecords } = useGalacticContent();
+  const sortedClubs = useMemo(
+    () => [...clubs].sort((left, right) => (right.points ?? 0) - (left.points ?? 0)),
+    [clubs],
+  );
+
+  const memberCounts = useMemo(() => {
+    const counts = new Map<number, number>();
+    playerRecords?.forEach((record) => {
+      const clubId = record.club?.id;
+      if (clubId != null) {
+        counts.set(clubId, (counts.get(clubId) ?? 0) + 1);
+      }
+    });
+    return counts;
+  }, [playerRecords]);
+
   const [visibleCount, setVisibleCount] = useState(5);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setVisibleCount(5);
-  }, [clubs]);
+  }, [sortedClubs]);
 
   useEffect(() => {
-    if (!loadMoreRef.current || visibleCount >= clubs.length) {
+    if (!loadMoreRef.current || visibleCount >= sortedClubs.length) {
       return;
     }
 
@@ -32,7 +50,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
       (entries) => {
         const entry = entries[0];
         if (entry.isIntersecting) {
-          setVisibleCount((current) => Math.min(current + 5, clubs.length));
+          setVisibleCount((current) => Math.min(current + 5, sortedClubs.length));
         }
       },
       {
@@ -43,9 +61,9 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
     observer.observe(loadMoreRef.current);
 
     return () => observer.disconnect();
-  }, [clubs.length, visibleCount]);
+  }, [sortedClubs.length, visibleCount]);
 
-  if (!clubs?.length) {
+  if (!sortedClubs?.length) {
     return (
       <section className="about-team-section padding-top">
         <div className="container">
@@ -57,8 +75,8 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
     );
   }
 
-  const visibleClubs = clubs.slice(0, visibleCount);
-  const canLoadMore = visibleCount < clubs.length;
+  const visibleClubs = sortedClubs.slice(0, visibleCount);
+  const canLoadMore = visibleCount < sortedClubs.length;
 
   return (
     <>
@@ -77,6 +95,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
           </div>
           {visibleClubs.map((club) => {
             const clubSlug = club.code || String(club.id);
+            const memberCount = memberCounts.get(club.id) ?? 0;
             return (
               <div className="row cart-body pb-30" key={club.id}>
                 <div className="col-lg-6">
@@ -86,7 +105,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                       <h3>
                         <Link to={`/klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>
                       </h3>
-                      <p>{club.level ? `Level ${club.level}` : "Level belum ditentukan"}</p>
+                      <p>{memberCount > 0 ? `${memberCount} anggota` : "Anggota belum tersedia"}</p>
                     </div>
                   </div>
                 </div>
@@ -115,7 +134,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                 <button
                   className="default-btn"
                   type="button"
-                  onClick={() => setVisibleCount((count) => Math.min(count + 5, clubs.length))}
+                  onClick={() => setVisibleCount((count) => Math.min(count + 5, sortedClubs.length))}
                 >
                   Muat lebih banyak
                 </button>
@@ -130,4 +149,4 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
   );
 };
 
-export { ClubsContent }; 
+export { ClubsContent };
