@@ -118,7 +118,7 @@ const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
           <div>
             Menampilkan {filteredPlayers.length} dari {items.length} player
           </div>
-          <div className="gender-filter">
+          <div>
             <select aria-label="Urutkan toko" className="orderby" defaultValue="date" name="orderby">
                 <option className={selectedGender === "all" ? "active" : ""} onSelect={() => setSelectedGender("all")} value="all">Semua</option>
                 <option className={selectedGender === "male" ? "active" : ""} onSelect={() => setSelectedGender("male")} value="male">Male</option>
