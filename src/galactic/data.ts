@@ -181,7 +181,7 @@ export const menus: GalacticMenuItem[] = [
     children: [
       { label: "Grid", path: "/blog-grid" },
       { label: "Klasik", path: "/blog-classic" },
-      { label: "Detail Blog", path: "/blog-details" },
+      { label: "Detail Artikel", path: "/blog-details" },
     ],
   },
   { label: "Kontak", path: "/contact" },

@@ -42,7 +42,7 @@ const HomeHeroSection = ({ hero }: HeroSectionProps) => {
           <h1 style={{ whiteSpace: "pre" }} dangerouslySetInnerHTML={{ __html: replaceWithBr() }} />
           <div className="btn-group">
             <Link className="default-btn" to="/contact">
-              Join With Us<span />
+              Gabung Yuk<span />
             </Link>
             <VideoCardButton href={heroVideoUrl} />
           </div>
@@ -124,8 +124,8 @@ const HomeShopSection = ({ items }: { items: ProductItem[] }) => (
     <div className="container">
       <SectionHeading
         eyebrow="Toko Gaming Online"
-        title={<>Jelajah <span>Gear</span></>}
-        description={<>Barang dan gear muncul dari API `products`, lengkap dengan kategori, stok, dan thumbnail.</>}
+        title={<>Jelajah <span>Perlengkapan</span></>}
+        description={<>Barang dan perlengkapan muncul dari API `products`, lengkap dengan kategori, stok, dan thumbnail.</>}
       />
       <ProductCarousel items={items} />
     </div>

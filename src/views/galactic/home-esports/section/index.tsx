@@ -25,7 +25,7 @@ const HomeEsportsHeroSection = ({ hero, streams }: { hero?: HeroItem; streams: S
     <div className="container">
       <div className="hero-content wow fade-in-bottom" data-wow-delay="200ms">
         <h4>{hero?.subtitle || "Nikmati Game-nya"}</h4>
-        <h1>{hero?.title || "Game Epik Buat True Gamers!"}</h1>
+        <h1>{hero?.title || "Game Epik Buat Gamer Sejati!"}</h1>
       </div>
       <WatchLiveGrid items={streams} />
     </div>

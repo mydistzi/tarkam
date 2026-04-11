@@ -6,7 +6,7 @@ const BlogGridPage = () => {
   const { blogCategories, posts } = useGalacticContent();
 
   return (
-    <PageShell title="Grid Blog">
+    <PageShell title="Grid Berita">
       <BlogGridContent posts={posts} categories={blogCategories} />
     </PageShell>
   );

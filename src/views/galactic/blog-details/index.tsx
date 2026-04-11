@@ -14,7 +14,7 @@ const BlogDetailsPage = () => {
 
   return (
     <PageShell
-      title="Detail Blog"
+      title="Detail Artikel"
       description={record?.item.excerpt}
       type="article"
       image={record?.item.image}

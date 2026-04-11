@@ -24,7 +24,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
   return (
     <>
       <PageHeader
-        eyebrow="Detail Blog"
+        eyebrow="Detail Artikel"
         title={post.title}
         className="single"
         description="Halaman artikel ini sekarang terisi dari API blog publik, sambil tetap jaga layout baca panjang galactic."
