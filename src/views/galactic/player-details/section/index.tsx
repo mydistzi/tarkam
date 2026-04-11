@@ -197,9 +197,6 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 <li>
                   <span>Klub:</span> {record.club?.name || "Independent"}
                 </li>
-                <li>
-                  <span>Season:</span> {record.joinLabel}
-                </li>
               </ul>
             </div>
             <div
