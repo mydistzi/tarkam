@@ -274,8 +274,10 @@ type PlayerRecord = {
   club?: ApiClub;
   team?: ApiTeam;
   item: PlayerItem;
+  alias: string;
   joinLabel: string;
   ageLabel: string;
+  timeline: Array<{ label: string; value: string }>;
   wins: number;
   losses: number;
   points: number;
@@ -643,11 +645,20 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
 
         const playerRecords: PlayerRecord[] = players.map((player) => {
           const member = player.member || (player.member_fk ? memberMap.get(player.member_fk) : undefined);
-          const team = teams.find((item) => extractMemberIds(item).includes(member?.id || -1));
           const club = member?.club_fk ? clubMap.get(member.club_fk) : undefined;
           const tarkam = player.tarkam || (player.tarkam_fk ? tarkamMap.get(player.tarkam_fk) : undefined);
+          const team = teams.find((item) => extractMemberIds(item).includes(member?.id || -1));
+          const alias = member?.nickname || member?.username || "Aimless";
           const wins = member?.wins || 0;
           const losses = member?.losses || 0;
+          const seasonLabel = tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam");
+          const seasonDate = formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "TBD";
+          const timeline = [
+            { label: "Musim", value: seasonLabel },
+            { label: "Sesi", value: tarkam?.week ? `Week ${tarkam.week}` : "Current Season" },
+            { label: "Status", value: tarkam?.status || "Aktif" },
+            { label: "Tanggal", value: seasonDate },
+          ];
           const item: PlayerItem = {
             id: player.id,
             name: member?.nickname || member?.username || "Unknown Player",
@@ -670,8 +681,10 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             club,
             team,
             item,
+            alias,
             joinLabel: tarkam?.week ? `Week ${tarkam.week}` : "Current Season",
             ageLabel: "Active Member",
+            timeline,
             wins,
             losses,
             points: member?.points || 0,

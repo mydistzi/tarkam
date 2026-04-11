@@ -1,20 +1,10 @@
-import {
-  GameplaySection,
-  SponsorCarousel,
-  signImage,
-  usaFlag,
-} from "@/galactic/common";
+import { signImage, usaFlag } from "@/galactic/common";
 import type { PlayerRecord } from "../../shared";
-import type { SponsorItem, StreamItem } from "@/galactic/data";
 
 const PlayerDetailsContent = ({
   record,
-  sponsors,
-  streams,
 }: {
   record?: PlayerRecord;
-  sponsors: SponsorItem[];
-  streams: StreamItem[];
 }) => {
   if (!record) {
     return (
@@ -29,6 +19,8 @@ const PlayerDetailsContent = ({
   }
 
   const player = record.item;
+  const alias = record.alias || player.name;
+  const clubSlug = record.club?.code || String(record.club?.id || record.id);
 
   return (
     <>
@@ -37,12 +29,12 @@ const PlayerDetailsContent = ({
           <div className="page-header-info player-details">
             <div className="player-thumb">
               <img
-                src={player.image || "/assets/images/placeholder-player.png"}
+                src={record.club?.logo || player.image || "/assets/images/placeholder-player.png"}
                 alt={player.name}
               />
             </div>
             <h2>
-              {player.name} <span>{player.game}</span>
+              {player.name} <span>{alias}</span>
             </h2>
           </div>
         </div>
@@ -53,30 +45,34 @@ const PlayerDetailsContent = ({
           <div className="shape center back" />
         </div>
       </section>
+
       <div className="team-details-info player-details">
         <div className="container">
           <div className="team-details-wrap">
             <div className="player-team">
-              <a href={player.teamPath || "#"}>
-                <img src={player.teamLogo} alt={player.team} />
+              <a href={`/klub/${clubSlug}`}>
+                <img
+                  src={record.club?.logo || "/assets/images/placeholder-squad.png"}
+                  alt={record.club?.name || player.team || "Independent"}
+                />
               </a>
               <h3>
-                <a href={player.teamPath || "#"}>{player.team}</a>
+                <a href={`/klub/${clubSlug}`}>{record.club?.name || player.team || "Independent"}</a>
               </h3>
             </div>
             <ul className="social-list">
-              <li>Divisi:</li>
-              <li>
-                <a href="#">{player.role}</a>
-              </li>
+              <li>Follow Me:</li>
+              <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
+              <li><a href="#"><i className="fab fa-twitter"></i></a></li>
+              <li><a href="#"><i className="fab fa-youtube"></i></a></li>
             </ul>
             <ul className="player-info">
               <li>
                 <div>
-                  <img className="flag" src={usaFlag} alt="flag" />{" "}
+                  <img className="flag" src={usaFlag} alt="flag" />{' '}
                   <span>{player.country || "Indonesia"}</span>
                 </div>
-                <h4>Kebangsaan</h4>
+                <h4>Kota: {player.country || player.team || "Jakarta"}</h4>
               </li>
               <li>
                 <div>
@@ -96,20 +92,20 @@ const PlayerDetailsContent = ({
           </div>
         </div>
       </div>
+
       <section className="about-team-section padding-top">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-6 sm-padding">
               <div className="section-heading">
-                <h3>Tentang Gue</h3>
+                <h3>Tentang Pemain</h3>
                 <h2>
-                  Tentang <span>Player</span>
+                  Profil <span>{player.name}</span>
                 </h2>
                 <p>{player.about}</p>
                 <p className="mt-20">
-                  Statistik sekarang: {record.wins} win, {record.losses} lose,{" "}
-                  {record.points} poin. Klub:{" "}
-                  {record.club?.name || "Independent"}.
+                  Statistik sekarang: {record.wins} win, {record.losses} lose, {' '}
+                  {record.points} poin. Klub: {record.club?.name || "Independent"}.
                 </p>
                 <img src={signImage} alt="sign" />
               </div>
@@ -125,6 +121,7 @@ const PlayerDetailsContent = ({
           </div>
         </div>
       </section>
+
       <section className="product-description padding-top">
         <div className="container">
           <ul className="nav tab-navigation" role="tablist">
@@ -138,66 +135,77 @@ const PlayerDetailsContent = ({
             </li>
           </ul>
           <div className="tab-content">
-            <div className="tab-pane active">
+            <div className="tab-pane fade show active description" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div className="description">
                 <p>{player.about}</p>
                 <ul className="description-meta">
                   <li>
-                    <span>Win:</span> {record.wins}
+                    <span>Tier:</span> {record.member?.tier || "-"}
                   </li>
                   <li>
-                    <span>Loss:</span> {record.losses}
+                    <span>Alias:</span> {record.alias}
                   </li>
                   <li>
-                    <span>Total Pertandingan:</span>{" "}
-                    {record.wins + record.losses}
-                  </li>
-                  <li>
-                    <span>Total Poin:</span> {record.points}
+                    <span>Gender:</span> {record.member?.gender || player.role || "-"}
                   </li>
                   <li>
                     <span>Klub:</span> {record.club?.name || "Independent"}
                   </li>
                   <li>
-                    <span>Gender:</span> {player.role}
+                    <span>Season:</span> {record.joinLabel}
                   </li>
                 </ul>
               </div>
             </div>
-            <div className="tab-pane">
-              <div className="description">
-                <p>{player.about}</p>
-                <ul className="description-meta">
-                  <li>
-                    <span>Info Tambahan:</span> Belum ada informasi tambahan.
-                  </li>
-                </ul>
+            <div className="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div className="table-responsive">
+                <table className="table product-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Informasi</th>
+                      <th scope="col">Session</th>
+                      <th scope="col">Win</th>
+                      <th scope="col">Los</th>
+                      <th scope="col">MVP</th>
+                      <th scope="col">Total Pertandingan</th>
+                      <th scope="col">Total Poin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{record.alias}</td>
+                      <td>{record.joinLabel}</td>
+                      <td>{record.wins}</td>
+                      <td>{record.losses}</td>
+                      <td>{Math.max(0, Math.round(record.points / 10))}</td>
+                      <td>{record.member?.t_matches ?? 0}</td>
+                      <td>{record.points}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </section>
+
       <section className="cart-section padding-top">
         <div className="container">
-          <div className="row cart-header">
-            <div className="col-lg-1">No.</div>
-            <div className="col-lg-6">Keterangan</div>
-            <div className="col-lg-3">Tanggal</div>
+          <div className="section-heading mb-30 text-center">
+            <h3>Timeline Karier</h3>
+            <p>Perjalanan {player.name} selama season ini.</p>
           </div>
           <div className="row cart-body pb-30">
-            <div className="col-lg-6">
-              <div className="cart-item">
-                <div className="cart-content">
-                  <h3>Timeline</h3>
-                  <p>Keterangan:</p>
+            {record.timeline.map((entry: { label: string; value: string }) => (
+              <div className="col-lg-3" key={entry.label}>
+                <div className="cart-item">
+                  <div className="cart-content">
+                    <h3>{entry.label}</h3>
+                    <p>{entry.value}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-3 col-lg-1">
-              <div className="cart-item">
-                <p>Kamis, 15 Juni 2023</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
