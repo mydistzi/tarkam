@@ -7,7 +7,7 @@ const TarkamSchedulePage = () => {
 
   return (
     <PageShell title="Jadwal Tarkam">
-      <TarkamScheduleContent tarkams={tarkams} streams={streams} />
+      <TarkamScheduleContent streams={streams} tarkams={tarkams} />
     </PageShell>
   );
 };

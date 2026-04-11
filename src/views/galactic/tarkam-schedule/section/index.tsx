@@ -33,7 +33,7 @@ const formatDateLabel = (value?: string) => {
 
 const mapTarkamToMatchItem = (tarkam: ScheduleTarkam): MatchItem => ({
   leftTeam: tarkam.title || `Tarkam ${tarkam.id}`,
-  leftLogo: tarkam.thumbnail || tarkam.image || "/assets/images/placeholder-team.png",
+  leftLogo: tarkam.image || tarkam.thumbnail || "/assets/images/placeholder-team.png",
   rightTeam: tarkam.week ? `Week ${tarkam.week}` : "Tarkam Schedule",
   rightLogo: "/assets/images/placeholder-team.png",
   group: tarkam.status || "Upcoming",
