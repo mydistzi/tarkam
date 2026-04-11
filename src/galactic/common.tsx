@@ -532,29 +532,32 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
     ))}
   </ul>
 );
-const LatestMatchesList = ({ items }: { items: MatchItem[] }) => (
+const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: StreamItem[] }) => (
   <>
-    {items.map((match) => (
-      <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
-        <div className="latest-matches-list">
-          <div className="matches-thumb">
-            <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.jpg")} alt={match.leftTeam} />
-          </div>
-          <div className="latest-match-info">
-              <a href="#" className="match-category">{match.group}</a>
-              <h3>{match.leftTeam} <span>-</span> {match.rightTeam}</h3>
-              <ul className="match-meta">
-                  <li><a href="#">{match.date} - {match.time}</a></li>
-              </ul>
-          </div>
-          <div className="watch-info">
-              <a className="dl-video-popup" data-autoplay="true" data-vbtype="video" href="https://www.youtube.com/watch?v=tv7LfFeamsc">
-                <i className="lab la-youtube"></i>Watch Streem
-              </a>
+    {items.map((match, index) => {
+      const stream = streams?.[index];
+      return (
+        <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
+          <div className="latest-matches-list">
+            <div className="matches-thumb">
+              <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.jpg")} alt={match.leftTeam} />
+            </div>
+            <div className="latest-match-info">
+                <a href="#" className="match-category">{match.group}</a>
+                <h3>{match.leftTeam} <span>-</span> {match.rightTeam}</h3>
+                <ul className="match-meta">
+                    <li><a href="#">{match.date} - {match.time}</a></li>
+                </ul>
+            </div>
+            <div className="watch-info">
+                <a className="dl-video-popup" data-autoplay="true" data-vbtype="video" href={stream?.videoUrl || videoHref}>
+                  <i className="lab la-youtube"></i>Watch Streem
+                </a>
+            </div>
           </div>
         </div>
-      </div>
-    ))}
+      );
+    })}
   </>
 );
 const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {

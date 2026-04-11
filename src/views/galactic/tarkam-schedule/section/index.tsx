@@ -1,5 +1,5 @@
-import { CtaSection, LatestMatchesList, PageHeader, WatchLiveGrid } from "@/galactic/common";
-import type { MatchItem, StreamItem } from "@/galactic/data";
+import { LatestMatchesList, PageHeader } from "@/galactic/common";
+import type { MatchItem } from "@/galactic/data";
 
 type ScheduleTarkam = {
   id: number;
@@ -32,31 +32,29 @@ const formatDateLabel = (value?: string) => {
 };
 
 const mapTarkamToMatchItem = (tarkam: ScheduleTarkam): MatchItem => ({
-  leftTeam: tarkam.title || `Tarkam ${tarkam.id}`,
-  leftLogo: tarkam.image || tarkam.thumbnail || "/assets/images/placeholder-team.png",
-  rightTeam: tarkam.week ? `Week ${tarkam.week}` : "Tarkam Schedule",
-  rightLogo: "/assets/images/placeholder-team.png",
+  leftTeam: tarkam.title || `Tarkam`,
+  leftLogo: tarkam.image || tarkam.thumbnail || "/assets/images/video-thumb.jpg",
+  rightTeam: tarkam.week ? `Week ke ${tarkam.week}` : "Tarkam Schedule",
+  rightLogo: "/assets/images/video-thumb.jpg",
   group: tarkam.status || "Upcoming",
   time: tarkam.male_time || tarkam.female_time || "TBA",
   date: formatDateLabel(tarkam.male_date || tarkam.female_date) || "TBA",
   path: `/tarkam-schedule#tarkam-${tarkam.id}`,
 });
 
-const TarkamScheduleContent = ({ tarkams, streams }: { tarkams: ScheduleTarkam[]; streams: StreamItem[] }) => {
+const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
   const scheduleItems = tarkams.map(mapTarkamToMatchItem);
 
   return (
     <>
       <PageHeader
         eyebrow="Tarkam Mendatang"
-        title="Jadwal Streaming Live"
-        description="Stream pilihan sekarang tarik data dari endpoint `streamings` dan daftar jadwal dari tabel `tarkams`."
+        title="Jadwal Tarkam & Streaming Live"
+        description="Jadwal tarkam dan streaming live yang sudah berlangsung dan yang akan datang."
       />
       <section className="latest-matches padding-top">
         <div className="container">
           <LatestMatchesList items={scheduleItems} />
-          <WatchLiveGrid items={streams} />
-          <CtaSection />
         </div>
       </section>
     </>
