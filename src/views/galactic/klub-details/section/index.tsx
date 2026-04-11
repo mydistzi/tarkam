@@ -1,5 +1,12 @@
+import { useEffect, useRef } from "react";
 import { PageHeader, PlayerCarousel } from "@/galactic/common";
 import type { PlayerItem } from "@/galactic/data";
+
+declare global {
+  interface Window {
+    Odometer?: any;
+  }
+}
 
 type ClubItem = {
   id: number;
@@ -19,6 +26,27 @@ type ClubsContentProps = {
   clubWins: number;
   clubLosses: number;
   clubPoints: number;
+};
+
+const OdometerCounter = ({ value }: { value: number }) => {
+  const ref = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    const odometerConstructor = window.Odometer;
+    if (!odometerConstructor || !ref.current) {
+      return;
+    }
+
+    const od = new odometerConstructor({
+      el: ref.current,
+      value: 0,
+      format: "(ddd)",
+    });
+
+    od.update(value);
+  }, [value]);
+
+  return <span ref={ref} className="odometer">0</span>;
 };
 
 const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: ClubsContentProps) => {
@@ -50,19 +78,19 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
             </ul>
             <ul className="team-counter">
               <li className="counter-list">
-                <h3><span className="odometer odometer-auto-theme" data-count={clubWins}>0</span></h3>
+                <h3><OdometerCounter value={clubWins} /></h3>
                 <h4>Menang</h4>
               </li>
               <li className="counter-list">
-                <h3><span className="odometer odometer-auto-theme" data-count={clubLosses}>0</span></h3>
+                <h3><OdometerCounter value={clubLosses} /></h3>
                 <h4>Kalah</h4>
               </li>
               <li className="counter-list">
-                <h3><span className="odometer odometer-auto-theme" data-count={clubPoints}>0</span></h3>
+                <h3><OdometerCounter value={clubPoints} /></h3>
                 <h4>Poin</h4>
               </li>
               <li className="counter-list">
-                <h3><span className="odometer odometer-auto-theme" data-count={members.length ?? 0}>0</span></h3>
+                <h3><OdometerCounter value={members.length ?? 0} /></h3>
                 <h4>Players</h4>
               </li>
             </ul>

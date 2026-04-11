@@ -14,6 +14,7 @@ import "swiper/css/free-mode";
 import "@/assets/css/animate.min.css";
 import "@/assets/css/line-awesome.min.css";
 import "@/assets/css/odometer.min.css";
+import "@/assets/js/odometer.min.js";
 import "@/assets/css/venobox.min.css";
 import "@/assets/css/keyframe-animation.css";
 import "@/assets/css/header.css";
