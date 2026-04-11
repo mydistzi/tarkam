@@ -103,7 +103,10 @@ const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
       return items;
     }
 
-    return items.filter((player) => player.role?.toLowerCase().includes(selectedGender));
+    return items.filter((player) => {
+      const role = player.role?.toLowerCase().trim() || "";
+      return role.startsWith(`${selectedGender} `) || role === `${selectedGender}`;
+    });
   }, [items, selectedGender]);
 
   return (
