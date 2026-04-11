@@ -42,7 +42,7 @@ function TermsOfService() {
                     Discord/WhatsApp, kamu setuju sama syarat ini. Kalau nggak
                     setuju, berhenti pakai Bot sekarang juga.
                   </p>
-                  <h2 className="mt-20">1. Deskripsi Layanan</h2>
+                  <h3 className="mt-20">1. Deskripsi Layanan</h3>
                   <p>
                     Tarkam adalah bot Discord yang dirancang untuk bantu server
                     dengan fitur-fitur seperti:
@@ -69,7 +69,7 @@ function TermsOfService() {
                     </a>
                   </p>
 
-                  <h2 className="mt-20">2. Kelayakan</h2>
+                  <h3 className="mt-20">2. Kelayakan</h3>
                   <p>Untuk pakai Bot, kamu harus:</p>
                   <ul>
                     <li>
@@ -87,7 +87,7 @@ function TermsOfService() {
                     dicabut dari server.
                   </p>
 
-                  <h2 className="mt-20">3. Penggunaan Wajar</h2>
+                  <h3 className="mt-20">3. Penggunaan Wajar</h3>
                   <p>
                     Pengguna setuju untuk tidak menyalahgunakan Bot, termasuk
                     tapi tidak terbatas pada:
@@ -105,7 +105,7 @@ function TermsOfService() {
                     server yang melanggar aturan.
                   </p>
 
-                  <h2 className="mt-20">4. Pengumpulan Data</h2>
+                  <h3 className="mt-20">4. Pengumpulan Data</h3>
                   <p>
                     Agar layanan berjalan, Bot bisa mengumpulkan dan memproses
                     data teknis terbatas seperti:
@@ -126,7 +126,7 @@ function TermsOfService() {
                     ketiga kecuali jika diwajibkan oleh hukum.
                   </p>
 
-                  <h2 className="mt-20">5. Penyimpanan Data & Retensi</h2>
+                  <h3 className="mt-20">5. Penyimpanan Data & Retensi</h3>
                   <p>
                     Beberapa data bisa disimpan sementara atau dipertahankan
                     sesuai fitur yang aktif di server.
@@ -146,7 +146,7 @@ function TermsOfService() {
                     </a>
                   </p>
 
-                  <h2 className="mt-20">6. Ketersediaan Layanan</h2>
+                  <h3 className="mt-20">6. Ketersediaan Layanan</h3>
                   <p>
                     Bot disediakan apa adanya dan tidak selalu terjamin
                     tersedia.
@@ -162,7 +162,7 @@ function TermsOfService() {
                     layanan kapan saja tanpa pemberitahuan.
                   </p>
 
-                  <h2 className="mt-20">7. Batas Tanggung Jawab</h2>
+                  <h3 className="mt-20">7. Batas Tanggung Jawab</h3>
                   <p>
                     Sejauh diizinkan hukum, Dist tidak bertanggung jawab atas:
                   </p>
@@ -176,7 +176,7 @@ function TermsOfService() {
                   </ul>
                   <p className="mt-20">Penggunaan Bot adalah risiko kamu sendiri.</p>
 
-                  <h2 className="mt-20">8. Penghentian</h2>
+                  <h3 className="mt-20">8. Penghentian</h3>
                   <p>Kami berhak:</p>
                   <ul>
                     <li>Membatasi akses untuk pengguna atau server tertentu</li>
@@ -188,7 +188,7 @@ function TermsOfService() {
                     menghapusnya dari server Discord.
                   </p>
 
-                  <h2 className="mt-20">9. Perubahan Syarat</h2>
+                  <h3 className="mt-20">9. Perubahan Syarat</h3>
                   <p>Kami bisa memperbarui syarat ini secara berkala.</p>
                   <p>
                     Penggunaan Bot setelah perubahan dipublikasi dianggap
@@ -208,7 +208,7 @@ function TermsOfService() {
                     <li>Support server resmi</li>
                   </ul>
 
-                  <h2 className="mt-20">10. Kontak & Dukungan</h2>
+                  <h3 className="mt-20">10. Kontak & Dukungan</h3>
                   <p>
                     Kalau ada pertanyaan tentang syarat ini, hubungi kami lewat:
                   </p>
@@ -234,7 +234,7 @@ function TermsOfService() {
                   </p>
                   <p className="mt-20">Developer: Dist</p>
 
-                  <h2 className="mt-20">11. Hukum yang Berlaku</h2>
+                  <h3 className="mt-20">11. Hukum yang Berlaku</h3>
                   <p>
                     Syarat ini diatur oleh hukum Indonesia dan yurisdiksi
                     Jakarta.
