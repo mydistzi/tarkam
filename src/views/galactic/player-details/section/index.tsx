@@ -124,17 +124,17 @@ const PlayerDetailsContent = ({
 
       <section className="product-description padding-top">
         <div className="container">
-          <ul className="nav tab-navigation" role="tablist">
+          <ul className="nav tab-navigation" id="product-tab-navigation" role="tablist">
             <li role="presentation">
-              <button className="active" type="button">
+              <button className="active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
                 Deskripsi
               </button>
             </li>
             <li role="presentation">
-              <button type="button">Info tambahan</button>
+              <button id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Info tambahan</button>
             </li>
           </ul>
-          <div className="tab-content">
+          <div className="tab-content" id="product-tab-content">
             <div className="tab-pane fade show active description" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div className="description">
                 <p>{player.about}</p>
