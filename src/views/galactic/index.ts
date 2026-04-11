@@ -7,7 +7,7 @@ export { default as CheckoutPage } from "./checkout";
 export { default as ContactPage } from "./contact";
 export { default as WhatsAppPage } from "./whatsapp";
 export { default as Error404Page } from "./error404";
-export { default as FaqPage } from "./faq-page";
+export { default as FaqPage } from "./pusat-bantuan";
 export { default as HomeDefaultPage } from "./home";
 export { default as HomeEsportsPage } from "./home-esports";
 export { default as MatchDetailsPage } from "./detail-pertandingan";

@@ -94,7 +94,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/about", element: <AboutPage /> },
       { path: "/our-gamers", element: <OurGamersPage /> },
       { path: "/sponsors", element: <SponsorsPage /> },
-      { path: "/faq-page", element: <FaqPage /> },
+      { path: "/pusat-bantuan", element: <FaqPage /> },
       { path: "/404", element: <Error404Page /> },
       { path: "/shop", element: <ShopGridPage /> },
       { path: "/shop-details", element: <ShopDetailsPage /> },
