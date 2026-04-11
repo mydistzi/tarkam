@@ -13,6 +13,8 @@ export { default as HomeEsportsPage } from "./home-esports";
 export { default as MatchDetailsPage } from "./detail-pertandingan";
 export { default as OurGamersPage } from "./our-gamers";
 export { default as PlayerDetailsPage } from "./player-details";
+export { default as ClubsPage } from "./klub";
+export { default as ClubDetailsPage } from "./klub-details";
 export { default as RouteErrorPage } from "./route-error";
 export { default as ShopDetailsPage } from "./shop-details";
 export { default as ShopGridPage } from "./shop";

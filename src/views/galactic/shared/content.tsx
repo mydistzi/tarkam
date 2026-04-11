@@ -311,6 +311,7 @@ type GalacticContentValue = {
   players: PlayerItem[];
   playerRecords: PlayerRecord[];
   teams: TeamRecord[];
+  clubs: ApiClub[];
   products: ProductItem[];
   productRecords: ProductRecord[];
   cartItems: CartRecord[];
@@ -379,6 +380,7 @@ const defaultContent: GalacticContentValue = {
   players: [],
   playerRecords: [],
   teams: [],
+  clubs: [],
   products: [],
   productRecords: [],
   cartItems: [],
@@ -856,6 +858,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           players: playerRecords.map((item) => item.item),
           playerRecords,
           teams: teamRecords,
+          clubs,
           products: productRecords.map((item) => item.item),
           productRecords,
           cartItems,
