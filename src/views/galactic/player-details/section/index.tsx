@@ -210,7 +210,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                   <thead>
                     <tr>
                       <th scope="col">Informasi</th>
-                      <th scope="col">Session</th>
+                      <th scope="col">Tarkam</th>
                       <th scope="col">Win</th>
                       <th scope="col">Los</th>
                       <th scope="col">MVP</th>
