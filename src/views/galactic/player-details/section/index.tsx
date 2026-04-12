@@ -20,7 +20,6 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
   const alias = record.alias || player.name;
   const clubSlug = record.club?.code || String(record.club?.id || record.id);
   const city = player.country || record.member?.city || "Jakarta";
-  const division = record.member?.gender ? `${record.member.gender} Division` : player.role || "Open";
   const status = record.member?.status || (record.player?.paid ? "Aktif" : "Tidak Aktif");
 
   const normalizeSocialUrl = (value?: string) => {
@@ -106,13 +105,6 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
               </li>
               <li>
                 <div>
-                  <i className="las la-user" />
-                  <span>Divisi</span>
-                </div>
-                <h4>{division}</h4>
-              </li>
-              <li>
-                <div>
                   <i className="las la-star" />
                   <span>Status</span>
                 </div>
@@ -123,7 +115,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                   <i className="las la-calendar" />
                   <span>Gabung</span>
                 </div>
-                <h4>{record.joinLabel}</h4>
+                <h4>{record.member?.created_at}</h4>
               </li>
             </ul>
           </div>
@@ -215,12 +207,6 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 </li>
                 <li>
                   <span>Klub:</span> {record.club?.name || "Independent"}
-                </li>
-                <li>
-                  <span>Discord:</span> {record.member?.discord_user_id || "-"}
-                </li>
-                <li>
-                  <span>Telepon:</span> {record.member?.phone_number || record.member?.tunisia_phone || "-"}
                 </li>
               </ul>
             </div>
