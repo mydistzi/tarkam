@@ -19,6 +19,22 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
   const player = record.item;
   const alias = record.alias || player.name;
   const clubSlug = record.club?.code || String(record.club?.id || record.id);
+  const city = player.country || record.member?.city || "Jakarta";
+  const division = record.member?.gender ? `${record.member.gender} Division` : player.role || "Open";
+  const status = record.member?.status || (record.player?.paid ? "Aktif" : "Tidak Aktif");
+
+  const normalizeSocialUrl = (value?: string) => {
+    if (!value?.trim()) return undefined;
+    if (value.startsWith("http")) return value;
+    if (value.includes("instagram.com") || value.includes("facebook.com") || value.includes("tiktok.com")) return `https://${value.replace(/^https?:\/\//, "")}`;
+    return value;
+  };
+
+  const socialLinks = [
+    { icon: "fab fa-facebook-f", href: normalizeSocialUrl(record.member?.facebook), label: "Facebook" },
+    { icon: "fab fa-instagram", href: normalizeSocialUrl(record.member?.instagram), label: "Instagram" },
+    { icon: "fab fa-tiktok", href: normalizeSocialUrl(record.member?.tiktok), label: "TikTok" },
+  ].filter((item) => !!item.href);
 
   return (
     <>
@@ -68,36 +84,39 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
             </div>
             <ul className="social-list">
               <li>Follow Me:</li>
-              <li>
-                <a href="#">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fab fa-twitter"></i>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fab fa-youtube"></i>
-                </a>
-              </li>
+              {socialLinks.length > 0 ? (
+                socialLinks.map((social) => (
+                  <li key={social.label}>
+                    <a href={social.href} target="_blank" rel="noreferrer noopener">
+                      <i className={social.icon}></i>
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li>Tidak ada tautan media sosial.</li>
+              )}
             </ul>
             <ul className="player-info">
               <li>
                 <div>
                   <img className="flag" src={usaFlag} alt="flag" />{" "}
-                  <span>{player.country || "Indonesia"}</span>
+                  <span>Lokasi</span>
                 </div>
-                <h4>Kota: {player.country || player.team || "Jakarta"}</h4>
+                <h4>{city}</h4>
               </li>
               <li>
                 <div>
                   <i className="las la-user" />
-                  <span>Aktivitas</span>
+                  <span>Divisi</span>
                 </div>
-                <h4>{record.ageLabel}</h4>
+                <h4>{division}</h4>
+              </li>
+              <li>
+                <div>
+                  <i className="las la-star" />
+                  <span>Status</span>
+                </div>
+                <h4>{status}</h4>
               </li>
               <li>
                 <div>
@@ -197,6 +216,12 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 <li>
                   <span>Klub:</span> {record.club?.name || "Independent"}
                 </li>
+                <li>
+                  <span>Discord:</span> {record.member?.discord_user_id || "-"}
+                </li>
+                <li>
+                  <span>Telepon:</span> {record.member?.phone_number || record.member?.tunisia_phone || "-"}
+                </li>
               </ul>
             </div>
             <div
@@ -216,6 +241,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                       <th scope="col">MVP</th>
                       <th scope="col">Total Pertandingan</th>
                       <th scope="col">Total Poin</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -227,6 +253,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                       <td>{Math.max(0, Math.round(record.points / 10))}</td>
                       <td>{record.member?.t_matches ?? 0}</td>
                       <td>{record.points}</td>
+                      <td>{status}</td>
                     </tr>
                   </tbody>
                 </table>

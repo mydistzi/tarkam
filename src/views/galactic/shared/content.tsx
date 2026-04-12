@@ -27,6 +27,10 @@ type ApiMenuItem = {
   parent_id?: number | null;
   title?: string | null;
   url?: string | null;
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiWebSetting = {
@@ -34,23 +38,38 @@ type ApiWebSetting = {
   site_url?: string;
   tagline?: string;
   author_name?: string;
+  author_url?: string;
+  full_name?: string;
   first_name?: string;
+  last_name?: string;
   email?: string;
   phone_number?: string;
-  whatsapp_number?: string;
   address?: string;
+  whatsapp_number?: string;
   facebook_url?: string;
   instagram_url?: string;
-  whatsapp_url?: string;
   discord_url?: string;
+  whatsapp_url?: string;
   about_description?: string;
+  about_image_path?: string;
   about_image?: string;
   about_image_alt?: string;
+  logo_path?: string;
   logo?: string;
+  favicon_path?: string;
   favicon?: string;
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
+  google_analytics_id?: string;
+  google_tag_manager_id?: string;
+  facebook_pixel_id?: string;
+  youtube_pixel_id?: string;
+  github_pixel_id?: string;
+  discord_pixel_id?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiHeader = {
@@ -60,12 +79,21 @@ type ApiHeader = {
   image?: string;
   image_alt?: string;
   video_url?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiCategory = {
   id: number;
+  title?: string;
   name?: string;
   slug?: string;
+  url?: string;
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiBlog = {
@@ -76,8 +104,11 @@ type ApiBlog = {
   image?: string;
   image_alt?: string;
   category_id?: number;
+  user_id?: number;
+  tags?: Array<{ id?: number; name?: string }>;
   created_at?: string;
   updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiPenyawer = {
@@ -85,7 +116,12 @@ type ApiPenyawer = {
   name?: string;
   gender?: string;
   amount?: number;
+  pesan?: string;
+  member_fk?: number | null;
   tarkam_fk?: number | null;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiProduct = {
@@ -98,16 +134,28 @@ type ApiProduct = {
   additional_info?: string;
   price?: number | string;
   status?: string;
-  catprod?: { title?: string; name?: string };
-  tags?: Array<{ name?: string }>;
-  thumbnails?: Array<{ product_thumbnail_path?: string }>;
+  catprod_id?: number;
+  user_id?: number;
+  catprod?: { id?: number; title?: string; name?: string; slug?: string; url?: string; status?: string };
+  tags?: Array<{ id?: number; name?: string }>;
+  thumbnails?: Array<{ id?: number; product_thumbnail_path?: string }>;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiCart = {
   id: number;
   quantity?: number;
   unit_price?: number;
+  product_id?: number;
+  user_id?: number;
+  session_id?: string | null;
+  status?: string;
   product?: ApiProduct;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiStreaming = {
@@ -118,8 +166,11 @@ type ApiStreaming = {
   thumbnail?: string;
   embed?: string;
   description?: string;
-  tags?: Array<{ name?: string }>;
+  user_id?: number;
+  tags?: Array<{ id?: number; name?: string }>;
   created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiClub = {
@@ -127,34 +178,64 @@ type ApiClub = {
   code?: string;
   name?: string;
   logo?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
   level?: string;
   points?: number;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiMember = {
   id: number;
   username?: string;
   nickname?: string;
+  discord_user_id?: string;
+  phone_number?: string;
+  tunisia_phone?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
   gender?: string;
-  city?: string;
+  latitude?: number;
+  longitude?: number;
   picture_url?: string;
   tier?: string;
-  club_fk?: number;
+  city?: string;
+  club_fk?: number | null;
   wins?: number;
   losses?: number;
   t_matches?: number;
   points?: number;
   status?: string;
+  alias?: ApiAlias;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+};
+
+type ApiAlias = {
+  id: number;
+  alias?: string;
+  member_fk?: number;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiPlayer = {
   id: number;
-  score?: number;
+  score?: number | string;
   paid?: boolean;
-  member_fk?: number;
-  tarkam_fk?: number;
+  member_fk?: number | null;
+  tarkam_fk?: number | null;
   member?: ApiMember;
   tarkam?: ApiTarkam;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiTeam = {
@@ -166,6 +247,9 @@ type ApiTeam = {
   member3_fk?: number | null;
   group_fk?: number | null;
   tarkam_fk?: number | null;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiTarkam = {
@@ -174,16 +258,25 @@ type ApiTarkam = {
   week?: string;
   status?: string;
   description?: string;
+  transfer_info?: string;
+  proof?: string;
+  thumbnail?: string;
+  image?: string;
   pool_price_m?: number;
   pool_price_f?: number;
   male_date?: string;
   male_time?: string;
   female_date?: string;
   female_time?: string;
-  image?: string;
-  thumbnail?: string;
+  male_slot?: number;
+  female_slot?: number;
+  male_completed?: number;
+  female_completed?: number;
   mvp_m?: string;
   mvp_f?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiContest = {
@@ -194,6 +287,9 @@ type ApiContest = {
   score?: number | string;
   tarkam_fk?: number | null;
   gender?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiWinner = {
@@ -203,6 +299,9 @@ type ApiWinner = {
   gender?: string;
   team_fk?: number | null;
   tarkam_fk?: number | null;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type ApiUsefull = {
@@ -210,6 +309,9 @@ type ApiUsefull = {
   title?: string;
   slug?: string;
   url?: string;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
 };
 
 type FooterLink = {
@@ -528,6 +630,7 @@ async function fetchGalacticPayloads() {
     Api.get("/winners"),
     Api.get("/usefull"),
     Api.get("/penyawers"),
+    Api.get("/aliases"),
   ]);
 
   const read = <T,>(index: number): T | undefined =>
