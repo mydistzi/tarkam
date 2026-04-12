@@ -1,18 +1,19 @@
 import { PageShell } from "@/galactic/common";
 import { useGalacticContent } from "../shared";
 import {
-  HomeBlogSection,
+  // HomeBlogSection,
   HomeHeroSection,
   HomeJoinSection,
   HomeMatchesSection,
   HomePlayersSection,
-  HomeShopSection,
+  // HomeShopSection,
   HomeSponsorsSection,
   HomeStreamsSection,
 } from "./section";
 
 const HomeDefaultPage = () => {
-  const { heroes, matches, streams, players, products, posts, sponsors } = useGalacticContent();
+  // const { heroes, matches, streams, players, products, posts, sponsors } = useGalacticContent();
+  const { heroes, matches, streams, players, sponsors } = useGalacticContent();
 
   return (
     <PageShell title="Beranda" image={heroes[0]?.image ?? ""}>
@@ -23,8 +24,8 @@ const HomeDefaultPage = () => {
         <HomePlayersSection items={players} />
         <HomeJoinSection />
         <HomeSponsorsSection items={sponsors} />
-        <HomeShopSection items={products} />
-        <HomeBlogSection items={posts} />
+        {/* <HomeShopSection items={products} /> */}
+        {/* <HomeBlogSection items={posts} /> */}
       </>
     </PageShell>
   );
