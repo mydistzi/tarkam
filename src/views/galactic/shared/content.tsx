@@ -258,6 +258,9 @@ type ApiTeam = {
   member3_fk?: number | null;
   group_fk?: number | null;
   tarkam_fk?: number | null;
+  group?: ApiGroup;
+  tarkam?: ApiTarkam;
+  member?: ApiMember;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -298,7 +301,6 @@ type ApiContest = {
   score?: number | string;
   tarkam_fk?: number | null;
   gender?: string;
-  group?: ApiGroup;
   tarkam?: ApiTarkam;
   created_at?: string;
   updated_at?: string;
@@ -372,6 +374,8 @@ type TeamRecord = {
   teamPath: string;
   gender: string;
   members: PlayerItem[];
+  group?: ApiGroup;
+  tarkam?: ApiTarkam;
   description: string;
   wins: number;
   losses: number;
@@ -860,7 +864,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : ""),
             time: contest.score ? String(contest.score) : tarkam?.male_time || tarkam?.female_time || "",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
-            path: `/match-details/${contest.id}`,
+            path: `/detail-pertandingan/${contest.id}`,
             leftTeamPath: team1 ? `/team-details/${team1.id}` : "/team-details",
             rightTeamPath: team2 ? `/team-details/${team2.id}` : "/team-details",
             videoUrl: stream?.url || stream?.embed || "",

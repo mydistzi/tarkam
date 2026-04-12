@@ -298,27 +298,29 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 30px 0;
+    gap: 25px;
+    padding: 40px 0;
+    flex-wrap: wrap;
 }
 
 .matches-list:not(:last-of-type) {
-    margin-bottom: 60px;
+    margin-bottom: 70px;
 }
 
 .participate-team {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 42%;
-    max-width: 42%;
+    flex: 1 1 35%;
+    max-width: 35%;
+    min-width: 240px;
     text-align: right;
     position: relative;
     z-index: 1;
 }
 
 .participate-team img {
-    max-height: 220px;
+    max-height: 260px;
     width: auto;
 }
 

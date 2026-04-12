@@ -39,7 +39,7 @@ const mapTarkamToMatchItem = (tarkam: ScheduleTarkam): MatchItem => ({
   group: tarkam.status || "Upcoming",
   time: tarkam.male_time || tarkam.female_time || "TBA",
   date: formatDateLabel(tarkam.male_date || tarkam.female_date) || "TBA",
-  path: `/tarkam-schedule#tarkam-${tarkam.id}`,
+  path: `/detail-tarkam/${tarkam.id}`,
 });
 
 const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {

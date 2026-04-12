@@ -20,5 +20,6 @@ export { default as ShopDetailsPage } from "./shop-details";
 export { default as ShopGridPage } from "./shop";
 export { default as SponsorsPage } from "./sponsors";
 export { default as TarkamSchedulePage } from "./tarkam-schedule";
+export { default as DetailTarkamPage } from "./detail-tarkam";
 export { default as TeamDetailsPage } from "./detail-tim";
 export { default as UpcomingMatchesPage } from "./jadwal-pertandingan";

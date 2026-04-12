@@ -1,9 +1,9 @@
 ﻿import { type CSSProperties, type FormEvent, type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import CarouselLib, { type ButtonGroupProps } from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { DiscussionEmbed } from "disqus-react";
-import { Link, useLocation } from "react-router-dom";
 import { Autoplay, EffectCoverflow, Pagination as SwiperPagination } from "swiper/modules";
 import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -516,13 +516,13 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
   <ul className="upcoming-matches">
     {items.map((match) => (
       <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
-        <div className="participate-team wow fade-in-left" data-wow-delay="200ms">
+        <div className="participate-team wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="900ms">
           <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
         </div>
         <div className="match-time">
-          <h3>21:30 <span>{match.date}</span></h3>
+          <h3>{match.time || "21:30"} <span>{match.date}</span></h3>
           <ul className="watch-btn">
             <li>
               <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={match.videoUrl || videoHref} type="button">
@@ -536,7 +536,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
             </li>
           </ul>
         </div>
-        <div className="participate-team oponent wow fade-in-right" data-wow-delay="200ms">
+        <div className="participate-team oponent wow fadeInRight" data-wow-delay="200ms" data-wow-duration="900ms">
           <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
           <img src={getImageSource(match.rightLogo, "/assets/images/placeholder-team.png")} alt={match.rightTeam} />
@@ -545,24 +545,35 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
     ))}
   </ul>
 );
-const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: StreamItem[] }) => (
-  <>
-    {items.map((match, index) => {
-      const stream = streams?.[index];
-      return (
-        <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
-          <div className="latest-matches-list">
-            <div className="matches-thumb">
-              <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.jpg")} alt={match.leftTeam} />
-            </div>
-            <div className="latest-match-info">
+const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: StreamItem[] }) => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      {items.map((match, index) => {
+        const stream = streams?.[index];
+        return (
+          <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
+            <div
+              className="latest-matches-list"
+              onClick={() => match.path && navigate(match.path)}
+              style={{ cursor: match.path ? "pointer" : undefined }}
+            >
+              <div className="matches-thumb">
+                <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.jpg")} alt={match.leftTeam} />
+              </div>
+              <div className="latest-match-info">
                 <a href="#" className="match-category">{match.group}</a>
-                <h3>{match.leftTeam} {match.rightTeam}</h3>
+                <h3>
+                  {match.leftTeamPath ? <Link to={match.leftTeamPath}>{match.leftTeam}</Link> : <span>{match.leftTeam}</span>}
+                  <span className="vs-text"> vs </span>
+                  {match.rightTeamPath ? <Link to={match.rightTeamPath}>{match.rightTeam}</Link> : <span>{match.rightTeam}</span>}
+                </h3>
                 <ul className="match-meta">
-                    <li><a href="#">{match.date} - {match.time}</a></li>
+                  <li><a href="#">{match.date} - {match.time}</a></li>
                 </ul>
-            </div>
-            <div className="watch-info">
+              </div>
+              <div className="watch-info" onClick={(event) => event.stopPropagation()}>
                 <a
                   className="dl-video-popup"
                   data-autoplay="true"
@@ -573,13 +584,14 @@ const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: S
                 >
                   <i className="lab la-youtube"></i>Watch Streem
                 </a>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    })}
-  </>
-);
+        );
+      })}
+    </>
+  );
+};
 const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
   const swiperRef = useRef<SwiperInstance | null>(null);
   const minLoopSlides = 8;
