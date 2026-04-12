@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import { LatestMatchesList, PageHeader, SectionHeading } from "@/galactic/common";
+import { PageHeader, SectionHeading } from "@/galactic/common";
 import { useGalacticContent } from "../../shared";
 
 const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
-  const { tarkams, teams, matchRecords } = useGalacticContent();
+  const { tarkams, teams } = useGalacticContent();
   const tarkam = tarkamId ? tarkams.find((item) => item.id === tarkamId) : undefined;
-  const tarkamMatches = tarkamId ? matchRecords.filter((record) => record.tarkam?.id === tarkamId) : [];
-  const matchItems = tarkamMatches.map((record) => record.item);
   const tarkamTeams = tarkamId
     ? teams.filter((record) => Number(record.team?.tarkam_fk) === tarkamId)
     : [];
@@ -33,21 +31,6 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         description={tarkam.description || "Lihat detail jadwal dan tim yang ikut berpartisipasi pada Tarkam ini."}
       />
 
-      <section className="latest-matches padding-top">
-        <div className="container">
-          <SectionHeading
-            eyebrow="Jadwal Pertandingan"
-            title={<><span>Daftar Pertandingan</span> untuk Tarkam</>}
-            description="Pertandingan yang terhubung ke Tarkam dan tim yang diambil dari API tim publik."
-          />
-          {matchItems.length ? (
-            <LatestMatchesList items={matchItems} />
-          ) : (
-            <p>Tidak ada pertandingan yang terdaftar untuk Tarkam ini.</p>
-          )}
-        </div>
-      </section>
-
       <section className="team-section padding-top">
         <div className="container">
           <SectionHeading
@@ -60,19 +43,13 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               tarkamTeams.map((team) => (
                 <div className="col-lg-4 col-md-6 sm-padding" key={team.id}>
                   <div className="team-item galactic-hover-card">
-                    <div className="team-thumb">
+                    <div className="team-thumb" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
                       <img src={team.logo || "/assets/images/placeholder-team.png"} alt={team.name} />
                     </div>
                     <div className="team-content">
                       <h3>
-                        <Link to={team.teamPath || "/detail-tim"}>{team.name}</Link>
+                        <Link to={team.teamPath || "/detail-tim"}>{team.name} | {team.group?.name || team.gender}</Link>
                       </h3>
-                      <p>{team.description || "Tim ini belum memiliki deskripsi lengkap."}</p>
-                      <ul className="team-meta">
-                        <li>{team.gender}</li>
-                        <li>{team.matches} pertandingan</li>
-                        <li>{team.points} poin</li>
-                      </ul>
                     </div>
                   </div>
                 </div>

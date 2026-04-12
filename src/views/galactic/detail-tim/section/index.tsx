@@ -1,4 +1,4 @@
-import { JoinMailSection, PageHeader, PlayerCarousel } from "@/galactic/common";
+import { PageHeader, PlayerCarousel } from "@/galactic/common";
 import type { TeamRecord } from "../../shared";
 
 const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
@@ -65,7 +65,6 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
           <PlayerCarousel items={record.members} />
         </div>
       </section>
-      <JoinMailSection />
     </>
   );
 };
