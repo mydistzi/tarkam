@@ -1,4 +1,5 @@
 ﻿import { type CSSProperties, type FormEvent, type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 import CarouselLib, { type ButtonGroupProps } from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { DiscussionEmbed } from "disqus-react";
@@ -128,6 +129,11 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 };
 
 const videoHref = "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243";
+const DISCORD_CONTACT_WEBHOOK =
+  import.meta.env.VITE_DISCORD_CONTACT_WEBHOOK ||
+  (import.meta.env as Record<string, string | undefined>).RAILWAY_DISCORD_CONTACT_WEBHOOK ||
+  (import.meta.env as Record<string, string | undefined>).VITE_RAILWAY_DISCORD_CONTACT_WEBHOOK ||
+  "";
 const cardResponsive = {
   desktop: { breakpoint: { max: 3000, min: 1200 }, items: 3 },
   tablet: { breakpoint: { max: 1199, min: 768 }, items: 2 },
@@ -150,7 +156,7 @@ const pageBackground = (image = brand.background): CSSProperties => ({
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
 });
-const formatCurrency = (value: number) => `$${value.toFixed(2)}`;
+const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
 const getMenuPaths = (item: GalacticMenuItem): string[] => {
   const directPath = item.path ? [item.path] : [];
   const childPaths = item.children ? item.children.flatMap(getMenuPaths) : [];
@@ -468,15 +474,7 @@ const Footer = ({
             <div className="widget-title">
               <h3>Daftar Newsletter</h3>
             </div>
-            <form action="#" className="subscribe-form" onSubmit={preventSubmit}>
-              <input className="form-control" type="email" id="email" name="EMAIL" placeholder="Email kamu" autoComplete="email" required />
-              <button className="submit">Daftar Sekarang</button>
-              <div className="clearfix" />
-              <div id="subscribe-result">
-                <div className="subscription-success" />
-                <div className="subscription-error" />
-              </div>
-            </form>
+                  <SubscribeForm />
             <ul className="footer-contact">
               <li><span>Invite Bot ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://discord.com/oauth2/authorize?client_id=1478890368429850674&permissions=8&scope=bot">Server Discord <span /></Link></li>
               <li><span>Atau ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://wa.me/message/PJEIVB5M56NGE1">Group WhatsApp <span /></Link></li>
@@ -736,7 +734,7 @@ const JoinMailSection = () => (
             <h3>Kirim Pesan ke Kami</h3>
             <h2>Gabung Jadi Super Fans dan Dapatkan <span>Segala Keuntungannya</span></h2>
             <p>{templateHeaderDescription}</p>
-            <Link className="default-btn" to="/contact">Gabung Tim Kami <span /></Link>
+            <Link className="default-btn" to="/hubungi-kami">Gabung Tim Kami <span /></Link>
           </div>
         </div>
         <div className="col-md-6 sm-padding">
@@ -752,7 +750,7 @@ const CtaSection = () => (
       <div className="section-heading">
         <h3>Terhubung dengan Tim Gaming Kami!</h3>
         <h2>Ikut kami untuk turnamen<br />gaming yang bakal datang!</h2>
-        <Link className="default-btn" to="/contact">Gabung Tim Kami</Link>
+        <Link className="default-btn" to="/hubungi-kami">Gabung Tim Kami</Link>
       </div>
     </div>
   </section>
@@ -974,29 +972,266 @@ const ClassicBlogSidebar = ({
     </div>
   </>
 );
-const ContactForm = ({ className = "" }: { className?: string }) => (
-  <div className={`contact-form ${className}`.trim()}>
-    <form className="form-horizontal" onSubmit={preventSubmit}>
-      <div className="contact-form-group">
-        <div className="form-field">
-          <input type="text" id="username" name="username" autoComplete="username" className="form-control" placeholder="Nama Anda" required />
+const ContactForm = ({ className = "" }: { className?: string }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting) {
+      return;
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+      const errorMessage = "Semua kolom harus diisi.";
+      setStatus({ type: "error", message: errorMessage });
+      await Swal.fire({
+        icon: "error",
+        title: "Form tidak lengkap",
+        text: errorMessage,
+      });
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(trimmedEmail)) {
+      const errorMessage = "Alamat email tidak valid.";
+      setStatus({ type: "error", message: errorMessage });
+      await Swal.fire({
+        icon: "error",
+        title: "Email tidak valid",
+        text: errorMessage,
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    setStatus({ type: "info", message: "Mengirim pesan..." });
+
+    try {
+      if (!DISCORD_CONTACT_WEBHOOK) {
+        throw new Error("Webhook Discord belum dikonfigurasi.");
+      }
+
+      const payload = {
+        username: "Tarkam Contact Form",
+        embeds: [
+          {
+            title: "Pesan Baru dari Website",
+            description: trimmedMessage,
+            color: 0x5865f2,
+            fields: [
+              { name: "Nama", value: trimmedName, inline: true },
+              { name: "Email", value: trimmedEmail, inline: true },
+            ],
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      };
+
+      const response = await fetch(DISCORD_CONTACT_WEBHOOK, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Webhook gagal: ${response.status}`);
+      }
+
+      setName("");
+      setEmail("");
+      setMessage("");
+      setStatus({ type: "success", message: "Pesan berhasil dikirim. Terima kasih!" });
+      await Swal.fire({
+        icon: "success",
+        title: "Pesan dikirim",
+        text: "Terima kasih, pesan Anda telah berhasil dikirim ke tim kami.",
+      });
+    } catch (error) {
+      console.error(error);
+      const errorMessage = "Gagal mengirim pesan. Silakan coba lagi nanti.";
+      setStatus({ type: "error", message: errorMessage });
+      await Swal.fire({
+        icon: "error",
+        title: "Gagal mengirim",
+        text: errorMessage,
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className={`contact-form ${className}`.trim()}>
+      <form className="form-horizontal" onSubmit={handleSubmit}>
+        <div className="contact-form-group">
+          <div className="form-field">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autoComplete="username"
+              className="form-control"
+              placeholder="Nama Anda"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autoComplete="email"
+              className="form-control"
+              placeholder="Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field message">
+            <textarea
+              cols={30}
+              rows={4}
+              id="message"
+              name="message"
+              className="form-control"
+              placeholder="Pesan"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <button className="default-btn" type="submit" disabled={submitting}>
+              {submitting ? "Mengirim..." : "Kirim Pesan"}
+              <span />
+              <span />
+            </button>
+          </div>
         </div>
-        <div className="form-field">
-          <input type="email" id="email" name="email" autoComplete="email" className="form-control" placeholder="Email" required />
+        <div
+          id="form-messages"
+          className={`alert${status ? ` alert-${status.type}` : ""}`.trim()}
+          role="alert"
+          aria-live="polite"
+        >
+          {status?.message}
         </div>
-        <div className="form-field message">
-          <textarea cols={30} rows={4} id="message" name="message" className="form-control" placeholder="Pesan" required />
-        </div>
-        <div className="form-field">
-          <button className="default-btn" type="submit">
-            Kirim Pesan<span /><span />
-          </button>
-        </div>
+      </form>
+    </div>
+  );
+};
+
+const SubscribeForm = () => {
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
+
+  const apiUrl = import.meta.env.VITE_API_BASE_URL?.trim()
+    ? `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, "")}/subscribe`
+    : "/api/v1/subscribe";
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting) {
+      return;
+    }
+
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      const message = "Email harus diisi.";
+      setStatus({ type: "error", message });
+      await Swal.fire({ icon: "error", title: "Email kosong", text: message });
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(trimmedEmail)) {
+      const message = "Alamat email tidak valid.";
+      setStatus({ type: "error", message });
+      await Swal.fire({ icon: "error", title: "Email tidak valid", text: message });
+      return;
+    }
+
+    setSubmitting(true);
+    setStatus({ type: "info", message: "Mengirim langganan..." });
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: trimmedEmail, is_subscribed: true }),
+      });
+
+      if (!response.ok) {
+        const apiError = await response.text();
+        throw new Error(`Gagal mengirim: ${response.status} ${apiError}`);
+      }
+
+      setEmail("");
+      setStatus({ type: "success", message: "Berhasil berlangganan." });
+      await Swal.fire({
+        icon: "success",
+        title: "Terima kasih",
+        text: "Email Anda berhasil didaftarkan untuk newsletter.",
+      });
+    } catch (error) {
+      console.error(error);
+      const message = "Gagal mendaftar. Silakan coba lagi nanti.";
+      setStatus({ type: "error", message });
+      await Swal.fire({ icon: "error", title: "Gagal", text: message });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form className="subscribe-form" onSubmit={handleSubmit}>
+      <input
+        className="form-control"
+        type="email"
+        id="subscribe-email"
+        name="EMAIL"
+        placeholder="Email kamu"
+        autoComplete="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+      <button className="submit" type="submit" disabled={submitting}>
+        {submitting ? "Mengirim..." : "Daftar Sekarang"}
+      </button>
+      <div className="clearfix" />
+      <div id="subscribe-result">
+        <div className="subscription-success" />
+        <div className="subscription-error" />
       </div>
-      <div id="form-messages" className="alert" role="alert" />
+      <div
+        className={`alert${status ? ` alert-${status.type}` : ""}`.trim()}
+        role="alert"
+        aria-live="polite"
+      >
+        {status?.message}
+      </div>
     </form>
-  </div>
-);
+  );
+};
+
 type PromoCard = {
   image?: string;
   title: string;
