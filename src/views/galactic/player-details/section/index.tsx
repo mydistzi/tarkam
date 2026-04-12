@@ -15,7 +15,6 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
       </section>
     );
   }
-
   const player = record.item;
   const alias = record.alias || player.name;
   const clubSlug = record.club?.code || String(record.club?.id || record.id);
@@ -27,6 +26,14 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
     if (value.startsWith("http")) return value;
     if (value.includes("instagram.com") || value.includes("facebook.com") || value.includes("tiktok.com")) return `https://${value.replace(/^https?:\/\//, "")}`;
     return value;
+  };
+
+  const formatIndo = (timestamp: string) => {
+    return new Intl.DateTimeFormat('id-ID', {
+        dateStyle: 'long',
+        timeStyle: 'short',
+        timeZone: 'Asia/Jakarta', // Gunakan Asia/Makassar untuk WITA atau Asia/Jayapura untuk WIT
+    }).format(new Date(timestamp));
   };
 
   const socialLinks = [
@@ -115,7 +122,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                   <i className="las la-calendar" />
                   <span>Gabung</span>
                 </div>
-                <h4>{record.member?.created_at}</h4>
+                <h4>{record.member?.created_at ? formatIndo(record.member.created_at) : "-"}</h4>
               </li>
             </ul>
           </div>
