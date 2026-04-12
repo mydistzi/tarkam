@@ -46,6 +46,8 @@ export type MatchItem = {
   time: string;
   date: string;
   path?: string;
+  malePath?: string;
+  femalePath?: string;
   leftTeamPath?: string;
   rightTeamPath?: string;
   videoUrl?: string;
@@ -116,6 +118,12 @@ export type SponsorItem = {
   image: string;
   name: string;
   url?: string;
+  amount?: number;
+  message?: string;
+  detail?: string;
+  memberImage?: string;
+  memberNickname?: string;
+  socialLinks?: Array<{ icon: string; href: string }>;
 };
 
 export const brand = {

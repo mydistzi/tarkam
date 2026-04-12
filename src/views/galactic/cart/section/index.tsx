@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatCurrency, PageHeader } from "@/galactic/common";
+import { PageHeader } from "@/galactic/common";
 import type { CartRecord } from "../../shared";
 
 const CartContent = ({ items }: { items: CartRecord[] }) => {
@@ -45,8 +45,8 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
                     <input max="10" min="1" type="number" defaultValue={item.quantity} />
                   </div>
                 </div>
-                <div className="col-3 col-lg-1"><div className="cart-item"><p>{formatCurrency(item.product.price)}</p></div></div>
-                <div className="col-3 col-lg-1"><div className="cart-item"><p>{formatCurrency(item.product.price * item.quantity)}</p></div></div>
+                <div className="col-3 col-lg-1"><div className="cart-item"><p>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.product.price)}</p></div></div>
+                <div className="col-3 col-lg-1"><div className="cart-item"><p>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(item.product.price * item.quantity)}</p></div></div>
                 <div className="col-2 col-lg-1"><div className="cart-item"><a className="remove" href="#"><i className="las la-times" /></a></div></div>
               </div>
             ))
@@ -54,9 +54,9 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
           <div className="row">
             <div className="col-lg-6 offset-lg-6">
               <ul className="cart-total mt-30">
-                <li><span>Subtotal:</span>{formatCurrency(subtotal)}</li>
-                <li><span>Estimasi ongkir:</span>$10.00</li>
-                <li><span>Total:</span>{formatCurrency(total)}</li>
+                <li><span>Subtotal:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(subtotal)}</li>
+                <li><span>Estimasi ongkir:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(10)}</li>
+                <li><span>Total:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>
                   <Link className="default-btn" to="/checkout">Bayar Sekarang<span /></Link>

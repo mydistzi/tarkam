@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatCurrency, PageHeader, preventSubmit } from "@/galactic/common";
+import { PageHeader, preventSubmit } from "@/galactic/common";
 import type { CartRecord } from "../../shared";
 
 type CheckoutContentProps = {
@@ -56,9 +56,9 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
             </div>
             <div className="col-lg-4 sm-padding">
               <ul className="cart-total">
-                <li><span>Subtotal:</span>{formatCurrency(subtotal)}</li>
-                <li><span>Perkiraan ongkir:</span>$10.00</li>
-                <li><span>Total:</span>{formatCurrency(total)}</li>
+                <li><span>Subtotal:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(subtotal)}</li>
+                <li><span>Perkiraan ongkir:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(10)}</li>
+                <li><span>Total:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>
                   <a className="default-btn" href="#">Selesaikan Pembayaran<span /></a>

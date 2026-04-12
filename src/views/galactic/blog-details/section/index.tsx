@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { comment1, DisqusThread, PageHeader } from "@/galactic/common";
+import { DisqusThread, PageHeader } from "@/galactic/common";
 import type { BlogRecord } from "../../shared";
 
 type BlogDetailsContentProps = {
@@ -73,7 +73,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                 </ul>
                 <div className="author-box">
                   <div className="author-thumb">
-                    <img src={comment1} alt={post.author} />
+                    <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&color=FCFCFC&background=66FFCC`} alt={post.author} />
                   </div>
                   <div className="author-info">
                     <h3>{post.author}</h3>

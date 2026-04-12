@@ -34,6 +34,7 @@ import AcceptableUsePolicy from "../policies/AcceptableUsePolicy";
 import DataDeletionPolicy from "../policies/DataDeletionPolicy";
 import PrivacyPolicy from "../policies/PrivacyPolicy";
 import TermsOfService from "../policies/TermsOfService";
+import CommentPolicy from "../policies/CommentPolicy";
 
 const GalacticLayout = () => {
   const { footerLinks, menus, meta } = useGalacticContent();
@@ -118,6 +119,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/kebijakan-privasi", element: <PrivacyPolicy /> },
       { path: "/ketentuan-penggunaan", element: <AcceptableUsePolicy /> },
       { path: "/ketentuan-penghapusan-data", element: <DataDeletionPolicy /> },
+      { path: "/comment-policy", element: <CommentPolicy /> },
       { path: "*", element: <Error404Page /> },
     ],
   },

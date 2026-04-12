@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { formatCurrency } from "@/galactic/common";
 import type { ProductRecord } from "../../shared";
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
@@ -43,7 +42,7 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                     </ul>
                   </div>
                   <h3>{product.name}</h3>
-                  <h4 className="price">{formatCurrency(product.price)} <span>({product.badge})</span></h4>
+                  <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)} <span>({product.badge})</span></h4>
                   <p>{product.description}</p>
                   <div className="product-btn">
                     <form>

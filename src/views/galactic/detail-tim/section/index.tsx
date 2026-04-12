@@ -1,4 +1,4 @@
-import { PageHeader, PlayerCarousel } from "@/galactic/common";
+import { DisqusThread, PageHeader, PlayerCarousel } from "@/galactic/common";
 import type { TeamRecord } from "../../shared";
 
 const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
@@ -41,20 +41,6 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
           </div>
         </div>
       </div>
-      <section className="about-team-section padding-top">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8 offset-lg-2">
-              <div className="section-heading text-center">
-                <h3>Tentang {record.name}</h3>
-                <h2>Tentang <span>Tim</span></h2>
-                <p>{record.description}</p>
-                <p className="mt-20">Kondisi sekarang: {record.points} poin total, {record.matches} kontes tercatat, aktif di {record.tarkamLabel}.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <section className="team-section padding-top">
         <div className="container">
           <div className="section-heading mb-40 text-center">
@@ -63,6 +49,19 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
             <p>Setiap kartu member di bawah terhubung ke halaman detail player live.</p>
           </div>
           <PlayerCarousel items={record.members} />
+        </div>
+      </section>
+      <section className="blog-section blog-page padding-top">
+        <div className="container">
+          <div className="col-lg-8 offset-lg-2">
+            <div className="post-details">
+              <h3 className="comment-title">Komentar Tim</h3>
+              <DisqusThread
+                identifier={`team-${record.id}`}
+                title={record.name || "Detail Tim"}
+              />
+            </div>
+          </div>
         </div>
       </section>
     </>

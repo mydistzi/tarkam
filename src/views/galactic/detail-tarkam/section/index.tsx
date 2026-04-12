@@ -1,12 +1,22 @@
-import { Link } from "react-router-dom";
-import { PageHeader, SectionHeading } from "@/galactic/common";
+import { Link, useSearchParams } from "react-router-dom";
+import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
 import { useGalacticContent } from "../../shared";
 
 const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
+  const [searchParams] = useSearchParams();
+  const genderParam = searchParams.get("gender")?.toLowerCase();
+  const genderFilter = genderParam === "male" || genderParam === "female" ? genderParam : "all";
   const { tarkams, teams } = useGalacticContent();
   const tarkam = tarkamId ? tarkams.find((item) => item.id === tarkamId) : undefined;
   const tarkamTeams = tarkamId
-    ? teams.filter((record) => Number(record.team?.tarkam_fk) === tarkamId)
+    ? teams.filter((record) => {
+        const teamTarkamId = record.team?.tarkam_fk ? Number(record.team.tarkam_fk) : NaN;
+        return (
+          Number.isInteger(teamTarkamId) &&
+          teamTarkamId === tarkamId &&
+          (genderFilter === "all" || record.gender?.toLowerCase() === genderFilter)
+        );
+      })
     : [];
 
   if (!tarkamId || !tarkam) {
@@ -36,8 +46,55 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
           <SectionHeading
             eyebrow="Tim Peserta"
             title={<>Daftar <span>Tim</span> Tarkam</>}
-            description="Klik nama tim untuk menuju halaman detail tim. Semua data tim diambil dari API tim publik."
+            description="Klik nama tim untuk menuju halaman detail tim. Gunakan filter gender untuk detail yang lebih spesifik."
           />
+          <div style={{ display: 'flex', gap: '10px', margin: '24px 0', flexWrap: 'wrap' }}>
+            <Link
+              to={`/detail-tarkam/${tarkamId}`}
+              className={genderFilter === 'all' ? 'active-gender-filter' : ''}
+              style={{
+                padding: '8px 16px',
+                color: genderFilter === 'all' ? '#000' : '#fff',
+                background: genderFilter === 'all' ? '#fff' : 'rgba(255,255,255,0.08)',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.18)',
+              }}
+            >
+              All
+            </Link>
+            <Link
+              to={`/detail-tarkam/${tarkamId}?gender=female`}
+              className={genderFilter === 'female' ? 'active-gender-filter' : ''}
+              style={{
+                padding: '8px 16px',
+                color: genderFilter === 'female' ? '#000' : '#fff',
+                background: genderFilter === 'female' ? '#fff' : 'rgba(255,255,255,0.08)',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.18)',
+              }}
+            >
+              Female
+            </Link>
+            <Link
+              to={`/detail-tarkam/${tarkamId}?gender=male`}
+              className={genderFilter === 'male' ? 'active-gender-filter' : ''}
+              style={{
+                padding: '8px 16px',
+                color: genderFilter === 'male' ? '#000' : '#fff',
+                background: genderFilter === 'male' ? '#fff' : 'rgba(255,255,255,0.08)',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.18)',
+              }}
+            >
+              Male
+            </Link>
+          </div>
+          {/* <div style={{ marginBottom: '24px', color: '#fff' }}>
+            Menampilkan tim: <strong>{genderFilter === 'all' ? 'Semua' : genderFilter}</strong>
+          </div> */}
           <div className="row">
             {tarkamTeams.length ? (
               tarkamTeams.map((team) => (
@@ -50,7 +107,11 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <h3>
                         <Link to={team.teamPath || "/detail-tim"}>
                           {team.name}
-                          {team.group ? <> | {team.group.name}</> : <> | Belum ada grup</>}
+                          {team.group ? (
+                            <> | {team.group.name} </>
+                          ) : (
+                            <> | Bye </>
+                          )}
                           <> | {team.gender}</>
                         </Link>
                       </h3>
@@ -63,6 +124,20 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <p>Tidak ada tim tersambung untuk Tarkam ini.</p>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      <section className="blog-section blog-page padding-top">
+        <div className="container">
+          <div className="col-lg-8 offset-lg-2">
+            <div className="post-details">
+              <h3 className="comment-title">Komentar Tarkam</h3>
+              <DisqusThread
+                key={`tarkam-${tarkam.id}`}
+                identifier={`tarkam-${tarkam.id}`}
+                title={tarkam.title || `Tarkam ${tarkam.week || "?"}`}
+              />
+            </div>
           </div>
         </div>
       </section>

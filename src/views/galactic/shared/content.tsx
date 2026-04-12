@@ -119,6 +119,15 @@ type ApiPenyawer = {
   pesan?: string;
   member_fk?: number | null;
   tarkam_fk?: number | null;
+  member?: ApiMember;
+  logo?: string;
+  image?: string;
+  url?: string;
+  detail?: string;
+  description?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -204,7 +213,7 @@ type ApiMember = {
   picture_url?: string;
   tier?: string;
   city?: string;
-  club_fk?: number | null;
+  club_fk?: number | string | null;
   wins?: number;
   losses?: number;
   t_matches?: number;
@@ -229,8 +238,8 @@ type ApiPlayer = {
   id: number;
   score?: number | string;
   paid?: boolean;
-  member_fk?: number | null;
-  tarkam_fk?: number | null;
+  member_fk?: number | string | null;
+  tarkam_fk?: number | string | null;
   member?: ApiMember;
   tarkam?: ApiTarkam;
   created_at?: string;
@@ -242,8 +251,7 @@ type ApiGroup = {
   id: number;
   name?: string;
   gender?: string;
-  team_fk?: number | null;
-  tarkam_fk?: number | null;
+  tarkam_fk?: number | string | null;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -253,11 +261,11 @@ type ApiTeam = {
   id: number;
   name?: string;
   gender?: string;
-  member1_fk?: number | null;
-  member2_fk?: number | null;
-  member3_fk?: number | null;
-  group_fk?: number | null;
-  tarkam_fk?: number | null;
+  member1_fk?: number | string | null;
+  member2_fk?: number | string | null;
+  member3_fk?: number | string | null;
+  group_fk?: number | string | null;
+  tarkam_fk?: number | string | null;
   group?: ApiGroup;
   tarkam?: ApiTarkam;
   member?: ApiMember;
@@ -286,6 +294,7 @@ type ApiTarkam = {
   female_slot?: number;
   male_completed?: number;
   female_completed?: number;
+  points_awarded?: number;
   mvp_m?: string;
   mvp_f?: string;
   created_at?: string;
@@ -295,11 +304,11 @@ type ApiTarkam = {
 
 type ApiContest = {
   id: number;
-  team1_fk?: number | null;
-  team2_fk?: number | null;
-  winner_team_fk?: number | null;
+  team1_fk?: number | string | null;
+  team2_fk?: number | string | null;
+  winner_team_fk?: number | string | null;
   score?: number | string;
-  tarkam_fk?: number | null;
+  tarkam_fk?: number | string | null;
   gender?: string;
   tarkam?: ApiTarkam;
   created_at?: string;
@@ -312,8 +321,8 @@ type ApiWinner = {
   nickname?: string;
   prize?: string;
   gender?: string;
-  team_fk?: number | null;
-  tarkam_fk?: number | null;
+  team_fk?: number | string | null;
+  tarkam_fk?: number | string | null;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -625,7 +634,18 @@ const buildMenuTree = (items: ApiMenuItem[]): GalacticMenuItem[] => {
 };
 
 const extractMemberIds = (team?: ApiTeam) =>
-  [team?.member1_fk, team?.member2_fk, team?.member3_fk].filter((value): value is number => Number.isInteger(value));
+  [team?.member1_fk, team?.member2_fk, team?.member3_fk]
+    .map((value) => normalizeId(value))
+    .filter((value): value is number => value != null);
+
+const normalizeId = (value: number | string | null | undefined): number | undefined => {
+  if (value === null || value === undefined) {
+    return undefined;
+  }
+
+  const numeric = Number(value);
+  return Number.isInteger(numeric) ? numeric : undefined;
+};
 
 
 async function fetchGalacticPayloads() {
@@ -735,9 +755,20 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
 
         const clubMap = new Map(clubs.map((item) => [item.id, item]));
         const memberMap = new Map(members.map((item) => [item.id, item]));
-        const teamMap = new Map(teams.map((item) => [item.id, item]));
-        const tarkamMap = new Map(tarkams.map((item) => [item.id, item]));
-        const groupMap = new Map(groups.map((item) => [item.id, item]));
+        const teamMap = new Map(teams.flatMap((item) => {
+          const id = normalizeId(item.id);
+          return id != null ? [[id, item] as const] : [];
+        }));
+        const tarkamMap = new Map(tarkams.flatMap((item) => {
+          const id = normalizeId(item.id);
+          return id != null ? [[id, item] as const] : [];
+        }));
+        const groupMap = new Map(groups.flatMap((item) => {
+          const id = normalizeId(item.id);
+          return id != null ? [[id, item] as const] : [];
+        }));
+        console.debug("Galactic groups loaded", groups.map((item) => ({ id: item.id, name: item.name, tarkam_fk: item.tarkam_fk, gender: item.gender })));
+        console.debug("Galactic groupMap keys", Array.from(groupMap.keys()));
         const categoryMap = new Map(categories.map((item) => [item.id, item.name || "Gaming"]));
         const menuTree = buildMenuTree(menus);
 
@@ -770,9 +801,10 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         };
 
         const playerRecords: PlayerRecord[] = players.map((player) => {
-          const member = player.member || (player.member_fk ? memberMap.get(player.member_fk) : undefined);
-          const club = member?.club_fk ? clubMap.get(member.club_fk) : undefined;
-          const tarkam = player.tarkam || (player.tarkam_fk ? tarkamMap.get(player.tarkam_fk) : undefined);
+          const member = player.member || (player.member_fk ? memberMap.get(normalizeId(player.member_fk)!) : undefined);
+          const club = member?.club_fk ? clubMap.get(normalizeId(member.club_fk)!) : undefined;
+          const playerTarkamId = normalizeId(player.tarkam_fk);
+          const tarkam = player.tarkam || (playerTarkamId != null ? tarkamMap.get(playerTarkamId) : undefined);
           const team = teams.find((item) => extractMemberIds(item).includes(member?.id || -1));
           const alias = member?.nickname || member?.username || "Aimless";
           const wins = member?.wins || 0;
@@ -820,13 +852,31 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         const teamRecords: TeamRecord[] = teams.map((team) => {
           const memberIds = extractMemberIds(team);
           const membersForTeam = playerRecords.filter((item) => memberIds.includes(item.member?.id || -1));
-          const relatedContests = contests.filter((item) => item.team1_fk === team.id || item.team2_fk === team.id);
-          const wins = relatedContests.filter((item) => item.winner_team_fk === team.id).length;
-          const losses = relatedContests.filter((item) => item.winner_team_fk && item.winner_team_fk !== team.id).length;
-          const draws = relatedContests.filter((item) => !item.winner_team_fk).length;
+          const relatedContests = contests.filter(
+            (item) => normalizeId(item.team1_fk) === team.id || normalizeId(item.team2_fk) === team.id
+          );
+          const wins = relatedContests.filter((item) => normalizeId(item.winner_team_fk) === team.id).length;
+          const losses = relatedContests.filter(
+            (item) => item.winner_team_fk != null && normalizeId(item.winner_team_fk) !== team.id
+          ).length;
+          const draws = relatedContests.filter((item) => item.winner_team_fk == null).length;
           const firstClub = membersForTeam[0]?.club;
-          const firstTarkam = team.tarkam_fk ? tarkamMap.get(team.tarkam_fk) : undefined;
-          const teamGroup = team.group || (team.group_fk ? groupMap.get(team.group_fk) : undefined);
+          const teamTarkamId = normalizeId(team.tarkam_fk);
+          const firstTarkam = teamTarkamId != null ? tarkamMap.get(teamTarkamId) : undefined;
+          const teamGroup = team.group || (() => {
+            const groupId = normalizeId(team.group_fk);
+            return groupId != null ? groupMap.get(groupId) : undefined;
+          })();
+          if (team.tarkam_fk === 9 && team.group_fk && !teamGroup) {
+            const groupId = normalizeId(team.group_fk);
+            console.debug("Missing teamGroup", {
+              teamId: team.id,
+              group_fk: team.group_fk,
+              normalizedGroupId: groupId,
+              groupMapHas: groupId != null ? groupMap.has(groupId) : false,
+              groupMapValue: groupId != null ? groupMap.get(groupId) : undefined,
+            });
+          }
           const points = membersForTeam.reduce((sum, item) => sum + item.points, 0);
 
           return {
@@ -851,12 +901,14 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
 
         const matchRecords: MatchRecord[] = contests.map((contest) => {
           const stream = streamings.find((item) => item.id === contest.id);
-          const team1 = contest.team1_fk ? teamMap.get(contest.team1_fk) : undefined;
-          const team2 = contest.team2_fk ? teamMap.get(contest.team2_fk) : undefined;
+          const team1 = normalizeId(contest.team1_fk) != null ? teamMap.get(normalizeId(contest.team1_fk)!) : undefined;
+          const team2 = normalizeId(contest.team2_fk) != null ? teamMap.get(normalizeId(contest.team2_fk)!) : undefined;
           const team1Record = teamRecords.find((item) => item.id === team1?.id);
           const team2Record = teamRecords.find((item) => item.id === team2?.id);
-          const tarkam = contest.tarkam_fk ? tarkamMap.get(contest.tarkam_fk) : undefined;
-          const winner = winners.find((item) => item.team_fk === contest.winner_team_fk && item.tarkam_fk === contest.tarkam_fk);
+          const tarkam = normalizeId(contest.tarkam_fk) != null ? tarkamMap.get(normalizeId(contest.tarkam_fk)!) : undefined;
+          const winner = winners.find(
+            (item) => normalizeId(item.team_fk) === normalizeId(contest.winner_team_fk) && normalizeId(item.tarkam_fk) === normalizeId(contest.tarkam_fk)
+          );
 
           const item: MatchItem = {
             id: contest.id,
@@ -883,7 +935,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             team2,
             tarkam,
             winner,
-            winnerTeam: contest.winner_team_fk ? teamMap.get(contest.winner_team_fk) : undefined,
+            winnerTeam: normalizeId(contest.winner_team_fk) != null ? teamMap.get(normalizeId(contest.winner_team_fk)!) : undefined,
           };
         });
 
@@ -974,11 +1026,35 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         }));
 
         const sponsors = penyawers.length
-          ? penyawers.map((item) => ({
-              image: "",
-              name: item.name || `Sponsor ${item.id}`,
-              url: "#",
-            }))
+          ? penyawers.map((item) => {
+              const member = item.member || (item.member_fk ? memberMap.get(normalizeId(item.member_fk)!) : undefined);
+              const socialLinks: Array<{ icon: string; href: string }> = [];
+              const facebookLink = member?.facebook;
+              const instagramLink = member?.instagram;
+              const tiktokLink = member?.tiktok;
+
+              if (facebookLink) {
+                socialLinks.push({ icon: "lab la-facebook-f", href: facebookLink });
+              }
+              if (instagramLink) {
+                socialLinks.push({ icon: "lab la-instagram", href: instagramLink });
+              }
+              if (tiktokLink) {
+                socialLinks.push({ icon: "lab la-tiktok", href: tiktokLink });
+              }
+
+              return {
+                image: item.logo || item.image || member?.picture_url?.trim() || "/assets/images/placeholder-sponsor.png",
+                name: item.name || `Sponsor ${item.id}`,
+                url: item.url || "#",
+                amount: item.amount,
+                message: item.pesan || item.description || item.detail || member?.status || undefined,
+                memberImage: member?.picture_url?.trim() || "/assets/images/placeholder-player.png",
+                memberNickname: member?.nickname || member?.username || "Sponsor Member",
+                detail: item.detail || item.description || member?.tier || undefined,
+                socialLinks: socialLinks.length ? socialLinks : undefined,
+              };
+            })
           : clubs
               .filter((club) => Boolean(club.logo))
               .map((club) => ({

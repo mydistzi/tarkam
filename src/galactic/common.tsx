@@ -15,6 +15,7 @@ import comment3 from "@/assets/images/comment-3.png";
 import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
+import { useGalacticContent } from "@/views/galactic/shared";
 import {
   brand,
   faqs,
@@ -169,7 +170,8 @@ const pageBackground = (image = brand.background): CSSProperties => ({
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
 });
-const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
+const formatCurrency = (value: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
+// const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
 const getMenuPaths = (item: GalacticMenuItem): string[] => {
   const directPath = item.path ? [item.path] : [];
   const childPaths = item.children ? item.children.flatMap(getMenuPaths) : [];
@@ -545,7 +547,15 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
     ))}
   </ul>
 );
-const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: StreamItem[] }) => {
+const LatestMatchesList = ({
+  items,
+  streams,
+  animated,
+}: {
+  items: MatchItem[];
+  streams?: StreamItem[];
+  animated?: boolean;
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -553,7 +563,11 @@ const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: S
       {items.map((match, index) => {
         const stream = streams?.[index];
         return (
-          <div className="latest-matches-lists" key={`latest-${match.leftTeam}-${match.rightTeam}`}>
+          <div
+            className={`latest-matches-lists${animated ? " animated fadeInUp" : ""}`}
+            key={`latest-${match.leftTeam}-${match.rightTeam}`}
+            style={animated ? { animationDelay: `${index * 100}ms`, animationDuration: "900ms" } : undefined}
+          >
             <div
               className="latest-matches-list"
               onClick={() => match.path && navigate(match.path)}
@@ -572,6 +586,54 @@ const LatestMatchesList = ({ items, streams }: { items: MatchItem[]; streams?: S
                 <ul className="match-meta">
                   <li><a href="#">{match.date} - {match.time}</a></li>
                 </ul>
+                {(match.malePath || match.femalePath) && (
+                  <div
+                    className="match-gender-actions"
+                    onClick={(event) => event.stopPropagation()}
+                    style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "16px" }}
+                  >
+                    {match.malePath && (
+                      <Link
+                        className="gender-filter-btn male"
+                        to={match.malePath}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "6px 12px",
+                          borderRadius: "999px",
+                          background: "rgba(255,255,255,0.08)",
+                          color: "#fff",
+                          border: "1px solid rgba(255,255,255,0.18)",
+                          fontSize: "0.85rem",
+                          textDecoration: "none",
+                        }}
+                      >
+                        Male
+                      </Link>
+                    )}
+                    {match.femalePath && (
+                      <Link
+                        className="gender-filter-btn female"
+                        to={match.femalePath}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "6px 12px",
+                          borderRadius: "999px",
+                          background: "rgba(255,255,255,0.08)",
+                          color: "#fff",
+                          border: "1px solid rgba(255,255,255,0.18)",
+                          fontSize: "0.85rem",
+                          textDecoration: "none",
+                        }}
+                      >
+                        Female
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="watch-info" onClick={(event) => event.stopPropagation()}>
                 <a
@@ -748,6 +810,64 @@ const SponsorGrid = ({ items = [] }: { items?: SponsorItem[] }) => (
     ))}
   </div>
 );
+
+const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) => (
+  <section className="sponsor-testimonial-section padding-top padding-bottom">
+    <div className="container">
+      <div className="section-heading text-center mb-40 wow fade-in-bottom" data-wow-delay="200ms">
+        <h3>Pesan dari Sponsor</h3>
+        <h2>Support Dari <span>Sponsor</span> &amp; Pesan Mereka</h2>
+        <p>Pesan langsung dari sponsor lengkap dengan detail partner, dukungan jumlah, dan kontak media sosial.</p>
+      </div>
+      <div className="carousel-wrap">
+        <Swiper
+          autoplay={{ delay: 3200, disableOnInteraction: false }}
+          className="sponsor-testimonial-carousel swiper"
+          loop={items.length > 2}
+          loopAdditionalSlides={items.length > 2 ? items.length : undefined}
+          modules={[Autoplay, SwiperPagination]}
+          pagination={{ clickable: true }}
+          slidesPerView={1}
+          spaceBetween={0}
+          speed={400}
+          breakpoints={{ 767: { slidesPerView: 2, spaceBetween: 30 } }}
+        >
+          {items.map((sponsor, index) => {
+            const avatarName = sponsor.memberNickname || sponsor.name || "Sponsor Partner";
+            return (
+              <SwiperSlide key={`sponsor-testimonial-${index + 1}`}>
+                <div className="testimonial-item">
+                  <div className="testi-thumb">
+                    <img
+                      src={getImageSource(sponsor.memberImage, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=66FFCC`)}
+                      alt={sponsor.memberNickname || sponsor.name}
+                    />
+                    <h3>{sponsor.name} 
+                      {sponsor.amount != null ? (
+                        <span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(sponsor.amount)}</span>
+                        ) : null}
+                    </h3>
+                  </div>
+                  {sponsor.message ? <p className="sponsor-message">"{sponsor.message}"</p> : null}
+                  <div className="sponsor-testimonial-meta">
+                      <span className="testimonial-author">{sponsor.memberNickname || "Sponsor Partner"}</span>
+                      <div className="sponsor-testimonial-social">
+                        {sponsor.socialLinks?.map((link, socialIndex) => (
+                          <a key={`social-${index}-${socialIndex}`} href={link.href} target="_blank" rel="noreferrer">
+                            <i className={link.icon} />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+    </div>
+  </section>
+);
 const JoinMailSection = () => (
   <section className="contact-section padding-bottom">
     <div className="container">
@@ -799,7 +919,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => (
         </ul>
       </div>
       <h3><Link to={product.path || "/shop-details"}>{product.name}</Link></h3>
-      <h4 className="price">{formatCurrency(product.price)}</h4>
+      <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)}</h4>
     </div>
   </div>
 );
@@ -1392,6 +1512,7 @@ const FaqAccordion = () => {
 
 const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) => {
   const location = useLocation();
+  const { loading: contentLoading } = useGalacticContent();
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sticky, setSticky] = useState(false);
@@ -1460,15 +1581,17 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   }, [location.pathname]);
 
   useEffect(() => {
-    if (loading) {
+    if (loading || contentLoading) {
       document.body.classList.remove("loaded");
     } else {
       document.body.classList.add("loaded");
     }
-  }, [loading]);
+  }, [loading, contentLoading]);
+
+  const isAppReady = !loading && !contentLoading;
 
   useEffect(() => {
-    if (loading) {
+    if (!isAppReady) {
       return;
     }
 
@@ -1490,7 +1613,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     }, 220);
 
     return () => window.clearTimeout(timer);
-  }, [loading, location.pathname]);
+  }, [isAppReady, location.pathname]);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -1672,6 +1795,7 @@ export {
   ContactForm,
   PromoSection,
   GameplaySection,
+  SponsorTestimonialSection,
   TestimonialSection,
   ContactDetails,
   FaqAccordion,
