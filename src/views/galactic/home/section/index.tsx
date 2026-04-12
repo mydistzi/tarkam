@@ -1,17 +1,18 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  HomePostGrid,
+//   HomePostGrid,
   JoinMailSection,
   MatchList,
   PlayerCarousel,
-  ProductCarousel,
+//   ProductCarousel,
   SectionHeading,
   SponsorCarousel,
   VideoCardButton,
   WatchLiveGrid,
 } from "@/galactic/common";
-import type { MatchItem, PlayerItem, PostItem, ProductItem, SponsorItem, StreamItem } from "@/galactic/data";
+// import type { MatchItem, PlayerItem, PostItem, ProductItem, SponsorItem, StreamItem } from "@/galactic/data";
+import type { MatchItem, PlayerItem, SponsorItem, StreamItem } from "@/galactic/data";
 
 type HeroItem = {
   title?: string;
@@ -153,39 +154,39 @@ const HomeSponsorsSection = ({ items }: { items: SponsorItem[] }) => (
   </div>
 );
 
-const HomeShopSection = ({ items }: { items: ProductItem[] }) => (
-  <section className="shop-section padding-bottom">
-    <div className="container">
-      <SectionHeading
-        eyebrow="Toko Gaming Online"
-        title={<>Jelajah <span>Perlengkapan</span></>}
-        description={<>Barang dan perlengkapan muncul dari API `products`, lengkap dengan kategori, stok, dan thumbnail.</>}
-      />
-      <ProductCarousel items={items} />
-    </div>
-  </section>
-);
+// const HomeShopSection = ({ items }: { items: ProductItem[] }) => (
+//   <section className="shop-section padding-bottom">
+//     <div className="container">
+//       <SectionHeading
+//         eyebrow="Toko Gaming Online"
+//         title={<>Jelajah <span>Perlengkapan</span></>}
+//         description={<>Barang dan perlengkapan muncul dari API `products`, lengkap dengan kategori, stok, dan thumbnail.</>}
+//       />
+//       <ProductCarousel items={items} />
+//     </div>
+//   </section>
+// );
 
-const HomeBlogSection = ({ items }: { items: PostItem[] }) => (
-  <section className="blog-section">
-    <div className="container">
-      <SectionHeading
-        eyebrow="Berita Terbaru"
-        title={<>Berita &amp; <span>Headline</span></>}
-        description={<>Artikel publik dari `tarkam-api` sekarang langsung ngisi halaman ini.</>}
-      />
-      <HomePostGrid items={items} />
-    </div>
-  </section>
-);
+// const HomeBlogSection = ({ items }: { items: PostItem[] }) => (
+//   <section className="blog-section">
+//     <div className="container">
+//       <SectionHeading
+//         eyebrow="Berita Terbaru"
+//         title={<>Berita &amp; <span>Headline</span></>}
+//         description={<>Artikel publik dari `tarkam-api` sekarang langsung ngisi halaman ini.</>}
+//       />
+//       <HomePostGrid items={items} />
+//     </div>
+//   </section>
+// );
 
 export {
-  HomeBlogSection,
+//   HomeBlogSection,
   HomeHeroSection,
   HomeJoinSection,
   HomeMatchesSection,
   HomePlayersSection,
-  HomeShopSection,
+//   HomeShopSection,
   HomeSponsorsSection,
   HomeStreamsSection,
 };
