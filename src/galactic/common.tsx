@@ -129,11 +129,11 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 };
 
 const videoHref = "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243";
-const DISCORD_CONTACT_WEBHOOK =
-  import.meta.env.VITE_DISCORD_CONTACT_WEBHOOK ||
-  (import.meta.env as Record<string, string | undefined>).RAILWAY_DISCORD_CONTACT_WEBHOOK ||
-  (import.meta.env as Record<string, string | undefined>).VITE_RAILWAY_DISCORD_CONTACT_WEBHOOK ||
-  "";
+const DEFAULT_API_BASE_URL = "https://tarkam-api-web-production.up.railway.app/api/v1";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL?.trim() ||
+  (import.meta.env as Record<string, string | undefined>).API_BASE_URL?.trim() ||
+  DEFAULT_API_BASE_URL;
 const cardResponsive = {
   desktop: { breakpoint: { max: 3000, min: 1200 }, items: 3 },
   tablet: { breakpoint: { max: 1199, min: 768 }, items: 2 },
@@ -1015,33 +1015,19 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
     setSubmitting(true);
     setStatus({ type: "info", message: "Mengirim pesan..." });
 
+    const contactApiUrl = `${API_BASE_URL.replace(/\/$/, "")}/contact`;
+
     try {
-      if (!DISCORD_CONTACT_WEBHOOK) {
-        throw new Error("Webhook Discord belum dikonfigurasi.");
-      }
-
-      const payload = {
-        username: "Tarkam Contact Form",
-        embeds: [
-          {
-            title: "Pesan Baru dari Website",
-            description: trimmedMessage,
-            color: 0x5865f2,
-            fields: [
-              { name: "Nama", value: trimmedName, inline: true },
-              { name: "Email", value: trimmedEmail, inline: true },
-            ],
-            timestamp: new Date().toISOString(),
-          },
-        ],
-      };
-
-      const response = await fetch(DISCORD_CONTACT_WEBHOOK, {
+      const response = await fetch(contactApiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+        }),
       });
 
       if (!response.ok) {
@@ -1140,10 +1126,6 @@ const SubscribeForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
 
-  const apiUrl = import.meta.env.VITE_API_BASE_URL?.trim()
-    ? `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, "")}/subscribe`
-    : "/api/v1/subscribe";
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (submitting) {
@@ -1170,7 +1152,7 @@ const SubscribeForm = () => {
     setStatus({ type: "info", message: "Mengirim langganan..." });
 
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${API_BASE_URL.replace(/\/$/, "")}/subscribe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
