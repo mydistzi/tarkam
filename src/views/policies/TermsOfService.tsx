@@ -268,6 +268,10 @@ function TermsOfService() {
               <p>
                 Syarat ini diatur oleh hukum Indonesia dan yurisdiksi Jakarta.
               </p>
+              <ul className="tags mb-30">
+                <li><a href="https://discord.com">Discord</a></li>
+                <li><a href="https://web.whatsapp.com">Whatsapp</a></li>
+              </ul>
             </div>
           </div>
         </div>
