@@ -100,6 +100,10 @@ function DataDeletionPolicy() {
                 Data akan dihapus sesuai permintaan selama permintaan tersebut
                 sah dan sesuai dengan kapasitas operasional.
               </blockquote>
+              <ul className="tags mb-30">
+                <li><a href="https://discord.com">Discord</a></li>
+                <li><a href="https://web.whatsapp.com">Whatsapp</a></li>
+              </ul>
             </div>
           </div>
         </div>

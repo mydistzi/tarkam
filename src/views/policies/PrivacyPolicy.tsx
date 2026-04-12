@@ -131,6 +131,10 @@ function PrivacyPolicy() {
                 Penggunaan Bot setelah perubahan dipublikasikan dianggap sebagai
                 penerimaan atas kebijakan versi terbaru.
               </p>
+              <ul className="tags mb-30">
+                <li><a href="https://discord.com">Discord</a></li>
+                <li><a href="https://web.whatsapp.com">Whatsapp</a></li>
+              </ul>
             </div>
           </div>
         </div>

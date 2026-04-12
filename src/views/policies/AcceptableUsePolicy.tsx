@@ -92,6 +92,10 @@ function AcceptableUsePolicy() {
                 Developer berhak menangguhkan atau mencabut akses jika aturan
                 ini dilanggar.
               </blockquote>
+              <ul className="tags mb-30">
+                <li><a href="https://discord.com">Discord</a></li>
+                <li><a href="https://web.whatsapp.com">Whatsapp</a></li>
+              </ul>
             </div>
           </div>
         </div>
