@@ -71,7 +71,7 @@ const HomeHeroSection = ({ hero }: HeroSectionProps) => {
 };
 
 const HomeMatchesSection = ({ items }: { items: MatchItem[] }) => (
-  <section className="matches-section padding">
+  <section className="matches-section padding-bottom">
     <div className="container">
       <SectionHeading
         eyebrow="Pertandingan Mendatang"

@@ -516,14 +516,14 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
   <ul className="upcoming-matches">
     {items.map((match) => (
       <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
-        <div className="participate-team wow fade-in-left">
+        <div className="participate-team wow fade-in-left" data-wow-delay="200ms">
           <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
         </div>
         <div className="match-time">
           {/* <h3>{match.time}<span>{match.date}</span></h3> */}
-          <h3>21:30<span>{match.date}</span></h3>
+          <h3>21:30 <span>{match.date}</span></h3>
           <ul className="watch-btn">
             <li>
               <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={match.videoUrl || videoHref} type="button">
@@ -537,7 +537,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
             </li>
           </ul>
         </div>
-        <div className="participate-team oponent wow fade-in-right">
+        <div className="participate-team oponent wow fade-in-right" data-wow-delay="200ms">
           <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
           <img src={getImageSource(match.rightLogo, "/assets/images/placeholder-team.png")} alt={match.rightTeam} />
