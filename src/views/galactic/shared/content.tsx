@@ -672,6 +672,7 @@ async function fetchGalacticPayloads() {
     winners: read<ApiEnvelope<ApiWinner[]>>(14),
     usefulls: read<ApiEnvelope<ApiUsefull[]>>(15),
     penyawers: read<ApiEnvelope<ApiPenyawer[]>>(16),
+    groups: read<ApiEnvelope<ApiGroup[]>>(17),
   };
 }
 
@@ -728,6 +729,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         const tarkams = normalizeList(payloads.tarkams);
         const contests = normalizeList(payloads.contests);
         const winners = normalizeList(payloads.winners);
+        const groups = normalizeList(payloads.groups);
         const usefulls = normalizeList(payloads.usefulls);
         const penyawers = normalizeList(payloads.penyawers);
 
@@ -735,6 +737,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         const memberMap = new Map(members.map((item) => [item.id, item]));
         const teamMap = new Map(teams.map((item) => [item.id, item]));
         const tarkamMap = new Map(tarkams.map((item) => [item.id, item]));
+        const groupMap = new Map(groups.map((item) => [item.id, item]));
         const categoryMap = new Map(categories.map((item) => [item.id, item.name || "Gaming"]));
         const menuTree = buildMenuTree(menus);
 
@@ -823,6 +826,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           const draws = relatedContests.filter((item) => !item.winner_team_fk).length;
           const firstClub = membersForTeam[0]?.club;
           const firstTarkam = team.tarkam_fk ? tarkamMap.get(team.tarkam_fk) : undefined;
+          const teamGroup = team.group || (team.group_fk ? groupMap.get(team.group_fk) : undefined);
           const points = membersForTeam.reduce((sum, item) => sum + item.points, 0);
 
           return {
@@ -833,7 +837,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             teamPath: `/detail-tim/${team.id}`,
             gender: team.gender || "Open",
             members: membersForTeam.map((item) => item.item),
-            group: team.group,
+            group: teamGroup,
             description: firstTarkam?.description || "",
             wins,
             losses,
