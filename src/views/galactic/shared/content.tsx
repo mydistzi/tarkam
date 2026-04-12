@@ -238,6 +238,17 @@ type ApiPlayer = {
   deleted_at?: string;
 };
 
+type ApiGroup = {
+  id: number;
+  name?: string;
+  gender?: string;
+  team_fk?: number | null;
+  tarkam_fk?: number | null;
+  created_at?: string;
+  updated_at?: string;
+  deleted_at?: string;
+}
+
 type ApiTeam = {
   id: number;
   name?: string;
@@ -287,6 +298,8 @@ type ApiContest = {
   score?: number | string;
   tarkam_fk?: number | null;
   gender?: string;
+  group?: ApiGroup;
+  tarkam?: ApiTarkam;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -631,6 +644,7 @@ async function fetchGalacticPayloads() {
     Api.get("/usefull"),
     Api.get("/penyawers"),
     Api.get("/aliases"),
+    Api.get("/groups"),
   ]);
 
   const read = <T,>(index: number): T | undefined =>
