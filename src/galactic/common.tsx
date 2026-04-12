@@ -522,7 +522,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
           <div className="match-info">{match.group}</div>
         </div>
         <div className="match-time">
-          <h3>{match.time || "00:00"} <span>{match.date}</span></h3>
+          <h3>21:30 <span>{match.date}</span></h3>
           <ul className="watch-btn">
             <li>
               <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={match.videoUrl || videoHref} type="button">
