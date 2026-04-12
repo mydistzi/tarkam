@@ -130,9 +130,22 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 
 const videoHref = "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243";
 const DEFAULT_API_BASE_URL = "https://tarkam-api-web-production.up.railway.app/api/v1";
+const normalizeApiBaseUrl = (value?: string): string => {
+  const baseUrl = String(value || "").trim();
+  if (!baseUrl) {
+    return "";
+  }
+
+  const cleaned = baseUrl.replace(/^\/+/, "").replace(/\/+$/, "");
+  if (/^https?:\/\//i.test(baseUrl)) {
+    return baseUrl.replace(/\/+$/, "");
+  }
+
+  return `https://${cleaned}`;
+};
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.trim() ||
-  (import.meta.env as Record<string, string | undefined>).API_BASE_URL?.trim() ||
+  normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL) ||
+  normalizeApiBaseUrl((import.meta.env as Record<string, string | undefined>).API_BASE_URL) ||
   DEFAULT_API_BASE_URL;
 const cardResponsive = {
   desktop: { breakpoint: { max: 3000, min: 1200 }, items: 3 },
