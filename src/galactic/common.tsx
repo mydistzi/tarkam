@@ -430,7 +430,7 @@ const Footer = ({
   description = "Kesuksesan kami datang dari tim yang kreatif, dedikasi tinggi, dan semangat gaming yang nggak pernah padam.",
   socialLinks = brand.socialLinks,
   usefulLinks = [],
-  contact = brand.contact,
+  // contact = brand.contact,
 }: FooterProps) => (
   <footer className="footer-section">
     <div className="container">
@@ -473,12 +473,14 @@ const Footer = ({
         <div className="col-lg-3 col-sm-6 sm-padding">
           <div className="footer-item">
             <div className="widget-title">
-              <h3>Kontak</h3>
+              <h3>Invite Bot</h3>
             </div>
             <ul className="footer-contact">
-              <li><span>Lokasi:</span>{contact.location || brand.contact.location}</li>
+              {/* <li><span>Lokasi:</span>{contact.location || brand.contact.location}</li>
               <li><span>Email:</span>{contact.email || brand.contact.email}</li>
-              <li><span>Telepon:</span>{contact.phone || brand.contact.phone}</li>
+              <li><span>Telepon:</span>{contact.phone || brand.contact.phone}</li> */}
+              <li><span>Discord:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://discord.com/oauth2/authorize?client_id=1478890368429850674&permissions=8&scope=bot">Server Discord <span /></Link></li>
+              <li><span>WhatsApp:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://wa.me/message/PJEIVB5M56NGE1">Group WhatsApp <span /></Link></li>
             </ul>
           </div>
         </div>
@@ -487,11 +489,7 @@ const Footer = ({
             <div className="widget-title">
               <h3>Daftar Newsletter</h3>
             </div>
-                  <SubscribeForm />
-            <ul className="footer-contact">
-              <li><span>Invite Bot ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://discord.com/oauth2/authorize?client_id=1478890368429850674&permissions=8&scope=bot">Server Discord <span /></Link></li>
-              <li><span>Atau ke:</span><Link className="default-btn" rel="noreferrer" target="_blank" to="https://wa.me/message/PJEIVB5M56NGE1">Group WhatsApp <span /></Link></li>
-            </ul>
+            <SubscribeForm />
           </div>
         </div>
       </div>
