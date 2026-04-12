@@ -1,9 +1,15 @@
 import { PageHeader, SponsorGrid, TestimonialSection } from "@/galactic/common";
-import type { SponsorItem } from "@/galactic/data";
+import { players, type SponsorItem } from "@/galactic/data";
 
 type SponsorsContentProps = {
   sponsors: SponsorItem[];
 };
+
+const testimonialItems = players.slice(0, 5).map((player) => ({
+  image: player.image,
+  name: player.name,
+  date: player.game,
+}));
 
 const SponsorsContent = ({ sponsors }: SponsorsContentProps) => (
   <>
@@ -15,7 +21,7 @@ const SponsorsContent = ({ sponsors }: SponsorsContentProps) => (
     <div className="sponsor-section padding-top">
       <div className="container">
         <SponsorGrid items={sponsors} />
-        <TestimonialSection />
+        <TestimonialSection items={testimonialItems} />
       </div>
     </div>
   </>

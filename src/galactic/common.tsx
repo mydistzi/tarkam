@@ -1295,7 +1295,7 @@ const GameplaySection = ({
   </section>
 );
 const TestimonialSection = ({ items = [] }: { items?: { image?: string; name: string; date?: string; }[] }) => (
-  <section className="testimonial-section padding-bottom">
+  <section className="testimonial-section padding-top padding-bottom">
     <div className="container">
       <div className="section-heading text-center mb-40 wow fade-in-bottom" data-wow-delay="200ms">
         <h3>Pesan dari Sponsor</h3>
