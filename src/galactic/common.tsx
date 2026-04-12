@@ -519,7 +519,8 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
         <div className="participate-team wow fade-in-left">
           <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
-          <div className="match-info">{match.group}</div>
+          {/* <div className="match-info">{match.group}</div> */}
+          <div className="match-info">21:30</div>
         </div>
         <div className="match-time">
           <h3>{match.time}<span>{match.date}</span></h3>
