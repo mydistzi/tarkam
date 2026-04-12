@@ -1035,6 +1035,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           name: trimmedName,
@@ -1044,7 +1045,14 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`Webhook gagal: ${response.status}`);
+        let errorText = await response.text();
+        try {
+          const json = JSON.parse(errorText);
+          errorText = json.message || JSON.stringify(json);
+        } catch {
+          // ignore parse errors and keep raw text
+        }
+        throw new Error(`Webhook gagal: ${response.status} - ${errorText}`);
       }
 
       setName("");
@@ -1058,7 +1066,10 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
       });
     } catch (error) {
       console.error(error);
-      const errorMessage = "Gagal mengirim pesan. Silakan coba lagi nanti.";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Gagal mengirim pesan. Silakan coba lagi nanti.";
       setStatus({ type: "error", message: errorMessage });
       await Swal.fire({
         icon: "error",
