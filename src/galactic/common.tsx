@@ -1298,8 +1298,8 @@ const TestimonialSection = ({ items = [] }: { items?: { image?: string; name: st
   <section className="testimonial-section padding-bottom">
     <div className="container">
       <div className="section-heading text-center mb-40 wow fade-in-bottom" data-wow-delay="200ms">
-        <h3>Testimonials</h3>
-        <h2>5000+ <span>Happy Gamers</span> <br /> Around The World</h2>
+        <h3>Pesan dari Sponsor</h3>
+        <h2>Dukung dan selalu supoort <span>Players</span> <br /> Agar Lebih Semangat.</h2>
         <p>{templateHeaderDescription}</p>
       </div>
       <div className="carousel-wrap">

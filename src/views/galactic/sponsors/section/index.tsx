@@ -1,4 +1,4 @@
-import { PageHeader, SponsorGrid } from "@/galactic/common";
+import { PageHeader, SponsorGrid, TestimonialSection } from "@/galactic/common";
 import type { SponsorItem } from "@/galactic/data";
 
 type SponsorsContentProps = {
@@ -15,6 +15,7 @@ const SponsorsContent = ({ sponsors }: SponsorsContentProps) => (
     <div className="sponsor-section padding-top">
       <div className="container">
         <SponsorGrid items={sponsors} />
+        <TestimonialSection />
       </div>
     </div>
   </>
