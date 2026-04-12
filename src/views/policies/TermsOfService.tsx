@@ -78,7 +78,7 @@ function TermsOfService() {
                 <li>Fungsi hiburan atau game-related</li>
                 <li>Integrasi dengan layanan atau API eksternal</li>
               </ul>
-              <blockquote>
+              <blockquote className="mt-20">
                 <i className="fas fa-quote-right" />
                 Fitur bisa diubah, ditambah, atau dihapus kapan saja tanpa
                 pemberitahuan terlebih dahulu.
@@ -105,10 +105,11 @@ function TermsOfService() {
                   Guidelines.
                 </li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Kalau nggak taat, akses kamu bisa dibatasi atau Bot bisa dicabut
                 dari server.
-              </p>
+              </blockquote>
 
               <h3 className="comment-title">3. Penggunaan Wajar</h3>
               <p>
@@ -123,10 +124,11 @@ function TermsOfService() {
                 <li>Menggunakan Bot untuk aktivitas ilegal</li>
                 <li>Mengganggu fungsi normal Bot</li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Developer berhak suspend, blokir, atau banned user atau server
                 yang melanggar aturan.
-              </p>
+              </blockquote>
 
               <h3 className="comment-title">4. Pengumpulan Data</h3>
               <p>
@@ -140,14 +142,13 @@ function TermsOfService() {
                 <li>Log penggunaan perintah</li>
                 <li>Setelan konfigurasi server</li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Data ini hanya dipakai untuk operasional, debugging, dan
                 ningkatin layanan.
-              </p>
-              <p>
-                Kami tidak menjual atau membagikan data pribadi ke pihak ketiga
-                kecuali jika diwajibkan oleh hukum.
-              </p>
+                <span>Kami tidak menjual atau membagikan data pribadi ke pihak ketiga
+                kecuali jika diwajibkan oleh hukum.</span>
+              </blockquote>
 
               <h3 className="comment-title">5. Penyimpanan Data & Retensi</h3>
               <p>
@@ -179,10 +180,11 @@ function TermsOfService() {
                 <li>Bebas dari bug atau error</li>
                 <li>Memenuhi harapan semua pengguna</li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Developer berhak mengubah, menangguhkan, atau menghentikan
                 layanan kapan saja tanpa pemberitahuan.
-              </p>
+              </blockquote>
 
               <h3 className="comment-title">7. Batas Tanggung Jawab</h3>
               <p>Sejauh diizinkan hukum, Dist tidak bertanggung jawab atas:</p>
@@ -194,9 +196,10 @@ function TermsOfService() {
                   Kerugian tidak langsung yang muncul akibat penggunaan Bot
                 </li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Penggunaan Bot adalah risiko kamu sendiri.
-              </p>
+              </blockquote>
 
               <h3 className="comment-title">8. Penghentian</h3>
               <p>Kami berhak:</p>
@@ -205,10 +208,11 @@ function TermsOfService() {
                 <li>Mengeluarkan Bot dari server mana pun</li>
                 <li>Menangguhkan atau menghentikan layanan sepenuhnya</li>
               </ul>
-              <p>
+              <blockquote className="mt-20">
+                <i className="fas fa-quote-right" />
                 Pengguna bisa berhenti pakai Bot kapan saja dengan menghapusnya
                 dari server Discord.
-              </p>
+              </blockquote>
 
               <h3 className="comment-title">9. Perubahan Syarat</h3>
               <p>Kami bisa memperbarui syarat ini secara berkala.</p>
@@ -234,27 +238,31 @@ function TermsOfService() {
               <p>
                 Kalau ada pertanyaan tentang syarat ini, hubungi kami lewat:
               </p>
-              <p>
-                Website:{" "}
+              <ul className="tags mb-30">
+                <li>Website:{" "}
                 <a
                   href="https://tarkam.fun"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   https://tarkam.fun
-                </a>
-              </p>
-              <p>
-                Support Server:{" "}
+                </a></li>
+                <li>Support Server:{" "}
                 <a
                   href="https://discord.gg/fnRhRkxTyC"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  https://discord.gg/fnRhRkxTyC
-                </a>
-              </p>
-              <p>Developer: Dist</p>
+                    https://discord.gg/fnRhRkxTyC
+                </a></li>
+                <li>Developer: <a
+                  href="https://instagram.com/mydistzi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Dist
+                </a></li>
+              </ul>
 
               <h3 className="comment-title">11. Hukum yang Berlaku</h3>
               <p>
