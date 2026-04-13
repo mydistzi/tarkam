@@ -98,6 +98,11 @@ type WowInstance = {
 declare global {
   interface Window {
     WOW?: new (options?: Record<string, unknown>) => WowInstance;
+    FB?: {
+      XFBML?: {
+        parse: (element?: HTMLElement) => void;
+      };
+    };
   }
 }
 const DISQUS_SHORTNAME = import.meta.env.VITE_DISQUS_SHORTNAME || "tarkam";
@@ -200,6 +205,48 @@ const toEmbedUrl = (url: string) => {
   }
   return url;
 };
+const isFacebookVideoUrl = (url: string) => /facebook\.com\/(?:video\.php|watch|plugins\/video\.php|videos?)/.test(url);
+const getFacebookVideoPostUrl = (url: string) => {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.endsWith("facebook.com") && parsed.pathname.includes("plugins/video.php")) {
+      const href = parsed.searchParams.get("href");
+      return href ? decodeURIComponent(href) : url;
+    }
+  } catch {
+    // ignore invalid URL and fallback to raw value
+  }
+  return url;
+};
+const loadFacebookSdk = () => {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return;
+  }
+
+  if (!document.getElementById("fb-root")) {
+    const fbRoot = document.createElement("div");
+    fbRoot.id = "fb-root";
+    document.body.prepend(fbRoot);
+  }
+
+  if (document.getElementById("facebook-jssdk")) {
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.id = "facebook-jssdk";
+  script.async = true;
+  script.defer = true;
+  script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0";
+  document.body.appendChild(script);
+};
+const parseFacebookXfbml = (element?: HTMLElement | null) => {
+  if (typeof window === "undefined" || !window.FB?.XFBML) {
+    return;
+  }
+
+  window.FB.XFBML.parse(element || undefined);
+};
 const CarouselButtonGroup = ({
   next,
   previous,
@@ -214,10 +261,57 @@ const CarouselButtonGroup = ({
     </button>
   </div>
 );
+const FacebookVideoEmbed = ({ url }: { url: string }) => {
+  const [sdkLoaded, setSdkLoaded] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    loadFacebookSdk();
+
+    const onSdkReady = () => {
+      setSdkLoaded(true);
+      parseFacebookXfbml(containerRef.current);
+    };
+
+    if (window.FB?.XFBML) {
+      onSdkReady();
+      return;
+    }
+
+    const handleSdkLoad = () => {
+      if (window.FB?.XFBML) {
+        onSdkReady();
+      }
+    };
+
+    const script = document.getElementById("facebook-jssdk");
+    if (script) {
+      script.addEventListener("load", handleSdkLoad);
+    }
+
+    return () => {
+      if (script) {
+        script.removeEventListener("load", handleSdkLoad);
+      }
+    };
+  }, [url]);
+
+  const postUrl = getFacebookVideoPostUrl(url);
+
+  return (
+    <>
+      <div ref={containerRef} className="fb-video" data-href={postUrl} data-width="auto" data-show-text="false" data-allowfullscreen="true" data-autoplay="true" />
+      {sdkLoaded ? null : <div>Memuat video Facebook...</div>}
+    </>
+  );
+};
+
 const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose: () => void }) => {
   if (!video) {
     return null;
   }
+  const isFacebook = isFacebookVideoUrl(video.url);
+
   return (
     <div className="video-modal-backdrop" onClick={onClose}>
       <div className="video-modal" onClick={(event) => event.stopPropagation()}>
@@ -225,13 +319,17 @@ const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose
           ×
         </button>
         <div className="video-modal-content">
-          <iframe
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-            src={toEmbedUrl(video.url)}
-            title={video.title}
-          />
+          {isFacebook ? (
+            <FacebookVideoEmbed url={video.url} />
+          ) : (
+            <iframe
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              src={toEmbedUrl(video.url)}
+              title={video.title}
+            />
+          )}
         </div>
       </div>
     </div>
