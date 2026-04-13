@@ -46,7 +46,7 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                   <p>{product.description}</p>
                   <div className="product-btn">
                     <form>
-                      <input defaultValue="1" max="100" min="1" step="1" type="number" />
+                      <input defaultValue="1" max="100" min="1" step="1" id="number" name="number" type="number" />
                     </form>
                     <div><Link className="purchase-btn" to="/cart">Tambah ke Keranjang</Link></div>
                   </div>

@@ -1015,7 +1015,7 @@ const BlogSidebar = ({
         <h3>Cari Berita</h3>
       </div>
       <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" type="text" placeholder="Cari..." />
+        <input className="form-control" id="cari" name="cari" type="text" placeholder="Cari..." />
         <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
@@ -1071,7 +1071,7 @@ const ClassicBlogSidebar = ({
   <>
     <div className="sidebar-widget">
       <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" type="text" placeholder="Cari" />
+        <input className="form-control" type="text" id="cari" name="cari" placeholder="Cari" />
         <button className="search-btn" type="submit"><i className="fa fa-search" /></button>
       </form>
     </div>
