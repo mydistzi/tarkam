@@ -129,7 +129,9 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
   );
 };
 
-const videoHref = "https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243&autoplay=1&mute=1";
+const videoHref = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
+  "https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243",
+)}&autoplay=1&mute=1&show_text=0`;
 const DEFAULT_API_BASE_URL = "https://tarkam-api-web-production.up.railway.app/api/v1";
 const normalizeApiBaseUrl = (value?: string): string => {
   const baseUrl = String(value || "").trim();
@@ -224,7 +226,7 @@ const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose
         </button>
         <div className="video-modal-content">
           <iframe
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; unload"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             referrerPolicy="strict-origin-when-cross-origin"
             src={toEmbedUrl(video.url)}
