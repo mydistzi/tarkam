@@ -11,14 +11,35 @@ function normalizeApiBaseUrl(value: string | undefined): string {
   }
 
   if (/^https?:\/\//i.test(baseUrl)) {
-    return baseUrl;
+    return baseUrl.replace(/\/+$/, "");
   }
 
-  return `https://${baseUrl}`;
+  return `https://${baseUrl.replace(/^\/+/, "").replace(/\/+$/, "")}`;
+}
+
+function buildPublicApiBaseUrl(value: string | undefined): string {
+  const normalized = normalizeApiBaseUrl(value);
+
+  if (!normalized) {
+    return "";
+  }
+
+  if (/\/api\/v1$/i.test(normalized)) {
+    return normalized;
+  }
+
+  if (/\/api$/i.test(normalized)) {
+    return `${normalized}/v1`;
+  }
+
+  return `${normalized}/api/v1`;
 }
 
 const Api = axios.create({
-  baseURL: normalizeApiBaseUrl(import.meta.env.BAILEYS_PUBLIC_BASE_URL) || DEFAULT_API_BASE_URL,
+  baseURL:
+    buildPublicApiBaseUrl(import.meta.env.VITE_API_BASE_URL) ||
+    buildPublicApiBaseUrl((import.meta.env as Record<string, string | undefined>).API_BASE_URL) ||
+    DEFAULT_API_BASE_URL,
 });
 
 export default Api;
