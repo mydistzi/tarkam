@@ -1236,7 +1236,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
     setSubmitting(true);
     setStatus({ type: "info", message: "Mengirim pesan..." });
 
-    const contactApiUrl = `${API_BASE_URL.replace(/\/$/, "")}/hubungi-kami`;
+    const contactApiUrl = `${API_BASE_URL.replace(/\/$/, "")}/contact`;
 
     try {
       const response = await fetch(contactApiUrl, {
