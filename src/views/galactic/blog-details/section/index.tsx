@@ -42,7 +42,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
             <div className="col-lg-8 offset-lg-2">
               <div className="post-details">
                 <div className="post-thumb">
-                  <img src={post.image} alt={post.title} />
+                  <img src={post.image || "/assets/images/placeholder-post.jpg"} alt={post.title} />
                 </div>
                 {post.content.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
