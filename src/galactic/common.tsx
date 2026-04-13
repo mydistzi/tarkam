@@ -205,18 +205,31 @@ const toEmbedUrl = (url: string) => {
   }
   return url;
 };
-const isFacebookVideoUrl = (url: string) => /facebook\.com\/(?:video\.php|watch|plugins\/video\.php|videos?)/.test(url);
+const isFacebookVideoUrl = (url: string) => {
+  const normalized = String(url || "").trim();
+  return /(?:facebook\.com|fb\.watch)\/(?:video\.php|watch|plugins\/video\.php|videos?)/i.test(normalized);
+};
 const getFacebookVideoPostUrl = (url: string) => {
+  const normalized = String(url || "").trim();
+  if (!normalized) {
+    return normalized;
+  }
+
   try {
-    const parsed = new URL(url);
-    if (parsed.hostname.endsWith("facebook.com") && parsed.pathname.includes("plugins/video.php")) {
-      const href = parsed.searchParams.get("href");
-      return href ? decodeURIComponent(href) : url;
+    const parsed = new URL(normalized.startsWith("http") ? normalized : `https://${normalized.replace(/^\/+/u, "")}`);
+    const hostname = parsed.hostname.toLowerCase();
+    if (hostname.endsWith("facebook.com") || hostname.endsWith("fb.watch")) {
+      if (parsed.pathname.includes("plugins/video.php")) {
+        const href = parsed.searchParams.get("href");
+        return href ? decodeURIComponent(href) : normalized;
+      }
+      return `${parsed.protocol}//${parsed.hostname}${parsed.pathname}${parsed.search}`;
     }
   } catch {
     // ignore invalid URL and fallback to raw value
   }
-  return url;
+
+  return normalized;
 };
 const getFacebookEmbedUrl = (url: string) => {
   const postUrl = getFacebookVideoPostUrl(url);
@@ -236,16 +249,20 @@ const CarouselButtonGroup = ({
     </button>
   </div>
 );
-const FacebookVideoEmbed = ({ url }: { url: string }) => (
-  <iframe
-    src={getFacebookEmbedUrl(url)}
-    allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowFullScreen
-    referrerPolicy="strict-origin-when-cross-origin"
-    style={{ width: "100%", minHeight: "420px", border: 0 }}
-    title="Facebook video"
-  />
-);
+const FacebookVideoEmbed = ({ url }: { url: string }) => {
+  const embedUrl = getFacebookEmbedUrl(url);
+
+  return (
+    <iframe
+      src={embedUrl}
+      allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+      referrerPolicy="strict-origin-when-cross-origin"
+      style={{ width: "100%", minHeight: "420px", border: 0 }}
+      title="Facebook video"
+    />
+  );
+};
 
 const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose: () => void }) => {
   if (!video) {
