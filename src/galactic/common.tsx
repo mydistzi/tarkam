@@ -659,7 +659,7 @@ const LatestMatchesList = ({
                 <h3>
                   {match.leftTeamPath ? <Link to={match.leftTeamPath}>{match.leftTeam}</Link> : <span>{match.leftTeam}</span>}
                   {/* <span className="vs-text"> vs </span> */}
-                  {match.rightTeamPath ? <Link to={match.rightTeamPath}>{match.rightTeam}</Link> : <span>{match.rightTeam}</span>}
+                  {match.rightTeamPath ? <Link to={match.rightTeamPath}> {match.rightTeam}</Link> : <span> {match.rightTeam}</span>}
                 </h3>
                 <ul className="match-meta">
                   <li><a href="#">{match.date} - {match.time}</a></li>
