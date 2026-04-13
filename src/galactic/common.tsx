@@ -573,8 +573,8 @@ const Footer = ({
     </div>
   </footer>
 );
-const VideoCardButton = ({ href }: { href: string }) => {
-  const normalizedHref = getNormalizedVideoUrl(href);
+const VideoCardButton = ({ href, normalizeFacebook = false }: { href: string; normalizeFacebook?: boolean }) => {
+  const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
 
   return (
     <button
