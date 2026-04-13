@@ -480,7 +480,7 @@ const STATIC_PAGE_ROUTES: Record<string, string> = {
   "grid layout": "/blog-grid",
   "classic layout": "/blog-classic",
   "blog details": "/blog-details",
-  contact: "/contact",
+  contact: "/hubungi-kami",
 };
 
 const defaultMeta: SiteMeta = {

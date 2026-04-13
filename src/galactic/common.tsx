@@ -399,7 +399,7 @@ const HeaderMarkup = ({
           <div className="search-icon dl-search-icon" onClick={onSearchOpen} onKeyDown={() => undefined} role="button" tabIndex={0}>
             <i className="las la-search" />
           </div>
-          <Link className="default-btn" to="/contact">
+          <Link className="default-btn" to="/hubungi-kami">
             Gabung Tim Kami<span />
           </Link>
           <div className="mobile-menu-icon" onClick={onToggleMenu} onKeyDown={() => undefined} role="button" tabIndex={0}>
@@ -1158,7 +1158,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
     setSubmitting(true);
     setStatus({ type: "info", message: "Mengirim pesan..." });
 
-    const contactApiUrl = `${API_BASE_URL.replace(/\/$/, "")}/contact`;
+    const contactApiUrl = `${API_BASE_URL.replace(/\/$/, "")}/hubungi-kami`;
 
     try {
       const response = await fetch(contactApiUrl, {
