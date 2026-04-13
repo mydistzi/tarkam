@@ -1502,6 +1502,7 @@ async function connectBaileys() {
     browser: ["Tarkam", "Chrome", "1.0.0"],
     markOnlineOnConnect: false,
     syncFullHistory: false,
+    fireInitQueries: false,
   });
 
   sock = nextSocket;
