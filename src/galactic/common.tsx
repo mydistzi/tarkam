@@ -136,7 +136,7 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 
 const videoHref = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
   "https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243",
-)}&autoplay=1&mute=1&show_text=0`;
+)}&autoplay=1&show_text=0`;
 const DEFAULT_API_BASE_URL = "https://tarkam-api-web-production.up.railway.app/api/v1";
 const normalizeApiBaseUrl = (value?: string): string => {
   const baseUrl = String(value || "").trim();
@@ -234,6 +234,18 @@ const getFacebookVideoPostUrl = (url: string) => {
 const getFacebookEmbedUrl = (url: string) => {
   const postUrl = getFacebookVideoPostUrl(url);
   return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}&show_text=0&autoplay=1`;
+};
+const getNormalizedVideoUrl = (url: string) => {
+  const normalized = String(url || "").trim();
+  if (!normalized) {
+    return normalized;
+  }
+
+  if (isFacebookVideoUrl(normalized)) {
+    return getFacebookEmbedUrl(normalized);
+  }
+
+  return normalized;
 };
 const CarouselButtonGroup = ({
   next,
@@ -561,17 +573,21 @@ const Footer = ({
     </div>
   </footer>
 );
-const VideoCardButton = ({ href }: { href: string }) => (
-  <button
-    className="dl-video-popup play-btn vbox-item"
-    data-video-title="Tarkam Highlight Reel"
-    data-video-url={href}
-    type="button"
-  >
-    <PlaySvg />
-    <div className="ripple" />
-  </button>
-);
+const VideoCardButton = ({ href }: { href: string }) => {
+  const normalizedHref = getNormalizedVideoUrl(href);
+
+  return (
+    <button
+      className="dl-video-popup play-btn vbox-item"
+      data-video-title="Tarkam Highlight Reel"
+      data-video-url={normalizedHref}
+      type="button"
+    >
+      <PlaySvg />
+      <div className="ripple" />
+    </button>
+  );
+};
 const MatchList = ({ items }: { items: MatchItem[] }) => (
   <ul className="upcoming-matches">
     {items.map((match) => (
@@ -585,12 +601,12 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
           <h3>{match.time || "21:30"} <span>{match.date}</span></h3>
           <ul className="watch-btn">
             <li>
-              <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={match.videoUrl || videoHref} type="button">
+              <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
                 <i className="lab la-youtube" />
               </button>
             </li>
             <li>
-              <button className="galactic-play-trigger" data-video-title={match.rightTeam} data-video-url={match.videoUrl || videoHref} type="button">
+              <button className="galactic-play-trigger" data-video-title={match.rightTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
                 <i className="lab la-twitch" />
               </button>
             </li>
@@ -699,8 +715,8 @@ const LatestMatchesList = ({
                   data-autoplay="true"
                   data-vbtype="video"
                   data-video-title={stream?.title || "Watch Stream"}
-                  data-video-url={stream?.videoUrl || videoHref}
-                  href={stream?.videoUrl || videoHref}
+                  data-video-url={getNormalizedVideoUrl(stream?.videoUrl || videoHref)}
+                  href={getNormalizedVideoUrl(stream?.videoUrl || videoHref)}
                 >
                   <i className="lab la-youtube"></i>Watch Streem
                 </a>
@@ -768,7 +784,7 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
             <button
               className="dl-video-popup play-btn vbox-item galactic-play-trigger"
               data-video-title={stream.title}
-              data-video-url={stream.videoUrl}
+              data-video-url={getNormalizedVideoUrl(stream.videoUrl)}
               type="button"
             >
               <PlaySvg />
@@ -1468,7 +1484,7 @@ const GameplaySection = ({
           <div className="col-lg-4 col-md-6 sm-padding wow fade-in-bottom" data-wow-delay={`${200 + index * 200}ms`} key={`gameplay-${item.title}-${index}`}>
             <div className="gameplay-card">
               <img src={getImageSource(item.image)} alt={item.title} />
-              <button className="play-btn galactic-play-trigger" data-video-title={item.title} data-video-url={item.videoUrl || videoHref} type="button">
+              <button className="play-btn galactic-play-trigger" data-video-title={item.title} data-video-url={getNormalizedVideoUrl(item.videoUrl || videoHref)} type="button">
                 <i className="las la-play" />
               </button>
               <div className="gameplay-info">
