@@ -195,6 +195,9 @@ const PlaySvg = () => (
   </svg>
 );
 const toEmbedUrl = (url: string) => {
+  if (isFacebookVideoUrl(url)) {
+    return getFacebookEmbedUrl(url);
+  }
   if (url.includes("youtube.com/watch?v=")) {
     const videoId = url.split("v=")[1]?.split("&")[0];
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
@@ -280,7 +283,8 @@ const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose
   if (!video) {
     return null;
   }
-  const isFacebook = isFacebookVideoUrl(video.url);
+  const normalizedUrl = getNormalizedVideoUrl(video.url);
+  const isFacebook = isFacebookVideoUrl(normalizedUrl);
 
   return (
     <div className="video-modal-backdrop" onClick={onClose}>
@@ -290,13 +294,13 @@ const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose
         </button>
         <div className="video-modal-content">
           {isFacebook ? (
-            <FacebookVideoEmbed url={video.url} />
+            <FacebookVideoEmbed url={normalizedUrl} />
           ) : (
             <iframe
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               referrerPolicy="strict-origin-when-cross-origin"
-              src={toEmbedUrl(video.url)}
+              src={toEmbedUrl(normalizedUrl)}
               title={video.title}
             />
           )}
@@ -1729,7 +1733,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         event.preventDefault();
         setActiveVideo({
           title: videoTrigger.dataset.videoTitle ?? "Galactic Video",
-          url: videoTrigger.dataset.videoUrl ?? videoHref,
+          url: getNormalizedVideoUrl(videoTrigger.dataset.videoUrl ?? videoHref),
         });
       }
     };
