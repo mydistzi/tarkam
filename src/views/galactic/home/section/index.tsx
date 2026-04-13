@@ -43,7 +43,7 @@ const HomeHeroSection = ({ hero }: HeroSectionProps) => {
           <h4>{heroSubtitle}</h4>
           <h1 style={{ whiteSpace: "pre" }} dangerouslySetInnerHTML={{ __html: replaceWithBr() }} />
           <div className="btn-group">
-            <Link className="default-btn" to="/https://discord.gg/fnRhRkxTyC" target="_blank" rel="noopener noreferrer">
+            <Link className="default-btn" to="https://discord.gg/fnRhRkxTyC" target="_blank" rel="noopener noreferrer">
               Gabung Yuk<span />
             </Link>
             <VideoCardButton href={heroVideoUrl} />
