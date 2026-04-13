@@ -1428,7 +1428,7 @@ const SubscribeForm = () => {
         required
       />
       <button className="submit" type="submit" disabled={submitting}>
-        {submitting ? "Mengirim..." : "Daftar Sekarang"}
+        {submitting ? "Mengirim..." : "Berlangganan Sekarang"}
       </button>
       <div className="clearfix" />
       <div id="subscribe-result">
