@@ -218,34 +218,9 @@ const getFacebookVideoPostUrl = (url: string) => {
   }
   return url;
 };
-const loadFacebookSdk = () => {
-  if (typeof window === "undefined" || typeof document === "undefined") {
-    return;
-  }
-
-  if (!document.getElementById("fb-root")) {
-    const fbRoot = document.createElement("div");
-    fbRoot.id = "fb-root";
-    document.body.prepend(fbRoot);
-  }
-
-  if (document.getElementById("facebook-jssdk")) {
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.id = "facebook-jssdk";
-  script.async = true;
-  script.defer = true;
-  script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0";
-  document.body.appendChild(script);
-};
-const parseFacebookXfbml = (element?: HTMLElement | null) => {
-  if (typeof window === "undefined" || !window.FB?.XFBML) {
-    return;
-  }
-
-  window.FB.XFBML.parse(element || undefined);
+const getFacebookEmbedUrl = (url: string) => {
+  const postUrl = getFacebookVideoPostUrl(url);
+  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}&show_text=0&autoplay=1`;
 };
 const CarouselButtonGroup = ({
   next,
@@ -261,50 +236,16 @@ const CarouselButtonGroup = ({
     </button>
   </div>
 );
-const FacebookVideoEmbed = ({ url }: { url: string }) => {
-  const [sdkLoaded, setSdkLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    loadFacebookSdk();
-
-    const onSdkReady = () => {
-      setSdkLoaded(true);
-      parseFacebookXfbml(containerRef.current);
-    };
-
-    if (window.FB?.XFBML) {
-      onSdkReady();
-      return;
-    }
-
-    const handleSdkLoad = () => {
-      if (window.FB?.XFBML) {
-        onSdkReady();
-      }
-    };
-
-    const script = document.getElementById("facebook-jssdk");
-    if (script) {
-      script.addEventListener("load", handleSdkLoad);
-    }
-
-    return () => {
-      if (script) {
-        script.removeEventListener("load", handleSdkLoad);
-      }
-    };
-  }, [url]);
-
-  const postUrl = getFacebookVideoPostUrl(url);
-
-  return (
-    <>
-      <div ref={containerRef} className="fb-video" data-href={postUrl} data-width="auto" data-show-text="false" data-allowfullscreen="true" data-autoplay="true" />
-      {sdkLoaded ? null : <div>Memuat video Facebook...</div>}
-    </>
-  );
-};
+const FacebookVideoEmbed = ({ url }: { url: string }) => (
+  <iframe
+    src={getFacebookEmbedUrl(url)}
+    allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+    referrerPolicy="strict-origin-when-cross-origin"
+    style={{ width: "100%", minHeight: "420px", border: 0 }}
+    title="Facebook video"
+  />
+);
 
 const VideoModal = ({ video, onClose }: { video: VideoModalState | null; onClose: () => void }) => {
   if (!video) {
