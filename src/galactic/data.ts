@@ -435,34 +435,54 @@ export const posts: PostItem[] = [
 
 export const faqs: FaqItem[] = [
   {
-    question: "Gimana cara gabung roster Galactic?",
+    question: "Bagaimana cara mendaftar di Tarkam?",
     answer:
-      "Kirim form kontak, cantumkan role yang diinginkan, platform, dan riwayat match terbaru, lalu tim rekrutmen kami bakal cek aplikasimu.",
+      "Anda dapat mendaftar dengan menekan tombol 'Daftar' di pojok kanan atas atau melalui link registrasi yang tersedia di menu navigasi.",
   },
   {
-    question: "Apa kalian gelar turnamen komunitas tiap bulan?",
+    question: "Bagaimana cara bergabung dengan tim (Gabung Tim Kami)?",
     answer:
-      "Iya, jadwal showcase nunjukin bracket bulanan, scrim bertema, dan event fan supaya mirip template turnamen aslinya.",
+      "Kirimkan formulir kontak Anda melalui menu 'Gabung Tim Kami'. Cantumkan role yang diinginkan, platform bermain, dan riwayat match terbaru Anda. Tim rekrutmen kami akan meninjau profil Anda.",
   },
   {
-    question: "Bisa nggak jadi sponsor atau partner afiliasi?",
+    question: "Bagaimana cara menghapus data saya?",
     answer:
-      "Sponsor bisa hubungi tim partnership lewat halaman kontak untuk minta deck, media kit, dan opsi kampanye musiman.",
+      "Silakan merujuk pada halaman Ketentuan Penghapusan Data untuk prosedur lengkapnya.",
   },
   {
-    question: "Game apa aja yang tim ikut sekarang?",
+    question: "Di mana saya bisa melihat jadwal turnamen?",
     answer:
-      "Roster contoh ini mencakup Overwatch, Valorant, StarCraft II, Call of Duty, dan Counter Strike supaya variasi halaman tetap seru.",
+      "Semua jadwal kompetisi tersedia di menu TURNAMEN. Anda dapat melihat jadwal mendatang, detail pertandingan, dan hasil pertandingan sebelumnya di sana.",
   },
   {
-    question: "Ada toko gear gaming resmi nggak?",
+    question: "Apakah ada turnamen komunitas setiap minggu?",
     answer:
-      "Iya, halaman toko punya katalog lengkap, detail produk, alur keranjang, dan layout checkout yang dibangun dengan aset tema yang sama.",
+      "Ya, Tarkam rutin mengadakan turnamen komunitas. Pantau halaman berita atau media sosial kami untuk pengumuman terbaru.",
   },
   {
-    question: "Di mana bisa nonton stream live Galactic?",
+    question: "Apa itu sistem Leaderboard?",
     answer:
-      "Gunakan bagian streaming di beranda atau halaman jadwal streaming untuk lihat siaran unggulan dan rekaman showcase.",
+      "Leaderboard mencatat prestasi pemain dan klub secara global. Kami memiliki kategori Leaderboard Sponsor, Global, Klub, Male, dan Female.",
+  },
+  {
+    question: "Apa itu Klub di Tarkam?",
+    answer:
+      "Klub di Tarkam adalah komunitas pemain yang berkumpul berdasarkan minat atau tujuan yang sama dalam bermain game.",
+  },
+  {
+    question: "Bagaimana cara bergabung ke Server Discord atau Grup WhatsApp?",
+    answer:
+      "Anda dapat menemukan tautan untuk bergabung dengan Server Discord dan Grup WhatsApp kami di bagian bawah halaman utama atau di menu kontak.",
+  },
+  {
+    question: "Bagaimana cara menjadi sponsor atau partner?",
+    answer:
+      "Kami selalu terbuka untuk kolaborasi. Silakan hubungi tim support kami melalui email di bawah untuk proposal kemitraan.",
+  },
+  {
+    question: "Hubungi Kami",
+    answer:
+      "Jika Anda tidak menemukan jawaban yang Anda cari, tim dukungan kami siap membantu. Silakan hubungi kami melalui email di bawah atau kunjungi halaman kontak untuk informasi lebih lanjut.",
   },
 ];
 

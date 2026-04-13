@@ -6,7 +6,7 @@ const FaqPage = () => {
   const { meta } = useGalacticContent();
 
   return (
-    <PageShell title="Bantuan & FAQ">
+    <PageShell title="Pusat Bantuan Tarkam">
       <FaqContent location={meta.address} email={meta.email} phone={meta.phone} />
     </PageShell>
   );

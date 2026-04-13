@@ -10,8 +10,8 @@ const FaqContent = ({ location, email, phone }: FaqContentProps) => (
   <>
     <PageHeader
       eyebrow="Bantuan & FAQ"
-      title="Pertanyaan yang Sering Diajukan"
-      description="FAQ komunitas dan turnamen sekarang tampil di accordion, lengkap dengan data kontak live di kartu support."
+      title="Pusat Bantuan Tarkam"
+      description="Selamat datang di Pusat Bantuan Tarkam. Kami siap membantu Anda memahami cara berkompetisi, bergabung dengan komunitas, dan menikmati layanan kami."
     />
     <section className="faq-section padding-top">
       <div className="container">
