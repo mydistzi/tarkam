@@ -107,11 +107,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <h3>
                         <Link to={team.teamPath || "/detail-tim"}>
                           {team.name}
-                          {team.group ? (
-                            <> | {team.group.name} </>
-                          ) : (
-                            <> | Bye </>
-                          )}
+                          {team.group ? <> | {team.group.name}</> : null}
                           <> | {team.gender}</>
                         </Link>
                       </h3>
