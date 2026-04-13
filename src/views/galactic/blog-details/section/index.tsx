@@ -73,7 +73,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                 </ul>
                 <div className="author-box">
                   <div className="author-thumb">
-                    <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&color=FCFCFC&background=66FFCC`} alt={post.author} />
+                    <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(post.author)}&color=FCFCFC&background=0c0c35`} alt={post.author} />
                   </div>
                   <div className="author-info">
                     <h3>{post.author}</h3>
