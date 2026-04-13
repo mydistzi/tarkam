@@ -230,6 +230,7 @@ export const resourceConfigs: ResourceConfig[] = [
     description: "Identitas klub komunitas yang tampil pada halaman klub.",
     group: "competition",
     endpoint: "admin/clubs",
+    identifierField: "code",
     columns: [
       { key: "code", label: "Kode" },
       { key: "name", label: "Nama" },
@@ -596,6 +597,7 @@ export const resourceConfigs: ResourceConfig[] = [
     columns: [
       { key: "title", label: "Judul" },
       { key: "url", label: "URL" },
+      { key: "tarkam.week", label: "Tarkam" },
       { key: "user_id", label: "User" },
       { key: "updated_at", label: "Diperbarui", format: "datetime" },
     ],
@@ -611,6 +613,13 @@ export const resourceConfigs: ResourceConfig[] = [
         type: "select",
         required: true,
         optionSource: { resourceKey: "users", labelField: "name", valueField: "id" },
+      },
+      {
+        key: "tarkam_fk",
+        label: "Tarkam",
+        type: "select",
+        required: true,
+        optionSource: { resourceKey: "tarkams", labelField: "week", valueField: "id" },
       },
       { key: "thumbnail", label: "Thumbnail", type: "file", accept: "image/*" },
     ],

@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:all": "npm run build && npm run --prefix=admin build",
     "lint": "eslint .",
     "preview": "vite preview",
     "sitemap": "node sitemap-server.js",
     "sitemap:dev": "cross-env BASE_URL=http://localhost:5173 node sitemap-server.js",
-    "whatsapp:baileys": "node baileys/server.js"
+    "whatsapp:baileys": "node baileys/server.js",
+    "start:services": "concurrently \"npm run dev\" \"npm run whatsapp:baileys\""
   },
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.21",
@@ -38,6 +40,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.0",
+    "concurrently": "^9.0.1",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
