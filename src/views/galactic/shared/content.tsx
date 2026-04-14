@@ -694,7 +694,7 @@ async function fetchGalacticPayloads() {
     Api.get("/tarkams"),
     Api.get("/contests"),
     Api.get("/winners"),
-    Api.get("/usefull"),
+    Api.get("/usefulls"),
     Api.get("/penyawers"),
     Api.get("/aliases"),
     Api.get("/groups"),
