@@ -8,7 +8,12 @@ import type { ProductRecord } from "../../shared";
 
 const getImageSource = (src?: string) => {
   const normalized = src?.trim();
-  return normalized || placeholderShop;
+  if (!normalized) {
+    return placeholderShop;
+  }
+
+  const isPlaceholderAsset = /\/assets\/images\/placeholder-[\w-]+\.(png|jpe?g|webp)$/i.test(normalized);
+  return isPlaceholderAsset ? placeholderShop : normalized;
 };
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {

@@ -43,6 +43,10 @@ const Carousel = (CarouselLib as unknown as { default: React.ComponentType<any> 
 const getImageSource = (src?: string, fallback?: string): string | undefined => {
   const normalized = src?.trim();
   if (normalized) {
+    const isPlaceholderAsset = /\/assets\/images\/placeholder-[\w-]+\.(png|jpe?g|webp)$/i.test(normalized);
+    if (isPlaceholderAsset) {
+      return fallback?.trim() || undefined;
+    }
     return normalized;
   }
   return fallback?.trim() || undefined;
