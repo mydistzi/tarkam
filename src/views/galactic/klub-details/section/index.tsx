@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PageHeader, PlayerCarousel } from "@/galactic/common";
+import { placeholderSquad } from "@/galactic/placeholders";
 import type { PlayerItem } from "@/galactic/data";
 
 type ClubItem = {

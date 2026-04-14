@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PageHeader } from "@/galactic/common";
+import { placeholderSquad } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 import { Link } from "react-router-dom";
 

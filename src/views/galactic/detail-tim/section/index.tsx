@@ -1,4 +1,5 @@
 import { DisqusThread, PageHeader, PlayerCarousel } from "@/galactic/common";
+import { placeholderSquad } from "@/galactic/placeholders";
 import type { TeamRecord } from "../../shared";
 
 const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
