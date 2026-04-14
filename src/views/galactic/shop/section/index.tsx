@@ -11,8 +11,8 @@ const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentP
   <>
     <PageHeader
       eyebrow="Toko Gaming Online"
-      title="Jelajah Gear Keren"
-      description="Stok shop di bawah nyambung ke endpoint `products`, lengkap sama kategori, harga, tag, dan gambar."
+      title="Jelajah Item &amp; Perlengkapan in-game"
+      description="Cari item yang kamu butuhkan in-game? Jelajahi koleksi favorit mu disini!"
     />
     <section className="shop-section padding-top">
       <div className="container">

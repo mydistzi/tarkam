@@ -1033,7 +1033,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
   return (
     <div className="product-card galactic-hover-card">
       <div className="product-thumb">
-        <img src={getImageSource(product.image, "/assets/images/placeholder-shop.png")} alt={product.name} />
+        <img src={getImageSource(product.image, "assets/images/placeholder-shop.png")} alt={product.name} />
         <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
         <button className="default-btn" type="button" onClick={handleAddToCart} disabled={isAdding}>
           {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
