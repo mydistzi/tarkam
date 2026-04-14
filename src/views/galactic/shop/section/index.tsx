@@ -192,7 +192,13 @@ const mapApiProductToProductItem = (product: any): ProductItem => ({
   badgeClass: product.status === "Sold Out" ? "sold-out" : "sale",
   description: product.description || product.subject || "",
   sku: product.sku || "",
-  tags: Array.from(new Set((product.tags || []).map((tag: any) => tag.name).filter(Boolean))),
+  tags: Array.from(
+    new Set(
+      (product.tags || [])
+        .map((tag: any) => tag.name || tag.title || tag.slug || "")
+        .filter(Boolean)
+    )
+  ),
   path: product.slug ? `/shop-details/${product.slug}` : `/shop-details/${product.id}`,
   gallery: product.thumbnails?.map((item: any) => item.product_thumbnail_path).filter(Boolean),
 });
