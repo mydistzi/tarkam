@@ -73,6 +73,8 @@ const RegisterPage = () => {
                   <div className="form-field">
                     <input
                       type="text"
+                      id="name"
+                      name="name"
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       className="form-control"
@@ -83,6 +85,8 @@ const RegisterPage = () => {
                   <div className="form-field">
                     <input
                       type="email"
+                      id="email"
+                      name="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className="form-control"
@@ -93,6 +97,8 @@ const RegisterPage = () => {
                   <div className="form-field">
                     <input
                       type="password"
+                      id="password"
+                      name="password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       className="form-control"
@@ -103,6 +109,8 @@ const RegisterPage = () => {
                   <div className="form-field">
                     <input
                       type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
                       value={confirmPassword}
                       onChange={(event) => setConfirmPassword(event.target.value)}
                       className="form-control"

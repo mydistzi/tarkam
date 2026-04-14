@@ -61,6 +61,8 @@ const SignInPage = () => {
                   <div className="form-field">
                     <input
                       type="email"
+                      id="email"
+                      name="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className="form-control"
@@ -71,6 +73,8 @@ const SignInPage = () => {
                   <div className="form-field">
                     <input
                       type="password"
+                      id="password"
+                      name="password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       className="form-control"

@@ -26,17 +26,11 @@ const PAYMENT_METHOD_LABELS: Record<keyof typeof PAYMENT_CHANNELS, string> = {
   alfamart: "Alfamart",
 };
 
-const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
+const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
   const [firstName, setFirstName] = useState("Tarkam");
   const [lastName, setLastName] = useState("Community");
-  const [company, setCompany] = useState("");
-  const [country, setCountry] = useState("Indonesia");
   const [city, setCity] = useState("Jakarta");
-  const [province, setProvince] = useState("");
-  const [street, setStreet] = useState("");
-  const [postalCode, setPostalCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(phone || "");
-  const [emailAddress, setEmailAddress] = useState(email || "");
   const [orderNote, setOrderNote] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<keyof typeof PAYMENT_CHANNELS>("credit_card");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,12 +58,8 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
       const response = await Api.post(import.meta.env.VITE_DOKU_PAYMENT_PATH || "/payments/doku", {
         carts: items.map((item) => item.id),
         customer_name: `${firstName} ${lastName}`.trim(),
-        customer_email: emailAddress,
         customer_phone: phoneNumber,
-        customer_address: street,
         customer_city: city,
-        customer_country: country,
-        customer_zip_code: postalCode,
         payment_method: PAYMENT_CHANNELS[paymentMethod],
         payment_channel: PAYMENT_CHANNELS[paymentMethod],
         shipping_cost: shipping,
@@ -137,21 +127,15 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
               <form className="checkout-form-wrap" onSubmit={handleSubmit}>
                 <h2>Detail Pembayaran</h2>
                 <div className="checkout-form mb-30">
-                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={company} onChange={(event) => setCompany(event.target.value)} placeholder="Nama Perusahaan" type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={country} onChange={(event) => setCountry(event.target.value)} placeholder="Negara" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={province} onChange={(event) => setProvince(event.target.value)} placeholder="Provinsi" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={street} onChange={(event) => setStreet(event.target.value)} placeholder="Jalan" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} placeholder="Kode Pos" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" value={emailAddress} onChange={(event) => setEmailAddress(event.target.value)} placeholder="Email" required type="email" /></div>
+                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" id="firstName" name="firstName" /></div>
+                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" id="lastName" name="lastName" /></div>
+                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" id="city" name="city" /></div>
+                  <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" id="phoneNumber" name="phoneNumber" /></div>
                 </div>
                 <div className="additional-info mb-30">
                   <h2>Info Tambahan</h2>
                   <div className="form-field">
-                    <textarea className="form-control" cols={30} value={orderNote} onChange={(event) => setOrderNote(event.target.value)} placeholder="Catatan Pesanan" rows={3} />
+                    <textarea className="form-control" cols={30} value={orderNote} onChange={(event) => setOrderNote(event.target.value)} placeholder="Catatan Pesanan" rows={3} id="orderNote" name="orderNote" />
                   </div>
                 </div>
                 <div className="payment-method">
