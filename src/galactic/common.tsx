@@ -1071,7 +1071,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
             ))}
           </ul>
         </div>
-        <h3><Link to={product.path || "/detail-shop"}>{product.name}</Link></h3>
+        <h3><Link to={product.path || "/shop"}>{product.name}</Link></h3>
       <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)}</h4>
     </div>
   </div>
@@ -1126,9 +1126,9 @@ const PostCard = ({ post }: { post: PostItem }) => (
     <div className="post-content-wrap">
       <PostMeta post={post} />
       <div className="post-content">
-        <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
+        <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
         <p>{post.excerpt}</p>
-        <Link className="read-more" to={post.path || "/detail-news"}>Baca Selengkapnya</Link>
+        <Link className="read-more" to={post.path || "/news"}>Baca Selengkapnya</Link>
       </div>
     </div>
   </div>
@@ -1269,7 +1269,7 @@ const BlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </span>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
+              <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
               <span className="date"><i className="las la-calendar" />{post.date}</span>
             </div>
           </li>
@@ -1346,8 +1346,8 @@ const ClassicBlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </div>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
-              <Link className="date" to={post.path || "/detail-news"}>{post.date}</Link>
+              <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
+              <Link className="date" to={post.path || "/news"}>{post.date}</Link>
             </div>
           </li>
         ))}

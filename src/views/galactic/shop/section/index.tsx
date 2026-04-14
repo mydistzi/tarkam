@@ -97,7 +97,7 @@ const ShopSidebar = ({
               <img src={item.image || placeholderShop} alt={item.name} />
             </span>
             <div className="thumb-post-info">
-              <h3><a href={item.path || "/detail-shop"}>{item.name}</a></h3>
+              <h3><a href={item.path || "/shop"}>{item.name}</a></h3>
               <span className="date"><i className="las la-tag" />{item.category}</span>
               <span className="date"><i className="las la-wallet" />Rp {item.price.toLocaleString()}</span>
             </div>

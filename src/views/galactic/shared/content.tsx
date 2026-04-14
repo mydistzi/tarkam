@@ -994,7 +994,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               description: product.subject || product.description || "",
               sku: product.sku || `product-${product.id}`,
               tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
-              path: `/detail-shop/${product.id}`,
+              path: `/detail-shop/${product.slug || product.id}`,
               gallery: gallery?.length ? gallery : [],
               additionalInfo: product.additional_info || product.description || "",
             },

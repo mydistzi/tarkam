@@ -93,7 +93,7 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
                   <div className="cart-item">
                     <img src={item.product.image?.trim() || placeholderShop} alt={item.product.name} />
                     <div className="cart-content">
-                      <h3><Link to={item.product.path || "/shop-details"}>{item.product.name}</Link></h3>
+                      <h3><Link to={item.product.path || "/shop"}>{item.product.name}</Link></h3>
                       <p>{item.product.description}</p>
                     </div>
                   </div>
