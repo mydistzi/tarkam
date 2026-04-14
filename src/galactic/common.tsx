@@ -1070,9 +1070,9 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
   );
 };
 const ProductGrid = ({ items }: { items: ProductItem[] }) => (
-  <div>
+  <div className="row">
     {items.map((product) => (
-      <div className="col-lg-4 col-md-6 padding-15" key={product.sku}>
+      <div className="col-md-4 padding-15" key={product.sku}>
         <ProductCard product={product} />
       </div>
     ))}
