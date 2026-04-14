@@ -7,7 +7,11 @@ import { ShopDetailsContent } from "./section";
 const ShopDetailsPage = () => {
   const { productId } = useParams();
   const { productRecords } = useGalacticContent();
-  const record = productRecords.find((item) => String(item.id) === productId) || productRecords[0];
+  const record = productRecords.find(
+    (item) =>
+      String(item.id) === productId ||
+      (item.product.slug ? String(item.product.slug) === productId : false),
+  ) || productRecords[0];
 
   return (
     <PageShell title="Detail Toko" image={record?.item.image?.trim() || placeholderShop}>

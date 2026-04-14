@@ -4,9 +4,14 @@ import { useGalacticContent } from "../shared";
 import { ClubsContent } from "./section";
 
 const ClubDetailsPage = () => {
-  const { clubCode } = useParams();
+  const { slug } = useParams();
   const { clubs, playerRecords } = useGalacticContent();
-  const record = clubs.find((item) => String(item.code) === clubCode) || clubs[0];
+  const record = clubs.find(
+    (item) =>
+      String(item.slug) === slug ||
+      String(item.code) === slug ||
+      String(item.id) === slug,
+  ) || clubs[0];
   const clubMembers = record
     ? playerRecords.filter((player) => player.club?.id === record.id)
     : [];
