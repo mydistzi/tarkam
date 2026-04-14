@@ -964,7 +964,6 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                   </div>
                   <p className="sponsor-message">{sponsor.message?.trim() || 'Sponsor belum meninggalkan pesan apapun untuk saat ini.'}</p>
                   <div className="sponsor-testimonial-meta">
-                      <span className="testimonial-author">{sponsor.memberNickname || "Sponsor Partner"}</span>
                       <div className="sponsor-testimonial-social">
                         {sponsor.socialLinks?.map((link, socialIndex) => (
                           <a key={`social-${index}-${socialIndex}`} href={link.href} target="_blank" rel="noreferrer">
