@@ -26,6 +26,7 @@ import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
 import { useGalacticContent } from "@/views/galactic/shared";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
+import { getCartRequestPayload } from "@/galactic/session";
 import {
   brand,
   faqs,
@@ -1019,12 +1020,12 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
     setIsAdding(true);
 
     try {
-      await Api.post('/carts', {
+      await Api.post('/carts', getCartRequestPayload({
         product_id: product.id,
         quantity: 1,
         unit_price: product.price,
         status: 'active',
-      });
+      }));
       navigate('/cart');
     } catch (error) {
       console.error('Failed to add product to cart', error);

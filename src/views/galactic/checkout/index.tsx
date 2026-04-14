@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Api from "@/api";
 import { PageShell } from "@/galactic/common";
 import { useGalacticContent } from "../shared";
+import { getCartQueryString } from "@/galactic/session";
 import { CheckoutContent } from "./section";
 import type { CartRecord } from "../shared";
 
@@ -18,7 +19,7 @@ const CheckoutPage = () => {
 
     const loadCart = async () => {
       try {
-        const response = await Api.get('/carts');
+        const response = await Api.get(`/carts${getCartQueryString()}`);
         if (!active) {
           return;
         }

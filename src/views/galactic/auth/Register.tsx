@@ -1,28 +1,59 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PageHeader, PageShell } from "@/galactic/common";
 import { useAuth } from "./AuthProvider";
 
 const RegisterPage = () => {
-  const { signIn } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || "/checkout";
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
+
+    if (!name.trim()) {
+      setError("Silakan masukkan nama lengkap.");
+      return;
+    }
 
     if (!email.trim()) {
       setError("Silakan masukkan email untuk mendaftar.");
       return;
     }
 
-    signIn({ email: email.trim(), name: name.trim() || undefined });
-    navigate(from, { replace: true });
+    if (password.length < 8) {
+      setError("Password minimal 8 karakter.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Password dan konfirmasi password tidak cocok.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signUp(name.trim(), email.trim(), password, confirmPassword);
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Registrasi gagal. Silakan periksa kembali data Anda.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,6 +77,7 @@ const RegisterPage = () => {
                       onChange={(event) => setName(event.target.value)}
                       className="form-control"
                       placeholder="Nama lengkap"
+                      required
                     />
                   </div>
                   <div className="form-field">
@@ -58,12 +90,35 @@ const RegisterPage = () => {
                       required
                     />
                   </div>
+                  <div className="form-field">
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                    />
+                  </div>
+                  <div className="form-field">
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(event) => setConfirmPassword(event.target.value)}
+                      className="form-control"
+                      placeholder="Konfirmasi password"
+                      required
+                    />
+                  </div>
                 </div>
                 {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                <button type="submit" className="default-btn w-100">
-                  Daftar dan lanjutkan
+                <button type="submit" className="default-btn w-100" disabled={loading}>
+                  {loading ? "Memproses..." : "Daftar dan lanjutkan"}
                   <span />
                 </button>
+                <p className="mt-3 text-center">
+                  Sudah punya akun? <Link to="/signin">Masuk di sini</Link>
+                </p>
               </form>
             </div>
           </div>

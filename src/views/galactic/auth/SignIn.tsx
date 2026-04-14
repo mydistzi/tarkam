@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PageHeader, PageShell } from "@/galactic/common";
 import { useAuth } from "./AuthProvider";
 
@@ -8,21 +8,40 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || "/checkout";
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError(null);
 
     if (!email.trim()) {
       setError("Silakan masukkan email untuk login.");
       return;
     }
 
-    signIn({ email: email.trim(), name: name.trim() || undefined });
-    navigate(from, { replace: true });
+    if (!password.trim()) {
+      setError("Silakan masukkan password Anda.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signIn(email.trim(), password);
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Login gagal. Pastikan email dan password sudah benar.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,19 +70,23 @@ const SignInPage = () => {
                   </div>
                   <div className="form-field">
                     <input
-                      type="text"
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
+                      type="password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
                       className="form-control"
-                      placeholder="Nama (opsional)"
+                      placeholder="Password"
+                      required
                     />
                   </div>
                 </div>
                 {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                <button type="submit" className="default-btn w-100">
-                  Masuk dan lanjutkan
+                <button type="submit" className="default-btn w-100" disabled={loading}>
+                  {loading ? "Memproses..." : "Masuk dan lanjutkan"}
                   <span />
                 </button>
+                <p className="mt-3 text-center">
+                  Belum punya akun? <Link to="/register">Daftar di sini</Link>
+                </p>
               </form>
             </div>
           </div>

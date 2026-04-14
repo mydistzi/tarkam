@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import Api from "@/api";
+import { getCartQueryString } from "@/galactic/session";
 import {
   placeholderPlayer,
   placeholderShop,
@@ -674,6 +675,7 @@ const normalizeId = (value: number | string | null | undefined): number | undefi
 
 
 async function fetchGalacticPayloads() {
+  const cartQuery = getCartQueryString();
   const requests = await Promise.allSettled([
     Api.get("/menus"),
     Api.get("/web-setting"),
@@ -681,7 +683,7 @@ async function fetchGalacticPayloads() {
     Api.get("/categories"),
     Api.get("/blogs"),
     Api.get("/products"),
-    Api.get("/carts"),
+    Api.get(`/carts${cartQuery}`),
     Api.get("/streamings"),
     Api.get("/clubs"),
     Api.get("/members"),

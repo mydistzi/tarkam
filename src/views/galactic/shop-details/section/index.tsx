@@ -2,6 +2,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "@/api";
+import { getCartRequestPayload } from "@/galactic/session";
 import type { ProductRecord } from "../../shared";
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
@@ -30,12 +31,12 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
     setFeedback(null);
 
     try {
-      await Api.post('/carts', {
+      await Api.post('/carts', getCartRequestPayload({
         product_id: product.id,
         quantity: Math.max(1, quantity),
         unit_price: product.price,
         status: 'active',
-      });
+      }));
 
       navigate('/cart');
     } catch (error) {

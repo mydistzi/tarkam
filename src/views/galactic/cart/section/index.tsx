@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
+import { getCartRequestPayload } from "@/galactic/session";
 import type { CartRecord } from "../../shared";
 
 const CartContent = ({ items }: { items: CartRecord[] }) => {
@@ -24,10 +25,10 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
         throw new Error('Item tidak ditemukan');
       }
 
-      await Api.patch(`/carts/${itemId}`, {
+      await Api.patch(`/carts/${itemId}`, getCartRequestPayload({
         quantity: normalizedQuantity,
         unit_price: item.product.price,
-      });
+      }));
 
       setCartItems((current) =>
         current.map((cart) =>
@@ -47,7 +48,9 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
     setErrorMessage(null);
 
     try {
-      await Api.delete(`/carts/${itemId}`);
+      await Api.delete(`/carts/${itemId}`, {
+        data: getCartRequestPayload({}),
+      });
       setCartItems((current) => current.filter((item) => item.id !== itemId));
     } catch (error) {
       console.error('Failed to remove cart item', error);
