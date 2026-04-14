@@ -43,7 +43,7 @@ const ShopSidebar = ({
   searchValue: string;
 }) => (
   <>
-    <div className="sidebar-widget">
+    <div className="shop-sidebar-widget">
       <form className="search-form" onSubmit={(event) => event.preventDefault()}>
         <input
           className="form-control"
@@ -100,7 +100,7 @@ const ShopSidebar = ({
       <div className="shop-widget-title">
         <h3><span>||</span> Item Terbaru</h3>
       </div>
-      <ul className="thumb-post">
+      <ul className="category-list">
         {recentItems.map((item) => (
           <li key={`sidebar-${item.sku || item.name}`}>
             <span className="thumb">
