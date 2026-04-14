@@ -75,6 +75,7 @@ const RegisterPage = () => {
                       type="text"
                       id="name"
                       name="name"
+                      autoComplete="name"
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       className="form-control"
@@ -87,6 +88,7 @@ const RegisterPage = () => {
                       type="email"
                       id="email"
                       name="email"
+                      autoComplete="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className="form-control"
@@ -99,6 +101,7 @@ const RegisterPage = () => {
                       type="password"
                       id="password"
                       name="password"
+                      autoComplete="new-password"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       className="form-control"
@@ -111,6 +114,7 @@ const RegisterPage = () => {
                       type="password"
                       id="confirmPassword"
                       name="confirmPassword"
+                      autoComplete="new-password"
                       value={confirmPassword}
                       onChange={(event) => setConfirmPassword(event.target.value)}
                       className="form-control"

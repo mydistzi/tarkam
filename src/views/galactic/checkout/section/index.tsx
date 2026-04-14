@@ -127,10 +127,10 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
               <form className="checkout-form-wrap" onSubmit={handleSubmit}>
                 <h2>Detail Pembayaran</h2>
                 <div className="checkout-form mb-30">
-                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" id="firstName" name="firstName" /></div>
-                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" id="lastName" name="lastName" /></div>
-                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" id="city" name="city" /></div>
-                  <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" id="phoneNumber" name="phoneNumber" /></div>
+                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" id="firstName" name="firstName" autoComplete="given-name" /></div>
+                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" id="lastName" name="lastName" autoComplete="family-name" /></div>
+                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" id="city" name="city" autoComplete="address-level2" /></div>
+                  <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" id="phoneNumber" name="phoneNumber" autoComplete="tel" /></div>
                 </div>
                 <div className="additional-info mb-30">
                   <h2>Info Tambahan</h2>
