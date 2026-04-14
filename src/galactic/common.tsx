@@ -1153,11 +1153,8 @@ const BlogSidebar = ({
 }) => (
   <>
     <div className="sidebar-widget">
-      <div className="widget-title">
-        <h3>Cari Berita</h3>
-      </div>
       <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" id="cari" name="cari" type="text" placeholder="Cari..." />
+        <input className="form-control" id="cari" name="cari" type="text" placeholder="Cari" />
         <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
