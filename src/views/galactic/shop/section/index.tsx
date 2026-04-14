@@ -52,37 +52,47 @@ const ShopSidebar = ({
           type="text"
           value={searchValue}
           onChange={(event) => onSearch(event.target.value)}
-          placeholder="Cari produk, SKU, harga, kategori"
+          placeholder="Cari"
         />
         <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
-    <div className="sidebar-widget">
-      <div className="widget-title">
-        <h3>Kategori</h3>
+    <div className="shop-sidebar-widget">
+      <div className="shop-widget-title">
+        <h3><span>||</span> Kategori</h3>
       </div>
       <ul className="category-list">
         <li>
-          <button
+          <a
             type="button"
             className={selectedCategoryId == null ? "active" : ""}
             onClick={() => onCategorySelect(undefined)}
           >
             Semua Kategori
+          </a>
             <span>{categories.reduce((total, item) => total + (item.products_count || 0), 0)}</span>
-          </button>
         </li>
         {categories.map((category) => (
           <li key={category.id ?? category.title}>
-            <button
+            <a
               type="button"
               className={selectedCategoryId === category.id ? "active" : ""}
               onClick={() => onCategorySelect(category.id)}
             >
               {category.title}
-              <span>{category.products_count ?? 0}</span>
-            </button>
+            </a>
+            <span>{category.products_count ?? 0}</span>
           </li>
+        ))}
+      </ul>
+    </div>
+    <div className="shop-sidebar-widget">
+      <div className="shop-widget-title">
+        <h3><span>||</span> Tag Populer</h3>
+      </div>
+      <ul className="tags">
+        {tags.map((tag) => (
+          <li key={tag}><a href="#">{tag}</a></li>
         ))}
       </ul>
     </div>
@@ -101,16 +111,6 @@ const ShopSidebar = ({
               <span className="date"><i className="las la-tag" />{item.category}</span>
             </div>
           </li>
-        ))}
-      </ul>
-    </div>
-    <div className="sidebar-widget">
-      <div className="widget-title">
-        <h3>Tag Populer</h3>
-      </div>
-      <ul className="tags">
-        {tags.map((tag) => (
-          <li key={tag}><a href="#">{tag}</a></li>
         ))}
       </ul>
     </div>
@@ -163,7 +163,8 @@ const ShopGridContent = ({
             <PagePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
           <div className="col-lg-3 sm-padding">
-            <ShopSidebar
+            <div className="shop-sidebar">
+              <ShopSidebar
               categories={categories}
               recentItems={recentItems}
               tags={tags}
