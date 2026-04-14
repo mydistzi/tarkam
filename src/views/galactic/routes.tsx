@@ -93,7 +93,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
         path: "/detail-pertandingan/:contestId",
         element: <MatchDetailsPage />,
       },
-      { path: "/detail-player/:playerId", element: <PlayerDetailsPage /> },
+      { path: "/detail-player/:slug", element: <PlayerDetailsPage /> },
       { path: "/detail-tim/:teamId", element: <TeamDetailsPage /> },
       { path: "/klub", element: <ClubsPage /> },
       { path: "/detail-klub/:slug", element: <ClubDetailsPage /> },
