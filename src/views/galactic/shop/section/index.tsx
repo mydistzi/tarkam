@@ -1,13 +1,138 @@
-import { BlogSidebar, PageHeader, PagePagination, ProductGrid } from "@/galactic/common";
-import type { PostItem, ProductItem } from "@/galactic/data";
+import { PageHeader, PagePagination, ProductGrid } from "@/galactic/common";
+import { placeholderShop } from "@/galactic/placeholders";
+import type { ProductItem } from "@/galactic/data";
+
+type CatprodWidgetItem = {
+  id?: number;
+  title: string;
+  products_count?: number;
+};
 
 type ShopGridContentProps = {
   products: ProductItem[];
-  recentPosts: PostItem[];
-  categories: string[];
+  categories: CatprodWidgetItem[];
+  recentItems: ProductItem[];
+  tags: string[];
+  resultText: string;
+  currentPage: number;
+  totalPages: number;
+  selectedCategoryId?: number;
+  onSearch: (value: string) => void;
+  onSort: (value: string) => void;
+  onCategorySelect: (id?: number) => void;
+  onPageChange: (page: number) => void;
+  searchValue: string;
+  orderBy: string;
 };
 
-const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentProps) => (
+const ShopSidebar = ({
+  categories,
+  recentItems,
+  tags,
+  selectedCategoryId,
+  onSearch,
+  onCategorySelect,
+  searchValue,
+}: {
+  categories: CatprodWidgetItem[];
+  recentItems: ProductItem[];
+  tags: string[];
+  selectedCategoryId?: number;
+  onSearch: (value: string) => void;
+  onCategorySelect: (id?: number) => void;
+  searchValue: string;
+}) => (
+  <>
+    <div className="sidebar-widget">
+      <form className="search-form" onSubmit={(event) => event.preventDefault()}>
+        <input
+          className="form-control"
+          id="cari"
+          name="cari"
+          type="text"
+          value={searchValue}
+          onChange={(event) => onSearch(event.target.value)}
+          placeholder="Cari produk, SKU, harga, kategori"
+        />
+        <button className="search-btn" type="submit"><i className="las la-search" /></button>
+      </form>
+    </div>
+    <div className="sidebar-widget">
+      <div className="widget-title">
+        <h3>Kategori</h3>
+      </div>
+      <ul className="category-list">
+        <li>
+          <button
+            type="button"
+            className={selectedCategoryId == null ? "active" : ""}
+            onClick={() => onCategorySelect(undefined)}
+          >
+            Semua Kategori
+            <span>{categories.reduce((total, item) => total + (item.products_count || 0), 0)}</span>
+          </button>
+        </li>
+        {categories.map((category) => (
+          <li key={category.id ?? category.title}>
+            <button
+              type="button"
+              className={selectedCategoryId === category.id ? "active" : ""}
+              onClick={() => onCategorySelect(category.id)}
+            >
+              {category.title}
+              <span>{category.products_count ?? 0}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div className="sidebar-widget">
+      <div className="widget-title">
+        <h3>Item Terbaru</h3>
+      </div>
+      <ul className="thumb-post">
+        {recentItems.map((item) => (
+          <li key={`sidebar-${item.sku || item.name}`}>
+            <span className="thumb">
+              <img src={item.image || placeholderShop} alt={item.name} />
+            </span>
+            <div className="thumb-post-info">
+              <h3><a href={item.path || "/shop-details"}>{item.name}</a></h3>
+              <span className="date"><i className="las la-tag" />{item.category}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div className="sidebar-widget">
+      <div className="widget-title">
+        <h3>Tag Populer</h3>
+      </div>
+      <ul className="tags">
+        {tags.map((tag) => (
+          <li key={tag}><a href="#">{tag}</a></li>
+        ))}
+      </ul>
+    </div>
+  </>
+);
+
+const ShopGridContent = ({
+  products,
+  categories,
+  recentItems,
+  tags,
+  resultText,
+  currentPage,
+  totalPages,
+  selectedCategoryId,
+  onSearch,
+  onSort,
+  onCategorySelect,
+  onPageChange,
+  searchValue,
+  orderBy,
+}: ShopGridContentProps) => (
   <>
     <PageHeader
       eyebrow="Toko Gaming Online"
@@ -19,11 +144,15 @@ const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentP
         <div className="row">
           <div className="col-lg-9 sm-padding">
             <div className="product-shorting">
-              <div>Menampilkan 1-{products.length} dari {products.length} hasil</div>
+              <div>{resultText}</div>
               <div>
-                <select aria-label="Urutkan toko" className="orderby" defaultValue="date" name="orderby">
-                  <option value="popularity">Urutkan berdasarkan popularitas</option>
-                  <option value="rating">Urutkan berdasarkan rating rata-rata</option>
+                <select
+                  aria-label="Urutkan toko"
+                  className="orderby"
+                  name="orderby"
+                  value={orderBy}
+                  onChange={(event) => onSort(event.target.value)}
+                >
                   <option value="date">Urutkan berdasarkan terbaru</option>
                   <option value="price">Urutkan berdasarkan harga: rendah ke tinggi</option>
                   <option value="price-desc">Urutkan berdasarkan harga: tinggi ke rendah</option>
@@ -31,10 +160,18 @@ const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentP
               </div>
             </div>
             <ProductGrid items={products} />
-            <PagePagination />
+            <PagePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
           <div className="col-lg-3 sm-padding">
-            <BlogSidebar categories={categories} recentPosts={recentPosts} />
+            <ShopSidebar
+              categories={categories}
+              recentItems={recentItems}
+              tags={tags}
+              selectedCategoryId={selectedCategoryId}
+              onSearch={onSearch}
+              onCategorySelect={onCategorySelect}
+              searchValue={searchValue}
+            />
           </div>
         </div>
       </div>
@@ -42,4 +179,20 @@ const ShopGridContent = ({ products, recentPosts, categories }: ShopGridContentP
   </>
 );
 
-export { ShopGridContent };
+const mapApiProductToProductItem = (product: any): ProductItem => ({
+  id: product.id,
+  name: product.title || product.subject || `Produk ${product.id}`,
+  category: product.catprod?.title || "Produk",
+  image: product.thumbnails?.[0]?.product_thumbnail_path || product.image || placeholderShop,
+  price: Number(product.price || 0),
+  oldPrice: undefined,
+  badge: product.status || "",
+  badgeClass: product.status === "Sold Out" ? "sold-out" : "sale",
+  description: product.description || product.subject || "",
+  sku: product.sku || "",
+  tags: Array.from(new Set((product.tags || []).map((tag: any) => tag.name).filter(Boolean))),
+  path: product.slug ? `/shop-details/${product.slug}` : `/shop-details/${product.id}`,
+  gallery: product.thumbnails?.map((item: any) => item.product_thumbnail_path).filter(Boolean),
+});
+
+export { ShopGridContent, mapApiProductToProductItem };

@@ -1133,14 +1133,54 @@ const HomePostGrid = ({ items }: { items: PostItem[] }) => (
     ))}
   </div>
 );
-const PagePagination = () => (
-  <ul className="pagination-wrap mt-40">
-    <li><a className="active" href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#"><i className="las la-angle-right" /></a></li>
-  </ul>
-);
+const PagePagination = ({
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+}: {
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+}) => {
+  if (!onPageChange || totalPages <= 1) {
+    return (
+      <ul className="pagination-wrap mt-40">
+        <li><a className="active" href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#"><i className="las la-angle-right" /></a></li>
+      </ul>
+    );
+  }
+
+  return (
+    <ul className="pagination-wrap mt-40">
+      {Array.from({ length: totalPages }, (_, index) => {
+        const page = index + 1;
+        return (
+          <li key={`page-${page}`}>
+            <button
+              type="button"
+              className={page === currentPage ? "active" : ""}
+              onClick={() => onPageChange(page)}
+            >
+              {page}
+            </button>
+          </li>
+        );
+      })}
+      <li>
+        <button
+          type="button"
+          disabled={currentPage >= totalPages}
+          onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+        >
+          <i className="las la-angle-right" />
+        </button>
+      </li>
+    </ul>
+  );
+};
 const BlogSidebar = ({
   categories = [],
   recentPosts = [],
