@@ -34,7 +34,7 @@ const BlogClassicContent = ({
 }: BlogClassicContentProps) => (
   <>
     <PageHeader
-      eyebrow="Blog Klasik"
+      eyebrow="Blog Tarkam"
       title={<>Berita Gaming &amp; Wawasan</>}
       description="Temukan publikasi resmi Tarkam dengan format klasik yang fokus pada konten dan kenyamanan membaca."
     />
