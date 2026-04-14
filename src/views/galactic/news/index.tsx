@@ -114,7 +114,11 @@ const BlogClassicPage = () => {
 
       setPosts(items);
       setTotalPages(Number(payload?.last_page ?? 1));
-      setTags(Array.from(new Set(items.flatMap((item) => item.tags))).slice(0, 8));
+      const extractedTags = Array.from(new Set(items.flatMap((item) => item.tags))).slice(0, 8);
+      const fallbackTags = extractedTags.length
+        ? extractedTags
+        : Array.from(new Set(items.map((item) => item.category))).slice(0, 8);
+      setTags(fallbackTags);
     } catch (error) {
       console.error("Failed to load blog posts", error);
     }
