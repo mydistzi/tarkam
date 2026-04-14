@@ -4,10 +4,10 @@ import { useGalacticContent } from "../shared";
 import BlogDetailsContent from "./section";
 
 const BlogDetailsPage = () => {
-  const { blogId } = useParams();
+  const { slug } = useParams();
   const { blogRecords } = useGalacticContent();
   const currentIndex = blogRecords.findIndex((item) =>
-    String(item.id) === blogId || item.item.path?.endsWith(`/${blogId}`)
+    String(item.id) === slug || item.item.path?.endsWith(`/${slug}`)
   );
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
   const record = blogRecords[safeIndex];

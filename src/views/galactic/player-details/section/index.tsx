@@ -18,7 +18,8 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
   }
   const player = record.item;
   const alias = record.alias || player.name;
-  const slug = record.club?.slug || String(record.club?.id || record.id);
+  const clubSlug = record.club?.slug;
+  const clubPath = clubSlug ? `/detail-klub/${clubSlug}` : "/klub";
   const city = player.country || record.member?.city || "Jakarta";
   const status = record.member?.status || (record.player?.paid ? "Aktif" : "Tidak Aktif");
 
@@ -75,7 +76,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
         <div className="container">
           <div className="team-details-wrap">
             <div className="player-team">
-              <a href={`/detail-klub/${slug}`}>
+              <a href={clubPath}>
                 <img
                   src={
                     record.club?.logo || placeholderSquad
@@ -84,7 +85,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 />
               </a>
               <h3>
-                <a href={`/detail-klub/${slug}`}>
+                <a href={clubPath}>
                   {record.club?.name || player.team || "Independent"}
                 </a>
               </h3>

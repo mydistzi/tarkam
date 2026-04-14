@@ -93,10 +93,10 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
             <div className="col-lg-6">Klub</div>
             <div className="col-lg-3">Level</div>
             <div className="col-lg-1">Poin</div>
-            <div className="col-lg-2">Kode</div>
+            <div className="col-lg-2">Slug</div>
           </div>
           {visibleClubs.map((club) => {
-            const clubSlug = club.code || String(club.id);
+            const clubSlug = club.slug || "";
             const memberCount = memberCounts.get(club.id) ?? 0;
             return (
               <div className="row cart-body pb-30" key={club.id}>
@@ -105,7 +105,11 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                     {club.logo ? <img src={club.logo} alt={club.name || "Logo Klub"} /> : <img src={placeholderSquad} alt="Logo Klub" />}
                     <div className="cart-content">
                       <h3>
-                        <Link to={`/detail-klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>
+                        {clubSlug ? (
+                          <Link to={`/detail-klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>
+                        ) : (
+                          club.name || "Klub Tanpa Nama"
+                        )}
                       </h3>
                       <p>{memberCount > 0 ? `${memberCount} anggota` : "Anggota belum tersedia"}</p>
                     </div>
@@ -123,7 +127,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                 </div>
                 <div className="col-lg-2">
                   <div className="cart-item">
-                    <p>{clubSlug}</p>
+                    <p>{clubSlug || "-"}</p>
                   </div>
                 </div>
               </div>

@@ -59,7 +59,7 @@ const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
 
 const BlogClassicPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page") ?? "1");
+  const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);
   const category = searchParams.get("category") ?? "";
   const tag = searchParams.get("tag") ?? "";
   const search = searchParams.get("search") ?? "";

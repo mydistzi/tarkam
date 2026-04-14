@@ -5,12 +5,12 @@ import { useGalacticContent } from "../shared";
 import { ShopDetailsContent } from "./section";
 
 const ShopDetailsPage = () => {
-  const { productId } = useParams();
+  const { slug } = useParams();
   const { productRecords } = useGalacticContent();
   const record = productRecords.find(
     (item) =>
-      String(item.id) === productId ||
-      (item.product.slug ? String(item.product.slug) === productId : false),
+      String(item.id) === slug ||
+      (item.product.slug ? String(item.product.slug) === slug : false),
   ) || productRecords[0];
 
   return (

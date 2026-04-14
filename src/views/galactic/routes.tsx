@@ -89,7 +89,10 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/tarkam-schedule", element: <TarkamSchedulePage /> },
       { path: "/detail-tarkam/:tarkamId", element: <DetailTarkamPage /> },
       { path: "/jadwal-pertandingan", element: <UpcomingMatchesPage /> },
-      { path: "/detail-pertandingan/:contestId", element: <MatchDetailsPage /> },
+      {
+        path: "/detail-pertandingan/:contestId",
+        element: <MatchDetailsPage />,
+      },
       { path: "/detail-player/:playerId", element: <PlayerDetailsPage /> },
       { path: "/detail-tim/:teamId", element: <TeamDetailsPage /> },
       { path: "/klub", element: <ClubsPage /> },
@@ -107,7 +110,14 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/ketentuan-penghapusan-data", element: <DataDeletionPolicy /> },
       { path: "/hubungi-kami", element: <ContactPage /> },
       { path: "/cart", element: <CartPage /> },
-      { path: "/checkout", element: <RequireAuth><CheckoutPage /></RequireAuth> },
+      {
+        path: "/checkout",
+        element: (
+          <RequireAuth>
+            <CheckoutPage />
+          </RequireAuth>
+        ),
+      },
       { path: "/signin", element: <SignInPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/logout", element: <LogoutPage /> },
