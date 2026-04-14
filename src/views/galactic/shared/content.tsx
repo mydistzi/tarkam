@@ -474,8 +474,8 @@ const STATIC_PAGE_ROUTES: Record<string, string> = {
   "upcoming matches": "/upcoming-matches",
   "stream schedule": "/stream-schedule",
   "match details": "/match-details",
-  "player details": "/player-details",
-  "team details": "/team-details",
+  "player details": "/detail-player",
+  "team details": "/detail-tim",
   pages: "/about",
   "about us": "/about",
   "our gamers": "/our-gamers",
@@ -488,9 +488,9 @@ const STATIC_PAGE_ROUTES: Record<string, string> = {
   "add to cart page": "/cart",
   "checkout page": "/checkout",
   blog: "/news",
-  "grid layout": "/blog-grid",
+  "grid layout": "/news",
   "classic layout": "/blog-classic",
-  "blog details": "/blog-details",
+  "blog details": "/detail-news",
   contact: "/hubungi-kami",
 };
 
@@ -863,8 +863,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             team: team?.name || club?.name || "",
             teamLogo: club?.logo || "",
             about: tarkam?.description || "",
-            path: `/player-details/${player.id}`,
-            teamPath: team ? `/team-details/${team.id}` : undefined,
+            path: `/detail-player/${player.id}`,
+            teamPath: team ? `/detail-tim/${team.id}` : undefined,
           };
 
           return {
@@ -957,8 +957,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             time: contest.score ? String(contest.score) : tarkam?.male_time || tarkam?.female_time || "",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
             path: `/detail-pertandingan/${contest.id}`,
-            leftTeamPath: team1 ? `/team-details/${team1.id}` : "/team-details",
-            rightTeamPath: team2 ? `/team-details/${team2.id}` : "/team-details",
+            leftTeamPath: team1 ? `/detail-tim/${team1.id}` : "/detail-tim",
+            rightTeamPath: team2 ? `/detail-tim/${team2.id}` : "/detail-tim",
             videoUrl: stream?.url || stream?.embed || "",
           };
 
@@ -994,7 +994,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               description: product.subject || product.description || "",
               sku: product.sku || `product-${product.id}`,
               tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
-              path: `/shop-details/${product.id}`,
+              path: `/detail-shop/${product.id}`,
               gallery: gallery?.length ? gallery : [],
               additionalInfo: product.additional_info || product.description || "",
             },
@@ -1034,7 +1034,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             ? blog.tags
                 .map((item) => item?.title || item?.name || "")
                 .filter(Boolean)
-            : [category, "Tarkam", "Gaming"].filter(Boolean);
+            : [category, "Tarkam", "IDM"].filter(Boolean);
 
           return {
             id: blog.id,
@@ -1049,8 +1049,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               excerpt: `${stripHtml(blog.content || "").slice(0, 150)}...`,
               content,
               tags: mappedTags,
-              path: blog.slug ? `/blog-details/${blog.slug}` : `/blog-details/${blog.id}`,
-              categoryPath: `/blog-grid?category=${slugify(category)}`,
+              path: blog.slug ? `/detail-news/${blog.slug}` : `/detail-news/${blog.id}`,
+              categoryPath: `/news?category=${slugify(category)}`,
             },
           };
         });
