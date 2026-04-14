@@ -356,6 +356,10 @@ const SectionHeading = ({ eyebrow, title, description }: SectionHeadingProps) =>
 function replaceWithBr(description: ReactNode) {
   return String(description || "").replace(/\n/g, "<br />");
 }
+const renderPageHeaderDescription = (description?: ReactNode) =>
+  description ? (
+    <p style={{ whiteSpace: "pre" }} dangerouslySetInnerHTML={{ __html: replaceWithBr(description) }} />
+  ) : null;
 const PageHeader = ({
   eyebrow,
   title,
@@ -371,7 +375,7 @@ const PageHeader = ({
         {children}
         {eyebrow ? <h4>{eyebrow}</h4> : null}
         <h2>{title}</h2>
-        {description ? <p style={{ whiteSpace: "pre" }} dangerouslySetInnerHTML={{ __html: replaceWithBr(description) }} /> : null}
+        {renderPageHeaderDescription(description)}
         {meta}
       </div>
     </div>
