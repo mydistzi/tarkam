@@ -962,9 +962,7 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                       ) : null}
                     </h3>
                   </div>
-                  {sponsor.detail ? <p className="sponsor-detail">{sponsor.detail}</p> : null}
                   <p className="sponsor-message">{sponsor.message?.trim() || 'Sponsor belum meninggalkan pesan apapun untuk saat ini.'}</p>
-                  {sponsor.amount != null ? <p className="sponsor-amount">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(sponsor.amount)}</p> : null}
                   <div className="sponsor-testimonial-meta">
                       <span className="testimonial-author">{sponsor.memberNickname || "Sponsor Partner"}</span>
                       <div className="sponsor-testimonial-social">
