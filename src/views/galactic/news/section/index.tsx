@@ -35,8 +35,8 @@ const BlogClassicContent = ({
   <>
     <PageHeader
       eyebrow="Blog Tarkam"
-      title={<>Berita Gaming &amp; Wawasan</>}
-      description="Temukan publikasi resmi Tarkam dengan format klasik yang fokus pada konten dan kenyamanan membaca."
+      title="Berita &amp; Wawasan"
+      description="Temukan publikasi resmi Tarkam dengan format klasik \n yang fokus pada konten dan kenyamanan membaca."
     />
     <section className="blog-section blog-page padding-top">
       <div className="container">

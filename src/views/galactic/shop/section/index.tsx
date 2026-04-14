@@ -136,9 +136,9 @@ const ShopGridContent = ({
 }: ShopGridContentProps) => (
   <>
     <PageHeader
-      eyebrow="Toko Gaming Online"
-      title="Jelajah Item &amp; Perlengkapan in-game"
-      description="Cari item yang kamu butuhkan in-game? Jelajahi koleksi favorit mu disini!"
+      eyebrow="Toko Online"
+      title="Item &amp; Perlengkapan"
+      description="Cari item yang kamu butuhkan in-game? \n Jelajahi koleksi favorit mu disini!"
     />
     <section className="shop-section padding-top">
       <div className="container">

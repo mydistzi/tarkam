@@ -83,9 +83,9 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
   return (
     <>
       <PageHeader
-        eyebrow="List Klub"
-        title="Semua Klub yang Terdaftar"
-        description="Berikut adalah daftar klub yang terdaftar di platform kami. Klik pada setiap klub untuk melihat detail lebih lanjut tentang anggota, prestasi, dan informasi lainnya."
+        eyebrow="Klub IDM"
+        title="List Klub Terdaftar"
+        description="Berikut adalah daftar klub yang terdaftar di platform kami. Klik pada setiap klub \n untuk melihat detail lebih lanjut tentang anggota, prestasi, dan informasi lainnya."
       />
       <section className="cart-section padding-top">
         <div className="container">
