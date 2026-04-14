@@ -11,7 +11,7 @@ const BlogClassicContent = ({ posts, categories }: BlogClassicContentProps) => (
     <PageHeader
       eyebrow="Blog Klasik"
       title={<>Berita Gaming &amp; Wawasan</>}
-      description="Tampilan artikel klasik ini pakai sumber blog API yang sama, sambil tetap pakai layout galactic yang lebih lega."
+      description="Temukan publikasi resmi Tarkam dengan format klasik yang fokus pada konten dan kenyamanan membaca."
     />
     <section className="blog-section blog-page padding-top">
       <div className="container">

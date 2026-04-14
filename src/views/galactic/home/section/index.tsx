@@ -76,7 +76,7 @@ const HomeMatchesSection = ({ items }: { items: MatchItem[] }) => (
       <SectionHeading
         eyebrow="Pertandingan Mendatang"
         title={<>Pertarungan Ekstrim <br /> Turnamen <span>Master</span></>}
-        description={<>Jadwal terbaru, skor, dan status pemenang dari turnamen Tarkam langsung tersinkron lewat API.</>}
+        description={<>Lihat jadwal terbaru, hasil, dan status pemenang dari turnamen resmi Tarkam.</>}
       />
       <MatchList items={items} />
     </div>
@@ -89,7 +89,7 @@ const HomeStreamsSection = ({ items }: { items: StreamItem[] }) => (
       <SectionHeading
         eyebrow="Nonton Gameplay"
         title={<>Nonton Live <span>Streaming</span></>}
-        description={<>Stream andalan tersambung langsung ke endpoint `streamings`, fallback cuma kalau belum ada media hero.</>}
+        description={<>Streaming unggulan tersedia di sini agar Anda dapat menonton pertandingan langsung dengan cepat dan mudah.</>}
       />
       <WatchLiveGrid items={items} />
     </div>

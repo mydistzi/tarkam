@@ -28,7 +28,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
         eyebrow="Detail Artikel"
         title={post.title}
         className="single"
-        description="Halaman artikel ini sekarang terisi dari API blog publik, sambil tetap jaga layout baca panjang galactic."
+        description="Baca artikel lengkap dengan informasi terbaru, komentar, dan metadata resmi Tarkam."
         meta={
           <ul className="post-meta">
             <li><i className="las la-user" />{post.author}</li>
@@ -50,8 +50,8 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                 ))}
                 <blockquote>
                   <i className="fas fa-quote-right" />
-                  Konten, routing, dan metadata halaman ini sekarang dikendalikan oleh feed blog live.
-                  <span>- Frontend Galactic</span>
+                  Artikel ini disajikan dengan konten resmi dan metadata terkini dari arsip berita Tarkam.
+                  <span>- Tim Redaksi Tarkam</span>
                 </blockquote>
                 <ul className="tags">
                   {post.tags.map((tag) => (
@@ -78,7 +78,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                   </div>
                   <div className="author-info">
                     <h3>{post.author}</h3>
-                    <p>Field author ini fallback ke pengaturan situs kalau API ngembaliin artikel tanpa profil user publik.</p>
+                    <p>Informasi penulis ditampilkan untuk memberi konteks dan kredibilitas pada setiap artikel Tarkam.</p>
                     <ul className="social-icon">
                       <li><a href="#"><i className="lab la-facebook-f" /></a></li>
                       <li><a href="#"><i className="lab la-twitter" /></a></li>

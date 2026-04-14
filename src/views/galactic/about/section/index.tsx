@@ -23,7 +23,7 @@ const AboutContent = ({
     <PageHeader
       eyebrow="Tentang Kami"
       title="Tentang Galactic Squad"
-      description="Halaman galactic ini sekarang nyambung ke sumber data Tarkam, sambil tetap jaga vibe turnamen aslinya."
+      description="Pelajari visi, komunitas, dan keunggulan Tarkam sebagai platform turnamen dan layanan esport."
     />
     <section className="about-section padding">
       <div className="container">
@@ -33,9 +33,9 @@ const AboutContent = ({
               <div className="section-heading">
                 <h3>Tentang Galactic Squad</h3>
                 <h2>Generasi <span>gaming</span> terbaru sudah datang.</h2>
-                <p>{aboutDescription || "Turnamen komunitas, streaming, ranking klub, dan cerita roster sekarang tampil dalam satu pengalaman galactic yang nyatu."}</p>
+                <p>{aboutDescription || "Tarkam menyatukan turnamen komunitas, streaming, peringkat klub, dan cerita roster dalam satu pengalaman gaming yang lengkap."}</p>
                 <p className="mt-20">
-                  Semua blok di halaman ini sekarang ambil data dari menu, pengaturan, roster, kontes, dan konten API, bukan lagi template statis.
+                  Temukan bagaimana komunitas, event, dan konten resmi tampil bersama dalam platform esport yang profesional.
                 </p>
                 <Link className="default-btn" to="/contact">Gabung Tim Kita</Link>
               </div>

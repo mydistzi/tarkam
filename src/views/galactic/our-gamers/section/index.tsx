@@ -6,7 +6,7 @@ const OurGamersContent = ({ players, sponsors }: { players: PlayerItem[]; sponso
     <PageHeader
       eyebrow="Gamer Kita"
       title="Kenalan Sama Gamer"
-      description="Roster ini dibuat dari member, klub, dan registrasi tim live di backend Tarkam."
+      description="Temui roster pemain dan tim resmi yang berkompetisi di event dan liga Tarkam."
     />
     <section className="gamers-section padding">
       <div className="container">

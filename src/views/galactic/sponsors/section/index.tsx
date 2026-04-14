@@ -10,7 +10,7 @@ const SponsorsContent = ({ sponsors }: SponsorsContentProps) => (
     <PageHeader
       eyebrow="Sponsor Kami"
       title="Sponsor Turnamen"
-      description="Logo sponsor dan link partner disajikan di sini agar halaman sponsor tetap hidup meski sumber data disimpan di tabel yang beda."
+      description="Lihat mitra resmi yang mendukung event, kompetisi, dan komunitas Tarkam secara penuh."
     />
     <div className="sponsor-section padding-top">
       <div className="container">

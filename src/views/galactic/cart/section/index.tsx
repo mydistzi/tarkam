@@ -69,7 +69,7 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
       <PageHeader
         eyebrow="Keranjang"
         title="Keranjang Produk"
-        description="Item keranjang di halaman ini diambil dari endpoint `carts` dan dilengkapi data produk yang terhubung."
+        description="Tinjau barang yang dipilih sebelum melanjutkan ke pembayaran. Semua item ini berasal dari keranjang belanja resmi Anda."
       />
       <section className="cart-section padding-top">
         <div className="container">

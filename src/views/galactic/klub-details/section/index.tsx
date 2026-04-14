@@ -136,8 +136,8 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
                 <h2>Tentang <span>Klub</span></h2>
                 <p>
                   {record.level
-                    ? `Klub ${record.name} berada di level ${record.level} dengan ${record.points ?? 0} poin pada klasemen.`
-                    : "Profil klub ini ditarik dari data klub live Tarkam."}
+                    ? `Klub ${record.name} berada di level ${record.level} dan mengumpulkan ${record.points ?? 0} poin dalam klasemen resmi.`
+                    : "Profil klub ini menampilkan data resmi dan statistik terbaru dari kompetisi Tarkam."}
                 </p>
               </div>
             </div>

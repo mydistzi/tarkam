@@ -11,7 +11,7 @@ const BlogGridContent = ({ posts, categories }: BlogGridContentProps) => (
     <PageHeader
       eyebrow="Blog"
       title={<>Berita Gaming &amp; Wawasan</>}
-      description="Index blog galactic sekarang diisi dari data blog publik `tarkam-api`, bukan lagi daftar artikel statis."
+      description="Jelajahi berita resmi, pengumuman turnamen, dan wawasan komunitas langsung dari sumber resmi Tarkam."
     />
     <section className="blog-section blog-page padding-top">
       <div className="container">

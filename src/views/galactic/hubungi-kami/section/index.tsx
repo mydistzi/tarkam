@@ -22,7 +22,7 @@ const ContactContent = ({ address, email, phone }: ContactContentProps) => (
     <PageHeader
       eyebrow="Kontak"
       title="Hubungi Tim Tarkam"
-      description="Detail kontak dan link sosial di footer sekarang diambil dari pengaturan live, sambil tetap jaga layout galactic."
+      description="Kontak resmi Tarkam untuk dukungan, kemitraan, dan pertanyaan terkait layanan kami."
     />
     <section className="contact-section padding-top">
       <div className="container">
@@ -43,7 +43,7 @@ const ContactContent = ({ address, email, phone }: ContactContentProps) => (
           <div className="col-md-6 sm-padding">
             <div className="contact-title">
               <h2>Kirim <span>Pesan</span></h2>
-              <p>Isi form kontak galactic ini buat pengalaman front-end yang mulus, sementara data kontak live tetap sinkron dengan pengaturan API.</p>
+                <p>Isi formulir ini untuk menghubungi tim Tarkam secara resmi mengenai dukungan, kemitraan, atau pertanyaan layanan.</p>
             </div>
             <ContactForm />
           </div>

@@ -51,11 +51,11 @@ const MatchDetailsContent = ({ record }: { record?: MatchRecord }) => {
               </ul>
               <h2>{match.leftTeam} Vs {match.rightTeam}</h2>
               <p>
-                Halaman detail ini sekarang dihasilkan dari graph kontes di API Tarkam live. Ia menggabungkan entri kontes,
-                kedua tim yang terhubung, dan jadwal induk Tarkam jadi satu narasi pertandingan.
+                Halaman detail ini menampilkan informasi pertandingan yang terhubung ke kontes resmi dan jadwal Tarkam.
+                Detail tim, hasil, dan statistik ditampilkan dalam konteks pertandingan yang komprehensif.
               </p>
               <p>
-                {record?.tarkam?.description || "Deskripsi jadwal belum diisi, jadi halaman ini fallback ke ringkasan netral agar layout tetap rapi."}
+                {record?.tarkam?.description || "Deskripsi jadwal belum tersedia; lihat ringkasan tim dan status pertandingan di sini."}
               </p>
               <blockquote>
                 <i className="fas fa-quote-right" />

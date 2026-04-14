@@ -47,7 +47,7 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
           <div className="section-heading mb-40 text-center">
             <h3>Anggota Tim</h3>
             <h2>Kenalan Sama <span>Roster</span></h2>
-            <p>Setiap kartu member di bawah terhubung ke halaman detail player live.</p>
+            <p>Setiap kartu anggota mengarah ke profil pemain resmi yang menampilkan statistik dan riwayat pertandingan.</p>
           </div>
           <PlayerCarousel items={record.members} />
         </div>

@@ -38,7 +38,7 @@ const HomeEsportsMatchesSection = ({ items }: { items: MatchItem[] }) => (
       <SectionHeading
         eyebrow="Pertandingan Mendatang"
         title={<>Pertarungan Ekstrim <br /> Turnamen <span>Master</span></>}
-        description={<>Kontes mendatang, pasangan tim, dan jadwal langsung nyambung ke model turnamen live.</>}
+        description={<>Lihat kontes mendatang, pasangan tim, dan jadwal resmi dalam satu tampilan turnamen.</>}
       />
       <MatchList items={items} />
     </div>
@@ -61,7 +61,7 @@ const HomeEsportsPlayersSection = ({ items }: { items: PlayerItem[] }) => (
       <SectionHeading
         eyebrow="Gamer Kita"
         title={<>Kenalan Sama <span>Gamer</span></>}
-        description={<>Dari member sampai player dan tim, roster ini sekarang dibikin dari database Tarkam.</>}
+        description={<>Roster ini menampilkan pemain dan tim resmi yang berkompetisi dalam ekosistem Tarkam.</>}
       />
       <PlayerCarousel items={items} />
     </div>
@@ -100,7 +100,7 @@ const HomeEsportsBlogSection = ({ items }: { items: PostItem[] }) => (
       <SectionHeading
         eyebrow="Berita Terbaru"
         title={<>Berita &amp; <span>Headline</span></>}
-        description={<>Konten artikel di bawah diambil dari `tarkam-api`, sambil jaga gaya visual galactic.</>}
+        description={<>Berita resmi dan pengumuman turnamen disajikan di sini dengan tampilan yang konsisten dan profesional.</>}
       />
       <HomePostGrid items={items} />
     </div>

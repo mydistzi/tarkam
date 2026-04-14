@@ -128,7 +128,7 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
       <PageHeader
         eyebrow="Pembayaran"
         title="Bayar Pesanan"
-        description="Ringkasan tagihan dan pesanan sekarang tersambung ke data keranjang, jadi halaman ini bukan lagi template mati."
+        description="Lihat detail pembayaran dan ringkasan pesanan Anda. Semua informasi ini diambil langsung dari keranjang belanja aktif."
       />
       <section className="checkout-section padding-top">
         <div className="container">
