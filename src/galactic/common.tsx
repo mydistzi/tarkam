@@ -490,14 +490,14 @@ const HeaderMarkup = ({
               <Link className="default-btn" to="/signin">
                 Login<span />
               </Link>
-              <Link className="default-btn" to="/register">
+              {/* <Link className="default-btn" to="/register">
                 Daftar<span />
-              </Link>
+              </Link> */}
             </>
           )}
-          <Link className="default-btn" to="/hubungi-kami">
+          {/* <Link className="default-btn" to="/hubungi-kami">
             Gabung Tim Kami<span />
-          </Link>
+          </Link> */}
           <div className="mobile-menu-icon" onClick={onToggleMenu} onKeyDown={() => undefined} role="button" tabIndex={0}>
             <div className={`burger-menu${menuOpen ? " menu-open" : ""}`}>
               <div className="line-menu line-half first-line" />
@@ -992,8 +992,8 @@ const CtaSection = () => (
   <section className="cta-section">
     <div className="container">
       <div className="section-heading">
-        <h3>Terhubung dengan Tim Gaming Kami!</h3>
-        <h2>Ikut kami untuk turnamen<br />gaming yang bakal datang!</h2>
+        <h3>Terhubung dengan Tim Kami!</h3>
+        <h2>Ikut kami untuk turnamen<br />tarkam yang akan datang!</h2>
         <Link className="default-btn" to="/hubungi-kami">Gabung Tim Kami</Link>
       </div>
     </div>
