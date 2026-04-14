@@ -773,6 +773,22 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         const usefulls = normalizeList(payloads.usefulls);
         const penyawers = normalizeList(payloads.penyawers);
 
+        console.debug("Galactic API fetched counts", {
+          menus: menus.length,
+          headers: headers.length,
+          streamings: streamings.length,
+          usefulls: usefulls.length,
+          webSetting: Boolean(webSetting),
+        });
+
+        console.debug("Galactic API fetched counts", {
+          menus: menus.length,
+          headers: headers.length,
+          streamings: streamings.length,
+          usefulls: usefulls.length,
+          webSetting: Boolean(webSetting),
+        });
+
         const clubMap = new Map(clubs.map((item) => [item.id, item]));
         const memberMap = new Map(members.map((item) => [item.id, item]));
         const teamMap = new Map(teams.flatMap((item) => {

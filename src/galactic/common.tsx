@@ -139,7 +139,11 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 const videoHref = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
   "https://www.facebook.com/chandra.albaz.9/videos/756597290539585/?idorvanity=1077594326683243",
 )}&autoplay=1&show_text=0`;
-const DEFAULT_API_BASE_URL = "https://tarkam-api-web-production.up.railway.app/api/v1";
+const DEFAULT_API_BASE_URL = import.meta.env.DEV
+  ? "http://127.0.0.1:8000/api/v1"
+  : import.meta.env.DEV
+  ? "http://127.0.0.1:8000/api/v1"
+  : "https://tarkam-api-web-production.up.railway.app/api/v1";
 const normalizeApiBaseUrl = (value?: string): string => {
   const baseUrl = String(value || "").trim();
   if (!baseUrl) {
