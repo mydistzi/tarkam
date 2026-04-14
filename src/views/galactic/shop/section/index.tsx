@@ -96,9 +96,9 @@ const ShopSidebar = ({
         ))}
       </ul>
     </div>
-    <div className="sidebar-widget">
-      <div className="widget-title">
-        <h3>Item Terbaru</h3>
+    <div className="shop-sidebar-widget">
+      <div className="shop-widget-title">
+        <h3><span>||</span> Item Terbaru</h3>
       </div>
       <ul className="thumb-post">
         {recentItems.map((item) => (
@@ -189,7 +189,7 @@ const mapApiProductToProductItem = (product: any): ProductItem => ({
   price: Number(product.price || 0),
   oldPrice: undefined,
   badge: product.status || "",
-  badgeClass: product.status === "Sold Out" ? "sold-out" : "sale",
+  badgeClass: product.status === "Sold Out" ? "sold-out" : "in-stock",
   description: product.description || product.subject || "",
   sku: product.sku || "",
   tags: Array.from(
