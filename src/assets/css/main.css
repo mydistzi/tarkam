@@ -1598,7 +1598,7 @@
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
-    min-height: 360px;
+    min-height: 100%;
 }
 
 .sponsor-testimonial-carousel .swiper-slide {
