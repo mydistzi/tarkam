@@ -1,5 +1,8 @@
+import type { FormEvent } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { PageHeader, preventSubmit } from "@/galactic/common";
+import Api from "@/api";
+import { PageHeader } from "@/galactic/common";
 import type { CartRecord } from "../../shared";
 
 type CheckoutContentProps = {
@@ -8,9 +11,97 @@ type CheckoutContentProps = {
   phone?: string;
 };
 
+const PAYMENT_CHANNELS = {
+  bank_transfer: "01",
+  credit_card: "02",
+  cod: "03",
+};
+
 const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
+  const [firstName, setFirstName] = useState("Tarkam");
+  const [lastName, setLastName] = useState("Community");
+  const [company, setCompany] = useState("");
+  const [country, setCountry] = useState("Indonesia");
+  const [city, setCity] = useState("Jakarta");
+  const [province, setProvince] = useState("");
+  const [street, setStreet] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(phone || "");
+  const [emailAddress, setEmailAddress] = useState(email || "");
+  const [orderNote, setOrderNote] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<keyof typeof PAYMENT_CHANNELS>("bank_transfer");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const shipping = 10;
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const total = subtotal + 10;
+  const total = subtotal + shipping;
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) {
+      return;
+    }
+
+    if (items.length === 0) {
+      setErrorMessage("Keranjang kamu kosong. Tambahkan produk terlebih dahulu.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await Api.post(import.meta.env.VITE_DOKU_PAYMENT_PATH || "/payments/doku", {
+        carts: items.map((item) => item.id),
+        customer_name: `${firstName} ${lastName}`.trim(),
+        customer_email: emailAddress,
+        customer_phone: phoneNumber,
+        customer_address: street,
+        customer_city: city,
+        customer_country: country,
+        customer_zip_code: postalCode,
+        payment_method: PAYMENT_CHANNELS[paymentMethod],
+        shipping_cost: shipping,
+        order_note: orderNote,
+      });
+
+      const paymentAction = response.data?.payment_action;
+      const paymentPayload = response.data?.payment_payload;
+
+      if (!paymentAction || !paymentPayload) {
+        throw new Error("Cannot build payment request from Doku response.");
+      }
+
+      const paymentWindow = window.open("", "_blank");
+      if (!paymentWindow) {
+        throw new Error("Pop up diblokir, izinkan jendela baru untuk melanjutkan pembayaran.");
+      }
+
+      const form = document.createElement("form");
+      form.method = "post";
+      form.action = paymentAction;
+      form.target = paymentWindow.name;
+      form.style.display = "none";
+
+      Object.entries(paymentPayload).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = String(value ?? "");
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    } catch (error) {
+      console.error("Checkout failed", error);
+      setErrorMessage("Gagal memproses pembayaran. Coba lagi atau periksa data kamu.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -23,45 +114,48 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
         <div className="container">
           <div className="row">
             <div className="col-lg-8 sm-padding">
-              <form className="checkout-form-wrap" onSubmit={preventSubmit}>
+              <form className="checkout-form-wrap" onSubmit={handleSubmit}>
                 <h2>Detail Pembayaran</h2>
                 <div className="checkout-form mb-30">
-                  <div className="form-field"><input className="form-control" defaultValue="Tarkam" placeholder="Nama Depan" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" defaultValue="Community" placeholder="Nama Belakang" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" placeholder="Nama Perusahaan" type="text" /></div>
-                  <div className="form-field"><input className="form-control" defaultValue="Indonesia" placeholder="Negara" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" defaultValue="Jakarta" placeholder="Kota" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" placeholder="Provinsi" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" placeholder="Jalan" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" placeholder="Kode Pos" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" defaultValue={phone} placeholder="Telepon" required type="text" /></div>
-                  <div className="form-field"><input className="form-control" defaultValue={email} placeholder="Email" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={company} onChange={(event) => setCompany(event.target.value)} placeholder="Nama Perusahaan" type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={country} onChange={(event) => setCountry(event.target.value)} placeholder="Negara" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={province} onChange={(event) => setProvince(event.target.value)} placeholder="Provinsi" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={street} onChange={(event) => setStreet(event.target.value)} placeholder="Jalan" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} placeholder="Kode Pos" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" /></div>
+                  <div className="form-field"><input className="form-control" value={emailAddress} onChange={(event) => setEmailAddress(event.target.value)} placeholder="Email" required type="email" /></div>
                 </div>
                 <div className="additional-info mb-30">
                   <h2>Info Tambahan</h2>
                   <div className="form-field">
-                    <textarea className="form-control" cols={30} placeholder="Catatan Pesanan" rows={3} />
+                    <textarea className="form-control" cols={30} value={orderNote} onChange={(event) => setOrderNote(event.target.value)} placeholder="Catatan Pesanan" rows={3} />
                   </div>
                 </div>
                 <div className="payment-method">
                   <h2>Metode Pembayaran</h2>
                   <ul className="mb-20">
-                    <li><input defaultChecked id="option-1" name="selector" type="radio" /><label htmlFor="option-1">Transfer Bank</label></li>
-                    <li><input id="option-2" name="selector" type="radio" /><label htmlFor="option-2">Bayar dengan Cek</label></li>
-                    <li><input id="option-3" name="selector" type="radio" /><label htmlFor="option-3">Bayar di Tempat</label></li>
+                    <li><label><input checked={paymentMethod === "bank_transfer"} name="selector" onChange={() => setPaymentMethod("bank_transfer")} type="radio" /> Transfer Bank</label></li>
+                    <li><label><input checked={paymentMethod === "credit_card"} name="selector" onChange={() => setPaymentMethod("credit_card")} type="radio" /> Bayar dengan Kartu Kredit</label></li>
+                    <li><label><input checked={paymentMethod === "cod"} name="selector" onChange={() => setPaymentMethod("cod")} type="radio" /> Bayar di Tempat</label></li>
                   </ul>
-                  <Link className="default-btn" to="/shop">Bayar Sekarang <span /></Link>
+                  <button className="default-btn" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Memproses...' : 'Bayar Sekarang'}<span />
+                  </button>
                 </div>
+                {errorMessage ? <p style={{ color: '#d9534f', marginTop: '1rem' }}>{errorMessage}</p> : null}
               </form>
             </div>
             <div className="col-lg-4 sm-padding">
               <ul className="cart-total">
                 <li><span>Subtotal:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(subtotal)}</li>
-                <li><span>Perkiraan ongkir:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(10)}</li>
+                <li><span>Perkiraan ongkir:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(shipping)}</li>
                 <li><span>Total:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>
-                  <a className="default-btn" href="#">Selesaikan Pembayaran<span /></a>
+                  <Link className="default-btn" to="/cart">Lihat Keranjang<span /></Link>
                 </li>
               </ul>
             </div>

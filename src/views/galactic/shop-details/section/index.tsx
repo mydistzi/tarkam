@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+import type { ChangeEvent, FormEvent } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Api from "@/api";
 import type { ProductRecord } from "../../shared";
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
@@ -11,6 +14,42 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
       </section>
     );
   }
+
+  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
+
+  const handleAddToCart = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isAdding) {
+      return;
+    }
+
+    setIsAdding(true);
+    setFeedback(null);
+
+    try {
+      await Api.post('/carts', {
+        product_id: product.id,
+        quantity: Math.max(1, quantity),
+        unit_price: product.price,
+        status: 'active',
+      });
+
+      navigate('/cart');
+    } catch (error) {
+      console.error('Failed to add product to cart', error);
+      setFeedback('Gagal menambahkan produk ke keranjang. Coba lagi.');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    setQuantity(Number.isNaN(value) || value < 1 ? 1 : value);
+  };
 
   const product = record.item;
 
@@ -45,10 +84,22 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                   <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)} <span>({product.badge})</span></h4>
                   <p>{product.description}</p>
                   <div className="product-btn">
-                    <form>
-                      <input defaultValue="1" max="100" min="1" step="1" id="number" name="number" type="number" />
+                    <form onSubmit={handleAddToCart}>
+                      <input
+                        value={quantity}
+                        max={100}
+                        min={1}
+                        step={1}
+                        id="number"
+                        name="number"
+                        type="number"
+                        onChange={handleQuantityChange}
+                      />
+                      <button className="purchase-btn" type="submit" disabled={isAdding}>
+                        {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
+                      </button>
                     </form>
-                    <div><Link className="purchase-btn" to="/cart">Tambah ke Keranjang</Link></div>
+                    {feedback ? <p className="checkout-message">{feedback}</p> : null}
                   </div>
                   <ul className="product-meta">
                     <li>SKU:<a href="#">{product.sku}</a></li>

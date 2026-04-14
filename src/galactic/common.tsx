@@ -1,6 +1,7 @@
 ﻿import { type CSSProperties, type FormEvent, type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Api from "@/api";
 import CarouselLib, { type ButtonGroupProps } from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { DiscussionEmbed } from "disqus-react";
@@ -976,31 +977,59 @@ const CtaSection = () => (
     </div>
   </section>
 );
-const ProductCard = ({ product }: { product: ProductItem }) => (
-  <div className="product-card galactic-hover-card">
-    <div className="product-thumb">
-      <img src={getImageSource(product.image, "/assets/images/placeholder-shop.png")} alt={product.name} />
-      <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
-      <Link className="default-btn" to="/cart">
-        Tambah ke Keranjang<span />
-      </Link>
-    </div>
-    <div className="product-info">
-      <div className="product-inner">
-        <ul className="category">
-          <li><a href="#">{product.category}</a></li>
-        </ul>
-        <ul className="rating">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <li key={`${product.name}-star-${index + 1}`}><i className="las la-star" /></li>
-          ))}
-        </ul>
+const ProductCard = ({ product }: { product: ProductItem }) => {
+  const navigate = useNavigate();
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToCart = async () => {
+    if (isAdding) {
+      return;
+    }
+
+    setIsAdding(true);
+
+    try {
+      await Api.post('/carts', {
+        product_id: product.id,
+        quantity: 1,
+        unit_price: product.price,
+        status: 'active',
+      });
+      navigate('/cart');
+    } catch (error) {
+      console.error('Failed to add product to cart', error);
+      window.alert('Gagal menambahkan ke keranjang. Silakan coba lagi.');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  return (
+    <div className="product-card galactic-hover-card">
+      <div className="product-thumb">
+        <img src={getImageSource(product.image, "/assets/images/placeholder-shop.png")} alt={product.name} />
+        <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
+        <button className="default-btn" type="button" onClick={handleAddToCart} disabled={isAdding}>
+          {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
+        </button>
       </div>
-      <h3><Link to={product.path || "/shop-details"}>{product.name}</Link></h3>
+      <div className="product-info">
+        <div className="product-inner">
+          <ul className="category">
+            <li><a href="#">{product.category}</a></li>
+          </ul>
+          <ul className="rating">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <li key={`${product.name}-star-${index + 1}`}><i className="las la-star" /></li>
+            ))}
+          </ul>
+        </div>
+        <h3><Link to={product.path || "/shop-details"}>{product.name}</Link></h3>
       <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)}</h4>
     </div>
   </div>
-);
+  );
+};
 const ProductGrid = ({ items }: { items: ProductItem[] }) => (
   <div className="row">
     {items.map((product) => (
