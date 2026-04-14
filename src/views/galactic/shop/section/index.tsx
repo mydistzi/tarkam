@@ -173,6 +173,7 @@ const ShopGridContent = ({
               onCategorySelect={onCategorySelect}
               searchValue={searchValue}
             />
+            </div>
           </div>
         </div>
       </div>
