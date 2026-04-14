@@ -1,12 +1,37 @@
 import { BlogSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
 import type { PostItem } from "@/galactic/data";
 
-type BlogGridContentProps = {
-  posts: PostItem[];
-  categories: string[];
+type CategoryWidgetItem = {
+  id?: number;
+  title: string;
+  slug?: string;
+  count?: number;
+  path?: string;
 };
 
-const BlogGridContent = ({ posts, categories }: BlogGridContentProps) => (
+type BlogGridContentProps = {
+  posts: PostItem[];
+  categories: CategoryWidgetItem[];
+  recentPosts: PostItem[];
+  tags: string[];
+  currentPage: number;
+  totalPages: number;
+  searchValue?: string;
+  onSearch: (value: string) => void;
+  onPageChange: (value: number) => void;
+};
+
+const BlogGridContent = ({
+  posts,
+  categories,
+  recentPosts,
+  tags,
+  currentPage,
+  totalPages,
+  searchValue,
+  onSearch,
+  onPageChange,
+}: BlogGridContentProps) => (
   <>
     <PageHeader
       eyebrow="Blog"
@@ -24,10 +49,18 @@ const BlogGridContent = ({ posts, categories }: BlogGridContentProps) => (
                 </div>
               ))}
             </div>
-            <PagePagination />
+            <div className="pagination-wrapper">
+              <PagePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+            </div>
           </div>
           <div className="col-lg-4 sm-padding">
-            <BlogSidebar categories={categories} recentPosts={posts.slice(0, 3)} tags={Array.from(new Set(posts.flatMap((post) => post.tags))).slice(0, 8)} />
+            <BlogSidebar
+              categories={categories}
+              recentPosts={recentPosts}
+              tags={tags}
+              searchValue={searchValue}
+              onSearch={onSearch}
+            />
           </div>
         </div>
       </div>

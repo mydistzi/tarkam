@@ -55,7 +55,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                 </blockquote>
                 <ul className="tags">
                   {post.tags.map((tag) => (
-                    <li key={tag}><a href="#">{tag}</a></li>
+                    <li key={tag}><Link to={`/blog-grid?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
                   ))}
                 </ul>
                 <ul className="post-navigation">

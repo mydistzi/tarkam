@@ -6,7 +6,9 @@ import BlogDetailsContent from "./section";
 const BlogDetailsPage = () => {
   const { blogId } = useParams();
   const { blogRecords } = useGalacticContent();
-  const currentIndex = blogRecords.findIndex((item) => String(item.id) === blogId);
+  const currentIndex = blogRecords.findIndex((item) =>
+    String(item.id) === blogId || item.item.path?.endsWith(`/${blogId}`)
+  );
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
   const record = blogRecords[safeIndex];
   const previousPath = blogRecords[safeIndex - 1]?.item.path;

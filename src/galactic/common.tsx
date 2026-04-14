@@ -1207,15 +1207,33 @@ const BlogSidebar = ({
   categories = [],
   recentPosts = [],
   tags = [],
+  searchValue,
+  onSearch,
 }: {
-  categories?: string[];
+  categories?: { title: string; count?: number; path?: string }[];
   recentPosts?: PostItem[];
   tags?: string[];
+  searchValue?: string;
+  onSearch?: (value: string) => void;
 }) => (
   <>
     <div className="sidebar-widget">
-      <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" id="cari" name="cari" type="text" placeholder="Cari" />
+      <form
+        className="search-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSearch?.(searchValue ?? "");
+        }}
+      >
+        <input
+          className="form-control"
+          id="cari"
+          name="cari"
+          type="text"
+          placeholder="Cari"
+          value={searchValue ?? ""}
+          onChange={(event) => onSearch?.(event.target.value)}
+        />
         <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
@@ -1225,7 +1243,10 @@ const BlogSidebar = ({
       </div>
       <ul className="category-list">
         {categories.map((category, index) => (
-          <li key={`${category}-${index + 1}`}><a href="#">{category}</a><span>{index + 1}</span></li>
+          <li key={`${category.title}-${index + 1}`}>
+            <Link to={category.path || "#"}>{category.title}</Link>
+            <span>{category.count ?? 0}</span>
+          </li>
         ))}
       </ul>
     </div>
@@ -1253,7 +1274,7 @@ const BlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}><a href="#">{tag}</a></li>
+          <li key={tag}><Link to={`/blog-grid?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
         ))}
       </ul>
     </div>
@@ -1263,15 +1284,33 @@ const ClassicBlogSidebar = ({
   categories = [],
   recentPosts = [],
   tags = [],
+  searchValue,
+  onSearch,
 }: {
-  categories?: string[];
+  categories?: { title: string; count?: number; path?: string }[];
   recentPosts?: PostItem[];
   tags?: string[];
+  searchValue?: string;
+  onSearch?: (value: string) => void;
 }) => (
   <>
     <div className="sidebar-widget">
-      <form className="search-form" onSubmit={preventSubmit}>
-        <input className="form-control" type="text" id="cari" name="cari" placeholder="Cari" />
+      <form
+        className="search-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSearch?.(searchValue ?? "");
+        }}
+      >
+        <input
+          className="form-control"
+          type="text"
+          id="cari"
+          name="cari"
+          placeholder="Cari"
+          value={searchValue ?? ""}
+          onChange={(event) => onSearch?.(event.target.value)}
+        />
         <button className="search-btn" type="submit"><i className="fa fa-search" /></button>
       </form>
     </div>
@@ -1281,7 +1320,10 @@ const ClassicBlogSidebar = ({
       </div>
       <ul className="category-list">
         {categories.map((category, index) => (
-          <li key={`${category}-${index + 1}`}><a href="#">{category}</a><span>{index + 1}</span></li>
+          <li key={`${category.title}-${index + 1}`}>
+            <Link to={category.path || "#"}>{category.title}</Link>
+            <span>{category.count ?? 0}</span>
+          </li>
         ))}
       </ul>
     </div>
@@ -1309,7 +1351,7 @@ const ClassicBlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}><a href="#">{tag}</a></li>
+          <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
         ))}
       </ul>
     </div>

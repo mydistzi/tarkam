@@ -1,12 +1,37 @@
-import { ClassicBlogSidebar, PageHeader, PostCard } from "@/galactic/common";
+import { ClassicBlogSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
 import type { PostItem } from "@/galactic/data";
+
+type CategoryWidgetItem = {
+  id?: number;
+  title: string;
+  slug?: string;
+  count?: number;
+  path?: string;
+};
 
 type BlogClassicContentProps = {
   posts: PostItem[];
-  categories: string[];
+  categories: CategoryWidgetItem[];
+  recentPosts: PostItem[];
+  tags: string[];
+  currentPage: number;
+  totalPages: number;
+  searchValue?: string;
+  onSearch: (value: string) => void;
+  onPageChange: (value: number) => void;
 };
 
-const BlogClassicContent = ({ posts, categories }: BlogClassicContentProps) => (
+const BlogClassicContent = ({
+  posts,
+  categories,
+  recentPosts,
+  tags,
+  currentPage,
+  totalPages,
+  searchValue,
+  onSearch,
+  onPageChange,
+}: BlogClassicContentProps) => (
   <>
     <PageHeader
       eyebrow="Blog Klasik"
@@ -24,9 +49,18 @@ const BlogClassicContent = ({ posts, categories }: BlogClassicContentProps) => (
                 </div>
               ))}
             </div>
+            <div className="pagination-wrapper">
+              <PagePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+            </div>
           </div>
           <div className="col-lg-4 sm-padding">
-            <ClassicBlogSidebar categories={categories} recentPosts={posts.slice(0, 3)} tags={Array.from(new Set(posts.flatMap((post) => post.tags))).slice(0, 8)} />
+            <ClassicBlogSidebar
+              categories={categories}
+              recentPosts={recentPosts}
+              tags={tags}
+              searchValue={searchValue}
+              onSearch={onSearch}
+            />
           </div>
         </div>
       </div>

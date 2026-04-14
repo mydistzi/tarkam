@@ -113,7 +113,8 @@ type ApiBlog = {
   image_alt?: string;
   category_id?: number;
   user_id?: number;
-  tags?: Array<{ id?: number; name?: string }>;
+  category?: { id?: number; title?: string; slug?: string };
+  tags?: Array<{ id?: number; title?: string; slug?: string; name?: string }>;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -683,7 +684,7 @@ async function fetchGalacticPayloads() {
     Api.get("/web-setting"),
     Api.get("/headers"),
     Api.get("/categories"),
-    Api.get("/blogs"),
+    Api.get("/blogs", { params: { all: true } }),
     Api.get("/products"),
     Api.get(`/carts${cartQuery}`),
     Api.get("/streamings"),
@@ -1029,6 +1030,11 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         const blogRecords: BlogRecord[] = blogs.map((blog) => {
           const category = categoryMap.get(blog.category_id || -1) || "";
           const content = splitContent(blog.content);
+          const mappedTags = Array.isArray(blog.tags)
+            ? blog.tags
+                .map((item) => item?.title || item?.name || "")
+                .filter(Boolean)
+            : [category, "Tarkam", "Gaming"].filter(Boolean);
 
           return {
             id: blog.id,
@@ -1042,8 +1048,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               author: meta.author || "",
               excerpt: `${stripHtml(blog.content || "").slice(0, 150)}...`,
               content,
-              tags: [category, "Tarkam", "Gaming"].filter(Boolean),
-              path: `/blog-details/${blog.id}`,
+              tags: mappedTags,
+              path: blog.slug ? `/blog-details/${blog.slug}` : `/blog-details/${blog.id}`,
               categoryPath: `/blog-grid?category=${slugify(category)}`,
             },
           };
