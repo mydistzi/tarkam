@@ -22,6 +22,9 @@ import {
   RouteErrorPage,
   ShopDetailsPage,
   ShopGridPage,
+  SignInPage,
+  RegisterPage,
+  LogoutPage,
   SponsorsPage,
   TarkamSchedulePage,
   DetailTarkamPage,
@@ -30,6 +33,7 @@ import {
   WhatsAppPage,
 } from "./index";
 import { GalacticDataProvider, useGalacticContent } from "./shared";
+import { RequireAuth } from "./auth/AuthProvider";
 import AcceptableUsePolicy from "../policies/AcceptableUsePolicy";
 import DataDeletionPolicy from "../policies/DataDeletionPolicy";
 import PrivacyPolicy from "../policies/PrivacyPolicy";
@@ -108,7 +112,10 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/shop-details", element: <ShopDetailsPage /> },
       { path: "/shop-details/:productId", element: <ShopDetailsPage /> },
       { path: "/cart", element: <CartPage /> },
-      { path: "/checkout", element: <CheckoutPage /> },
+      { path: "/checkout", element: <RequireAuth><CheckoutPage /></RequireAuth> },
+      { path: "/signin", element: <SignInPage /> },
+      { path: "/register", element: <RegisterPage /> },
+      { path: "/logout", element: <LogoutPage /> },
       { path: "/blog-grid", element: <BlogGridPage /> },
       { path: "/news", element: <BlogClassicPage /> },
       { path: "/blog-details", element: <BlogDetailsPage /> },

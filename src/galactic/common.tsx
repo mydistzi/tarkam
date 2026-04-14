@@ -17,6 +17,7 @@ import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
 import { useGalacticContent } from "@/views/galactic/shared";
+import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import {
   brand,
   faqs,
@@ -452,8 +453,11 @@ const HeaderMarkup = ({
   onSearchOpen: () => void;
   menuItems?: GalacticMenuItem[];
   logoUrl?: string;
-}) => (
-  <div className="primary-header">
+}) => {
+  const { user, isAuthenticated } = useAuth();
+
+  return (
+    <div className="primary-header">
     <div className="container">
       <div className="primary-header-inner">
         <div className="header-logo">
@@ -474,6 +478,23 @@ const HeaderMarkup = ({
           <div className="search-icon dl-search-icon" onClick={onSearchOpen} onKeyDown={() => undefined} role="button" tabIndex={0}>
             <i className="las la-search" />
           </div>
+          {isAuthenticated ? (
+            <>
+              <span className="header-user-label">Hai, {user?.name || user?.email}</span>
+              <Link className="default-btn" to="/logout">
+                Logout<span />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className="default-btn" to="/signin">
+                Login<span />
+              </Link>
+              <Link className="default-btn" to="/register">
+                Daftar<span />
+              </Link>
+            </>
+          )}
           <Link className="default-btn" to="/hubungi-kami">
             Gabung Tim Kami<span />
           </Link>
@@ -489,6 +510,7 @@ const HeaderMarkup = ({
     </div>
   </div>
 );
+};
 const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }) => (
   <div id="popup-search-box" className={open ? "toggled" : ""} onClick={onClose}>
     <div className="box-inner-wrap d-flex align-items-center" onClick={(event) => event.stopPropagation()}>
