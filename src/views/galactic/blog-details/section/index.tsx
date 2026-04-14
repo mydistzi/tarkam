@@ -55,18 +55,18 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                 </blockquote>
                 <ul className="tags">
                   {post.tags.map((tag) => (
-                    <li key={tag}><Link to={`/blog-grid?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
+                    <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
                   ))}
                 </ul>
                 <ul className="post-navigation">
                   <li>
-                    <Link to={previousPath || post.path || "/blog-grid"}>
+                    <Link to={previousPath || post.path || "/news"}>
                       <span><i className="las la-angle-left" />Sebelumnya</span>
                       Lihat artikel sebelumnya
                     </Link>
                   </li>
                   <li>
-                    <Link to={nextPath || post.path || "/blog-grid"}>
+                    <Link to={nextPath || post.path || "/news"}>
                       <span>Selanjutnya<i className="las la-angle-right" /></span>
                       Lihat artikel selanjutnya
                     </Link>

@@ -97,7 +97,7 @@ const ShopSidebar = ({
               <img src={item.image || placeholderShop} alt={item.name} />
             </span>
             <div className="thumb-post-info">
-              <h3><a href={item.path || "/shop-details"}>{item.name}</a></h3>
+              <h3><a href={item.path || "/detail-shop"}>{item.name}</a></h3>
               <span className="date"><i className="las la-tag" />{item.category}</span>
               <span className="date"><i className="las la-wallet" />Rp {item.price.toLocaleString()}</span>
             </div>
@@ -200,7 +200,7 @@ const mapApiProductToProductItem = (product: any): ProductItem => ({
         .filter(Boolean)
     )
   ),
-  path: product.slug ? `/shop-details/${product.slug}` : `/shop-details/${product.id}`,
+  path: product.slug ? `/detail-shop/${product.slug}` : `/detail-shop/${product.id}`,
   gallery: product.thumbnails?.map((item: any) => item.product_thumbnail_path).filter(Boolean),
 });
 

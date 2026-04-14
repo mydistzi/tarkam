@@ -151,48 +151,38 @@ export const menus: GalacticMenuItem[] = [
   {
     label: "Beranda",
     children: [
-      { label: "Beranda Utama", path: "/" },
+      { label: "Beranda", path: "/" },
       { label: "Beranda eSports", path: "/index-2" },
     ],
   },
   {
     label: "Turnamen",
     children: [
-      { label: "Pertandingan Mendatang", path: "/upcoming-matches" },
-      { label: "Jadwal Streaming", path: "/stream-schedule" },
+      { label: "Jadwal Tarkam", path: "/upcoming-matches" },
+      { label: "Jadwal Pertandingan", path: "/stream-schedule" },
       { label: "Detail Pertandingan", path: "/match-details" },
-      { label: "Detail Pemain", path: "/player-details" },
-      { label: "Detail Tim", path: "/team-details" },
     ],
   },
   {
-    label: "Halaman",
+    label: "Leaderboard",
     children: [
-      { label: "Tentang Kami", path: "/about" },
-      { label: "Para Gamer Kami", path: "/our-gamers" },
-      { label: "Sponsor", path: "/sponsors" },
-      { label: "Bantuan & FAQ", path: "/faq-page" },
-      { label: "404", path: "/404" },
+      { label: "Sponsor Leaderboard", path: "/about" },
+      { label: "Global Leaderboard", path: "/our-gamers" },
+      { label: "Club Leaderboard", path: "/sponsors" },
+      { label: "Male Leaderboard", path: "/faq-page" },
+      { label: "Female Leaderboard", path: "/404" },
     ],
   },
   {
-    label: "Toko",
-    children: [
-      { label: "Toko", path: "/shop" },
-      { label: "Detail Produk", path: "/shop-details" },
-      { label: "Keranjang", path: "/cart" },
-      { label: "Pembayaran", path: "/checkout" },
-    ],
+    label: "Klub",
   },
   {
-    label: "Blog",
-    children: [
-      { label: "Grid", path: "/blog-grid" },
-      { label: "Klasik", path: "/blog-classic" },
-      { label: "Detail Artikel", path: "/blog-details" },
-    ],
+    label: "News",
   },
-  { label: "Kontak", path: "/contact" },
+  {
+    label: "Shop",
+  },
+  { label: "Sponsor", path: "/contact" },
 ];
 
 export const matches: MatchItem[] = [

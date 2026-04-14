@@ -1071,7 +1071,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
             ))}
           </ul>
         </div>
-        <h3><Link to={product.path || "/shop-details"}>{product.name}</Link></h3>
+        <h3><Link to={product.path || "/detail-shop"}>{product.name}</Link></h3>
       <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)}</h4>
     </div>
   </div>
