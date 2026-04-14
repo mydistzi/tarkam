@@ -1590,11 +1590,13 @@
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.2s ease;
-    max-width: 520px;
+    max-width: 100%;
     width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
     min-height: 100%;
 }
 
