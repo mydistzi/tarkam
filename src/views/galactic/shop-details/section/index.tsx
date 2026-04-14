@@ -113,10 +113,10 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                         type="number"
                         onChange={handleQuantityChange}
                       />
-                      <button className="purchase-btn" type="submit" disabled={isAdding}>
-                        {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
-                      </button>
                     </form>
+                    <button className="purchase-btn" type="submit" disabled={isAdding}>
+                      {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
+                    </button>
                     {feedback ? <p className="checkout-message">{feedback}</p> : null}
                   </div>
                   <ul className="product-meta">
