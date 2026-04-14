@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:all": "npm run build && npm run --prefix=admin build",
+    "build:admin": "npm --prefix ../tarkam-admin run build",
+    "build:all": "npm run build && npm run build:admin",
     "lint": "eslint .",
     "preview": "vite preview",
     "sitemap": "node sitemap-server.js",
