@@ -1121,14 +1121,14 @@ const PostCard = ({ post }: { post: PostItem }) => (
   <div className="post-card galactic-hover-card">
     <div className="post-thumb">
       <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
-      <Link className="post-category" to={post.categoryPath || "/blog-classic"}>{post.category}</Link>
+      <Link className="post-category" to={post.categoryPath || "/news"}>{post.category}</Link>
     </div>
     <div className="post-content-wrap">
       <PostMeta post={post} />
       <div className="post-content">
-        <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>
+        <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
         <p>{post.excerpt}</p>
-        <Link className="read-more" to={post.path || "/blog-details"}>Baca Selengkapnya</Link>
+        <Link className="read-more" to={post.path || "/detail-news"}>Baca Selengkapnya</Link>
       </div>
     </div>
   </div>
@@ -1269,7 +1269,7 @@ const BlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </span>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>
+              <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
               <span className="date"><i className="las la-calendar" />{post.date}</span>
             </div>
           </li>
@@ -1282,7 +1282,7 @@ const BlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}><Link to={`/blog-grid?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
+          <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
         ))}
       </ul>
     </div>
@@ -1346,8 +1346,8 @@ const ClassicBlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </div>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>
-              <Link className="date" to={post.path || "/blog-details"}>{post.date}</Link>
+              <h3><Link to={post.path || "/detail-news"}>{post.title}</Link></h3>
+              <Link className="date" to={post.path || "/detail-news"}>{post.date}</Link>
             </div>
           </li>
         ))}
