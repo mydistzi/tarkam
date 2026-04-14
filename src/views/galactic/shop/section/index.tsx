@@ -1,11 +1,41 @@
+import { Link } from "react-router-dom";
 import { PageHeader, PagePagination, ProductGrid } from "@/galactic/common";
 import { placeholderShop } from "@/galactic/placeholders";
-import type { ProductItem } from "@/galactic/data";
+import { buildShopDetailPath, galacticRoutes, type ProductItem } from "@/galactic/data";
 
 type CatprodWidgetItem = {
   id?: number;
   title: string;
   products_count?: number;
+};
+
+type ApiShopTag = {
+  name?: string;
+  title?: string;
+  slug?: string;
+};
+
+type ApiShopThumbnail = {
+  product_thumbnail_path?: string;
+};
+
+type ApiShopCategory = {
+  title?: string;
+};
+
+type ApiShopProduct = {
+  id?: number | string;
+  title?: string;
+  subject?: string;
+  slug?: string;
+  image?: string;
+  price?: number | string;
+  status?: string;
+  description?: string;
+  sku?: string;
+  tags?: ApiShopTag[];
+  catprod?: ApiShopCategory;
+  thumbnails?: ApiShopThumbnail[];
 };
 
 type ShopGridContentProps = {
@@ -97,7 +127,7 @@ const ShopSidebar = ({
               <img src={item.image || placeholderShop} alt={item.name} />
             </span>
             <div className="thumb-post-info">
-              <h3><a href={item.path || "/shop"}>{item.name}</a></h3>
+              <h3><Link to={item.path || galacticRoutes.shop}>{item.name}</Link></h3>
               <span className="date"><i className="las la-tag" />{item.category}</span>
               <span className="date"><i className="las la-wallet" />Rp {item.price.toLocaleString()}</span>
             </div>
@@ -182,8 +212,8 @@ const ShopGridContent = ({
   </>
 );
 
-const mapApiProductToProductItem = (product: any): ProductItem => ({
-  id: product.id,
+const mapApiProductToProductItem = (product: ApiShopProduct): ProductItem => ({
+  id: product.id ?? 0,
   name: product.title || product.subject || `Produk ${product.id}`,
   category: product.catprod?.title || "Produk",
   image: product.thumbnails?.[0]?.product_thumbnail_path || product.image || placeholderShop,
@@ -196,12 +226,15 @@ const mapApiProductToProductItem = (product: any): ProductItem => ({
   tags: Array.from(
     new Set(
       (product.tags || [])
-        .map((tag: any) => tag.name || tag.title || tag.slug || "")
+        .map((tag) => tag.name || tag.title || tag.slug || "")
         .filter(Boolean)
     )
   ),
-  path: product.slug ? `/detail-shop/${product.slug}` : `/detail-shop/${product.id}`,
-  gallery: product.thumbnails?.map((item: any) => item.product_thumbnail_path).filter(Boolean),
+  path: buildShopDetailPath(product.slug || product.id || 0),
+  gallery: product.thumbnails
+    ?.map((item) => item.product_thumbnail_path)
+    .filter((item): item is string => Boolean(item)),
 });
 
 export { ShopGridContent, mapApiProductToProductItem };
+export type { ApiShopProduct };

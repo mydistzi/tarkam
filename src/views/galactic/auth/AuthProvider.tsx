@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Api from "@/api";
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(AUTH_STORAGE_KEY);
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     const response = await Api.post("/auth/login", {
       email,
       password,
@@ -107,9 +107,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setAuthState(payload.token, nextUser);
     return nextUser;
-  };
+  }, []);
 
-  const signUp = async (name: string, email: string, password: string, passwordConfirmation: string) => {
+  const signUp = useCallback(async (name: string, email: string, password: string, passwordConfirmation: string) => {
     const response = await Api.post("/auth/register", {
       name,
       email,
@@ -130,9 +130,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setAuthState(payload.token, nextUser);
     return nextUser;
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     try {
       if (token) {
         await Api.post("/auth/logout");
@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     clearAuthState();
-  };
+  }, [token]);
 
   const value = useMemo(
     () => ({
@@ -153,7 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signUp,
       signOut,
     }),
-    [user, token],
+    [user, token, signIn, signUp, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -173,11 +173,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [didAlert, setDidAlert] = useState(false);
+  const didAlertRef = useRef(false);
 
   useEffect(() => {
-    if (!isAuthenticated && !didAlert) {
-      setDidAlert(true);
+    if (!isAuthenticated && !didAlertRef.current) {
+      didAlertRef.current = true;
       Swal.fire({
         icon: "warning",
         title: "Harus Login Terlebih Dahulu",
@@ -187,7 +187,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
         navigate("/signin", { state: { from: location }, replace: true });
       });
     }
-  }, [didAlert, isAuthenticated, location, navigate]);
+  }, [isAuthenticated, location, navigate]);
 
   if (!isAuthenticated) {
     return null;

@@ -15,7 +15,6 @@ import "swiper/css/free-mode";
 import "@/assets/css/animate.min.css";
 import "@/assets/css/line-awesome.min.css";
 import "@/assets/css/odometer.min.css";
-;(window as any).odometerOptions = { auto: false };
 import "@/assets/js/odometer.min.js";
 import "@/assets/css/venobox.min.css";
 import "@/assets/css/keyframe-animation.css";
@@ -27,7 +26,15 @@ import "@/assets/css/main.css";
 import "@/assets/css/galactic-interactions.css";
 import "@/assets/css/responsive.css";
 
+type OdometerWindow = Window & {
+  odometerOptions?: {
+    auto: boolean;
+  };
+};
+
 const router = createBrowserRouter(getGalacticRoutes());
+
+;(window as OdometerWindow).odometerOptions = { auto: false };
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

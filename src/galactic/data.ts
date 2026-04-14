@@ -36,6 +36,113 @@ export type GalacticMenuItem = {
   children?: GalacticMenuItem[];
 };
 
+export const galacticRoutes = {
+  home: "/",
+  tarkamSchedule: "/tarkam-schedule",
+  tarkamDetail: "/detail-tarkam",
+  matchSchedule: "/jadwal-pertandingan",
+  matchDetail: "/detail-pertandingan",
+  playerDetail: "/detail-player",
+  teamDetail: "/detail-tim",
+  clubs: "/klub",
+  clubDetail: "/detail-klub",
+  news: "/news",
+  newsDetail: "/detail-news",
+  shop: "/shop",
+  shopDetail: "/detail-shop",
+  sponsors: "/sponsors",
+  helpCenter: "/pusat-bantuan",
+  privacyPolicy: "/kebijakan-privasi",
+  commentPolicy: "/comment-policy",
+  terms: "/syarat-dan-ketentuan",
+  acceptableUse: "/ketentuan-penggunaan",
+  dataDeletion: "/ketentuan-penghapusan-data",
+  contact: "/hubungi-kami",
+  cart: "/cart",
+  checkout: "/checkout",
+  signIn: "/signin",
+  register: "/register",
+  logout: "/logout",
+  whatsapp: "/whatsapp",
+  error404: "/404",
+} as const;
+
+export const galacticMenuRouteAliases: Record<string, string> = {
+  home: galacticRoutes.home,
+  "home default": galacticRoutes.home,
+  "home esports": galacticRoutes.home,
+  tournament: galacticRoutes.tarkamSchedule,
+  "upcoming matches": galacticRoutes.matchSchedule,
+  "stream schedule": galacticRoutes.tarkamSchedule,
+  "match details": galacticRoutes.matchSchedule,
+  "player details": galacticRoutes.clubs,
+  "team details": galacticRoutes.clubs,
+  pages: galacticRoutes.home,
+  "about us": galacticRoutes.home,
+  "our gamers": galacticRoutes.clubs,
+  sponsors: galacticRoutes.sponsors,
+  "help & faq's": galacticRoutes.helpCenter,
+  "help & faqs": galacticRoutes.helpCenter,
+  shop: galacticRoutes.shop,
+  "shop grid": galacticRoutes.shop,
+  "shop details": galacticRoutes.shop,
+  "add to cart page": galacticRoutes.cart,
+  "checkout page": galacticRoutes.checkout,
+  blog: galacticRoutes.news,
+  news: galacticRoutes.news,
+  "grid layout": galacticRoutes.news,
+  "classic layout": galacticRoutes.news,
+  "blog details": galacticRoutes.news,
+  "news details": galacticRoutes.news,
+  contact: galacticRoutes.contact,
+};
+
+export type NewsCategoryWidgetItem = {
+  id?: number | string;
+  title: string;
+  slug: string;
+  count?: number;
+  path: string;
+};
+
+export type NewsTagWidgetItem = {
+  label: string;
+  slug: string;
+  path: string;
+};
+
+const normalizeRouteParam = (value: number | string) => encodeURIComponent(String(value).trim());
+
+export const buildTarkamDetailPath = (value: number | string) =>
+  `${galacticRoutes.tarkamDetail}/${normalizeRouteParam(value)}`;
+
+export const buildMatchDetailPath = (value: number | string) =>
+  `${galacticRoutes.matchDetail}/${normalizeRouteParam(value)}`;
+
+export const buildPlayerDetailPath = (value: number | string) =>
+  `${galacticRoutes.playerDetail}/${normalizeRouteParam(value)}`;
+
+export const buildTeamDetailPath = (value: number | string) =>
+  `${galacticRoutes.teamDetail}/${normalizeRouteParam(value)}`;
+
+export const buildClubDetailPath = (value: number | string) =>
+  `${galacticRoutes.clubDetail}/${normalizeRouteParam(value)}`;
+
+export const buildNewsDetailPath = (value: number | string) =>
+  `${galacticRoutes.newsDetail}/${normalizeRouteParam(value)}`;
+
+export const buildShopDetailPath = (value: number | string) =>
+  `${galacticRoutes.shopDetail}/${normalizeRouteParam(value)}`;
+
+export const buildNewsCategoryPath = (value: number | string) =>
+  `${galacticRoutes.news}?category=${normalizeRouteParam(value)}`;
+
+export const buildNewsTagPath = (value: number | string) =>
+  `${galacticRoutes.news}?tag=${normalizeRouteParam(value)}`;
+
+export const buildTarkamScheduleAnchorPath = (value: number | string) =>
+  `${galacticRoutes.tarkamSchedule}#tarkam-${normalizeRouteParam(value)}`;
+
 export type MatchItem = {
   id?: number | string;
   leftTeam: string;
@@ -153,37 +260,40 @@ export const menus: GalacticMenuItem[] = [
   {
     label: "Beranda",
     children: [
-      { label: "Beranda", path: "/" },
+      { label: "Beranda", path: galacticRoutes.home },
     ],
   },
   {
     label: "Turnamen",
     children: [
-      { label: "Jadwal Tarkam", path: "/upcoming-matches" },
-      { label: "Jadwal Pertandingan", path: "/stream-schedule" },
-      { label: "Detail Pertandingan", path: "/match-details" },
+      { label: "Jadwal Tarkam", path: galacticRoutes.tarkamSchedule },
+      { label: "Jadwal Pertandingan", path: galacticRoutes.matchSchedule },
+      { label: "Detail Pertandingan", path: galacticRoutes.matchSchedule },
     ],
   },
   {
     label: "Leaderboard",
     children: [
-      { label: "Sponsor Leaderboard", path: "/about" },
-      { label: "Global Leaderboard", path: "/our-gamers" },
-      { label: "Club Leaderboard", path: "/sponsors" },
-      { label: "Male Leaderboard", path: "/faq-page" },
-      { label: "Female Leaderboard", path: "/404" },
+      { label: "Sponsor Leaderboard", path: galacticRoutes.sponsors },
+      { label: "Global Leaderboard", path: galacticRoutes.clubs },
+      { label: "Club Leaderboard", path: galacticRoutes.sponsors },
+      { label: "Male Leaderboard", path: galacticRoutes.helpCenter },
+      { label: "Female Leaderboard", path: galacticRoutes.error404 },
     ],
   },
   {
     label: "Klub",
+    path: galacticRoutes.clubs,
   },
   {
     label: "News",
+    path: galacticRoutes.news,
   },
   {
     label: "Shop",
+    path: galacticRoutes.shop,
   },
-  { label: "Sponsor", path: "/sponsors" },
+  { label: "Sponsor", path: galacticRoutes.sponsors },
 ];
 
 export const matches: MatchItem[] = [

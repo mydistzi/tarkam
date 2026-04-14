@@ -1,20 +1,28 @@
 import { Link } from "react-router-dom";
 import { DisqusThread, PageHeader } from "@/galactic/common";
+import { buildNewsTagPath, galacticRoutes } from "@/galactic/data";
 import { placeholderPost } from "@/galactic/placeholders";
-import type { BlogRecord } from "../../shared";
+import type { NewsRecord } from "../../shared";
 
-type BlogDetailsContentProps = {
-  record?: BlogRecord;
+type NewsDetailsContentProps = {
+  record?: NewsRecord;
   previousPath?: string;
   nextPath?: string;
 };
 
-const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsContentProps) => {
+const slugifyTag = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const NewsDetailsContent = ({ record, previousPath, nextPath }: NewsDetailsContentProps) => {
   if (!record) {
     return (
       <section className="blog-section blog-page padding-top">
         <div className="container">
-          <h2>Belum ada artikel blog.</h2>
+          <h2>Belum ada artikel news.</h2>
         </div>
       </section>
     );
@@ -54,19 +62,24 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                   <span>- Tim Redaksi Tarkam</span>
                 </blockquote>
                 <ul className="tags">
-                  {post.tags.map((tag) => (
-                    <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
-                  ))}
+                  {post.tags.map((tag) => {
+                    const tagSlug = slugifyTag(tag);
+                    return (
+                      <li key={tag}>
+                        <Link to={buildNewsTagPath(tagSlug)}>{tag}</Link>
+                      </li>
+                    );
+                  })}
                 </ul>
                 <ul className="post-navigation">
                   <li>
-                    <Link to={previousPath || post.path || "/news"}>
+                    <Link to={previousPath || post.path || galacticRoutes.news}>
                       <span><i className="las la-angle-left" />Sebelumnya</span>
                       Lihat artikel sebelumnya
                     </Link>
                   </li>
                   <li>
-                    <Link to={nextPath || post.path || "/news"}>
+                    <Link to={nextPath || post.path || galacticRoutes.news}>
                       <span>Selanjutnya<i className="las la-angle-right" /></span>
                       Lihat artikel selanjutnya
                     </Link>
@@ -88,7 +101,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
                   </div>
                 </div>
                 <h3 className="comment-title">Komentar Artikel</h3>
-                <DisqusThread identifier={post.path || post.title || `blog-${post.date}`} title={post.title || "Artikel Blog"} />
+                <DisqusThread identifier={post.path || post.title || `news-${post.date}`} title={post.title || "Artikel News"} />
               </div>
             </div>
           </div>
@@ -98,4 +111,4 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
   );
 };
 
-export default BlogDetailsContent;
+export default NewsDetailsContent;

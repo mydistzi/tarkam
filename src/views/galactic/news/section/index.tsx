@@ -1,19 +1,11 @@
-import { ClassicBlogSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
-import type { PostItem } from "@/galactic/data";
+import { ClassicNewsSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
+import type { NewsCategoryWidgetItem, NewsTagWidgetItem, PostItem } from "@/galactic/data";
 
-type CategoryWidgetItem = {
-  id?: number;
-  title: string;
-  slug: string;
-  count?: number;
-  path?: string;
-};
-
-type BlogClassicContentProps = {
+type NewsContentProps = {
   posts: PostItem[];
-  categories: CategoryWidgetItem[];
+  categories: NewsCategoryWidgetItem[];
   recentPosts: PostItem[];
-  tags: string[];
+  tags: NewsTagWidgetItem[];
   currentPage: number;
   totalPages: number;
   searchValue?: string;
@@ -25,7 +17,7 @@ type BlogClassicContentProps = {
   onPageChange: (value: number) => void;
 };
 
-const BlogClassicContent = ({
+const NewsContent = ({
   posts,
   categories,
   recentPosts,
@@ -39,10 +31,10 @@ const BlogClassicContent = ({
   onCategorySelect,
   onTagSelect,
   onPageChange,
-}: BlogClassicContentProps) => (
+}: NewsContentProps) => (
   <>
     <PageHeader
-      eyebrow="Blog Tarkam"
+      eyebrow="News Tarkam"
       title="Berita &amp; Wawasan"
       description="Temukan publikasi resmi Tarkam dengan format klasik \n yang fokus pada konten dan kenyamanan membaca."
     />
@@ -62,7 +54,7 @@ const BlogClassicContent = ({
             </div>
           </div>
           <div className="col-lg-4 sm-padding">
-            <ClassicBlogSidebar
+            <ClassicNewsSidebar
               categories={categories}
               recentPosts={recentPosts}
               tags={tags}
@@ -80,4 +72,4 @@ const BlogClassicContent = ({
   </>
 );
 
-export { BlogClassicContent };
+export { NewsContent };

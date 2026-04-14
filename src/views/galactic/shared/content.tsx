@@ -13,7 +13,16 @@ import {
   placeholderSponsor,
 } from "@/galactic/placeholders";
 import {
+  buildMatchDetailPath,
+  buildNewsCategoryPath,
+  buildNewsDetailPath,
+  buildPlayerDetailPath,
+  buildShopDetailPath,
+  buildTarkamScheduleAnchorPath,
+  buildTeamDetailPath,
   brand,
+  galacticMenuRouteAliases,
+  galacticRoutes,
   menus as defaultMenus,
   streams as defaultStreams,
   type FaqItem,
@@ -428,9 +437,9 @@ type ProductRecord = {
   item: ProductItem;
 };
 
-type BlogRecord = {
+type NewsRecord = {
   id: number;
-  blog: ApiBlog;
+  news: ApiBlog;
   item: PostItem;
 };
 
@@ -458,40 +467,12 @@ type GalacticContentValue = {
   productRecords: ProductRecord[];
   cartItems: CartRecord[];
   posts: PostItem[];
-  blogRecords: BlogRecord[];
-  blogCategories: string[];
+  newsRecords: NewsRecord[];
+  newsCategories: string[];
   sponsors: SponsorItem[];
   penyawers: ApiPenyawer[];
   faqs: FaqItem[];
   usefulLinks: ApiUsefull[];
-};
-
-const STATIC_PAGE_ROUTES: Record<string, string> = {
-  home: "/",
-  "home default": "/",
-  "home esports": "/index-2",
-  tournament: "/tarkam-schedule",
-  "upcoming matches": "/upcoming-matches",
-  "stream schedule": "/stream-schedule",
-  "match details": "/match-details",
-  "player details": "/detail-player",
-  "team details": "/detail-tim",
-  pages: "/about",
-  "about us": "/about",
-  "our gamers": "/our-gamers",
-  sponsors: "/sponsors",
-  "help & faq's": "/pusat-bantuan",
-  "help & faqs": "/pusat-bantuan",
-  shop: "/shop",
-  "shop grid": "/shop",
-  "shop details": "/detail-shop",
-  "add to cart page": "/cart",
-  "checkout page": "/checkout",
-  blog: "/news",
-  "grid layout": "/news",
-  "classic layout": "/blog-classic",
-  "blog details": "/detail-news",
-  contact: "/hubungi-kami",
 };
 
 const defaultMeta: SiteMeta = {
@@ -520,13 +501,13 @@ const defaultHeader: ApiHeader = {
 };
 
 const defaultFooterLinks: FooterLink[] = [
-  { label: "Pusat Bantuan", path: "/pusat-bantuan" },
-  { label: "Kebijakan Privasi", path: "/kebijakan-privasi" },
-  { label: "Kebijakan Komentar", path: "/comment-policy" },
-  { label: "Syarat dan Ketentuan", path: "/syarat-dan-ketentuan" },
-  { label: "Ketentuan Penggunaan", path: "/ketentuan-penggunaan" },
-  { label: "Ketentuan Penghapusan Data", path: "/ketentuan-penghapusan-data" },
-  { label: "Hubungi Kami", path: "/hubungi-kami" },
+  { label: "Pusat Bantuan", path: galacticRoutes.helpCenter },
+  { label: "Kebijakan Privasi", path: galacticRoutes.privacyPolicy },
+  { label: "Kebijakan Komentar", path: galacticRoutes.commentPolicy },
+  { label: "Syarat dan Ketentuan", path: galacticRoutes.terms },
+  { label: "Ketentuan Penggunaan", path: galacticRoutes.acceptableUse },
+  { label: "Ketentuan Penghapusan Data", path: galacticRoutes.dataDeletion },
+  { label: "Hubungi Kami", path: galacticRoutes.contact },
 ];
 
 const defaultContent: GalacticContentValue = {
@@ -547,8 +528,8 @@ const defaultContent: GalacticContentValue = {
   productRecords: [],
   cartItems: [],
   posts: [],
-  blogRecords: [],
-  blogCategories: [],
+  newsRecords: [],
+  newsCategories: [],
   sponsors: [],
   penyawers: [],
   faqs: [],
@@ -629,7 +610,7 @@ const resolveMenuPath = (item: ApiMenuItem) => {
     return normalizeMenuPath(directUrl);
   }
 
-  return STATIC_PAGE_ROUTES[(item.title || "").toLowerCase().trim()] || "";
+  return galacticMenuRouteAliases[(item.title || "").toLowerCase().trim()] || "";
 };
 
 const buildMenuTree = (items: ApiMenuItem[]): GalacticMenuItem[] => {
@@ -864,8 +845,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             team: team?.name || club?.name || "",
             teamLogo: club?.logo || "",
             about: tarkam?.description || "",
-            path: `/detail-player/${player.id}`,
-            teamPath: team ? `/detail-tim/${team.id}` : undefined,
+            path: buildPlayerDetailPath(player.id),
+            teamPath: team ? buildTeamDetailPath(team.id) : undefined,
           };
 
           return {
@@ -920,7 +901,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             team,
             name: team.name || `Team ${team.id}`,
             logo: firstClub?.logo || "",
-            teamPath: `/detail-tim/${team.id}`,
+            teamPath: buildTeamDetailPath(team.id),
             gender: team.gender || "Open",
             members: membersForTeam.map((item) => item.item),
             group: teamGroup,
@@ -957,9 +938,9 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : ""),
             time: contest.score ? String(contest.score) : tarkam?.male_time || tarkam?.female_time || "",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
-            path: `/detail-pertandingan/${contest.id}`,
-            leftTeamPath: team1 ? `/detail-tim/${team1.id}` : "/detail-tim",
-            rightTeamPath: team2 ? `/detail-tim/${team2.id}` : "/detail-tim",
+            path: buildMatchDetailPath(contest.id),
+            leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
+            rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
             videoUrl: stream?.url || stream?.embed || "",
           };
 
@@ -995,7 +976,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               description: product.subject || product.description || "",
               sku: product.sku || `product-${product.id}`,
               tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
-              path: `/detail-shop/${product.slug || product.id}`,
+              path: buildShopDetailPath(product.slug || product.id),
               gallery: gallery?.length ? gallery : [],
               additionalInfo: product.additional_info || product.description || "",
             },
@@ -1021,14 +1002,14 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               description: relatedItem?.description || "",
               sku: relatedItem?.sku || `product-${cart.product?.id ?? 0}`,
               tags: relatedItem?.tags || [],
-              path: relatedItem?.path || "/shop",
+              path: relatedItem?.path || galacticRoutes.shop,
               gallery: relatedItem?.gallery || [],
               additionalInfo: relatedItem?.additionalInfo || "",
             },
           };
         });
 
-        const blogRecords: BlogRecord[] = blogs.map((blog) => {
+        const newsRecords: NewsRecord[] = blogs.map((blog) => {
           const category = categoryMap.get(blog.category_id || -1) || "";
           const content = splitContent(blog.content);
           const mappedTags = Array.isArray(blog.tags)
@@ -1039,10 +1020,10 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
 
           return {
             id: blog.id,
-            blog,
+            news: blog,
             item: {
               id: blog.id,
-              title: blog.title || `Blog ${blog.id}`,
+              title: blog.title || `News ${blog.id}`,
               category,
               image: blog.image || "",
               date: formatDateLabel(blog.created_at),
@@ -1050,8 +1031,8 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               excerpt: `${stripHtml(blog.content || "").slice(0, 150)}...`,
               content,
               tags: mappedTags,
-              path: blog.slug ? `/detail-news/${blog.slug}` : `/detail-news/${blog.id}`,
-              categoryPath: `/news?category=${slugify(category)}`,
+              path: buildNewsDetailPath(blog.slug || blog.id),
+              categoryPath: buildNewsCategoryPath(blog.category?.slug || slugify(category)),
             },
           };
         });
@@ -1063,7 +1044,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           category: stream.tags?.[0]?.name || "Live Stream",
           meta: formatDateLabel(stream.created_at),
           videoUrl: stream.embed || stream.url || "",
-          path: `/tarkam-schedule#tarkam-${stream.id}`,
+          path: buildTarkamScheduleAnchorPath(stream.id),
         }));
         const fallbackStreams = streamings.length ? streamItems : defaultStreams;
 
@@ -1122,9 +1103,9 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           products: productRecords.map((item) => item.item),
           productRecords,
           cartItems,
-          posts: blogRecords.map((item) => item.item),
-          blogRecords,
-          blogCategories: Array.from(new Set(blogRecords.map((item) => item.item.category))).filter(Boolean),
+          posts: newsRecords.map((item) => item.item),
+          newsRecords,
+          newsCategories: Array.from(new Set(newsRecords.map((item) => item.item.category))).filter(Boolean),
           sponsors,
           penyawers,
           faqs: [],
@@ -1153,7 +1134,7 @@ export function useGalacticContent() {
 }
 
 export type {
-  BlogRecord,
+  NewsRecord,
   CartRecord,
   FooterLink,
   MatchRecord,

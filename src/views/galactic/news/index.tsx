@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Api from "@/api";
 import { PageShell } from "@/galactic/common";
-import { BlogClassicContent } from "./section";
-import type { PostItem } from "@/galactic/data";
-
-type CategoryWidgetItem = {
-  id?: number;
-  title: string;
-  slug?: string;
-  count?: number;
-  path?: string;
-};
+import {
+  buildNewsCategoryPath,
+  buildNewsDetailPath,
+  buildNewsTagPath,
+  type NewsCategoryWidgetItem,
+  type NewsTagWidgetItem,
+  type PostItem,
+} from "@/galactic/data";
+import { NewsContent } from "./section";
 
 type ApiBlogItem = {
   id: number;
@@ -25,8 +25,34 @@ type ApiBlogItem = {
   tags?: Array<{ id?: number; title?: string; name?: string }>;
 };
 
+type ApiNewsCategoryItem = {
+  id?: number;
+  title?: string;
+  name?: string;
+  slug?: string;
+  blogs_count?: number | string;
+  blog_count?: number | string;
+};
+
 const formatDateLabel = (value?: string) =>
   value ? new Date(value).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" }) : "";
+
+const slugifyTag = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const createNewsTagItem = (value: string): NewsTagWidgetItem => {
+  const label = String(value || "").trim();
+  const slug = slugifyTag(label);
+  return {
+    label,
+    slug,
+    path: buildNewsTagPath(slug),
+  };
+};
 
 const stripHtml = (value?: string) =>
   (value || "").replace(/<[^>]+>/g, "");
@@ -34,7 +60,7 @@ const stripHtml = (value?: string) =>
 const splitContent = (value?: string) =>
   (value || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
 
-const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
+const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
   const category = blog.category?.title || "Berita";
   const tags = Array.isArray(blog.tags)
     ? blog.tags.map((item) => item?.title || item?.name || "").filter(Boolean)
@@ -42,7 +68,7 @@ const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
 
   return {
     id: blog.id,
-    title: blog.title || `Blog ${blog.id}`,
+    title: blog.title || `News ${blog.id}`,
     category,
     image: blog.image || "",
     date: formatDateLabel(blog.created_at),
@@ -50,14 +76,12 @@ const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
     excerpt: `${stripHtml(blog.content).slice(0, 160)}...`,
     content: splitContent(blog.content),
     tags,
-    path: blog.slug ? `/detail-news/${blog.slug}` : `/detail-news/${blog.id}`,
-    categoryPath: blog.category?.slug
-      ? `/news?category=${encodeURIComponent(blog.category.slug)}`
-      : `/news?category=${encodeURIComponent(category)}`,
+    path: buildNewsDetailPath(blog.slug || blog.id),
+    categoryPath: buildNewsCategoryPath(blog.category?.slug || category),
   };
 };
 
-const BlogClassicPage = () => {
+const NewsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);
   const category = searchParams.get("category") ?? "";
@@ -65,9 +89,9 @@ const BlogClassicPage = () => {
   const search = searchParams.get("search") ?? "";
 
   const [posts, setPosts] = useState<PostItem[]>([]);
-  const [categories, setCategories] = useState<CategoryWidgetItem[]>([]);
+  const [categories, setCategories] = useState<NewsCategoryWidgetItem[]>([]);
   const [recentPosts, setRecentPosts] = useState<PostItem[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<NewsTagWidgetItem[]>([]);
   const [totalPages, setTotalPages] = useState(1);
 
   const updateSearchParams = (params: Record<string, string | undefined>) => {
@@ -82,7 +106,7 @@ const BlogClassicPage = () => {
     setSearchParams(nextParams);
   };
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       const params: Record<string, unknown> = {
         page,
@@ -109,69 +133,84 @@ const BlogClassicPage = () => {
       } | undefined;
 
       const items = Array.isArray(payload?.data)
-        ? payload.data.map((item) => mapApiBlogToPostItem(item as ApiBlogItem))
+        ? payload.data.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
         : [];
 
       setPosts(items);
       setTotalPages(Number(payload?.last_page ?? 1));
-      const extractedTags = Array.from(new Set(items.flatMap((item) => item.tags))).slice(0, 8);
+      const uniqueTags = new Map<string, NewsTagWidgetItem>();
+      items.flatMap((item) => item.tags).forEach((tag) => {
+        const tagItem = createNewsTagItem(tag);
+        if (tagItem.slug && !uniqueTags.has(tagItem.slug)) {
+          uniqueTags.set(tagItem.slug, tagItem);
+        }
+      });
+
+      const extractedTags = Array.from(uniqueTags.values()).slice(0, 8);
       const fallbackTags = extractedTags.length
         ? extractedTags
-        : Array.from(new Set(items.map((item) => item.category))).slice(0, 8);
+        : Array.from(
+            new Map(
+              items
+                .map((item) => createNewsTagItem(item.category))
+                .filter((tagItem) => tagItem.slug)
+                .map((tagItem) => [tagItem.slug, tagItem] as const),
+            ).values(),
+          ).slice(0, 8);
       setTags(fallbackTags);
     } catch (error) {
       console.error("Failed to load blog posts", error);
     }
-  };
+  }, [category, page, search, tag]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await Api.get("/categories");
-      const payload = response.data?.data as unknown[] | undefined;
+      const payload = response.data?.data as ApiNewsCategoryItem[] | undefined;
 
       setCategories(
         Array.isArray(payload)
-          ? payload.map((item: any) => ({
+          ? payload.map((item: ApiNewsCategoryItem) => ({
               id: item.id,
               title: item.title || item.name || "Kategori",
-              slug: item.slug,
+              slug: item.slug || slugifyTag(item.title || item.name || "Kategori"),
               count: Number(item.blogs_count ?? item.blog_count ?? 0),
-              path: item.slug ? `/news?category=${encodeURIComponent(item.slug)}` : undefined,
+              path: buildNewsCategoryPath(item.slug || item.title || item.name || "Kategori"),
             }))
           : []
       );
     } catch (error) {
       console.error("Failed to load blog categories", error);
     }
-  };
+  }, []);
 
-  const fetchRecentPosts = async () => {
+  const fetchRecentPosts = useCallback(async () => {
     try {
       const response = await Api.get("/blogs/random-items");
       const payload = response.data?.data as unknown[] | undefined;
 
       setRecentPosts(
         Array.isArray(payload)
-          ? payload.map((item) => mapApiBlogToPostItem(item as ApiBlogItem))
+          ? payload.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
           : []
       );
     } catch (error) {
       console.error("Failed to load recent posts", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void fetchCategories();
     void fetchRecentPosts();
-  }, []);
+  }, [fetchCategories, fetchRecentPosts]);
 
   useEffect(() => {
     void fetchPosts();
-  }, [page, category, tag, search]);
+  }, [fetchPosts]);
 
   return (
-    <PageShell title="Blog Klasik">
-      <BlogClassicContent
+    <PageShell title="News">
+      <NewsContent
         posts={posts}
         categories={categories}
         recentPosts={recentPosts}
@@ -198,4 +237,4 @@ const BlogClassicPage = () => {
   );
 };
 
-export default BlogClassicPage;
+export default NewsPage;

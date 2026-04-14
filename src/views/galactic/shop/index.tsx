@@ -1,13 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Api from "@/api";
 import { PageShell } from "@/galactic/common";
-import { ShopGridContent, mapApiProductToProductItem } from "./section";
+import { ShopGridContent, mapApiProductToProductItem, type ApiShopProduct } from "./section";
 import type { ProductItem } from "@/galactic/data";
 
 type CatprodWidgetItem = {
   id?: number;
   title: string;
   products_count?: number;
+};
+
+type ApiCatalogCategory = {
+  id?: number;
+  title?: string;
+  name?: string;
+  products_count?: number | string;
 };
 
 const ShopGridPage = () => {
@@ -22,7 +30,7 @@ const ShopGridPage = () => {
   const [orderBy, setOrderBy] = useState("date");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | undefined>(undefined);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const params: Record<string, unknown> = {
         page,
@@ -40,11 +48,13 @@ const ShopGridPage = () => {
 
       const response = await Api.get("/products", { params });
       const payload = response.data?.data as {
-        data?: unknown[];
+        data?: ApiShopProduct[];
         total?: number;
         last_page?: number;
       } | undefined;
-      const items = Array.isArray(payload?.data) ? payload.data.map((item) => mapApiProductToProductItem(item as any)) : [];
+      const items = Array.isArray(payload?.data)
+        ? payload.data.map((item) => mapApiProductToProductItem(item))
+        : [];
 
       setProducts(items);
       setTotalResults(Number(payload?.total ?? 0));
@@ -53,16 +63,16 @@ const ShopGridPage = () => {
     } catch (error) {
       console.error("Failed to load products", error);
     }
-  };
+  }, [orderBy, page, search, selectedCategoryId]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await Api.get("/catprods");
-      const payload = response.data?.data as unknown[] | undefined;
+      const payload = response.data?.data as ApiCatalogCategory[] | undefined;
 
       setCategories(
         Array.isArray(payload)
-          ? payload.map((item: any) => ({
+          ? payload.map((item: ApiCatalogCategory) => ({
               id: item.id,
               title: item.title || item.name || "Kategori",
               products_count: Number(item.products_count ?? 0),
@@ -72,29 +82,29 @@ const ShopGridPage = () => {
     } catch (error) {
       console.error("Failed to load product categories", error);
     }
-  };
+  }, []);
 
-  const fetchRecentItems = async () => {
+  const fetchRecentItems = useCallback(async () => {
     try {
       const response = await Api.get("/products/random-items");
-      const payload = response.data?.data as unknown[] | undefined;
+      const payload = response.data?.data as ApiShopProduct[] | undefined;
 
       setRecentItems(
-        Array.isArray(payload) ? payload.map((item) => mapApiProductToProductItem(item as any)) : []
+        Array.isArray(payload) ? payload.map((item) => mapApiProductToProductItem(item)) : []
       );
     } catch (error) {
       console.error("Failed to load recent items", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void fetchCategories();
     void fetchRecentItems();
-  }, []);
+  }, [fetchCategories, fetchRecentItems]);
 
   useEffect(() => {
     void fetchProducts();
-  }, [page, orderBy, search, selectedCategoryId]);
+  }, [fetchProducts]);
 
   const resultText = useMemo(() => {
     const from = products.length ? (page - 1) * 9 + 1 : 0;

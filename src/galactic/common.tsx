@@ -29,9 +29,13 @@ import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { getCartRequestPayload } from "@/galactic/session";
 import {
   brand,
+  buildNewsTagPath,
+  galacticRoutes,
   faqs,
   type GalacticMenuItem,
   type MatchItem,
+  type NewsCategoryWidgetItem,
+  type NewsTagWidgetItem,
   type PlayerItem,
   type PostItem,
   type ProductItem,
@@ -998,7 +1002,7 @@ const JoinMailSection = () => (
             <h3>Kirim Pesan ke Kami</h3>
             <h2>Gabung Jadi Super Fans dan Dapatkan <span>Segala Keuntungannya</span></h2>
             <p>{templateHeaderDescription}</p>
-            <Link className="default-btn" to="/hubungi-kami">Gabung Tim Kami <span /></Link>
+            <Link className="default-btn" to={galacticRoutes.contact}>Gabung Tim Kami <span /></Link>
           </div>
         </div>
         <div className="col-md-6 sm-padding">
@@ -1014,7 +1018,7 @@ const CtaSection = () => (
       <div className="section-heading">
         <h3>Terhubung dengan Tim Kami!</h3>
         <h2>Ikut kami untuk turnamen<br />tarkam yang akan datang!</h2>
-        <Link className="default-btn" to="/hubungi-kami">Gabung Tim Kami</Link>
+        <Link className="default-btn" to={galacticRoutes.contact}>Gabung Tim Kami</Link>
       </div>
     </div>
   </section>
@@ -1031,16 +1035,16 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
     setIsAdding(true);
 
     try {
-      await Api.post('/carts', getCartRequestPayload({
+      await Api.post("/carts", getCartRequestPayload({
         product_id: product.id,
         quantity: 1,
         unit_price: product.price,
-        status: 'active',
+        status: "active",
       }));
-      navigate('/cart');
+      navigate(galacticRoutes.cart);
     } catch (error) {
-      console.error('Failed to add product to cart', error);
-      window.alert('Gagal menambahkan ke keranjang. Silakan coba lagi.');
+      console.error("Failed to add product to cart", error);
+      window.alert("Gagal menambahkan ke keranjang. Silakan coba lagi.");
     } finally {
       setIsAdding(false);
     }
@@ -1071,7 +1075,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
             ))}
           </ul>
         </div>
-        <h3><Link to={product.path || "/shop"}>{product.name}</Link></h3>
+        <h3><Link to={product.path || galacticRoutes.shop}>{product.name}</Link></h3>
       <h4 className="price">{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(product.price)}</h4>
     </div>
   </div>
@@ -1121,14 +1125,14 @@ const PostCard = ({ post }: { post: PostItem }) => (
   <div className="post-card galactic-hover-card">
     <div className="post-thumb">
       <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
-      <Link className="post-category" to={post.categoryPath || "/news"}>{post.category}</Link>
+      <Link className="post-category" to={post.categoryPath || galacticRoutes.news}>{post.category}</Link>
     </div>
     <div className="post-content-wrap">
       <PostMeta post={post} />
       <div className="post-content">
-        <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
+        <h3><Link to={post.path || galacticRoutes.news}>{post.title}</Link></h3>
         <p>{post.excerpt}</p>
-        <Link className="read-more" to={post.path || "/news"}>Baca Selengkapnya</Link>
+        <Link className="read-more" to={post.path || galacticRoutes.news}>Baca Selengkapnya</Link>
       </div>
     </div>
   </div>
@@ -1211,18 +1215,22 @@ const PagePagination = ({
     </ul>
   );
 };
-const BlogSidebar = ({
+const NewsSidebar = ({
   categories = [],
   recentPosts = [],
   tags = [],
   searchValue,
+  selectedTag,
   onSearch,
+  onTagSelect,
 }: {
-  categories?: { title: string; count?: number; path?: string }[];
+  categories?: Array<Pick<NewsCategoryWidgetItem, "title" | "count" | "path">>;
   recentPosts?: PostItem[];
-  tags?: string[];
+  tags?: NewsTagWidgetItem[];
   searchValue?: string;
+  selectedTag?: string;
   onSearch?: (value: string) => void;
+  onTagSelect?: (slug?: string) => void;
 }) => (
   <>
     <div className="sidebar-widget">
@@ -1269,7 +1277,7 @@ const BlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </span>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
+              <h3><Link to={post.path || galacticRoutes.news}>{post.title}</Link></h3>
               <span className="date"><i className="las la-calendar" />{post.date}</span>
             </div>
           </li>
@@ -1282,13 +1290,21 @@ const BlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
+          <li key={tag.slug}>
+            <Link
+              to={tag.path}
+              className={tag.slug === selectedTag ? "active" : ""}
+              onClick={() => onTagSelect?.(tag.slug)}
+            >
+              {tag.label}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
   </>
 );
-const ClassicBlogSidebar = ({
+const ClassicNewsSidebar = ({
   categories = [],
   recentPosts = [],
   tags = [],
@@ -1299,9 +1315,9 @@ const ClassicBlogSidebar = ({
   onCategorySelect,
   onTagSelect,
 }: {
-  categories?: { title: string; slug: string; count?: number; path?: string }[];
+  categories?: NewsCategoryWidgetItem[];
   recentPosts?: PostItem[];
-  tags?: string[];
+  tags?: NewsTagWidgetItem[];
   searchValue?: string;
   selectedCategory?: string;
   selectedTag?: string;
@@ -1363,8 +1379,8 @@ const ClassicBlogSidebar = ({
               <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </div>
             <div className="thumb-post-info">
-              <h3><Link to={post.path || "/news"}>{post.title}</Link></h3>
-              <Link className="date" to={post.path || "/news"}>{post.date}</Link>
+              <h3><Link to={post.path || galacticRoutes.news}>{post.title}</Link></h3>
+              <Link className="date" to={post.path || galacticRoutes.news}>{post.date}</Link>
             </div>
           </li>
         ))}
@@ -1376,13 +1392,13 @@ const ClassicBlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}>
+          <li key={tag.slug}>
             <Link
-              to={`/news?tag=${encodeURIComponent(tag)}`}
-              className={tag === selectedTag ? "active" : ""}
-              onClick={() => onTagSelect?.(tag)}
+              to={tag.path || buildNewsTagPath(tag.slug)}
+              className={tag.slug === selectedTag ? "active" : ""}
+              onClick={() => onTagSelect?.(tag.slug)}
             >
-              {tag}
+              {tag.label}
             </Link>
           </li>
         ))}
@@ -2065,8 +2081,8 @@ export {
   PostCard,
   HomePostGrid,
   PagePagination,
-  BlogSidebar,
-  ClassicBlogSidebar,
+  NewsSidebar,
+  ClassicNewsSidebar,
   ContactForm,
   PromoSection,
   GameplaySection,

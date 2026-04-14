@@ -1,6 +1,6 @@
 export { GalacticDataProvider, useGalacticContent } from "./content";
 export type {
-  BlogRecord,
+  NewsRecord,
   CartRecord,
   FooterLink,
   MatchRecord,

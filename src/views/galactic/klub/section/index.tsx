@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PageHeader } from "@/galactic/common";
+import { buildClubDetailPath } from "@/galactic/data";
 import { placeholderSquad } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 import { Link } from "react-router-dom";
@@ -38,10 +39,6 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
 
   const [visibleCount, setVisibleCount] = useState(5);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setVisibleCount(5);
-  }, [sortedClubs]);
 
   useEffect(() => {
     if (!loadMoreRef.current || visibleCount >= sortedClubs.length) {
@@ -106,7 +103,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                     <div className="cart-content">
                       <h3>
                         {clubSlug ? (
-                          <Link to={`/detail-klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>
+                          <Link to={buildClubDetailPath(clubSlug)}>{club.name || "Klub Tanpa Nama"}</Link>
                         ) : (
                           club.name || "Klub Tanpa Nama"
                         )}

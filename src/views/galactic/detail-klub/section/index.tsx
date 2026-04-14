@@ -24,7 +24,7 @@ type ClubsContentProps = {
 };
 
 const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number }) => {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(value);
   const previousValue = useRef(value);
   const frameId = useRef<number | null>(null);
   const timeoutId = useRef<number | null>(null);
@@ -34,7 +34,7 @@ const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number
     const startValue = previousValue.current;
     const endValue = value;
     if (startValue === endValue) {
-      setDisplayValue(endValue);
+      previousValue.current = endValue;
       return;
     }
 

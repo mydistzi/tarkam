@@ -3,13 +3,13 @@ import { Outlet } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Footer, GalacticChrome } from "@/galactic/common";
 import {
-  BlogClassicPage,
-  BlogDetailsPage,
   CartPage,
   CheckoutPage,
   ContactPage,
   Error404Page,
   FaqPage,
+  NewsDetailsPage,
+  NewsPage,
   HomeDefaultPage,
   MatchDetailsPage,
   PlayerDetailsPage,
@@ -97,8 +97,8 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/detail-tim/:teamId", element: <TeamDetailsPage /> },
       { path: "/klub", element: <ClubsPage /> },
       { path: "/detail-klub/:slug", element: <ClubDetailsPage /> },
-      { path: "/news", element: <BlogClassicPage /> },
-      { path: "/detail-news/:slug", element: <BlogDetailsPage /> },
+      { path: "/news", element: <NewsPage /> },
+      { path: "/detail-news/:slug", element: <NewsDetailsPage /> },
       { path: "/shop", element: <ShopGridPage /> },
       { path: "/detail-shop/:slug", element: <ShopDetailsPage /> },
       { path: "/sponsors", element: <SponsorsPage /> },

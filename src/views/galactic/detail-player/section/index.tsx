@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { signImage, usaFlag } from "@/galactic/common";
+import { buildClubDetailPath, galacticRoutes } from "@/galactic/data";
 import { placeholderPlayer, placeholderSquad } from "@/galactic/placeholders";
 import type { PlayerRecord } from "../../shared";
 
@@ -19,7 +21,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
   const player = record.item;
   const alias = record.alias || player.name;
   const clubSlug = record.club?.slug;
-  const clubPath = clubSlug ? `/detail-klub/${clubSlug}` : "/klub";
+  const clubPath = clubSlug ? buildClubDetailPath(clubSlug) : galacticRoutes.clubs;
   const city = player.country || record.member?.city || "Jakarta";
   const status = record.member?.status || (record.player?.paid ? "Aktif" : "Tidak Aktif");
 
@@ -76,18 +78,18 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
         <div className="container">
           <div className="team-details-wrap">
             <div className="player-team">
-              <a href={clubPath}>
+              <Link to={clubPath}>
                 <img
                   src={
                     record.club?.logo || placeholderSquad
                   }
                   alt={record.club?.name || player.team || "Independent"}
                 />
-              </a>
+              </Link>
               <h3>
-                <a href={clubPath}>
+                <Link to={clubPath}>
                   {record.club?.name || player.team || "Independent"}
-                </a>
+                </Link>
               </h3>
             </div>
             <ul className="social-list">

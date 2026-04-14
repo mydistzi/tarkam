@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CtaSection, LatestMatchesList, PageHeader, PlayerCarousel, SponsorCarousel, SectionHeading, aboutCharacters } from "@/galactic/common";
-import type { MatchItem, PlayerItem, SponsorItem } from "@/galactic/data";
+import { galacticRoutes, type MatchItem, type PlayerItem, type SponsorItem } from "@/galactic/data";
 
 type AboutSectionProps = {
   aboutDescription?: string;
@@ -37,7 +37,7 @@ const AboutContent = ({
                 <p className="mt-20">
                   Temukan bagaimana komunitas, event, dan konten resmi tampil bersama dalam platform esport yang profesional.
                 </p>
-                <Link className="default-btn" to="/contact">Gabung Tim Kita</Link>
+                <Link className="default-btn" to={galacticRoutes.contact}>Gabung Tim Kita</Link>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ const AboutContent = ({
             <h2>Gameplay <span>Terbaru</span></h2>
             <p>Baris kontes terbaru di bawah dibangun dari data `contests`, `teams`, dan `tarkams` yang nyambung.</p>
           </div>
-          <div><Link className="default-btn" to="/upcoming-matches">Lihat Semua Match</Link></div>
+          <div><Link className="default-btn" to={galacticRoutes.matchSchedule}>Lihat Semua Match</Link></div>
         </div>
         <LatestMatchesList items={matches} />
       </div>

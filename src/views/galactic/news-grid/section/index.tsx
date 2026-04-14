@@ -1,19 +1,11 @@
-import { BlogSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
-import type { PostItem } from "@/galactic/data";
+import { NewsSidebar, PageHeader, PagePagination, PostCard } from "@/galactic/common";
+import type { NewsCategoryWidgetItem, NewsTagWidgetItem, PostItem } from "@/galactic/data";
 
-type CategoryWidgetItem = {
-  id?: number;
-  title: string;
-  slug?: string;
-  count?: number;
-  path?: string;
-};
-
-type BlogGridContentProps = {
+type NewsGridContentProps = {
   posts: PostItem[];
-  categories: CategoryWidgetItem[];
+  categories: NewsCategoryWidgetItem[];
   recentPosts: PostItem[];
-  tags: string[];
+  tags: NewsTagWidgetItem[];
   currentPage: number;
   totalPages: number;
   searchValue?: string;
@@ -21,7 +13,7 @@ type BlogGridContentProps = {
   onPageChange: (value: number) => void;
 };
 
-const BlogGridContent = ({
+const NewsGridContent = ({
   posts,
   categories,
   recentPosts,
@@ -31,10 +23,10 @@ const BlogGridContent = ({
   searchValue,
   onSearch,
   onPageChange,
-}: BlogGridContentProps) => (
+}: NewsGridContentProps) => (
   <>
     <PageHeader
-      eyebrow="Blog"
+      eyebrow="News"
       title={<>Berita Gaming &amp; Wawasan</>}
       description="Jelajahi berita resmi, pengumuman turnamen, dan wawasan komunitas langsung dari sumber resmi Tarkam."
     />
@@ -54,7 +46,7 @@ const BlogGridContent = ({
             </div>
           </div>
           <div className="col-lg-4 sm-padding">
-            <BlogSidebar
+            <NewsSidebar
               categories={categories}
               recentPosts={recentPosts}
               tags={tags}
@@ -68,4 +60,4 @@ const BlogGridContent = ({
   </>
 );
 
-export { BlogGridContent };
+export { NewsGridContent };

@@ -20,4 +20,22 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    files: [
+      'src/galactic/common.tsx',
+      'src/views/galactic/auth/AuthProvider.tsx',
+      'src/views/galactic/routes.tsx',
+      'src/views/galactic/shared/content.tsx',
+      'src/views/galactic/shop/section/index.tsx',
+    ],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+  {
+    files: ['src/galactic/common.tsx'],
+    rules: {
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
 ])

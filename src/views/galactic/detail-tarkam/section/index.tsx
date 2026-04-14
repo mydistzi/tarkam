@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
+import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { placeholderTeam } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 
@@ -27,7 +28,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
           <div className="text-center">
             <h2>Tarkam tidak ditemukan</h2>
             <p>ID Tarkam yang dipilih tidak valid atau tidak tersedia.</p>
-            <Link className="default-btn" to="/tarkam-schedule">Kembali ke Jadwal Tarkam</Link>
+            <Link className="default-btn" to={galacticRoutes.tarkamSchedule}>Kembali ke Jadwal Tarkam</Link>
           </div>
         </div>
       </section>
@@ -51,7 +52,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
           />
           <div style={{ display: 'flex', gap: '10px', margin: '24px 0', flexWrap: 'wrap' }}>
             <Link
-              to={`/detail-tarkam/${tarkamId}`}
+              to={buildTarkamDetailPath(tarkamId)}
               className={genderFilter === 'all' ? 'active-gender-filter' : ''}
               style={{
                 padding: '8px 16px',
@@ -65,7 +66,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               All
             </Link>
             <Link
-              to={`/detail-tarkam/${tarkamId}?gender=female`}
+              to={`${buildTarkamDetailPath(tarkamId)}?gender=female`}
               className={genderFilter === 'female' ? 'active-gender-filter' : ''}
               style={{
                 padding: '8px 16px',
@@ -79,7 +80,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               Female
             </Link>
             <Link
-              to={`/detail-tarkam/${tarkamId}?gender=male`}
+              to={`${buildTarkamDetailPath(tarkamId)}?gender=male`}
               className={genderFilter === 'male' ? 'active-gender-filter' : ''}
               style={{
                 padding: '8px 16px',
@@ -106,7 +107,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     </div>
                     <div className="team-content">
                       <h3>
-                        <Link to={team.teamPath || "/detail-tim"}>
+                        <Link to={team.teamPath || galacticRoutes.clubs}>
                           {team.name}
                           {team.group ? <> | {team.group.name}</> : null}
                           <> | {team.gender}</>

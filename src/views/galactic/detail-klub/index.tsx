@@ -5,8 +5,9 @@ import { ClubsContent } from "./section";
 
 const ClubDetailsPage = () => {
   const { slug } = useParams();
+  const normalizedSlug = slug?.trim().toLowerCase();
   const { clubs, playerRecords } = useGalacticContent();
-  const record = clubs.find((item) => item.slug === slug);
+  const record = clubs.find((item) => item.slug?.trim().toLowerCase() === normalizedSlug);
   const clubMembers = record
     ? playerRecords.filter((player) => player.club?.id === record.id)
     : [];

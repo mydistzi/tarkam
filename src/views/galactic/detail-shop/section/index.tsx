@@ -2,6 +2,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "@/api";
+import { galacticRoutes } from "@/galactic/data";
 import { placeholderShop } from "@/galactic/placeholders";
 import { getCartRequestPayload } from "@/galactic/session";
 import type { ProductRecord } from "../../shared";
@@ -17,7 +18,13 @@ const getImageSource = (src?: string) => {
 };
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
-  if (!record) {
+  const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  const [isAdding, setIsAdding] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const product = record?.item;
+
+  if (!product) {
     return (
       <section className="shop-section single padding">
         <div className="container">
@@ -26,11 +33,6 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
       </section>
     );
   }
-
-  const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
-  const [isAdding, setIsAdding] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
 
   const handleAddToCart = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,7 +51,7 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
         status: 'active',
       }));
 
-      navigate('/cart');
+      navigate(galacticRoutes.cart);
     } catch (error) {
       console.error('Failed to add product to cart', error);
       setFeedback('Gagal menambahkan produk ke keranjang. Coba lagi.');
@@ -63,7 +65,6 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
     setQuantity(Number.isNaN(value) || value < 1 ? 1 : value);
   };
 
-  const product = record.item;
   const galleryImages = Array.isArray(product.gallery)
     ? product.gallery.map((image) => String(image || "").trim()).filter(Boolean)
     : [];
@@ -113,10 +114,10 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                         type="number"
                         onChange={handleQuantityChange}
                       />
+                      <button className="purchase-btn" type="submit" disabled={isAdding}>
+                        {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
+                      </button>
                     </form>
-                    <button className="purchase-btn" type="submit" disabled={isAdding}>
-                      {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
-                    </button>
                     {feedback ? <p className="checkout-message">{feedback}</p> : null}
                   </div>
                   <ul className="product-meta">
