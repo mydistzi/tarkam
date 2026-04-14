@@ -100,7 +100,7 @@ const ShopSidebar = ({
       <div className="shop-widget-title">
         <h3><span>||</span> Item Terbaru</h3>
       </div>
-      <ul className="category-list">
+      <ul className="thumb-post">
         {recentItems.map((item) => (
           <li key={`sidebar-${item.sku || item.name}`}>
             <span className="thumb">
