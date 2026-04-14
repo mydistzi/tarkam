@@ -354,7 +354,7 @@ const SectionHeading = ({ eyebrow, title, description }: SectionHeadingProps) =>
 );
 
 function replaceWithBr(description: ReactNode) {
-  return String(description || "").replace(/\n/g, "<br />");
+  return String(description || "").replace(/(?:\\n|\n)/g, "<br />");
 }
 const renderPageHeaderDescription = (description?: ReactNode) =>
   description ? (
