@@ -1039,10 +1039,15 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
   };
 
   return (
-    <div className="product-card galactic-hover-card">
+    <div className="product-card">
       <div className="product-thumb">
         <img src={getImageSource(product.image, placeholderShop)} alt={product.name} />
         <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
+        <ul className="shop-action">
+                                        <li><a href="#"><i className="lar la-heart"></i></a></li>
+                                        <li><a href="#"><i className="las la-retweet"></i></a></li>
+                                        <li><a href="#"><i className="las la-expand-arrows-alt"></i></a></li>
+                                    </ul>
         <button className="default-btn" type="button" onClick={handleAddToCart} disabled={isAdding}>
           {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
         </button>
@@ -1065,9 +1070,9 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
   );
 };
 const ProductGrid = ({ items }: { items: ProductItem[] }) => (
-  <div className="row">
+  <div>
     {items.map((product) => (
-      <div className="col-lg-4 col-md-6 padding-15" key={product.sku}>
+      <div className="col-md-4 padding-15" key={product.sku}>
         <ProductCard product={product} />
       </div>
     ))}

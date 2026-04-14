@@ -143,6 +143,7 @@ const ShopGridContent = ({
       <div className="container">
         <div className="row">
           <div className="col-lg-9 sm-padding">
+            <div className="row">
             <div className="product-shorting">
               <div>{resultText}</div>
               <div>
@@ -160,6 +161,7 @@ const ShopGridContent = ({
               </div>
             </div>
             <ProductGrid items={products} />
+            </div>
             <PagePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
           <div className="col-lg-3 sm-padding">
