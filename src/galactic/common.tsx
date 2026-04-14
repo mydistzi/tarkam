@@ -962,7 +962,7 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                         ) : null}
                     </h3>
                   </div>
-                  {sponsor.message ? <p className="sponsor-message">"{sponsor.message}"</p> : null}
+                  {sponsor.message ? <p className="sponsor-message">{sponsor.message}</p> : <p className="sponsor-message">Sponsor belum meninggalkan pesan apapun untuk saat ini.</p>}
                   <div className="sponsor-testimonial-meta">
                       <span className="testimonial-author">{sponsor.memberNickname || "Sponsor Partner"}</span>
                       <div className="sponsor-testimonial-social">
