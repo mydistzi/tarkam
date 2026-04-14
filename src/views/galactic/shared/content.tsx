@@ -1083,7 +1083,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
                 name: item.name || `Sponsor ${item.id}`,
                 url: item.url || "#",
                 amount: item.amount,
-                message: item.pesan || item.description || item.detail || member?.status || undefined,
+                message: item.pesan?.trim() || item.description?.trim() || item.detail?.trim() || undefined,
                 memberImage: member?.picture_url?.trim() || placeholderPlayer,
                 memberNickname: member?.nickname || member?.username || "Sponsor Member",
                 detail: item.detail || item.description || member?.tier || undefined,
