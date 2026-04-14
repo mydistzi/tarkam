@@ -75,7 +75,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
         <div className="container">
           <div className="team-details-wrap">
             <div className="player-team">
-              <a href={`/klub/${slug}`}>
+              <a href={`/detail-klub/${slug}`}>
                 <img
                   src={
                     record.club?.logo || placeholderSquad
@@ -84,7 +84,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 />
               </a>
               <h3>
-                <a href={`/klub/${slug}`}>
+                <a href={`/detail-klub/${slug}`}>
                   {record.club?.name || player.team || "Independent"}
                 </a>
               </h3>

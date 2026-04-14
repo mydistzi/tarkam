@@ -50,7 +50,7 @@ const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
     excerpt: `${stripHtml(blog.content).slice(0, 160)}...`,
     content: splitContent(blog.content),
     tags,
-    path: blog.slug ? `/blog-details/${blog.slug}` : `/blog-details/${blog.id}`,
+    path: blog.slug ? `/detail-news/${blog.slug}` : `/detail-news/${blog.id}`,
     categoryPath: blog.category?.slug
       ? `/news?category=${encodeURIComponent(blog.category.slug)}`
       : `/news?category=${encodeURIComponent(category)}`,

@@ -105,7 +105,7 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                     {club.logo ? <img src={club.logo} alt={club.name || "Logo Klub"} /> : <img src={placeholderSquad} alt="Logo Klub" />}
                     <div className="cart-content">
                       <h3>
-                        <Link to={`/klub/${club.slug}`}>{club.name || "Klub Tanpa Nama"}</Link>
+                        <Link to={`/detail-klub/${clubSlug}`}>{club.name || "Klub Tanpa Nama"}</Link>
                       </h3>
                       <p>{memberCount > 0 ? `${memberCount} anggota` : "Anggota belum tersedia"}</p>
                     </div>

@@ -50,10 +50,10 @@ const mapApiBlogToPostItem = (blog: ApiBlogItem): PostItem => {
     excerpt: `${stripHtml(blog.content).slice(0, 160)}...`,
     content: splitContent(blog.content),
     tags,
-    path: blog.slug ? `/blog-details/${blog.slug}` : `/blog-details/${blog.id}`,
+    path: blog.slug ? `/detail-news/${blog.slug}` : `/detail-news/${blog.id}`,
     categoryPath: blog.category?.slug
-      ? `/blog-grid?category=${encodeURIComponent(blog.category.slug)}`
-      : `/blog-grid?category=${encodeURIComponent(category)}`,
+      ? `/news?category=${encodeURIComponent(blog.category.slug)}`
+      : `/news?category=${encodeURIComponent(category)}`,
   };
 };
 
@@ -136,7 +136,7 @@ const BlogGridPage = () => {
               title: item.title || item.name || "Kategori",
               slug: item.slug,
               count: Number(item.blogs_count ?? item.blog_count ?? 0),
-              path: item.slug ? `/blog-grid?category=${encodeURIComponent(item.slug)}` : undefined,
+              path: item.slug ? `/news?category=${encodeURIComponent(item.slug)}` : undefined,
             }))
           : []
       );
