@@ -193,6 +193,7 @@ type ApiStreaming = {
 type ApiClub = {
   id: number;
   code?: string;
+  slug?: string;
   name?: string;
   logo?: string;
   facebook?: string;
@@ -209,6 +210,7 @@ type ApiMember = {
   id: number;
   username?: string;
   nickname?: string;
+  slug?: string;
   discord_user_id?: string;
   phone_number?: string;
   tunisia_phone?: string;
