@@ -47,7 +47,7 @@ const SignInPage = () => {
   return (
     <PageShell title="Masuk untuk Checkout">
       <PageHeader
-        eyebrow="Login"
+        eyebrow="Halaman Login"
         title="Masuk untuk melanjutkan pembelian"
         description="Akun diperlukan untuk memproses checkout dan menyimpan data pesanan Anda dengan aman."
       />

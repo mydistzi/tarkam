@@ -59,7 +59,7 @@ const RegisterPage = () => {
   return (
     <PageShell title="Daftar Akun">
       <PageHeader
-        eyebrow="Registrasi"
+        eyebrow="Halaman Registrasi"
         title="Buat akun untuk checkout"
         description="Daftar sekarang supaya proses pembelian lebih mudah dan data pesanan tersimpan dengan benar."
       />

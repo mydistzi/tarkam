@@ -116,7 +116,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
   return (
     <>
       <PageHeader
-        eyebrow="Pembayaran"
+        eyebrow="Halaman Pembayaran"
         title="Bayar Pesanan"
         description="Lihat detail pembayaran dan ringkasan pesanan Anda. Semua informasi ini diambil langsung dari keranjang belanja aktif."
       />
