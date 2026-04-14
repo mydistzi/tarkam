@@ -1,4 +1,5 @@
 import SEO from "@/components/SEO";
+import { placeholderDiscord, placeholderWhatsapp } from "@/galactic/placeholders";
 
 function DataDeletionPolicy() {
   return (
@@ -27,7 +28,7 @@ function DataDeletionPolicy() {
           <div className="match-details-header">
             <img
               className="left"
-              src="/assets/images/placeholder-discord.png"
+              src={placeholderDiscord}
               alt="Discord"
             />
             <h3 className="left-team">Discord</h3>
@@ -37,7 +38,7 @@ function DataDeletionPolicy() {
             <h3 className="right-team">WhatsApp</h3>
             <img
               className="right"
-              src="/assets/images/placeholder-whatsapp.png"
+              src={placeholderWhatsapp}
               alt="WhatsApp"
             />
           </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signImage, usaFlag } from "@/galactic/common";
+import { placeholderPlayer, placeholderSquad } from "@/galactic/placeholders";
 import type { PlayerRecord } from "../../shared";
 
 const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
@@ -52,7 +53,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
                 src={
                   record.club?.logo ||
                   player.image ||
-                  "/assets/images/placeholder-player.png"
+                  placeholderPlayer
                 }
                 alt={player.name}
               />
@@ -77,7 +78,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
               <a href={`/klub/${clubSlug}`}>
                 <img
                   src={
-                    record.club?.logo || "/assets/images/placeholder-squad.png"
+                    record.club?.logo || placeholderSquad
                   }
                   alt={record.club?.name || player.team || "Independent"}
                 />
@@ -150,7 +151,7 @@ const PlayerDetailsContent = ({ record }: { record?: PlayerRecord }) => {
             <div className="col-md-6 sm-padding">
               <div className="player-thumb">
                 <img
-                  src={player.image || "/assets/images/placeholder-player.png"}
+                  src={player.image || placeholderPlayer}
                   alt={player.name}
                 />
               </div>

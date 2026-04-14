@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { DisqusThread } from "@/galactic/common";
+import { placeholderTeam } from "@/galactic/placeholders";
 import type { MatchRecord } from "../../shared";
 
 const MatchDetailsContent = ({ record }: { record?: MatchRecord }) => {
@@ -31,11 +32,11 @@ const MatchDetailsContent = ({ record }: { record?: MatchRecord }) => {
         </div>
         <div className="container">
           <div className="match-details-header">
-            <img className="left" src={match.leftLogo || "/assets/images/placeholder-team.png"} alt={match.leftTeam} />
+            <img className="left" src={match.leftLogo || placeholderTeam} alt={match.leftTeam} />
             <h3 className="left-team"><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
             <div className="vs"><h2>vs</h2></div>
             <h3 className="right-team"><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
-            <img className="right" src={match.rightLogo || "/assets/images/placeholder-team.png"} alt={match.rightTeam} />
+            <img className="right" src={match.rightLogo || placeholderTeam} alt={match.rightTeam} />
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type AuthUser = {
   email: string;
@@ -63,9 +64,25 @@ export function useAuth() {
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [didAlert, setDidAlert] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated && !didAlert) {
+      setDidAlert(true);
+      Swal.fire({
+        icon: "warning",
+        title: "Harus Login Terlebih Dahulu",
+        text: "Agar bisa menyelesaikan transaksi pembelian, silakan login atau daftar terlebih dahulu.",
+        confirmButtonText: "Masuk sekarang",
+      }).then(() => {
+        navigate("/signin", { state: { from: location }, replace: true });
+      });
+    }
+  }, [didAlert, isAuthenticated, location, navigate]);
 
   if (!isAuthenticated) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
+    return null;
   }
 
   return <>{children}</>;

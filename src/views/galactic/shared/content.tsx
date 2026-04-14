@@ -7,6 +7,11 @@ import {
 } from "react";
 import Api from "@/api";
 import {
+  placeholderPlayer,
+  placeholderShop,
+  placeholderSponsor,
+} from "@/galactic/placeholders";
+import {
   brand,
   menus as defaultMenus,
   streams as defaultStreams,
@@ -846,7 +851,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             id: player.id,
             name: member?.nickname || member?.username || "Unknown Player",
             game: tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam"),
-            image: member?.picture_url?.trim() || "/assets/images/placeholder-player.png",
+            image: member?.picture_url?.trim() || placeholderPlayer,
             speciality: member?.tier || "",
             role: member?.gender ? `${member.gender} Division` : "",
             country: member?.city || "",
@@ -976,7 +981,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               id: product.id,
               name: product.title || `Product ${product.id}`,
               category: product.catprod?.title || product.catprod?.name || "",
-              image: gallery?.[0] || "/assets/images/placeholder-shop.png",
+              image: gallery?.[0] || placeholderShop,
               price: Number(product.price ?? 0),
               oldPrice: undefined,
               badge: product.status || "",
@@ -1002,7 +1007,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               id: relatedItem?.id || cart.product?.id || 0,
               name: relatedItem?.name || cart.product?.title || "Product",
               category: relatedItem?.category || "",
-              image: relatedItem?.image  || "/assets/images/placeholder-shop.png",
+              image: relatedItem?.image  || placeholderShop,
               price: Number(cart.unit_price ?? relatedItem?.price ?? 0),
               oldPrice: relatedItem?.oldPrice,
               badge: relatedItem?.badge || "",
@@ -1070,12 +1075,12 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               }
 
               return {
-                image: item.logo || item.image || member?.picture_url?.trim() || "/assets/images/placeholder-sponsor.png",
+                image: item.logo || item.image || member?.picture_url?.trim() || placeholderSponsor,
                 name: item.name || `Sponsor ${item.id}`,
                 url: item.url || "#",
                 amount: item.amount,
                 message: item.pesan || item.description || item.detail || member?.status || undefined,
-                memberImage: member?.picture_url?.trim() || "/assets/images/placeholder-player.png",
+                memberImage: member?.picture_url?.trim() || placeholderPlayer,
                 memberNickname: member?.nickname || member?.username || "Sponsor Member",
                 detail: item.detail || item.description || member?.tier || undefined,
                 socialLinks: socialLinks.length ? socialLinks : undefined,

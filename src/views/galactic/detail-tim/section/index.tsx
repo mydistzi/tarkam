@@ -17,7 +17,7 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
   return (
     <>
       <PageHeader className="team-details" title={record.name}>
-        <img src={record.logo || "/assets/images/placeholder-squad.png"} alt={record.name} />
+        <img src={record.logo || placeholderSquad} alt={record.name} />
       </PageHeader>
       <div className="team-details-info">
         <div className="container">

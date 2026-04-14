@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
+import { placeholderTeam } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 
 const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
@@ -101,7 +102,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <div className="col-lg-4 col-md-6 sm-padding" key={team.id}>
                   <div className="team-item galactic-hover-card">
                     <div className="team-thumb" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '40px' }}>
-                      <img src={team.logo || "/assets/images/placeholder-team.png"} alt={team.name} />
+                      <img src={team.logo || placeholderTeam} alt={team.name} />
                     </div>
                     <div className="team-content">
                       <h3>

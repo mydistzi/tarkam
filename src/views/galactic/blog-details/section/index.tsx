@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { DisqusThread, PageHeader } from "@/galactic/common";
+import { placeholderPost } from "@/galactic/placeholders";
 import type { BlogRecord } from "../../shared";
 
 type BlogDetailsContentProps = {
@@ -42,7 +43,7 @@ const BlogDetailsContent = ({ record, previousPath, nextPath }: BlogDetailsConte
             <div className="col-lg-8 offset-lg-2">
               <div className="post-details">
                 <div className="post-thumb">
-                  <img src={post.image || "/assets/images/placeholder-post.jpg"} alt={post.title} />
+                  <img src={post.image || placeholderPost} alt={post.title} />
                 </div>
                 {post.content.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>

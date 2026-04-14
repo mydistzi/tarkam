@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PageShell } from "@/galactic/common";
+import { PageHeader, PageShell } from "@/galactic/common";
 import { useAuth } from "./AuthProvider";
 
 const SignInPage = () => {
@@ -27,52 +27,48 @@ const SignInPage = () => {
 
   return (
     <PageShell title="Masuk untuk Checkout">
-      <div className="checkout-section padding-top">
+      <PageHeader
+        eyebrow="Login"
+        title="Masuk untuk melanjutkan pembelian"
+        description="Akun diperlukan untuk memproses checkout dan menyimpan data pesanan Anda dengan aman."
+      />
+      <section className="checkout-section padding-top">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-6">
-              <div className="sign-in-box rounded-3 bg-white p-6 shadow-theme">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Login</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                  Silakan masuk untuk melanjutkan proses pembelian.
-                </p>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="form-label">Email</label>
+            <div className="col-lg-6 sm-padding">
+              <form className="checkout-form-wrap" onSubmit={handleSubmit}>
+                <h2>Login</h2>
+                <div className="checkout-form mb-30">
+                  <div className="form-field">
                     <input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       className="form-control"
-                      placeholder="email@example.com"
+                      placeholder="Email"
                       required
                     />
                   </div>
-
-                  <div>
-                    <label className="form-label">Nama (opsional)</label>
+                  <div className="form-field">
                     <input
                       type="text"
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       className="form-control"
-                      placeholder="Nama Anda"
+                      placeholder="Nama (opsional)"
                     />
                   </div>
-
-                  {error ? <p className="text-sm text-red-600">{error}</p> : null}
-
-                  <button type="submit" className="default-btn w-full">
-                    Masuk dan lanjutkan
-                    <span />
-                  </button>
-                </form>
-              </div>
+                </div>
+                {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                <button type="submit" className="default-btn w-100">
+                  Masuk dan lanjutkan
+                  <span />
+                </button>
+              </form>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </PageShell>
   );
 };

@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
 import type { CartRecord } from "../../shared";
@@ -97,7 +98,17 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
       document.body.removeChild(form);
     } catch (error) {
       console.error("Checkout failed", error);
-      setErrorMessage("Gagal memproses pembayaran. Coba lagi atau periksa data kamu.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Gagal memproses pembayaran. Coba lagi atau periksa data kamu.";
+      setErrorMessage(message);
+      void Swal.fire({
+        icon: "error",
+        title: "Checkout gagal",
+        text: message,
+        confirmButtonText: "Tutup",
+      });
     } finally {
       setIsSubmitting(false);
     }

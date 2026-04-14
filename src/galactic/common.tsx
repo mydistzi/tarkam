@@ -9,6 +9,14 @@ import { Autoplay, EffectCoverflow, Pagination as SwiperPagination } from "swipe
 import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import clickAudio from "@/assets/audio/click.wav";
+import {
+  placeholderPlayer,
+  placeholderSponsor,
+  placeholderShop,
+  placeholderPost,
+  placeholderTeam,
+  placeholderVideoThumb,
+} from "@/galactic/placeholders";
 import aboutCharacters from "@/assets/images/about-characters.png";
 import comment1 from "@/assets/images/comment-1.png";
 import comment2 from "@/assets/images/comment-2.png";
@@ -620,7 +628,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
     {items.map((match) => (
       <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
         <div className="participate-team wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="900ms">
-          <img src={getImageSource(match.leftLogo, "/assets/images/placeholder-team.png")} alt={match.leftTeam} />
+          <img src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
         </div>
@@ -642,7 +650,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
         <div className="participate-team oponent wow fadeInRight" data-wow-delay="200ms" data-wow-duration="900ms">
           <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
           <div className="match-info">{match.group}</div>
-          <img src={getImageSource(match.rightLogo, "/assets/images/placeholder-team.png")} alt={match.rightTeam} />
+          <img src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
         </div>
       </li>
     ))}
@@ -807,7 +815,7 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
       >
         {loopItems.map((stream, index) => (
           <SwiperSlide className="watch-carousel-slide" key={`${stream.title}-${index + 1}`}>
-            <img src={getImageSource(stream.image, "/assets/images/video-thumb.jpg")} alt="thumb" />
+            <img src={getImageSource(stream.image, placeholderVideoThumb)} alt="thumb" />
             <button
               className="dl-video-popup play-btn vbox-item galactic-play-trigger"
               data-video-title={stream.title}
@@ -826,7 +834,7 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
 const PlayerCard = ({ player }: { player: PlayerItem }) => (
   <div className="team-item galactic-hover-card">
     <div className="team-thumb">
-      <img src={getImageSource(player.image, "/assets/images/placeholder-player.png")} alt={player.name} />
+      <img src={getImageSource(player.image, placeholderPlayer)} alt={player.name} />
       <div className="shape-wrap">
         <div className="shape shape-1" />
         <div className="shape shape-2" />
@@ -893,7 +901,7 @@ const SponsorCarousel = ({ items = [] }: { items?: SponsorItem[] }) => (
       {items.map((sponsor, index) => (
         <div className="swiper-slide galactic-carousel-slide" key={`sponsor-${index + 1}`}>
           <a href={sponsor.url || "#"} rel="noreferrer" target={sponsor.url?.startsWith("http") ? "_blank" : undefined}>
-            <img src={getImageSource(sponsor.image, "/assets/images/placeholder-sponsor.png")} alt={sponsor.name} />
+            <img src={getImageSource(sponsor.image, placeholderSponsor)} alt={sponsor.name} />
           </a>
         </div>
       ))}
@@ -905,7 +913,7 @@ const SponsorGrid = ({ items = [] }: { items?: SponsorItem[] }) => (
     {items.map((sponsor, index) => (
       <div className="sponsor-item" key={`sponsor-grid-${index + 1}`}>
         <a href={sponsor.url || "#"} rel="noreferrer" target={sponsor.url?.startsWith("http") ? "_blank" : undefined}>
-          <img src={getImageSource(sponsor.image, "/assets/images/placeholder-sponsor.png")} alt={sponsor.name} />
+          <img src={getImageSource(sponsor.image, placeholderSponsor)} alt={sponsor.name} />
         </a>
       </div>
     ))}
@@ -1029,7 +1037,7 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
   return (
     <div className="product-card galactic-hover-card">
       <div className="product-thumb">
-        <img src={getImageSource(product.image, "/assets/images/placeholder-shop.png")} alt={product.name} />
+        <img src={getImageSource(product.image, placeholderShop)} alt={product.name} />
         <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
         <button className="default-btn" type="button" onClick={handleAddToCart} disabled={isAdding}>
           {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
@@ -1095,7 +1103,7 @@ const PostMeta = ({ post }: { post: PostItem }) => (
 const PostCard = ({ post }: { post: PostItem }) => (
   <div className="post-card galactic-hover-card">
     <div className="post-thumb">
-      <img src={getImageSource(post.image, "/assets/images/placeholder-post.jpg")} alt={post.title} />
+      <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
       <Link className="post-category" to={post.categoryPath || "/blog-classic"}>{post.category}</Link>
     </div>
     <div className="post-content-wrap">
@@ -1166,7 +1174,7 @@ const BlogSidebar = ({
         {recentPosts.map((post) => (
           <li key={`sidebar-${post.title}`}>
             <span className="thumb">
-              <img src={getImageSource(post.image, "/assets/images/placeholder-post.jpg")} alt={post.title} />
+              <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </span>
             <div className="thumb-post-info">
               <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>
@@ -1222,7 +1230,7 @@ const ClassicBlogSidebar = ({
         {recentPosts.map((post) => (
           <li key={`classic-sidebar-${post.title}`}>
             <div className="thumb">
-              <img src={getImageSource(post.image, "/assets/images/placeholder-post.jpg")} alt={post.title} />
+              <img src={getImageSource(post.image, placeholderPost)} alt={post.title} />
             </div>
             <div className="thumb-post-info">
               <h3><Link to={post.path || "/blog-details"}>{post.title}</Link></h3>

@@ -1,0 +1,9 @@
+export const placeholderDiscord = "/assets/images/placeholder-discord.png";
+export const placeholderWhatsapp = "/assets/images/placeholder-whatsapp.png";
+export const placeholderPlayer = "/assets/images/placeholder-player.png";
+export const placeholderPost = "/assets/images/placeholder-post.jpg";
+export const placeholderShop = "/assets/images/placeholder-shop.png";
+export const placeholderSponsor = "/assets/images/placeholder-sponsor.png";
+export const placeholderSquad = "/assets/images/placeholder-squad.png";
+export const placeholderTeam = "/assets/images/placeholder-team.png";
+export const placeholderVideoThumb = "/assets/images/video-thumb.jpg";
