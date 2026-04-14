@@ -88,16 +88,6 @@ const ShopSidebar = ({
     </div>
     <div className="shop-sidebar-widget">
       <div className="shop-widget-title">
-        <h3><span>||</span> Tag Populer</h3>
-      </div>
-      <ul className="tags">
-        {tags.map((tag) => (
-          <li key={tag}><a href="#">{tag}</a></li>
-        ))}
-      </ul>
-    </div>
-    <div className="shop-sidebar-widget">
-      <div className="shop-widget-title">
         <h3><span>||</span> Item Terbaru</h3>
       </div>
       <ul className="thumb-post">
@@ -109,8 +99,19 @@ const ShopSidebar = ({
             <div className="thumb-post-info">
               <h3><a href={item.path || "/shop-details"}>{item.name}</a></h3>
               <span className="date"><i className="las la-tag" />{item.category}</span>
+              <span className="date"><i className="las la-wallet" />Rp {item.price.toLocaleString()}</span>
             </div>
           </li>
+        ))}
+      </ul>
+    </div>
+    <div className="shop-sidebar-widget">
+      <div className="shop-widget-title">
+        <h3><span>||</span> Tag Populer</h3>
+      </div>
+      <ul className="tags">
+        {tags.map((tag) => (
+          <li key={tag}><a href="#">{tag}</a></li>
         ))}
       </ul>
     </div>
