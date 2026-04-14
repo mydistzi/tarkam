@@ -953,7 +953,7 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                 <div className="testimonial-item sponsor-testimonial-card">
                   <div className="testi-thumb">
                     <img
-                      src={getImageSource(sponsor.memberImage, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=66FFCC`)}
+                      src={getImageSource(sponsor.memberImage, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=0c0c35`)}
                       alt={sponsor.memberNickname || sponsor.name}
                     />
                     <h3>{sponsor.name}
