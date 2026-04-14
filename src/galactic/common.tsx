@@ -1044,10 +1044,10 @@ const ProductCard = ({ product }: { product: ProductItem }) => {
         <img src={getImageSource(product.image, placeholderShop)} alt={product.name} />
         <a href="#" className={`badge ${product.badgeClass}`}>{product.badge}</a>
         <ul className="shop-action">
-                                        <li><a href="#"><i className="lar la-heart"></i></a></li>
-                                        <li><a href="#"><i className="las la-retweet"></i></a></li>
-                                        <li><a href="#"><i className="las la-expand-arrows-alt"></i></a></li>
-                                    </ul>
+            <li><a href="#"><i className="lar la-heart"></i></a></li>
+            <li><a href="#"><i className="las la-retweet"></i></a></li>
+            <li><a href="#"><i className="las la-expand-arrows-alt"></i></a></li>
+        </ul>
         <button className="default-btn" type="button" onClick={handleAddToCart} disabled={isAdding}>
           {isAdding ? 'Menambahkan...' : 'Tambah ke Keranjang'}<span />
         </button>
