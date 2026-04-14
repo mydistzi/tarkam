@@ -8,6 +8,8 @@ import {
 import Api from "@/api";
 import {
   brand,
+  menus as defaultMenus,
+  streams as defaultStreams,
   type FaqItem,
   type GalacticMenuItem,
   type MatchItem,
@@ -499,6 +501,24 @@ const defaultMeta: SiteMeta = {
   socialLinks: brand.socialLinks,
 };
 
+const defaultHeader: ApiHeader = {
+  id: 0,
+  title: "Selamat Datang di Tarkam",
+  subtitle: "Turnamen, streaming, dan komunitas eSports dalam satu tempat.",
+  image: brand.heroImage,
+  image_alt: "Tarkam Hero",
+  video_url: "https://www.youtube.com/watch?v=tv7LfFeamsc",
+};
+
+const defaultFooterLinks: FooterLink[] = [
+  { label: "Beranda", path: "/" },
+  { label: "Jadwal Streaming", path: "/stream-schedule" },
+  { label: "Tentang Kami", path: "/about" },
+  { label: "Kontak Kami", path: "/hubungi-kami" },
+  { label: "Sponsor", path: "/sponsors" },
+  { label: "Bantuan & FAQ", path: "/faq-page" },
+];
+
 const defaultContent: GalacticContentValue = {
   loading: true,
   meta: defaultMeta,
@@ -771,6 +791,11 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         console.debug("Galactic groupMap keys", Array.from(groupMap.keys()));
         const categoryMap = new Map(categories.map((item) => [item.id, item.name || "Gaming"]));
         const menuTree = buildMenuTree(menus);
+        const fallbackMenus = menuTree.length ? menuTree : defaultMenus;
+        const fallbackHeroHeaders = headers.length ? headers : [defaultHeader];
+        const footerLinks = usefulls.length
+          ? buildFooterLinks(fallbackMenus, usefulls)
+          : defaultFooterLinks;
 
         const meta: SiteMeta = {
           siteName: webSetting?.site_name || webSetting?.first_name || brand.name,
@@ -1015,7 +1040,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           };
         });
 
-        const streams: StreamItem[] = streamings.map((stream, index) => ({
+        const streamItems: StreamItem[] = streamings.map((stream, index) => ({
           id: stream.id,
           title: stream.title || "",
           image: stream.thumbnail || headers[index]?.image || "",
@@ -1024,6 +1049,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           videoUrl: stream.embed || stream.url || "",
           path: `/tarkam-schedule#tarkam-${stream.id}`,
         }));
+        const fallbackStreams = streamings.length ? streamItems : defaultStreams;
 
         const sponsors = penyawers.length
           ? penyawers.map((item) => {
@@ -1066,12 +1092,12 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         setContent({
           loading: false,
           meta,
-          menus: menuTree.length ? menuTree : buildMenuTree([]),
-          footerLinks: buildFooterLinks(menuTree, usefulls),
-          heroes: headers,
+          menus: fallbackMenus,
+          footerLinks,
+          heroes: fallbackHeroHeaders,
           matches: matchRecords.map((item) => item.item),
           matchRecords,
-          streams,
+          streams: fallbackStreams,
           tarkams,
           players: playerRecords.map((item) => item.item),
           playerRecords,
