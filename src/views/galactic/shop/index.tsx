@@ -39,8 +39,12 @@ const ShopGridPage = () => {
       }
 
       const response = await Api.get("/products", { params });
-      const payload = response.data?.data;
-      const items = Array.isArray(payload?.data) ? payload.data.map(mapApiProductToProductItem) : [];
+      const payload = response.data?.data as {
+        data?: unknown[];
+        total?: number;
+        last_page?: number;
+      } | undefined;
+      const items = Array.isArray(payload?.data) ? payload.data.map((item) => mapApiProductToProductItem(item as any)) : [];
 
       setProducts(items);
       setTotalResults(Number(payload?.total ?? 0));
@@ -54,7 +58,7 @@ const ShopGridPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await Api.get("/catprods");
-      const payload = response.data?.data;
+      const payload = response.data?.data as unknown[] | undefined;
 
       setCategories(
         Array.isArray(payload)
@@ -73,10 +77,10 @@ const ShopGridPage = () => {
   const fetchRecentItems = async () => {
     try {
       const response = await Api.get("/products/random-items");
-      const payload = response.data?.data;
+      const payload = response.data?.data as unknown[] | undefined;
 
       setRecentItems(
-        Array.isArray(payload) ? payload.map(mapApiProductToProductItem) : []
+        Array.isArray(payload) ? payload.map((item) => mapApiProductToProductItem(item as any)) : []
       );
     } catch (error) {
       console.error("Failed to load recent items", error);
