@@ -43,7 +43,7 @@ const ShopSidebar = ({
   searchValue: string;
 }) => (
   <>
-    <div className="shop-sidebar-widget">
+    <div className="sidebar-widget">
       <form className="search-form" onSubmit={(event) => event.preventDefault()}>
         <input
           className="form-control"
