@@ -13,9 +13,17 @@ type CheckoutContentProps = {
 };
 
 const PAYMENT_CHANNELS = {
-  bank_transfer: "01",
-  credit_card: "02",
-  cod: "03",
+  credit_card: "01",
+  bank_transfer: "02",
+  indomaret: "09",
+  alfamart: "10",
+};
+
+const PAYMENT_METHOD_LABELS: Record<keyof typeof PAYMENT_CHANNELS, string> = {
+  credit_card: "Kartu Kredit",
+  bank_transfer: "Transfer Bank",
+  indomaret: "Indomaret",
+  alfamart: "Alfamart",
 };
 
 const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
@@ -30,7 +38,7 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
   const [phoneNumber, setPhoneNumber] = useState(phone || "");
   const [emailAddress, setEmailAddress] = useState(email || "");
   const [orderNote, setOrderNote] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<keyof typeof PAYMENT_CHANNELS>("bank_transfer");
+  const [paymentMethod, setPaymentMethod] = useState<keyof typeof PAYMENT_CHANNELS>("credit_card");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -63,6 +71,7 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
         customer_country: country,
         customer_zip_code: postalCode,
         payment_method: PAYMENT_CHANNELS[paymentMethod],
+        payment_channel: PAYMENT_CHANNELS[paymentMethod],
         shipping_cost: shipping,
         order_note: orderNote,
       });
@@ -148,9 +157,19 @@ const CheckoutContent = ({ items, email, phone }: CheckoutContentProps) => {
                 <div className="payment-method">
                   <h2>Metode Pembayaran</h2>
                   <ul className="mb-20">
-                    <li><label><input checked={paymentMethod === "bank_transfer"} name="selector" onChange={() => setPaymentMethod("bank_transfer")} type="radio" /> Transfer Bank</label></li>
-                    <li><label><input checked={paymentMethod === "credit_card"} name="selector" onChange={() => setPaymentMethod("credit_card")} type="radio" /> Bayar dengan Kartu Kredit</label></li>
-                    <li><label><input checked={paymentMethod === "cod"} name="selector" onChange={() => setPaymentMethod("cod")} type="radio" /> Bayar di Tempat</label></li>
+                    {Object.entries(PAYMENT_CHANNELS).map(([key]) => (
+                      <li key={key}>
+                        <label>
+                          <input
+                            checked={paymentMethod === key}
+                            name="selector"
+                            onChange={() => setPaymentMethod(key as keyof typeof PAYMENT_CHANNELS)}
+                            type="radio"
+                          />
+                          {PAYMENT_METHOD_LABELS[key as keyof typeof PAYMENT_CHANNELS]}
+                        </label>
+                      </li>
+                    ))}
                   </ul>
                   <button className="default-btn" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Memproses...' : 'Bayar Sekarang'}<span />

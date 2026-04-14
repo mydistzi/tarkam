@@ -2,8 +2,14 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "@/api";
+import { placeholderShop } from "@/galactic/placeholders";
 import { getCartRequestPayload } from "@/galactic/session";
 import type { ProductRecord } from "../../shared";
+
+const getImageSource = (src?: string) => {
+  const normalized = src?.trim();
+  return normalized || placeholderShop;
+};
 
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
   if (!record) {
@@ -53,6 +59,12 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
   };
 
   const product = record.item;
+  const galleryImages = Array.isArray(product.gallery)
+    ? product.gallery.map((image) => String(image || "").trim()).filter(Boolean)
+    : [];
+  const images = galleryImages.length > 0
+    ? galleryImages
+    : [product.image?.trim() || placeholderShop];
 
   return (
     <>
@@ -61,9 +73,9 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
           <div className="row">
             <div className="col-md-6 sm-padding product-details-wrap">
               <div className="row">
-                {(product.gallery || [product.image]).map((image, index) => (
+                {images.map((image, index) => (
                   <div className="col-6 padding-15" key={`${product.sku}-gallery-${index + 1}`}>
-                    <img src={image} alt={`${product.name} ${index + 1}`} />
+                    <img src={getImageSource(image)} alt={`${product.name} ${index + 1}`} />
                   </div>
                 ))}
               </div>

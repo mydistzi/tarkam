@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
+import { placeholderShop } from "@/galactic/placeholders";
 import { getCartRequestPayload } from "@/galactic/session";
 import type { CartRecord } from "../../shared";
 
@@ -90,7 +91,7 @@ const CartContent = ({ items }: { items: CartRecord[] }) => {
               <div className="row cart-body pb-30" key={item.id}>
                 <div className="col-lg-6">
                   <div className="cart-item">
-                    <img src={item.product.image} alt={item.product.name} />
+                    <img src={item.product.image?.trim() || placeholderShop} alt={item.product.name} />
                     <div className="cart-content">
                       <h3><Link to={item.product.path || "/shop-details"}>{item.product.name}</Link></h3>
                       <p>{item.product.description}</p>

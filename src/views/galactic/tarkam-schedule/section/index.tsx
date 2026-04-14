@@ -1,4 +1,5 @@
 import { LatestMatchesList, PageHeader } from "@/galactic/common";
+import { placeholderVideoThumb } from "@/galactic/placeholders";
 import type { MatchItem } from "@/galactic/data";
 import { useState } from "react";
 
@@ -34,10 +35,9 @@ const formatDateLabel = (value?: string) => {
 
 const mapTarkamToMatchItem = (tarkam: ScheduleTarkam): MatchItem => ({
   leftTeam: tarkam.title || `Tarkam`,
-  leftLogo:
-    tarkam.image || tarkam.thumbnail || "/assets/images/video-thumb.jpg",
+  leftLogo: tarkam.image?.trim() || tarkam.thumbnail?.trim() || placeholderVideoThumb,
   rightTeam: tarkam.week ? `Week ke ${tarkam.week}` : "Tarkam Schedule",
-  rightLogo: "/assets/images/video-thumb.jpg",
+  rightLogo: placeholderVideoThumb,
   group: tarkam.status || "Upcoming",
   time: tarkam.male_time || tarkam.female_time || "TBA",
   date: formatDateLabel(tarkam.male_date || tarkam.female_date) || "TBA",
