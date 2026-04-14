@@ -950,7 +950,7 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
             const avatarName = sponsor.memberNickname || sponsor.name || "Sponsor Partner";
             return (
               <SwiperSlide key={`sponsor-testimonial-${index + 1}`}>
-                <div className="testimonial-item">
+                <div className="sponsor-testimonial-card">
                   <div className="testi-thumb">
                     <img
                       src={getImageSource(sponsor.memberImage, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=66FFCC`)}
@@ -962,7 +962,9 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                         ) : null}
                     </h3>
                   </div>
-                  {sponsor.message ? <p className="sponsor-message">{sponsor.message}</p> : <p className="sponsor-message">Sponsor belum meninggalkan pesan apapun untuk saat ini.</p>}
+                          <div className="sponsor-testimonial-content">
+                    <p className="sponsor-message">{sponsor.message?.trim() || 'Sponsor belum meninggalkan pesan apapun untuk saat ini.'}</p>
+                  </div>
                   <div className="sponsor-testimonial-meta">
                       <span className="testimonial-author">{sponsor.memberNickname || "Sponsor Partner"}</span>
                       <div className="sponsor-testimonial-social">
