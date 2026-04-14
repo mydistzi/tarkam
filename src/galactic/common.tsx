@@ -1153,34 +1153,51 @@ const PagePagination = ({
         <li><a className="active" href="#">1</a></li>
         <li><a href="#">2</a></li>
         <li><a href="#">3</a></li>
-        <li><a href="#"><i className="las la-angle-right" /></a></li>
+        <li><a href="#"><i className="las la-long-arrow-alt-right" /></a></li>
       </ul>
     );
   }
 
+  const page = Math.max(1, Math.min(currentPage, totalPages));
+
   return (
     <ul className="pagination-wrap mt-40">
+      <li>
+        <button
+          type="button"
+          className="pagination-nav swiper-prev"
+          disabled={page <= 1}
+          onClick={() => onPageChange(Math.max(page - 1, 1))}
+          aria-label="Previous page"
+        >
+          <i className="las la-long-arrow-alt-left" />
+        </button>
+      </li>
+
       {Array.from({ length: totalPages }, (_, index) => {
-        const page = index + 1;
+        const pageNumber = index + 1;
         return (
-          <li key={`page-${page}`}>
+          <li key={`page-${pageNumber}`}>
             <button
               type="button"
-              className={page === currentPage ? "active" : ""}
-              onClick={() => onPageChange(page)}
+              className={pageNumber === page ? "active" : ""}
+              onClick={() => onPageChange(pageNumber)}
             >
-              {page}
+              {pageNumber}
             </button>
           </li>
         );
       })}
+
       <li>
         <button
           type="button"
-          disabled={currentPage >= totalPages}
-          onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+          className="pagination-nav swiper-next"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(Math.min(page + 1, totalPages))}
+          aria-label="Next page"
         >
-          <i className="las la-angle-right" />
+          <i className="las la-long-arrow-alt-right" />
         </button>
       </li>
     </ul>
