@@ -178,9 +178,17 @@ const BlogClassicPage = () => {
         tags={tags}
         currentPage={page}
         totalPages={totalPages}
+        selectedCategory={category || undefined}
+        selectedTag={tag || undefined}
         searchValue={search}
         onSearch={(value) => {
           updateSearchParams({ search: value.trim() || undefined, page: "1" });
+        }}
+        onCategorySelect={(value) => {
+          updateSearchParams({ category: value?.trim() || undefined, page: "1" });
+        }}
+        onTagSelect={(value) => {
+          updateSearchParams({ tag: value?.trim() || undefined, page: "1" });
         }}
         onPageChange={(value) => {
           updateSearchParams({ page: String(value) });

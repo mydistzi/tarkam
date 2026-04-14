@@ -1293,13 +1293,21 @@ const ClassicBlogSidebar = ({
   recentPosts = [],
   tags = [],
   searchValue,
+  selectedCategory,
+  selectedTag,
   onSearch,
+  onCategorySelect,
+  onTagSelect,
 }: {
-  categories?: { title: string; count?: number; path?: string }[];
+  categories?: { title: string; slug: string; count?: number; path?: string }[];
   recentPosts?: PostItem[];
   tags?: string[];
   searchValue?: string;
+  selectedCategory?: string;
+  selectedTag?: string;
   onSearch?: (value: string) => void;
+  onCategorySelect?: (slug?: string) => void;
+  onTagSelect?: (tag?: string) => void;
 }) => (
   <>
     <div className="sidebar-widget">
@@ -1327,12 +1335,21 @@ const ClassicBlogSidebar = ({
         <h3>Kategori</h3>
       </div>
       <ul className="category-list">
-        {categories.map((category, index) => (
-          <li key={`${category.title}-${index + 1}`}>
-            <Link to={category.path || "#"}>{category.title}</Link>
-            <span>{category.count ?? 0}</span>
-          </li>
-        ))}
+        {categories.map((category, index) => {
+          const isActive = category.slug ? category.slug === selectedCategory : false;
+          return (
+            <li key={`${category.title}-${index + 1}`}>
+              <Link
+                to={category.path || "#"}
+                className={isActive ? "active" : ""}
+                onClick={() => onCategorySelect?.(category.slug)}
+              >
+                {category.title}
+              </Link>
+              <span>{category.count ?? 0}</span>
+            </li>
+          );
+        })}
       </ul>
     </div>
     <div className="sidebar-widget">
@@ -1359,7 +1376,15 @@ const ClassicBlogSidebar = ({
       </div>
       <ul className="tags">
         {tags.map((tag) => (
-          <li key={tag}><Link to={`/news?tag=${encodeURIComponent(tag)}`}>{tag}</Link></li>
+          <li key={tag}>
+            <Link
+              to={`/news?tag=${encodeURIComponent(tag)}`}
+              className={tag === selectedTag ? "active" : ""}
+              onClick={() => onTagSelect?.(tag)}
+            >
+              {tag}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>

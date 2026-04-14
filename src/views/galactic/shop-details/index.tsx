@@ -6,12 +6,15 @@ import { ShopDetailsContent } from "./section";
 
 const ShopDetailsPage = () => {
   const { slug } = useParams();
+  const normalizedSlug = slug?.trim().toLowerCase();
   const { productRecords } = useGalacticContent();
-  const record = productRecords.find(
-    (item) =>
-      String(item.id) === slug ||
-      (item.product.slug ? String(item.product.slug) === slug : false),
-  ) || productRecords[0];
+  const record = productRecords.find((item) => {
+    const productSlug = item.product.slug?.trim().toLowerCase();
+    return (
+      String(item.id) === normalizedSlug ||
+      (productSlug ? productSlug === normalizedSlug : false)
+    );
+  }) || productRecords[0];
 
   return (
     <PageShell title="Detail Toko" image={record?.item.image?.trim() || placeholderShop}>

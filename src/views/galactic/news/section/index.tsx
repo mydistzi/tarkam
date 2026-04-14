@@ -4,7 +4,7 @@ import type { PostItem } from "@/galactic/data";
 type CategoryWidgetItem = {
   id?: number;
   title: string;
-  slug?: string;
+  slug: string;
   count?: number;
   path?: string;
 };
@@ -17,7 +17,11 @@ type BlogClassicContentProps = {
   currentPage: number;
   totalPages: number;
   searchValue?: string;
+  selectedCategory?: string;
+  selectedTag?: string;
   onSearch: (value: string) => void;
+  onCategorySelect: (slug?: string) => void;
+  onTagSelect: (tag?: string) => void;
   onPageChange: (value: number) => void;
 };
 
@@ -29,7 +33,11 @@ const BlogClassicContent = ({
   currentPage,
   totalPages,
   searchValue,
+  selectedCategory,
+  selectedTag,
   onSearch,
+  onCategorySelect,
+  onTagSelect,
   onPageChange,
 }: BlogClassicContentProps) => (
   <>
@@ -59,7 +67,11 @@ const BlogClassicContent = ({
               recentPosts={recentPosts}
               tags={tags}
               searchValue={searchValue}
+              selectedCategory={selectedCategory}
+              selectedTag={selectedTag}
               onSearch={onSearch}
+              onCategorySelect={onCategorySelect}
+              onTagSelect={onTagSelect}
             />
           </div>
         </div>
