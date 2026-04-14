@@ -128,22 +128,24 @@ export type SponsorItem = {
 
 export const brand = {
   name: "Tarkam",
-  title: "Tarkam | Template HTML5 eSports dan Gaming",
+  title: "Tarkam | Fun Group Random Team",
   description:
-    "Tarkam jadi showcase eSports dengan halaman lengkap buat turnamen, streaming, profil roster, toko, blog, dan kontak.",
+    "Tarkam adalah komunitas game tempat para pemain berkumpul untuk berkompetisi, streaming, dan menikmati pertarungan tim acak.",
   logo,
   background: bodyBg,
   heroImage: gameCharacters,
   contact: {
-    location: "153 Williamson Plaza, Maggieberg, MT 09514",
-    email: "Info@YourGmail24.com",
-    phone: "+1 (062) 109-9222",
+    location: "in-game",
+    email: "mysurellinux@gmail.com",
+    phone: "+62 (898) 684-8855",
   },
   socialLinks: [
-    { icon: "lab la-facebook-f", label: "Facebook", href: "#" },
-    { icon: "lab la-twitter", label: "Twitter", href: "#" },
-    { icon: "lab la-instagram", label: "Instagram", href: "#" },
-    { icon: "lab la-youtube", label: "YouTube", href: "#" },
+    { icon: "lab la-facebook-f", label: "Facebook", href: "https://facebook.com/" },
+    { icon: "lab la-twitter", label: "Twitter", href: "https://twitter.com/" },
+    { icon: "lab la-instagram", label: "Instagram", href: "https://instagram.com/" },
+    { icon: "lab la-youtube", label: "YouTube", href: "https://youtube.com/" },
+    { icon: "lab la-discord", label: "Discord", href: "https://discord.gg/" },
+    { icon: "lab la-whatsapp", label: "WhatsApp", href: "https://wa.me/" },
   ],
 };
 
@@ -152,7 +154,6 @@ export const menus: GalacticMenuItem[] = [
     label: "Beranda",
     children: [
       { label: "Beranda", path: "/" },
-      { label: "Beranda eSports", path: "/index-2" },
     ],
   },
   {
@@ -182,7 +183,7 @@ export const menus: GalacticMenuItem[] = [
   {
     label: "Shop",
   },
-  { label: "Sponsor", path: "/contact" },
+  { label: "Sponsor", path: "/sponsors" },
 ];
 
 export const matches: MatchItem[] = [
