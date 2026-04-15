@@ -185,7 +185,7 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
         </div>
       </section>
 
-      <section className="club-registry-section">
+      <section className="club-registry-section padding-top">
         <div className="container">
           <div className="club-registry-grid">
             {visibleClubs.map((club) => {
@@ -262,7 +262,7 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
         </div>
       </section>
 
-      <section className="club-registry-section club-registry-section--footer">
+      <section className="club-registry-section club-registry-section--footer padding-top">
         <div className="container">
           <div className="club-registry-banner">
             <div>
