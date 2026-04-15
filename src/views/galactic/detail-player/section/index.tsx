@@ -266,7 +266,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
 
   return (
     <>
-      <PageHeader className="team-details" infoClassName="player-details" title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
+      <PageHeader infoClassName="player-details" title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
         <div className="player-thumb"><img src={record.picture_url || placeholderPlayer} alt={displayName} /></div>
       </PageHeader>
 
