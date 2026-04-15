@@ -22,15 +22,17 @@ const buildReverbConfig = (): EchoOptions<"reverb"> => {
   const port = Number(import.meta.env.VITE_REVERB_PORT ?? 6001);
   const scheme = import.meta.env.VITE_REVERB_SCHEME?.trim().toLowerCase() ?? "https";
   const forceTLS = scheme === "https";
+  const socketHost = host || window.location.hostname;
 
   return {
     broadcaster: "reverb",
     key,
-    wsHost: host || window.location.hostname,
+    wsHost: socketHost,
+    wssHost: socketHost,
     wsPort: port,
     wssPort: port,
     forceTLS,
-    enabledTransports: ["ws", "wss"],
+    enabledTransports: forceTLS ? ["wss"] : ["ws"],
     disableStats: true,
     authEndpoint: "/broadcasting/auth",
   };
