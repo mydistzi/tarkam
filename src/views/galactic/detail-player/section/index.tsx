@@ -266,8 +266,8 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
 
   return (
     <>
-      <PageHeader title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
-        <img src={record.picture_url || placeholderPlayer} alt={displayName} />
+      <PageHeader className="team-details" infoClassName="player-details" title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
+        <div className="player-thumb"></div><img src={record.picture_url || placeholderPlayer} alt={displayName} />
       </PageHeader>
 
       <section className="player-hero-section padding-top">
@@ -306,7 +306,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
         </div>
       </section>
 
-      <section className="player-page-section player-stats-section padding-top">
+      <section className="player-page-section player-stats-section">
         <div className="container">
           <div className="player-kpi-grid">
             <article className="player-kpi-card player-kpi-card--accent galactic-hover-card">
