@@ -1,43 +1,54 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PageHeader } from "@/galactic/common";
+import { Link } from "react-router-dom";
+import "@/assets/css/club-registry.css";
 import { buildClubDetailPath } from "@/galactic/data";
 import { placeholderSquad } from "@/galactic/placeholders";
-import { useGalacticContent } from "../../shared";
-import { Link } from "react-router-dom";
+import type { ClubItem } from "@/galactic/data";
 
-type ClubItem = {
-  id: number;
-  code?: string;
-  name?: string;
-  slug?: string;
-  logo?: string;
-  level?: string;
-  points?: number;
+type ClubRegistryItem = ClubItem & {
+  activeMembersCount?: number;
+  sessionCount?: number;
+  timelineCount?: number;
 };
 
 type ClubsContentProps = {
-  clubs: ClubItem[];
+  clubs: ClubRegistryItem[];
+  loading?: boolean;
+  error?: string | null;
 };
 
-const ClubsContent = ({ clubs }: ClubsContentProps) => {
-  const { playerRecords } = useGalacticContent();
+const formatNumber = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") {
+    return "0";
+  }
+
+  const numeric = Number(value);
+  if (Number.isNaN(numeric)) {
+    return String(value);
+  }
+
+  return new Intl.NumberFormat("id-ID").format(numeric);
+};
+
+const normalizeSocialUrl = (value?: string) => {
+  if (!value?.trim()) {
+    return undefined;
+  }
+
+  if (value.startsWith("http://") || value.startsWith("https://")) {
+    return value;
+  }
+
+  return `https://${value.replace(/^\/+/, "")}`;
+};
+
+const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProps) => {
   const sortedClubs = useMemo(
-    () => [...clubs].sort((left, right) => (right.points ?? 0) - (left.points ?? 0)),
+    () => [...clubs].sort((left, right) => (right.points ?? 0) - (left.points ?? 0) || String(left.name || "").localeCompare(String(right.name || ""))),
     [clubs],
   );
 
-  const memberCounts = useMemo(() => {
-    const counts = new Map<number, number>();
-    playerRecords?.forEach((record) => {
-      const clubId = record.club?.id;
-      if (clubId != null) {
-        counts.set(clubId, (counts.get(clubId) ?? 0) + 1);
-      }
-    });
-    return counts;
-  }, [playerRecords]);
-
-  const [visibleCount, setVisibleCount] = useState(5);
+  const [visibleCount, setVisibleCount] = useState(6);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -48,13 +59,13 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (entry.isIntersecting) {
-          setVisibleCount((current) => Math.min(current + 5, sortedClubs.length));
+        if (entry?.isIntersecting) {
+          setVisibleCount((current) => Math.min(current + 6, sortedClubs.length));
         }
       },
       {
-        rootMargin: "100px",
-      }
+        rootMargin: "120px",
+      },
     );
 
     observer.observe(loadMoreRef.current);
@@ -62,45 +73,131 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
     return () => observer.disconnect();
   }, [sortedClubs.length, visibleCount]);
 
-  if (!sortedClubs?.length) {
+  const totalClubs = sortedClubs.length;
+  const totalMembers = sortedClubs.reduce((sum, club) => sum + Number(club.membersCount ?? 0), 0);
+  const totalPoints = sortedClubs.reduce((sum, club) => sum + Number(club.points ?? 0), 0);
+  const totalSessions = sortedClubs.reduce((sum, club) => sum + Number(club.sessionCount ?? 0), 0);
+  const activeClubs = sortedClubs.filter((club) => Number(club.membersCount ?? 0) > 0).length;
+  const topClub = sortedClubs[0];
+  const visibleClubs = sortedClubs.slice(0, visibleCount);
+  const canLoadMore = visibleCount < sortedClubs.length;
+
+  if (loading) {
     return (
-      <section className="about-team-section padding-top">
+      <section className="club-registry-section padding-top">
         <div className="container">
-          <div className="section-heading text-center">
-            <h2>Data klub belum tersedia.</h2>
+          <div className="club-registry-empty">
+            <h2>Memuat direktori klub resmi.</h2>
+            <p>Mohon tunggu sejenak, data dari server sedang dipersiapkan.</p>
           </div>
         </div>
       </section>
     );
   }
 
-  const visibleClubs = sortedClubs.slice(0, visibleCount);
-  const canLoadMore = visibleCount < sortedClubs.length;
+  if (error) {
+    return (
+      <section className="club-registry-section padding-top">
+        <div className="container">
+          <div className="club-registry-empty club-registry-empty--error">
+            <h2>Direktori klub belum dapat ditampilkan.</h2>
+            <p>{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!sortedClubs.length) {
+    return (
+      <section className="club-registry-section padding-top">
+        <div className="container">
+          <div className="club-registry-empty">
+            <h2>Belum ada klub yang terdaftar.</h2>
+            <p>Data klub resmi akan muncul setelah server mengirimkan daftar yang valid.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
-      <PageHeader
-        eyebrow="Klub IDM"
-        title="List Klub Terdaftar"
-        description="Berikut adalah daftar klub yang terdaftar di platform kami. Klik pada setiap klub \n untuk melihat detail lebih lanjut tentang anggota, prestasi, dan informasi lainnya."
-      />
-      <section className="cart-section padding-top">
+      <section className="club-registry-hero">
         <div className="container">
-          <div className="row cart-header">
-            <div className="col-lg-6">Klub</div>
-            <div className="col-lg-3">Level</div>
-            <div className="col-lg-1">Poin</div>
-            <div className="col-lg-2">Slug</div>
+          <div className="club-registry-shell">
+            <div className="club-registry-copy">
+              <p className="club-registry-note">Direktori Klub Resmi</p>
+              <h1>Seluruh klub terdaftar ditampilkan langsung dari data server.</h1>
+              <p>
+                Setiap entri klub disusun berdasarkan poin, jumlah anggota, serta relasi yang
+                tersinkron. Halaman ini berfungsi sebagai rujukan resmi untuk menelusuri profil
+                klub, roster, dan statistik utama mereka.
+              </p>
+              <div className="club-registry-summary">
+                <div>
+                  <span>Total Klub</span>
+                  <strong>{formatNumber(totalClubs)}</strong>
+                </div>
+                <div>
+                  <span>Anggota Terdata</span>
+                  <strong>{formatNumber(totalMembers)}</strong>
+                </div>
+                <div>
+                  <span>Klub Aktif</span>
+                  <strong>{formatNumber(activeClubs)}</strong>
+                </div>
+                <div>
+                  <span>Total Poin</span>
+                  <strong>{formatNumber(totalPoints)}</strong>
+                </div>
+              </div>
+            </div>
+
+            <aside className="club-registry-focus">
+              <div className="club-registry-focus__header">
+                <span>Klub Teratas</span>
+                <h2>{topClub?.name || "Belum tersedia"}</h2>
+              </div>
+              <div className="club-registry-focus__media">
+                <img src={topClub?.logo || placeholderSquad} alt={topClub?.name || "Logo Klub"} />
+              </div>
+              <ul className="club-registry-focus__meta">
+                <li>
+                  <span>Kode</span>
+                  <strong>{topClub?.code || "-"}</strong>
+                </li>
+                <li>
+                  <span>Level</span>
+                  <strong>{topClub?.level || "-"}</strong>
+                </li>
+                <li>
+                  <span>Anggota</span>
+                  <strong>{formatNumber(topClub?.membersCount ?? 0)}</strong>
+                </li>
+                <li>
+                  <span>Poin</span>
+                  <strong>{formatNumber(topClub?.points ?? 0)}</strong>
+                </li>
+              </ul>
+            </aside>
           </div>
-          {visibleClubs.map((club) => {
-            const clubSlug = club.slug || "";
-            const memberCount = memberCounts.get(club.id) ?? 0;
-            return (
-              <div className="row cart-body pb-30" key={club.id}>
-                <div className="col-lg-6">
-                  <div className="cart-item">
-                    {club.logo ? <img src={club.logo} alt={club.name || "Logo Klub"} /> : <img src={placeholderSquad} alt="Logo Klub" />}
-                    <div className="cart-content">
+        </div>
+      </section>
+
+      <section className="club-registry-section">
+        <div className="container">
+          <div className="club-registry-grid">
+            {visibleClubs.map((club) => {
+              const clubSlug = club.slug || "";
+              return (
+                <article className="club-registry-card galactic-hover-card" key={club.id}>
+                  <div className="club-registry-card__brand">
+                    <div className="club-registry-card__logo">
+                      <img src={club.logo || placeholderSquad} alt={club.name || "Logo Klub"} />
+                    </div>
+                    <div>
+                      <span>{club.code || "Kode belum tersedia"}</span>
                       <h3>
                         {clubSlug ? (
                           <Link to={buildClubDetailPath(clubSlug)}>{club.name || "Klub Tanpa Nama"}</Link>
@@ -108,44 +205,75 @@ const ClubsContent = ({ clubs }: ClubsContentProps) => {
                           club.name || "Klub Tanpa Nama"
                         )}
                       </h3>
-                      <p>{memberCount > 0 ? `${memberCount} anggota` : "Anggota belum tersedia"}</p>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-3">
-                  <div className="cart-item">
-                    <p>{club.level || "-"}</p>
-                  </div>
-                </div>
-                <div className="col-lg-1">
-                  <div className="cart-item">
-                    <p>{club.points ?? 0}</p>
-                  </div>
-                </div>
-                <div className="col-lg-2">
-                  <div className="cart-item">
-                    <p>{clubSlug || "-"}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
 
-          {canLoadMore && (
-            <div className="row justify-content-center mt-40">
-              <div className="col-lg-6 text-center">
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={() => setVisibleCount((count) => Math.min(count + 5, sortedClubs.length))}
-                >
-                  Muat lebih banyak
-                </button>
-              </div>
+                  <p className="club-registry-card__lead">
+                    {club.level ? `Level organisasi ${club.level}.` : "Level organisasi belum ditetapkan."}
+                  </p>
+
+                  <div className="club-registry-card__stats">
+                    <div>
+                      <span>{formatNumber(club.membersCount ?? 0)}</span>
+                      <small>Anggota</small>
+                    </div>
+                    <div>
+                      <span>{formatNumber(club.activeMembersCount ?? 0)}</span>
+                      <small>Aktif</small>
+                    </div>
+                    <div>
+                      <span>{formatNumber(club.sessionCount ?? 0)}</span>
+                      <small>Sesi</small>
+                    </div>
+                    <div>
+                      <span>{formatNumber(club.timelineCount ?? 0)}</span>
+                      <small>Timeline</small>
+                    </div>
+                  </div>
+
+                  <div className="club-registry-card__footer">
+                    <span>Poin: {formatNumber(club.points ?? 0)}</span>
+                    {club.facebook || club.instagram || club.tiktok ? (
+                      <div className="club-registry-card__social">
+                        {normalizeSocialUrl(club.facebook) ? <a href={normalizeSocialUrl(club.facebook)} target="_blank" rel="noreferrer noopener">Facebook</a> : null}
+                        {normalizeSocialUrl(club.instagram) ? <a href={normalizeSocialUrl(club.instagram)} target="_blank" rel="noreferrer noopener">Instagram</a> : null}
+                        {normalizeSocialUrl(club.tiktok) ? <a href={normalizeSocialUrl(club.tiktok)} target="_blank" rel="noreferrer noopener">TikTok</a> : null}
+                      </div>
+                    ) : null}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          {canLoadMore ? (
+            <div className="club-registry-actions">
+              <button
+                className="club-registry-load-more"
+                type="button"
+                onClick={() => setVisibleCount((count) => Math.min(count + 6, sortedClubs.length))}
+              >
+                Muat lebih banyak
+              </button>
             </div>
-          )}
+          ) : null}
 
           <div ref={loadMoreRef} />
+        </div>
+      </section>
+
+      <section className="club-registry-section club-registry-section--footer">
+        <div className="container">
+          <div className="club-registry-banner">
+            <div>
+              <span>Catatan Resmi</span>
+              <h2>{totalSessions} sesi klub telah tersinkron pada direktori ini.</h2>
+            </div>
+            <p>
+              Direktori ini dirancang untuk menampilkan status klub secara transparan dan konsisten
+              dengan data server terbaru.
+            </p>
+          </div>
         </div>
       </section>
     </>
