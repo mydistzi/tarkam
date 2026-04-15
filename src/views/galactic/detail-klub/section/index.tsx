@@ -62,11 +62,11 @@ const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number
 
 const mapMemberToPlayerItem = (member: MemberItem): PlayerItem => ({
   id: member.id,
-  name: member.name,
+  name: member.nickname || member.username || "",
   game: member.tier || "Player",
-  image: member.image || placeholderSquad,
-  speciality: member.role || "",
-  role: member.role || "",
+  image: member.pictureUrl || member.image || placeholderSquad,
+  speciality: member.alias || "",
+  role: member.alias || "",
   country: member.city || "Indonesia",
   team: member.clubName || "",
   teamLogo: member.clubLogo || placeholderSquad,
