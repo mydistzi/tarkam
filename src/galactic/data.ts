@@ -135,10 +135,10 @@ export const buildShopDetailPath = (value: number | string) =>
   `${galacticRoutes.shopDetail}/${normalizeRouteParam(value)}`;
 
 export const buildNewsCategoryPath = (value: number | string) =>
-  `${galacticRoutes.news}?category=${normalizeRouteParam(value)}`;
+  `${galacticRoutes.news}/category/${normalizeRouteParam(value)}`;
 
 export const buildNewsTagPath = (value: number | string) =>
-  `${galacticRoutes.news}?tag=${normalizeRouteParam(value)}`;
+  `${galacticRoutes.news}/tag/${normalizeRouteParam(value)}`;
 
 export const buildTarkamScheduleAnchorPath = (value: number | string) =>
   `${galacticRoutes.tarkamSchedule}#tarkam-${normalizeRouteParam(value)}`;

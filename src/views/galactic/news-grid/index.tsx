@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";
 import { PageShell } from "@/galactic/common";
 import {
@@ -78,16 +78,17 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
     content: splitContent(blog.content),
     tags,
     path: buildNewsDetailPath(blog.slug || blog.id),
-    categoryPath: buildNewsCategoryPath(blog.category?.slug || category),
+    categoryPath: buildNewsCategoryPath(blog.category?.slug || slugifyTerm(category)),
   };
 };
 
 const NewsGridPage = () => {
+  const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);
-  const category = searchParams.get("category") ?? "";
-  const tag = searchParams.get("tag") ?? "";
   const search = searchParams.get("search") ?? "";
+  const category = categorySlug.trim().toLowerCase();
+  const tag = tagSlug.trim().toLowerCase();
 
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [categories, setCategories] = useState<NewsCategoryWidgetItem[]>([]);
@@ -176,7 +177,7 @@ const NewsGridPage = () => {
               title: item.title || item.name || "Kategori",
               slug: item.slug || slugifyTerm(item.title || item.name || "Kategori"),
               count: Number(item.blogs_count ?? item.blog_count ?? 0),
-              path: buildNewsCategoryPath(item.slug || item.title || item.name || "Kategori"),
+              path: buildNewsCategoryPath(item.slug || slugifyTerm(item.title || item.name || "Kategori")),
             }))
           : []
       );

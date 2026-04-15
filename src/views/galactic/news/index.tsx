@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";
 import { PageShell } from "@/galactic/common";
 import {
   buildNewsCategoryPath,
   buildNewsDetailPath,
   buildNewsTagPath,
+  galacticRoutes,
   type NewsCategoryWidgetItem,
   type NewsTagWidgetItem,
   type PostItem,
@@ -99,16 +100,18 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
     content: splitContent(blog.content),
     tags,
     path: buildNewsDetailPath(blog.slug || blog.id),
-    categoryPath: buildNewsCategoryPath(blog.category?.slug || category),
+    categoryPath: buildNewsCategoryPath(blog.category?.slug || slugifyTag(category)),
   };
 };
 
 const NewsPage = () => {
+  const navigate = useNavigate();
+  const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);
-  const category = searchParams.get("category") ?? "";
-  const tag = searchParams.get("tag") ?? "";
   const search = searchParams.get("search") ?? "";
+  const category = categorySlug.trim().toLowerCase();
+  const tag = tagSlug.trim().toLowerCase();
 
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [categories, setCategories] = useState<NewsCategoryWidgetItem[]>([]);
@@ -126,6 +129,20 @@ const NewsPage = () => {
       }
     });
     setSearchParams(nextParams);
+  };
+
+  const navigateWithSearch = (pathname: string) => {
+    const nextParams = new URLSearchParams();
+    const normalizedSearch = search.trim();
+
+    if (normalizedSearch) {
+      nextParams.set("search", normalizedSearch);
+    }
+
+    navigate({
+      pathname,
+      search: nextParams.toString() ? `?${nextParams.toString()}` : "",
+    });
   };
 
   const fetchPosts = useCallback(async () => {
@@ -191,7 +208,7 @@ const NewsPage = () => {
               title: item.title || item.name || "Kategori",
               slug: item.slug || slugifyTag(item.title || item.name || "Kategori"),
               count: Number(item.blogs_count ?? item.blog_count ?? 0),
-              path: buildNewsCategoryPath(item.slug || item.title || item.name || "Kategori"),
+              path: buildNewsCategoryPath(item.slug || slugifyTag(item.title || item.name || "Kategori")),
             }))
           : []
       );
@@ -240,10 +257,10 @@ const NewsPage = () => {
           updateSearchParams({ search: value.trim() || undefined, page: "1" });
         }}
         onCategorySelect={(value) => {
-          updateSearchParams({ category: value?.trim() || undefined, page: "1" });
+          navigateWithSearch(value?.trim() ? buildNewsCategoryPath(value.trim()) : galacticRoutes.news);
         }}
         onTagSelect={(value) => {
-          updateSearchParams({ tag: value?.trim() || undefined, page: "1" });
+          navigateWithSearch(value?.trim() ? buildNewsTagPath(value.trim()) : galacticRoutes.news);
         }}
         onPageChange={(value) => {
           updateSearchParams({ page: String(value) });

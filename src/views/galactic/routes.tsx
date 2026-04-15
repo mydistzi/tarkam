@@ -98,6 +98,8 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/klub", element: <ClubsPage /> },
       { path: "/detail-klub/:slug", element: <ClubDetailsPage /> },
       { path: "/news", element: <NewsPage /> },
+      { path: "/news/category/:categorySlug", element: <NewsPage /> },
+      { path: "/news/tag/:tagSlug", element: <NewsPage /> },
       { path: "/detail-news/:slug", element: <NewsDetailsPage /> },
       { path: "/shop", element: <ShopGridPage /> },
       { path: "/detail-shop/:slug", element: <ShopDetailsPage /> },
