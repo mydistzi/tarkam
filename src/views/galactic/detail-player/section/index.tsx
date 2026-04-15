@@ -210,14 +210,14 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
     { label: "Username", value: record?.username || "-" },
     { label: "Nickname", value: record?.nickname || "-" },
     { label: "Slug", value: record?.slug || "-" },
-    { label: "Discord", value: record?.discord_user_id || "-" },
-    { label: "Phone", value: record?.phone_number || "-" },
-    { label: "Tunisia Phone", value: record?.tunisia_phone || "-" },
+    // { label: "Discord", value: record?.discord_user_id || "-" },
+    // { label: "Phone", value: record?.phone_number || "-" },
+    // { label: "Tunisia Phone", value: record?.tunisia_phone || "-" },
     { label: "Gender", value: genderLabel(record?.gender) },
     { label: "Tier", value: record?.tier || "-" },
     { label: "City", value: record?.city || "-" },
     { label: "Status", value: statusLabel(record?.status) },
-    { label: "Club FK", value: record?.club_fk != null ? String(record.club_fk) : "-" },
+    { label: "Club", value: record?.club?.name != null ? String(record.club.name) : "-" },
     { label: "Latitude", value: fmtCoord(record?.latitude) },
     { label: "Longitude", value: fmtCoord(record?.longitude) },
     { label: "Created", value: fmtDate(record?.created_at) },
@@ -267,7 +267,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   return (
     <>
       <PageHeader className="team-details" infoClassName="player-details" title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
-        <div className="player-thumb"></div><img src={record.picture_url || placeholderPlayer} alt={displayName} />
+        <div className="player-thumb"><img src={record.picture_url || placeholderPlayer} alt={displayName} /></div>
       </PageHeader>
 
       <section className="player-hero-section padding-top">
@@ -312,34 +312,35 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
             <article className="player-kpi-card player-kpi-card--accent galactic-hover-card">
               <span>Points</span>
               <h3>{fmtNumber(totalPoints)}</h3>
-              <p>Poin member yang tercatat di database.</p>
+              <p>Poin saat ini.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Win Rate</span>
               <h3>{winRate(totalWins, totalLosses)}%</h3>
               <p>
-                {totalWins} menang dari {totalMatches} pertandingan.
+                {/* {totalWins} menang dari {totalMatches} pertandingan. */}
+                Persentase kemenangan.
               </p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Wins</span>
               <h3>{fmtNumber(totalWins)}</h3>
-              <p>Jumlah kemenangan member.</p>
+              <p>Jumlah kemenangan.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Losses</span>
               <h3>{fmtNumber(totalLosses)}</h3>
-              <p>Jumlah kekalahan member.</p>
+              <p>Jumlah kekalahan.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Matches</span>
               <h3>{fmtNumber(totalMatches)}</h3>
-              <p>Total pertandingan yang tercatat.</p>
+              <p>Total pertandingan.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Sessions</span>
               <h3>{fmtNumber(sessionEntries.length)}</h3>
-              <p>Relasi session aktif untuk member ini.</p>
+              <p>Session aktif member.</p>
             </article>
           </div>
         </div>
@@ -350,11 +351,10 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
           <div className="section-heading mb-40 text-center">
             <h3>Member Ledger</h3>
             <h2>
-              Semua <span>field members</span> dalam satu tampilan
+              Semua <span>informasi</span> member
             </h2>
             <p>
-              Blok ini mengambil data dari field resmi `members`, tanpa campuran properti
-              generik dari model lain.
+              Halaman ini menyajikan keseluruhan informasi member secara terstruktur.
             </p>
           </div>
 
@@ -418,7 +418,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
                 </div>
               </Link>
               <ul className="player-contact-list">
-                <li>
+                {/* <li>
                   <span>Discord</span>
                   <strong>{record.discord_user_id || "-"}</strong>
                 </li>
@@ -429,7 +429,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
                 <li>
                   <span>Tunisia Phone</span>
                   <strong>{record.tunisia_phone || "-"}</strong>
-                </li>
+                </li> */}
                 <li>
                   <span>Location</span>
                   <strong>{record.city || "-"}</strong>
@@ -468,8 +468,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               Relasi <span>member</span> yang ikut dibaca
             </h2>
             <p>
-              Bagian ini menampilkan kaitan member ke players, teams, dan penyawer yang ada di
-              backend.
+              Bagian ini menampilkan kaitan players, teams, dan penyawer.
             </p>
           </div>
 
@@ -609,7 +608,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
             <h2>
               Semua relasi <span>session</span> member
             </h2>
-            <p>Section ini memisahkan data sesi supaya history member tidak bercampur dengan timeline profil.</p>
+            <p>Section data sesi history profil.</p>
           </div>
 
           {sessionEntries.length > 0 ? (
@@ -672,8 +671,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               Riwayat <span>personal member</span>
             </h2>
             <p>
-              Timeline ini menampung history individual member, baik yang datang langsung dari
-              tabel timelines maupun relasi member_timeline.
+              Timeline ini menampung history individual member secara keseluruhan.
             </p>
           </div>
 
