@@ -279,9 +279,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               <span className={`player-pill ${tierClass(record.tier)}`}>Tier {record.tier || "-"}</span>
               <span className="player-pill is-neutral">{clubName}</span>
             </div>
-            <p>
-              Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi, hingga timeline aktivitas, yang semuanya diambil langsung dari data terbaru.
-            </p>
+            <p>Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi, hingga timeline aktivitas, yang semuanya diambil langsung dari data terbaru.</p>
             <div className="player-hero-links">
               <Link className="player-hero-link" to={clubPath}>
                 <img src={record.club?.logo || placeholderSquad} alt={clubName} />
