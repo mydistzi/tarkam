@@ -185,7 +185,7 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
         </div>
       </section>
 
-      <section className="club-registry-section padding-top">
+      <section className="club-registry-section">
         <div className="container">
           <div className="club-registry-grid">
             {visibleClubs.map((club) => {
