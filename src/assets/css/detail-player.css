@@ -418,6 +418,28 @@
   gap: 18px;
 }
 
+.player-connection-scroll {
+  max-height: 860px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(125, 228, 255, 0.45) rgba(255, 255, 255, 0.06);
+}
+
+.player-connection-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.player-connection-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.player-connection-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(125, 228, 255, 0.55), rgba(255, 109, 182, 0.5));
+  border-radius: 999px;
+}
+
 .player-connection-card {
   padding: 24px;
   border-radius: 24px;
@@ -719,6 +741,36 @@
   gap: 16px;
 }
 
+.player-timeline-wrap {
+  display: grid;
+  gap: 18px;
+}
+
+.player-timeline-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.player-load-more-btn {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid rgba(125, 228, 255, 0.22);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(125, 228, 255, 0.18), rgba(255, 109, 182, 0.12));
+  color: #f7f9ff;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.player-load-more-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 228, 255, 0.36);
+  background: linear-gradient(135deg, rgba(125, 228, 255, 0.24), rgba(255, 109, 182, 0.16));
+}
+
 .player-timeline-card {
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
@@ -832,6 +884,10 @@
   .player-donation-card > div {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .player-connection-scroll {
+    max-height: 700px;
   }
 
   .player-timeline-card__body {

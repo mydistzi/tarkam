@@ -69,7 +69,12 @@ const PlayerDetailsPage = () => {
 
   return (
     <PageShell title={title} type="profile" image={record?.picture_url}>
-      <PlayerDetailsContent record={record} loading={loading} error={resolvedError} />
+      <PlayerDetailsContent
+        key={record?.slug || slug}
+        record={record}
+        loading={loading}
+        error={resolvedError}
+      />
     </PageShell>
   );
 };
