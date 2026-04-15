@@ -269,9 +269,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
       <PageHeader
         className="team-details player-details player-page-header"
         infoClassName="player-page-hero"
-        eyebrow="Player Profile"
-        title={displayName}
-        description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}
+        title={`${displayName} <span>${handle}</span> | <span>${record.tier || "Tier belum diatur"}</span> | <span>${genderLabel(record.gender)}</span>`} 
       >
         <div className="player-hero-shell">
           <div className="player-hero-portrait">
@@ -284,8 +282,8 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               <span className="player-pill is-neutral">{clubName}</span>
             </div>
             <p>
-              Halaman ini membaca langsung data resmi dari tabel <code>members</code>, lalu
-              memecahnya menjadi profil inti, catatan sesi, serta timeline riwayat member.
+              Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
+              hingga timeline aktivitas, yang semuanya diambil langsung dari data terbaru.
             </p>
             <div className="player-hero-links">
               <Link className="player-hero-link" to={clubPath}>

@@ -1,6 +1,7 @@
 .player-page-header .page-header-info {
   position: relative;
   z-index: 2;
+  height: 600px;
 }
 
 .player-page-header .page-header-info h2 {
