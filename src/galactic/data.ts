@@ -185,6 +185,58 @@ export type PlayerItem = {
   teamPath?: string;
 };
 
+export type MemberItem = {
+  id?: number | string;
+  username?: string;
+  nickname?: string;
+  slug?: string;
+  alias?: string;
+  discordUserId?: string;
+  phoneNumber?: string;
+  tunisiaPhone?: string;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  gender?: string;
+  latitude?: number;
+  longitude?: number;
+  pictureUrl?: string;
+  tier?: string;
+  city?: string;
+  clubFk?: number;
+  clubName?: string;
+  clubSlug?: string;
+  clubLogo?: string;
+  about?: string;
+  wins?: number;
+  losses?: number;
+  tMatches?: number;
+  points?: number;
+  status?: string;
+  image?: string;
+  path?: string;
+};
+
+type ClubTimelineItem = {
+  label: string;
+  value: string;
+};
+
+export type ClubItem = {
+  id?: number | string;
+  code?: string;
+  slug?: string;
+  name?: string;
+  logo?: string;
+  level?: string;
+  points?: number;
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  membersCount?: number;
+  timeline?: ClubTimelineItem[];
+};
+
 export type ProductItem = {
   id?: number | string;
   name: string;

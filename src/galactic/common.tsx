@@ -862,7 +862,7 @@ const PlayerCard = ({ player }: { player: PlayerItem }) => (
     <div className="team-content">
       <span className="whte-shape" />
       <h3><Link to={player.path || "/player-details"}>{player.name}</Link></h3>
-      <h4>{player.game}</h4>
+      <h4>{player.country ? player.country : 'Jakarta'}</h4>
     </div>
   </div>
 );
