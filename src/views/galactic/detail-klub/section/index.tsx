@@ -359,7 +359,7 @@ const ClubsContent = ({
                   <img src={record.logo || placeholderSquad} alt={record.name || "Logo Klub"} />
                 </div>
                 <div>
-                  <span className="club-orbit-card__eyebrow">Galactic Club Profile</span>
+                  <span className="club-orbit-card__eyebrow">Tarkam Club Profile</span>
                   <h2>{record.name || "Klub Tanpa Nama"}</h2>
                   <p>
                     {record.code ? `${record.code} • ` : ""}
@@ -370,8 +370,7 @@ const ClubsContent = ({
               <div className="club-orbit-card__copy">
                 <p>
                   Basis komando {record.name || "klub ini"} menampilkan seluruh identitas klub,
-                  performa roster, relasi sesi, dan history timeline dalam satu layar yang lebih
-                  rapi dan tetap nyambung dengan nuansa galactic.
+                  performa roster, relasi sesi, dan history timeline dalam satu layar.
                 </p>
               </div>
               <div className="club-orbit-card__footer">
@@ -454,8 +453,7 @@ const ClubsContent = ({
               Semua <span>Informasi Klub</span>
             </h2>
             <p>
-              Field yang ditampilkan mengikuti data klub dari database/model dan dirapikan ke
-              format yang lebih mudah dipindai.
+              Field yang ditampilkan mengikuti informasi data klub yang kami terima saat ini.
             </p>
           </div>
 
@@ -497,7 +495,7 @@ const ClubsContent = ({
               </div>
               <p>
                 Klub <strong>{record.name || "-"}</strong> memakai kode{" "}
-                <strong>{record.code || "-"}</strong> dengan tier organisasi{" "}
+                <strong>{record.code || "-"}</strong> dengan tier organisasi level{" "}
                 <strong>{record.level || "-"}</strong>. Slug publiknya adalah{" "}
                 <strong>{record.slug || "-"}</strong>.
               </p>
@@ -515,7 +513,7 @@ const ClubsContent = ({
           <div className="section-heading mb-40 text-center">
             <h3>Anggota Tim</h3>
             <h2>
-              Roster <span>{record.name}</span> dalam carousel
+              Yuk kenalan dengan Roster <span>{record.name}</span>
             </h2>
             <p>
               Setiap kartu anggota terhubung langsung ke halaman detail player dan menampilkan
@@ -534,8 +532,7 @@ const ClubsContent = ({
               Relasi <span>Sesi Klub</span>
             </h2>
             <p>
-              Section ini khusus menampilkan keterhubungan klub ke session, terpisah dari timeline
-              agar log session dan history perubahan tidak tercampur.
+              Section ini khusus menampilkan keterhubungan klub pada musim tertentu.
             </p>
           </div>
 
@@ -582,7 +579,7 @@ const ClubsContent = ({
             ) : (
               <div className="club-empty-state">
                 <h3>Belum ada data sesi</h3>
-                <p>Relasi `club_session` untuk klub ini belum tersedia atau belum tersinkron.</p>
+                <p>Relasi pada Musim untuk klub ini belum tersedia atau belum tersinkron.</p>
               </div>
             )}
           </div>
@@ -597,8 +594,7 @@ const ClubsContent = ({
               History <span>{record.name}</span>
             </h2>
             <p>
-              Timeline menampung perubahan individual klub dan tidak dipaksa menempel pada session
-              jika event-nya memang berdiri sendiri.
+              Timeline menampung perubahan individual klub dan tidak terhubung dengan musim tertentu.
             </p>
           </div>
 
@@ -636,7 +632,7 @@ const ClubsContent = ({
           ) : (
             <div className="club-empty-state">
               <h3>Timeline belum tersedia</h3>
-              <p>Belum ada history klub yang tercatat di `club_timeline` atau `timelines`.</p>
+              <p>Belum ada history klub yang tercatat di timeline saat ini.</p>
             </div>
           )}
         </div>
