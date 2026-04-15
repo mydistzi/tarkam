@@ -24,13 +24,10 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     const url = getSocketUrl();
     
     const client = io(url, {
-      path: "/socket.io/",
-      transports: ["websocket", "polling"],
-      withCredentials: true,
+      path: "/socket.io",
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       autoConnect: true,
-      forceNew: true,
     });
 
     const handleUpdate = (data?: unknown) => {
