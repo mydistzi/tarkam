@@ -667,7 +667,7 @@ async function fetchGalacticPayloads() {
     Api.get("/headers"),
     Api.get("/categories"),
     Api.get("/blogs", { params: { all: true } }),
-    Api.get("/products"),
+    Api.get("/products", { params: { all: true } }),
     Api.get(`/carts${cartQuery}`),
     Api.get("/streamings"),
     Api.get("/clubs"),
