@@ -295,10 +295,10 @@ const ClubsContent = ({
                   </thead>
                   <tbody>
                     <tr>
-                      <tr>
-                        <td>Nama Klub</td>
-                        <td>{record.name || "-"}</td>
-                      </tr>
+                      <td>Nama Klub</td>
+                      <td>{record.name || "-"}</td>
+                    </tr>
+                    <tr>
                       <td>Kode Klub</td>
                       <td>{record.code || "-"}</td>
                     </tr>
