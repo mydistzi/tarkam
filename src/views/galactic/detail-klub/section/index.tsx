@@ -345,7 +345,7 @@ const ClubsContent = ({
 
   return (
     <>
-      <PageHeader className="team-details club-page-header" title={record.name || "Detail Klub"}>
+      <PageHeader title={record.name || "Detail Klub"}>
         <img src={record.logo || placeholderSquad} alt={record.name || "Logo Klub"} />
       </PageHeader>
 
