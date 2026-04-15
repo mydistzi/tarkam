@@ -271,7 +271,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
         infoClassName="player-page-hero"
         title={displayName}
         eyebrow="Player Profile"
-        description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
+        description={`${handle} &#8594; ${record.tier || "Tier belum diatur"} &#8592; ${genderLabel(record.gender)}`}>
       </PageHeader>
 
       <div className="team-details-info player-details">
