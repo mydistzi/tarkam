@@ -8,9 +8,10 @@ const PlayerDetailsPage = () => {
   const { playerId } = useParams();
   const { playerRecords } = useGalacticContent();
   const record = playerRecords.find((item: PlayerRecord) => String(item.id) === playerId) || playerRecords[0];
+  const title = record?.member?.nickname || record?.member?.username || record?.item.name || "Detail Pemain";
 
   return (
-    <PageShell title="Detail Pemain" type="profile" image={record?.item.image}>
+    <PageShell title={title} type="profile" image={record?.member?.picture_url || record?.item.image}>
       <PlayerDetailsContent record={record} />
     </PageShell>
   );
