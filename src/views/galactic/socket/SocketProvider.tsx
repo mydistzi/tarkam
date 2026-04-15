@@ -1,7 +1,14 @@
 import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
-import { io, type Socket } from "socket.io-client";
+import Echo, { type EchoOptions } from "laravel-echo";
+import Pusher from "pusher-js";
 
-type SocketContextValue = Socket | null;
+declare global {
+  interface Window {
+    Pusher?: typeof Pusher;
+  }
+}
+
+type SocketContextValue = Echo<"reverb"> | null;
 
 const SocketContext = createContext<SocketContextValue>(null);
 
@@ -9,70 +16,57 @@ interface SocketProviderProps {
   children: ReactNode;
 }
 
-const getSocketUrl = () => {
-  // Pastikan URL di .env diawali dengan https://tarkam-api-web-production.up.railway.app
-  return (
-    import.meta.env.VITE_SOCKET_URL?.trim() ||
-    `${window.location.origin}`
-  );
+const buildReverbConfig = (): EchoOptions<"reverb"> => {
+  const key = import.meta.env.VITE_REVERB_APP_KEY?.trim() ?? "";
+  const host = import.meta.env.VITE_REVERB_HOST?.trim() ?? "";
+  const port = Number(import.meta.env.VITE_REVERB_PORT ?? 6001);
+  const scheme = import.meta.env.VITE_REVERB_SCHEME?.trim().toLowerCase() ?? "https";
+  const forceTLS = scheme === "https";
+
+  return {
+    broadcaster: "reverb",
+    key,
+    wsHost: host || window.location.hostname,
+    wsPort: port,
+    wssPort: port,
+    forceTLS,
+    enabledTransports: ["ws", "wss"],
+    disableStats: true,
+    authEndpoint: "/broadcasting/auth",
+  };
 };
 
 const SocketProvider = ({ children }: SocketProviderProps) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [client, setClient] = useState<Echo<"reverb"> | null>(null);
 
   useEffect(() => {
-    const url = getSocketUrl();
-    
-    const client = io(url, {
-      path: "/socket.io",
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      autoConnect: true,
-    });
+    const options = buildReverbConfig();
+
+    if (!options.key) {
+      console.warn("[SocketProvider] VITE_REVERB_APP_KEY is not configured. Broadcast socket is disabled.");
+      return;
+    }
+
+    window.Pusher = Pusher;
+
+    const echo = new Echo(options);
+    const channel = echo.channel("broadcasts");
 
     const handleUpdate = (data?: unknown) => {
       window.dispatchEvent(new CustomEvent("tarkam:update", { detail: data }));
     };
 
-    const handleRefresh = () => {
-      window.location.reload();
-    };
+    channel.listen("BroadcastChanged", handleUpdate);
 
-    client.on("connect", () => {
-      console.log("[SocketProvider] Connected successfully!");
-      window.dispatchEvent(new CustomEvent("tarkam:socket-connect", { detail: { connected: true } }));
-    });
-
-    client.on("disconnect", (reason) => {
-      console.log("[SocketProvider] Disconnected:", reason);
-      window.dispatchEvent(new CustomEvent("tarkam:socket-disconnect"));
-    });
-
-    client.on("refresh", handleRefresh);
-    client.on("update", handleUpdate);
-    client.on("data:update", handleUpdate);
-    client.on("record:update", handleUpdate);
-
-    client.on("connect_error", (error) => {
-      // Jika masih error 404/CORS, masalah ada di konfigurasi server (Backend)
-      console.warn("[SocketProvider] connect_error", error.message);
-    });
-
-    setSocket(client);
+    setClient(echo);
 
     return () => {
-      client.off("connect");
-      client.off("disconnect");
-      client.off("refresh", handleRefresh);
-      client.off("update", handleUpdate);
-      client.off("data:update", handleUpdate);
-      client.off("record:update", handleUpdate);
-      client.off("connect_error");
-      client.close();
+      channel.stopListening("BroadcastChanged");
+      echo.disconnect();
     };
   }, []);
 
-  const value = useMemo(() => socket, [socket]);
+  const value = useMemo(() => client, [client]);
 
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };
