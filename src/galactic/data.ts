@@ -213,13 +213,33 @@ export type MemberItem = {
   tMatches?: number;
   points?: number;
   status?: string;
+  createdAt?: string;
+  updatedAt?: string;
   image?: string;
   path?: string;
 };
 
-type ClubTimelineItem = {
-  label: string;
-  value: string;
+export type ClubTimelineItem = {
+  id?: number | string;
+  title: string;
+  description: string;
+  sessionLabel?: string;
+  sessionStatus?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type ClubSessionItem = {
+  id?: number | string;
+  sessionFk?: number | string;
+  sesi?: number;
+  point?: number;
+  participant?: string;
+  status?: string;
+  relationCreatedAt?: string;
+  relationUpdatedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ClubItem = {
@@ -234,6 +254,10 @@ export type ClubItem = {
   instagram?: string;
   tiktok?: string;
   membersCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  sessions?: ClubSessionItem[];
   timeline?: ClubTimelineItem[];
 };
 

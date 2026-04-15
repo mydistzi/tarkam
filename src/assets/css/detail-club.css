@@ -1,0 +1,685 @@
+.club-page-header .page-header-info {
+  position: relative;
+  z-index: 2;
+}
+
+.club-command-section,
+.club-intel-section,
+.club-roster-section,
+.club-session-section,
+.club-timeline-section {
+  position: relative;
+}
+
+.club-command-section::before,
+.club-intel-section::before,
+.club-session-section::before,
+.club-timeline-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.club-command-section::before {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(74, 226, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 85% 30%, rgba(255, 109, 182, 0.14), transparent 24%);
+}
+
+.club-intel-section::before {
+  background:
+    linear-gradient(180deg, rgba(11, 18, 51, 0.95) 0%, rgba(9, 15, 41, 0.98) 100%);
+}
+
+.club-session-section::before {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(255, 183, 77, 0.18), transparent 22%),
+    linear-gradient(180deg, rgba(8, 14, 40, 0.98) 0%, rgba(11, 18, 51, 0.95) 100%);
+}
+
+.club-timeline-section::before {
+  background:
+    radial-gradient(circle at 8% 25%, rgba(74, 226, 255, 0.12), transparent 20%),
+    linear-gradient(180deg, rgba(10, 14, 35, 0.95) 0%, rgba(6, 10, 29, 0.99) 100%);
+}
+
+.club-command-grid,
+.club-kpi-grid,
+.club-intel-grid,
+.club-story-grid,
+.club-session-grid,
+.club-timeline-list {
+  position: relative;
+  z-index: 2;
+}
+
+.club-command-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.9fr);
+  gap: 28px;
+}
+
+.club-orbit-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(126, 160, 255, 0.16);
+  background: linear-gradient(180deg, rgba(17, 24, 60, 0.98) 0%, rgba(9, 14, 38, 0.98) 100%);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.24);
+}
+
+.club-orbit-card--primary {
+  min-height: 100%;
+}
+
+.club-orbit-card__glow {
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(74, 226, 255, 0.32) 0%, rgba(74, 226, 255, 0) 72%);
+  pointer-events: none;
+}
+
+.club-orbit-card__brand {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+}
+
+.club-orbit-card__logo {
+  width: 108px;
+  height: 108px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(145deg, rgba(21, 32, 79, 0.98), rgba(6, 12, 33, 0.98));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.club-orbit-card__logo img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.club-orbit-card__eyebrow,
+.club-section-head span,
+.club-session-card__eyebrow,
+.club-timeline-card__eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7de4ff;
+}
+
+.club-orbit-card__brand h2,
+.club-section-head h3,
+.club-session-card h3,
+.club-timeline-card h3,
+.club-empty-state h3,
+.club-empty-inline {
+  color: #fff;
+}
+
+.club-orbit-card__brand h2 {
+  margin: 8px 0 8px;
+  font-size: clamp(28px, 4vw, 46px);
+  line-height: 1.04;
+}
+
+.club-orbit-card__brand p,
+.club-orbit-card__copy p,
+.club-radar-note p,
+.club-story-panel p,
+.club-session-card__snapshot p,
+.club-timeline-card p,
+.club-empty-state p {
+  color: rgba(233, 241, 255, 0.78);
+}
+
+.club-orbit-card__copy {
+  margin-top: 28px;
+  max-width: 720px;
+}
+
+.club-orbit-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.club-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f7f9ff;
+  font-size: 13px;
+}
+
+.club-social-dock {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.club-social-dock__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f7f9ff;
+  text-decoration: none;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.club-social-dock__item i {
+  font-size: 24px;
+  color: #7de4ff;
+}
+
+.club-social-dock__item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(125, 228, 255, 0.4);
+  background: rgba(125, 228, 255, 0.08);
+}
+
+.club-radar-note,
+.club-story-panel {
+  margin-top: 22px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.club-radar-note strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.club-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.club-kpi-card,
+.club-info-card,
+.club-session-card,
+.club-timeline-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(18, 23, 57, 0.95) 0%, rgba(8, 12, 31, 0.96) 100%);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.club-kpi-card {
+  min-height: 140px;
+  border-radius: 24px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.club-kpi-card h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 34px;
+}
+
+.club-kpi-card p {
+  margin: 0;
+  color: rgba(233, 241, 255, 0.72);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+.club-intel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.club-info-card {
+  min-height: 128px;
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.club-info-card span {
+  color: rgba(233, 241, 255, 0.66);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.club-info-card strong {
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.club-story-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 24px;
+}
+
+.club-story-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.club-story-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.club-story-list li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.club-story-list span {
+  color: rgba(233, 241, 255, 0.72);
+}
+
+.club-story-list strong {
+  color: #fff;
+}
+
+.club-member-carousel {
+  position: relative;
+}
+
+.club-member-card {
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(17, 23, 56, 0.98) 0%, rgba(6, 11, 31, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+.club-member-card__media {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+
+.club-member-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(9, 14, 38, 0) 10%, rgba(6, 11, 30, 0.82) 100%);
+}
+
+.club-member-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.club-member-card__status,
+.club-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.club-member-card__status {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+}
+
+.club-status-pill.is-active,
+.club-member-card__status.is-active {
+  background: rgba(72, 221, 162, 0.18);
+  color: #7ef0c0;
+  border: 1px solid rgba(126, 240, 192, 0.28);
+}
+
+.club-status-pill.is-complete,
+.club-member-card__status.is-complete {
+  background: rgba(255, 183, 77, 0.18);
+  color: #ffc56f;
+  border: 1px solid rgba(255, 197, 111, 0.28);
+}
+
+.club-status-pill.is-pending,
+.club-member-card__status.is-pending {
+  background: rgba(127, 179, 255, 0.18);
+  color: #9fc5ff;
+  border: 1px solid rgba(159, 197, 255, 0.28);
+}
+
+.club-status-pill.is-idle,
+.club-member-card__status.is-idle {
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.club-member-card__body {
+  padding: 22px;
+}
+
+.club-member-card__headline h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.club-member-card__headline h3 a {
+  color: #fff;
+}
+
+.club-member-card__headline p {
+  margin: 8px 0 0;
+  color: rgba(233, 241, 255, 0.68);
+}
+
+.club-member-card__meta,
+.club-session-card__meta {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.club-member-card__meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.club-member-card__meta li,
+.club-session-card__meta li {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 14px;
+}
+
+.club-member-card__meta span,
+.club-session-card__meta span,
+.club-session-card__snapshot span,
+.club-timeline-card__footer span {
+  display: block;
+  color: rgba(233, 241, 255, 0.6);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.club-member-card__meta strong,
+.club-session-card__meta strong {
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-size: 15px;
+}
+
+.club-member-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.club-member-card__stats div {
+  border-radius: 18px;
+  padding: 14px 12px;
+  background: linear-gradient(180deg, rgba(125, 228, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+  text-align: center;
+}
+
+.club-member-card__stats span {
+  display: block;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.club-member-card__stats small {
+  color: rgba(233, 241, 255, 0.68);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+}
+
+.club-session-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.club-session-card {
+  border-radius: 26px;
+  padding: 24px;
+}
+
+.club-session-card__header,
+.club-timeline-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.club-session-card__header h3,
+.club-timeline-card__header h3 {
+  margin: 8px 0 0;
+  font-size: 24px;
+}
+
+.club-session-card__snapshot {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.club-session-card__snapshot p {
+  margin: 10px 0 0;
+}
+
+.club-timeline-list {
+  display: grid;
+  gap: 18px;
+}
+
+.club-timeline-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 0;
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.club-timeline-card__rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(125, 228, 255, 0.14) 0%, rgba(255, 109, 182, 0.12) 100%);
+}
+
+.club-timeline-card__rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(125, 228, 255, 0.4) 0%, rgba(255, 109, 182, 0.4) 100%);
+}
+
+.club-timeline-card__rail span {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #7de4ff;
+  box-shadow: 0 0 0 8px rgba(125, 228, 255, 0.12);
+}
+
+.club-timeline-card__body {
+  padding: 24px 24px 20px;
+}
+
+.club-timeline-card p {
+  margin: 16px 0;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.club-timeline-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.club-empty-state {
+  text-align: center;
+  padding: 42px 24px;
+  border-radius: 26px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.club-empty-inline {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 1199px) {
+  .club-command-grid,
+  .club-story-grid,
+  .club-session-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .club-kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .club-intel-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .club-orbit-card,
+  .club-kpi-card,
+  .club-info-card,
+  .club-session-card,
+  .club-timeline-card {
+    border-radius: 22px;
+  }
+
+  .club-member-card__media {
+    height: 280px;
+  }
+
+  .club-intel-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .club-command-grid {
+    gap: 18px;
+  }
+
+  .club-orbit-card,
+  .club-kpi-card,
+  .club-info-card,
+  .club-session-card,
+  .club-story-panel {
+    padding: 22px;
+  }
+
+  .club-orbit-card__brand {
+    grid-template-columns: 1fr;
+  }
+
+  .club-orbit-card__logo {
+    width: 88px;
+    height: 88px;
+  }
+
+  .club-kpi-grid,
+  .club-intel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .club-member-card__meta,
+  .club-member-card__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .club-session-card__header,
+  .club-timeline-card__header {
+    flex-direction: column;
+  }
+
+  .club-timeline-card {
+    grid-template-columns: 1fr;
+  }
+
+  .club-timeline-card__rail {
+    min-height: 56px;
+  }
+
+  .club-timeline-card__rail::before {
+    width: auto;
+    height: 2px;
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+  }
+}
