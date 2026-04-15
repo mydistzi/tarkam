@@ -319,7 +319,6 @@ const ClubsContent = ({
     ),
   );
   const [visibleTimelineCount, setVisibleTimelineCount] = useState(3);
-  const loadMoreTimelineRef = useRef<HTMLDivElement | null>(null);
 
   const timelineEntries = [...(record.timeline || [])].sort((left, right) =>
     String(right.createdAt || "").localeCompare(String(left.createdAt || "")),
@@ -331,29 +330,11 @@ const ClubsContent = ({
     setVisibleTimelineCount(Math.min(3, timelineEntries.length));
   }, [timelineEntries.length]);
 
-  useEffect(() => {
-    if (!loadMoreTimelineRef.current || visibleTimelineCount >= timelineEntries.length) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-          setVisibleTimelineCount((current) =>
-            Math.min(current + 3, timelineEntries.length),
-          );
-        }
-      },
-      {
-        rootMargin: "100px",
-      },
+  const handleLoadMore = () => {
+    setVisibleTimelineCount((current) =>
+      Math.min(current + 3, timelineEntries.length),
     );
-
-    observer.observe(loadMoreTimelineRef.current);
-
-    return () => observer.disconnect();
-  }, [timelineEntries.length, visibleTimelineCount]);
+  };
 
   let topMember: MemberItem | undefined;
   for (const member of members) {
@@ -664,10 +645,11 @@ const ClubsContent = ({
                 ))}
               </div>
               {canLoadMoreTimeline && (
-                <div
-                  ref={loadMoreTimelineRef}
-                  style={{ height: 1, visibility: "hidden" }}
-                />
+                <div className="text-center mt-50">
+                  <button className="default-btn" type="button" onClick={handleLoadMore}>
+                    Muat Lebih Banyak
+                  </button>
+                </div>
               )}
             </>
           ) : (

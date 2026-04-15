@@ -69,7 +69,7 @@ const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
           {hasMore && (
             <div className="text-center mt-50">
               <a className="default-btn" role="button" onClick={handleLoadMore}>
-                Muat Lagi Pertandingan
+                Muat Lebih Banyak 
               </a>
             </div>
           )}
