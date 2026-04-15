@@ -23,10 +23,11 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     const url = getSocketUrl();
     const client = io(url, {
       path: "/socket.io",
-      transports: ["websocket", "polling"],
+      transports: ["polling", "websocket"],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       autoConnect: true,
+      withCredentials: true,
     });
 
     const handleUpdate = (data?: unknown) => {
