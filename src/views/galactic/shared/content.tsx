@@ -286,6 +286,11 @@ type ApiTeam = {
   member3_fk?: number | string | null;
   group_fk?: number | string | null;
   tarkam_fk?: number | string | null;
+  date?: string;
+  time?: string;
+  member1?: ApiMember;
+  member2?: ApiMember;
+  member3?: ApiMember;
   group?: ApiGroup;
   tarkam?: ApiTarkam;
   member?: ApiMember;
@@ -317,6 +322,16 @@ type ApiTarkam = {
   points_awarded?: number;
   mvp_m?: string;
   mvp_f?: string;
+  location?: string;
+  teams_count?: number;
+  groups_count?: number;
+  contests_count?: number;
+  winners_count?: number;
+  players_count?: number;
+  penyawers_count?: number;
+  streamings_count?: number;
+  sessions_count?: number;
+  timelines_count?: number;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
