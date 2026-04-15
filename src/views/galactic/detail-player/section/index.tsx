@@ -266,8 +266,11 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
 
   return (
     <>
-      <PageHeader infoClassName="player-details" title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
-        <div className="player-thumb"><img src={record.picture_url || placeholderPlayer} alt={displayName} /></div>
+      <PageHeader
+        className="team-details player-details player-page-header"
+        infoClassName="player-page-hero"
+        title={displayName} 
+        description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
       </PageHeader>
 
       <section className="player-hero-section padding-top">
