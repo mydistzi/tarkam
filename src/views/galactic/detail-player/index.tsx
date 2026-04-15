@@ -1,18 +1,75 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Api from "@/api";
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
-import { PlayerDetailsContent } from "./section";
-import type { PlayerRecord } from "../shared";
+import { PlayerDetailsContent, type MemberDetailPayload } from "./section";
+
+type ApiEnvelope<T> = {
+  data?: T;
+};
 
 const PlayerDetailsPage = () => {
-  const { playerId } = useParams();
-  const { playerRecords } = useGalacticContent();
-  const record = playerRecords.find((item: PlayerRecord) => String(item.id) === playerId) || playerRecords[0];
-  const title = record?.member?.nickname || record?.member?.username || record?.item.name || "Detail Pemain";
+  const { slug } = useParams();
+  const hasSlug = Boolean(slug?.trim());
+  const [record, setRecord] = useState<MemberDetailPayload | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const resolvedError = hasSlug ? error : "Slug member tidak valid.";
+  const loading = hasSlug && (!record || record.slug !== slug?.trim()) && !resolvedError;
+
+  useEffect(() => {
+    const normalizedSlug = slug?.trim();
+    if (!normalizedSlug) {
+      return;
+    }
+
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (!cancelled) {
+        setError(null);
+      }
+    });
+
+    Api.get(`/members/${encodeURIComponent(normalizedSlug)}`)
+      .then((response) => {
+        if (cancelled) {
+          return;
+        }
+
+        const payload = response.data as
+          | ApiEnvelope<MemberDetailPayload>
+          | MemberDetailPayload
+          | undefined;
+        const member =
+          (payload as ApiEnvelope<MemberDetailPayload> | undefined)?.data ??
+          (payload as MemberDetailPayload | undefined);
+        if (!member) {
+          setRecord(null);
+          setError("Data member tidak ditemukan.");
+          return;
+        }
+
+        setRecord(member);
+      })
+      .catch((fetchError) => {
+        if (cancelled) {
+          return;
+        }
+
+        console.error(fetchError);
+        setRecord(null);
+        setError("Terjadi kesalahan saat memuat detail member.");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hasSlug, slug]);
+
+  const title = record?.nickname || record?.username || "Detail Member";
 
   return (
-    <PageShell title={title} type="profile" image={record?.member?.picture_url || record?.item.image}>
-      <PlayerDetailsContent record={record} />
+    <PageShell title={title} type="profile" image={record?.picture_url}>
+      <PlayerDetailsContent record={record} loading={loading} error={resolvedError} />
     </PageShell>
   );
 };
