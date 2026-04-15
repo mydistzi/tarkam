@@ -35,6 +35,13 @@ type ApiNewsCategoryItem = {
   blog_count?: number | string;
 };
 
+type ApiNewsTagItem = {
+  id?: number;
+  title?: string;
+  name?: string;
+  slug?: string;
+};
+
 const formatDateLabel = (value?: string) =>
   value ? new Date(value).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" }) : "";
 
@@ -44,16 +51,6 @@ const slugifyTag = (value: string) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-
-const createNewsTagItem = (value: string): NewsTagWidgetItem => {
-  const label = String(value || "").trim();
-  const slug = slugifyTag(label);
-  return {
-    label,
-    slug,
-    path: buildNewsTagPath(slug),
-  };
-};
 
 const stripHtml = (value?: string) =>
   (value || "").replace(/<[^>]+>/g, "");
@@ -161,16 +158,6 @@ const NewsPage = () => {
           ? 1
           : Number(payload?.last_page ?? 1),
       );
-
-      const uniqueTags = new Map<string, NewsTagWidgetItem>();
-      posts.flatMap((item) => item.tags).forEach((tagValue) => {
-        const tagItem = createNewsTagItem(tagValue);
-        if (tagItem.slug && !uniqueTags.has(tagItem.slug)) {
-          uniqueTags.set(tagItem.slug, tagItem);
-        }
-      });
-
-      setTags(Array.from(uniqueTags.values()).slice(0, 8));
     } catch (error) {
       console.error("Failed to load blog posts", error);
     }
@@ -183,7 +170,7 @@ const NewsPage = () => {
 
       setCategories(
         Array.isArray(payload)
-          ? payload.map((item: ApiNewsCategoryItem) => ({
+          ? payload.map((item) => ({
               id: item.id,
               title: item.title || item.name || "Kategori",
               slug: item.slug || slugifyTag(item.title || item.name || "Kategori"),
@@ -194,6 +181,32 @@ const NewsPage = () => {
       );
     } catch (error) {
       console.error("Failed to load blog categories", error);
+    }
+  }, []);
+
+  const fetchTags = useCallback(async () => {
+    try {
+      const response = await Api.get("/tags");
+      const payload = response.data?.data as ApiNewsTagItem[] | undefined;
+
+      setTags(
+        Array.isArray(payload)
+          ? payload
+              .map((item) => {
+                const label = item.title || item.name || "Tag";
+                const slug = item.slug || slugifyTag(label);
+                return {
+                  label,
+                  slug,
+                  path: buildNewsTagPath(slug),
+                };
+              })
+              .filter((item) => item.slug)
+              .slice(0, 8)
+          : []
+      );
+    } catch (error) {
+      console.error("Failed to load news tags", error);
     }
   }, []);
 
@@ -214,8 +227,9 @@ const NewsPage = () => {
 
   useEffect(() => {
     void fetchCategories();
+    void fetchTags();
     void fetchRecentPosts();
-  }, [fetchCategories, fetchRecentPosts]);
+  }, [fetchCategories, fetchTags, fetchRecentPosts]);
 
   useEffect(() => {
     void fetchPosts();

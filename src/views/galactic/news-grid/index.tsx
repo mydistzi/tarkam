@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
+﻿/* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";
@@ -34,6 +34,13 @@ type ApiNewsCategoryItem = {
   blog_count?: number | string;
 };
 
+type ApiNewsTagItem = {
+  id?: number;
+  title?: string;
+  name?: string;
+  slug?: string;
+};
+
 const formatDateLabel = (value?: string) =>
   value ? new Date(value).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" }) : "";
 
@@ -49,17 +56,6 @@ const stripHtml = (value?: string) =>
 
 const splitContent = (value?: string) =>
   (value || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-
-const createNewsTagItem = (value: string): NewsTagWidgetItem => {
-  const label = String(value || "").trim();
-  const slug = slugifyTerm(label);
-
-  return {
-    label,
-    slug,
-    path: buildNewsTagPath(slug),
-  };
-};
 
 const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
   const category = blog.category?.title || "Berita";
@@ -140,26 +136,6 @@ const NewsGridPage = () => {
 
       setPosts(items);
       setTotalPages(Number(payload?.last_page ?? 1));
-      const extractedTags = Array.from(
-        new Map(
-          items
-            .flatMap((item) => item.tags)
-            .map((tag) => createNewsTagItem(tag))
-            .filter((tag) => tag.slug)
-            .map((tag) => [tag.slug, tag] as const),
-        ).values(),
-      ).slice(0, 8);
-      const fallbackTags = extractedTags.length
-        ? extractedTags
-        : Array.from(
-            new Map(
-              items
-                .map((item) => createNewsTagItem(item.category))
-                .filter((tag) => tag.slug)
-                .map((tag) => [tag.slug, tag] as const),
-            ).values(),
-          ).slice(0, 8);
-      setTags(fallbackTags);
     } catch (error) {
       console.error("Failed to load blog posts", error);
     }
@@ -172,7 +148,7 @@ const NewsGridPage = () => {
 
       setCategories(
         Array.isArray(payload)
-          ? payload.map((item: ApiNewsCategoryItem) => ({
+          ? payload.map((item) => ({
               id: item.id,
               title: item.title || item.name || "Kategori",
               slug: item.slug || slugifyTerm(item.title || item.name || "Kategori"),
@@ -183,6 +159,32 @@ const NewsGridPage = () => {
       );
     } catch (error) {
       console.error("Failed to load blog categories", error);
+    }
+  }, []);
+
+  const fetchTags = useCallback(async () => {
+    try {
+      const response = await Api.get("/tags");
+      const payload = response.data?.data as ApiNewsTagItem[] | undefined;
+
+      setTags(
+        Array.isArray(payload)
+          ? payload
+              .map((item) => {
+                const label = item.title || item.name || "Tag";
+                const slug = item.slug || slugifyTerm(label);
+                return {
+                  label,
+                  slug,
+                  path: buildNewsTagPath(slug),
+                };
+              })
+              .filter((item) => item.slug)
+              .slice(0, 8)
+          : []
+      );
+    } catch (error) {
+      console.error("Failed to load news tags", error);
     }
   }, []);
 
@@ -203,8 +205,9 @@ const NewsGridPage = () => {
 
   useEffect(() => {
     void fetchCategories();
+    void fetchTags();
     void fetchRecentPosts();
-  }, [fetchCategories, fetchRecentPosts]);
+  }, [fetchCategories, fetchTags, fetchRecentPosts]);
 
   useEffect(() => {
     void fetchPosts();
