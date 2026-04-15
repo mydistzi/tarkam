@@ -318,9 +318,42 @@ const ClubsContent = ({
       String(left.relationCreatedAt || left.createdAt || ""),
     ),
   );
+  const [visibleTimelineCount, setVisibleTimelineCount] = useState(3);
+  const loadMoreTimelineRef = useRef<HTMLDivElement | null>(null);
+
   const timelineEntries = [...(record.timeline || [])].sort((left, right) =>
     String(right.createdAt || "").localeCompare(String(left.createdAt || "")),
   );
+  const visibleTimelineEntries = timelineEntries.slice(0, visibleTimelineCount);
+  const canLoadMoreTimeline = visibleTimelineCount < timelineEntries.length;
+
+  useEffect(() => {
+    setVisibleTimelineCount(Math.min(3, timelineEntries.length));
+  }, [timelineEntries.length]);
+
+  useEffect(() => {
+    if (!loadMoreTimelineRef.current || visibleTimelineCount >= timelineEntries.length) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          setVisibleTimelineCount((current) =>
+            Math.min(current + 3, timelineEntries.length),
+          );
+        }
+      },
+      {
+        rootMargin: "100px",
+      },
+    );
+
+    observer.observe(loadMoreTimelineRef.current);
+
+    return () => observer.disconnect();
+  }, [timelineEntries.length, visibleTimelineCount]);
 
   let topMember: MemberItem | undefined;
   for (const member of members) {
@@ -599,36 +632,44 @@ const ClubsContent = ({
           </div>
 
           {timelineEntries.length > 0 ? (
-            <div className="club-timeline-list">
-              {timelineEntries.map((entry, index) => (
-                <article
-                  className="club-timeline-card galactic-hover-card"
-                  key={`${entry.id || resolveTimelineTitle(entry)}-${entry.createdAt || index}`}
-                >
-                  <div className="club-timeline-card__rail">
-                    <span />
-                  </div>
-                  <div className="club-timeline-card__body">
-                    <div className="club-timeline-card__header">
-                      <div>
-                        <span className="club-timeline-card__eyebrow">
-                          {resolveTimelineTitle(entry)}
+            <>
+              <div className="club-timeline-list">
+                {visibleTimelineEntries.map((entry, index) => (
+                  <article
+                    className="club-timeline-card galactic-hover-card"
+                    key={`${entry.id || resolveTimelineTitle(entry)}-${entry.createdAt || index}`}
+                  >
+                    <div className="club-timeline-card__rail">
+                      <span />
+                    </div>
+                    <div className="club-timeline-card__body">
+                      <div className="club-timeline-card__header">
+                        <div>
+                          <span className="club-timeline-card__eyebrow">
+                            {resolveTimelineTitle(entry)}
+                          </span>
+                          <h3>{entry.sessionLabel || "History Klub"}</h3>
+                        </div>
+                        <span className={`club-status-pill ${getStatusClass(entry.sessionStatus)}`}>
+                          {getStatusLabel(entry.sessionStatus)}
                         </span>
-                        <h3>{entry.sessionLabel || "History Klub"}</h3>
                       </div>
-                      <span className={`club-status-pill ${getStatusClass(entry.sessionStatus)}`}>
-                        {getStatusLabel(entry.sessionStatus)}
-                      </span>
+                      <p>{entry.description}</p>
+                      <div className="club-timeline-card__footer">
+                        <span>Dibuat: {formatDateLabel(entry.createdAt)}</span>
+                        <span>Update: {formatDateLabel(entry.updatedAt)}</span>
+                      </div>
                     </div>
-                    <p>{entry.description}</p>
-                    <div className="club-timeline-card__footer">
-                      <span>Dibuat: {formatDateLabel(entry.createdAt)}</span>
-                      <span>Update: {formatDateLabel(entry.updatedAt)}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  </article>
+                ))}
+              </div>
+              {canLoadMoreTimeline && (
+                <div
+                  ref={loadMoreTimelineRef}
+                  style={{ height: 1, visibility: "hidden" }}
+                />
+              )}
+            </>
           ) : (
             <div className="club-empty-state">
               <h3>Timeline belum tersedia</h3>
