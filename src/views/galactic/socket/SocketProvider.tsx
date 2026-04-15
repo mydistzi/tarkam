@@ -10,6 +10,7 @@ interface SocketProviderProps {
 }
 
 const getSocketUrl = () => {
+  // Pastikan URL di .env diawali dengan https://tarkam-api-web-production.up.railway.app
   return (
     import.meta.env.VITE_SOCKET_URL?.trim() ||
     `${window.location.origin}`
@@ -21,13 +22,15 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
 
   useEffect(() => {
     const url = getSocketUrl();
+    
     const client = io(url, {
-      path: "/socket.io",
-      transports: ["polling", "websocket"],
+      path: "/socket.io/", // Ditambahkan '/' di akhir untuk kecocokan endpoint yang lebih baik
+      transports: ["polling", "websocket"], // Tetap gunakan polling dulu untuk stabilitas CORS handshake
+      withCredentials: true, // WAJIB: Agar browser mengirimkan header CORS yang diperlukan
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       autoConnect: true,
-      withCredentials: true,
+      forceNew: true, // Memastikan koneksi baru setiap kali provider di-mount
     });
 
     const handleUpdate = (data?: unknown) => {
@@ -39,10 +42,12 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     };
 
     client.on("connect", () => {
+      console.log("[SocketProvider] Connected successfully!");
       window.dispatchEvent(new CustomEvent("tarkam:socket-connect", { detail: { connected: true } }));
     });
 
-    client.on("disconnect", () => {
+    client.on("disconnect", (reason) => {
+      console.log("[SocketProvider] Disconnected:", reason);
       window.dispatchEvent(new CustomEvent("tarkam:socket-disconnect"));
     });
 
@@ -52,7 +57,8 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     client.on("record:update", handleUpdate);
 
     client.on("connect_error", (error) => {
-      console.warn("[SocketProvider] connect_error", error);
+      // Jika masih error 404/CORS, masalah ada di konfigurasi server (Backend)
+      console.warn("[SocketProvider] connect_error", error.message);
     });
 
     setSocket(client);
