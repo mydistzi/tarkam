@@ -24,13 +24,13 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     const url = getSocketUrl();
     
     const client = io(url, {
-      path: "/socket.io/", // Ditambahkan '/' di akhir untuk kecocokan endpoint yang lebih baik
-      transports: ["polling", "websocket"], // Tetap gunakan polling dulu untuk stabilitas CORS handshake
-      withCredentials: true, // WAJIB: Agar browser mengirimkan header CORS yang diperlukan
+      path: "/socket.io/",
+      transports: ["websocket", "polling"],
+      withCredentials: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       autoConnect: true,
-      forceNew: true, // Memastikan koneksi baru setiap kali provider di-mount
+      forceNew: true,
     });
 
     const handleUpdate = (data?: unknown) => {
