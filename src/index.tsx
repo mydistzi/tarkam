@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/views/galactic/auth/AuthProvider";
+import { SocketProvider } from "@/views/galactic/socket/SocketProvider";
 import { getGalacticRoutes } from "@/views/galactic/routes";
 import "@/assets/css/bootstrap.min.css";
 import "react-multi-carousel/lib/styles.css";
@@ -39,9 +40,11 @@ const router = createBrowserRouter(getGalacticRoutes());
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <SocketProvider>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </SocketProvider>
     </HelmetProvider>
   </StrictMode>,
 )
