@@ -127,8 +127,8 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
         <div className="container">
           <div className="club-registry-shell">
             <div className="club-registry-copy">
-              <p className="club-registry-note">Direktori Klub Resmi</p>
-              <h1>Seluruh klub terdaftar ditampilkan langsung dari data server.</h1>
+              <p className="club-registry-note">Direktori Klub Tarkam</p>
+              <h1>Informasi klub terupdate.</h1>
               <p>
                 Setiap entri klub disusun berdasarkan poin, jumlah anggota, serta relasi yang
                 tersinkron. Halaman ini berfungsi sebagai rujukan resmi untuk menelusuri profil
