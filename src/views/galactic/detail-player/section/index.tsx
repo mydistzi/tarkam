@@ -295,7 +295,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
                 <span className="player-pill is-neutral">{clubName}</span>
               </div>
               <p className="mt-10">
-                Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
+                Halaman ini menampilkan informasi lengkap <code>{displayName}</code>, mulai dari profil utama, riwayat sesi,
                 hingga timeline aktivitas terbaru.
               </p>
               <div className="player-hero-links">
