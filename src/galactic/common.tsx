@@ -66,6 +66,7 @@ type PageShellProps = {
 type PageHeaderProps = {
   eyebrow?: ReactNode;
   title: ReactNode;
+  span?: ReactNode;
   description?: ReactNode;
   className?: string;
   infoClassName?: string;
@@ -367,6 +368,7 @@ const renderPageHeaderDescription = (description?: ReactNode) =>
 const PageHeader = ({
   eyebrow,
   title,
+  span,
   description,
   className = "",
   infoClassName = "",
@@ -378,7 +380,7 @@ const PageHeader = ({
       <div className={`page-header-info ${infoClassName}`.trim()}>
         {children}
         {eyebrow ? <h4>{eyebrow}</h4> : null}
-        <h2>{title}</h2>
+        <h2>{title} <span>{span}</span></h2>
         {renderPageHeaderDescription(description)}
         {meta}
       </div>

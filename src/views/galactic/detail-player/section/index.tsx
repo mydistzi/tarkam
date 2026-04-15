@@ -266,12 +266,11 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
 
   return (
     <>
-      <PageHeader
-        title={displayName}
-        description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}
-      />
+      <PageHeader title={displayName} span={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
+        <img src={record.picture_url || placeholderPlayer} alt={displayName} />
+      </PageHeader>
 
-      <section className="player-hero-section">
+      <section className="player-hero-section padding-top">
         <div className="container">
           <div className="player-hero-shell">
             <div className="player-hero-portrait">
@@ -283,7 +282,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
                 <span className={`player-pill ${tierClass(record.tier)}`}>Tier {record.tier || "-"}</span>
                 <span className="player-pill is-neutral">{clubName}</span>
               </div>
-              <p>
+              <p className="mt-10">
                 Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
                 hingga timeline aktivitas terbaru.
               </p>
