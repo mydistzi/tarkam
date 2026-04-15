@@ -267,7 +267,10 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   return (
     <>
       <PageHeader
-        title="Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi, hingga timeline aktivitas terbaru."
+        className="team-details player-details player-page-header"
+        infoClassName="player-page-hero"
+        title={displayName}
+        description={`${displayName} <span>${handle}</span> | <span>${record.tier || "Tier belum diatur"}</span> | <span>${genderLabel(record.gender)}</span>`}
       >
         <div className="player-hero-shell">
           <div className="player-hero-portrait">
@@ -279,6 +282,10 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               <span className={`player-pill ${tierClass(record.tier)}`}>Tier {record.tier || "-"}</span>
               <span className="player-pill is-neutral">{clubName}</span>
             </div>
+            <p>
+              Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
+              hingga timeline aktivitas terbaru.
+            </p>
             <div className="player-hero-links">
               <Link className="player-hero-link" to={clubPath}>
                 <img src={record.club?.logo || placeholderSquad} alt={clubName} />
