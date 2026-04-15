@@ -1,11 +1,29 @@
 .player-page-header .page-header-info {
   position: relative;
   z-index: 2;
-  height: 600px;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 118px 0 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 .player-page-header .page-header-info h2 {
   max-width: 12ch;
+  margin-bottom: 0;
+}
+
+.player-page-header {
+  align-items: flex-start;
+}
+
+.player-hero-section {
+  position: relative;
+  z-index: 2;
+  padding: 28px 0 12px;
 }
 
 .player-page-hero {
@@ -211,12 +229,12 @@
     linear-gradient(180deg, rgba(6, 10, 27, 0.98) 0%, rgba(9, 12, 29, 0.99) 100%);
 } */
 
-.player-stats-section::before {
+/* .player-stats-section::before {
   background:
     radial-gradient(circle at 10% 20%, rgba(125, 228, 255, 0.16), transparent 24%),
     radial-gradient(circle at 90% 12%, rgba(255, 109, 182, 0.12), transparent 20%),
     linear-gradient(180deg, rgba(8, 13, 34, 0.99) 0%, rgba(9, 14, 37, 0.99) 100%);
-}
+} */
 
 /* .player-ledger-section::before {
   background:

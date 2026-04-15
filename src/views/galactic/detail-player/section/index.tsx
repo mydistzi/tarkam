@@ -270,40 +270,44 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
         className="team-details player-details player-page-header"
         infoClassName="player-page-hero"
         title={displayName}
-        description={`${displayName} <span>${handle}</span> | <span>${record.tier || "Tier belum diatur"}</span> | <span>${genderLabel(record.gender)}</span>`}
-      >
-        <div className="player-hero-shell">
-          <div className="player-hero-portrait">
-            <img src={record.picture_url || placeholderPlayer} alt={displayName} />
-          </div>
-          <div className="player-hero-copy">
-            <div className="player-hero-badges">
-              <span className={`player-pill ${statusClass(record.status)}`}>{statusLabel(record.status)}</span>
-              <span className={`player-pill ${tierClass(record.tier)}`}>Tier {record.tier || "-"}</span>
-              <span className="player-pill is-neutral">{clubName}</span>
+        description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}
+      />
+
+      <section className="player-hero-section">
+        <div className="container">
+          <div className="player-hero-shell">
+            <div className="player-hero-portrait">
+              <img src={record.picture_url || placeholderPlayer} alt={displayName} />
             </div>
-            <p>
-              Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
-              hingga timeline aktivitas terbaru.
-            </p>
-            <div className="player-hero-links">
-              <Link className="player-hero-link" to={clubPath}>
-                <img src={record.club?.logo || placeholderSquad} alt={clubName} />
-                <div>
-                  <span>Club</span>
-                  <strong>{clubName}</strong>
-                </div>
-              </Link>
-              <div className="player-hero-link is-static">
-                <div>
-                  <span>Handle</span>
-                  <strong>@{handle}</strong>
+            <div className="player-hero-copy">
+              <div className="player-hero-badges">
+                <span className={`player-pill ${statusClass(record.status)}`}>{statusLabel(record.status)}</span>
+                <span className={`player-pill ${tierClass(record.tier)}`}>Tier {record.tier || "-"}</span>
+                <span className="player-pill is-neutral">{clubName}</span>
+              </div>
+              <p>
+                Halaman ini menampilkan informasi lengkap <code>member</code>, mulai dari profil utama, riwayat sesi,
+                hingga timeline aktivitas terbaru.
+              </p>
+              <div className="player-hero-links">
+                <Link className="player-hero-link" to={clubPath}>
+                  <img src={record.club?.logo || placeholderSquad} alt={clubName} />
+                  <div>
+                    <span>Club</span>
+                    <strong>{clubName}</strong>
+                  </div>
+                </Link>
+                <div className="player-hero-link is-static">
+                  <div>
+                    <span>Handle</span>
+                    <strong>@{handle}</strong>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </PageHeader>
+      </section>
 
       <section className="player-page-section player-stats-section padding-top">
         <div className="container">
