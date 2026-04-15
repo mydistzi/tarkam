@@ -269,9 +269,18 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
       <PageHeader
         className="team-details player-details player-page-header"
         infoClassName="player-page-hero"
-        title={displayName} 
+        title={displayName}
+        eyebrow="Player Profile"
         description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}>
       </PageHeader>
+
+      <div className="team-details-info player-details">
+        <div className="container">
+            <div className="team-details-wrap">
+                <br />
+            </div>
+        </div>
+    </div>
 
       <section className="player-hero-section padding-top">
         <div className="container">
