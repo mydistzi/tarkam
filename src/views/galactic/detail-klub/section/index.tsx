@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageHeader } from "@/galactic/common";
-import { placeholderSquad } from "@/galactic/placeholders";
-import { buildPlayerDetailPath, type ClubItem, type MemberItem } from "@/galactic/data";
+import { placeholderSquad, placeholderPlayer } from "@/galactic/placeholders";
+import {
+  buildPlayerDetailPath,
+  type ClubItem,
+  type MemberItem,
+} from "@/galactic/data";
 
 type ClubsContentProps = {
   record?: ClubItem;
@@ -12,7 +16,13 @@ type ClubsContentProps = {
   clubPoints: number;
 };
 
-const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number }) => {
+const AnimatedCounter = ({
+  value,
+  delay = 300,
+}: {
+  value: number;
+  delay?: number;
+}) => {
   const [displayValue, setDisplayValue] = useState(value);
   const previousValue = useRef(value);
   const frameId = useRef<number | null>(null);
@@ -65,20 +75,32 @@ const MemberCarousel = ({ members }: { members: MemberItem[] }) => (
   <div className="member-carousel">
     <div className="row flex-nowrap overflow-auto gx-3">
       {members.map((member) => (
-        <div className="col-12 col-sm-6 col-lg-4" key={`${member.slug || member.id}-${member.alias || member.nickname || member.username || "member"}`}>
+        <div
+          className="col-12 col-sm-6 col-lg-4"
+          key={`${member.slug || member.id}-${member.alias || member.nickname || member.username || "member"}`}
+        >
           <div className="team-item galactic-hover-card">
             <div className="team-thumb">
               <img
-                src={member.pictureUrl || member.image || placeholderSquad}
+                src={member.pictureUrl || member.image || placeholderPlayer}
                 alt={member.nickname || member.username || "Member"}
               />
             </div>
             <div className="team-content">
               <span className="whte-shape" />
               <h3>
-                <Link to={member.path || buildPlayerDetailPath(member.slug || member.id || "")}>{member.nickname || member.username || "Member"}</Link>
+                <Link
+                  to={
+                    member.path ||
+                    buildPlayerDetailPath(member.slug || member.id || "")
+                  }
+                >
+                  {member.nickname || member.username || "Member"}
+                </Link>
               </h3>
-              <h4>{member.alias ? `@${member.alias}` : member.city || "Indonesia"}</h4>
+              <h4>
+                {member.alias ? `@${member.alias}` : member.city || "Jakarta"}
+              </h4>
             </div>
           </div>
         </div>
@@ -87,7 +109,13 @@ const MemberCarousel = ({ members }: { members: MemberItem[] }) => (
   </div>
 );
 
-const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: ClubsContentProps) => {
+const ClubsContent = ({
+  record,
+  members,
+  clubWins,
+  clubLosses,
+  clubPoints,
+}: ClubsContentProps) => {
   const [activeTab, setActiveTab] = useState<"about" | "details">("about");
 
   if (!record) {
@@ -105,7 +133,11 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
   return (
     <>
       <PageHeader className="team-details" title={record.name || "Detail Klub"}>
-        {record.logo ? <img src={record.logo} alt={record.name || "Logo Klub"} /> : <img src={placeholderSquad} alt="Logo Klub" />}
+        {record.logo ? (
+          <img src={record.logo} alt={record.name || "Logo Klub"} />
+        ) : (
+          <img src={placeholderSquad} alt="Logo Klub" />
+        )}
       </PageHeader>
       <div className="team-details-info">
         <div className="container">
@@ -179,15 +211,24 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
         <div className="container">
           <div className="section-heading mb-40 text-center">
             <h3>Anggota Tim</h3>
-            <h2>Kenalan Sama <span>Roster</span></h2>
-            <p>Setiap kartu member di bawah terhubung ke halaman detail player live.</p>
+            <h2>
+              Kenalan Sama <span>Roster</span>
+            </h2>
+            <p>
+              Setiap kartu member di bawah terhubung ke halaman detail player
+              live.
+            </p>
           </div>
           <MemberCarousel members={members} />
         </div>
       </section>
       <section className="product-description padding-top">
         <div className="container">
-          <ul className="nav tab-navigation" id="product-tab-navigation" role="tablist">
+          <ul
+            className="nav tab-navigation"
+            id="product-tab-navigation"
+            role="tablist"
+          >
             <li role="presentation">
               <button
                 className={activeTab === "about" ? "active" : ""}
@@ -223,20 +264,17 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
               aria-labelledby="about-tab"
             >
               <div className="description-wrap">
-                <p>{record.level ? `Level klub: ${record.level}` : "Informasi level klub belum tersedia."}</p>
-                <p>{record.points !== undefined ? `Total poin klub: ${record.points}` : "Poin klub belum tersedia."}</p>
+                <p>
+                  {`Jumlah Pertandingan: ${clubWins} + ${clubLosses}` ||
+                    "Informasi pertandingan klub belum tersedia."}
+                </p>
                 <ul className="description-meta">
                   <li>
+                    <span>Level Klub</span>{" "}
+                    {record.level || "Informasi level klub belum tersedia."}
+                  </li>
+                  <li>
                     <span>Kode Klub:</span> {record.code || "-"}
-                  </li>
-                  <li>
-                    <span>Anggota Terdaftar:</span> {record.membersCount ?? members.length}
-                  </li>
-                  <li>
-                    <span>Facebook:</span> {record.facebook ? <a href={record.facebook}>{record.facebook}</a> : "-"}
-                  </li>
-                  <li>
-                    <span>Instagram:</span> {record.instagram ? <a href={record.instagram}>{record.instagram}</a> : "-"}
                   </li>
                 </ul>
               </div>
@@ -257,24 +295,24 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
                   </thead>
                   <tbody>
                     <tr>
+                      <tr>
+                        <td>Nama Klub</td>
+                        <td>{record.name || "-"}</td>
+                      </tr>
                       <td>Kode Klub</td>
                       <td>{record.code || "-"}</td>
-                    </tr>
-                    <tr>
-                      <td>Nama Klub</td>
-                      <td>{record.name || "-"}</td>
                     </tr>
                     <tr>
                       <td>Level</td>
                       <td>{record.level || "-"}</td>
                     </tr>
                     <tr>
-                      <td>Poin</td>
-                      <td>{record.points ?? "-"}</td>
-                    </tr>
-                    <tr>
                       <td>Jumlah Anggota</td>
                       <td>{record.membersCount ?? members.length}</td>
+                    </tr>
+                    <tr>
+                      <td>Poin</td>
+                      <td>{record.points ?? "-"}</td>
                     </tr>
                     <tr>
                       <td>Facebook</td>
@@ -299,7 +337,9 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
         <div className="container">
           <div className="section-heading mb-30 text-center">
             <h3>Timeline Klub</h3>
-            <h2>Perjalanan <span>{record.name}</span> selama musim ini.</h2>
+            <h2>
+              Perjalanan <span>{record.name}</span> selama musim ini.
+            </h2>
           </div>
           <div className="row cart-body pb-30">
             {record.timeline && record.timeline.length > 0 ? (
@@ -330,4 +370,4 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
   );
 };
 
-export { ClubsContent }; 
+export { ClubsContent };
