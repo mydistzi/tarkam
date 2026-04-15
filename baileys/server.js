@@ -59,13 +59,13 @@ const MAX_MESSAGE_CACHE_SIZE = Number(process.env.BAILEYS_MESSAGE_CACHE_SIZE || 
 const HOSTED_MEDIA_MAX_AGE_MS = Number(process.env.BAILEYS_HOSTED_MEDIA_MAX_AGE_MS || 300000);
 const NSFW_GROUP_STATUS_CACHE_TTL_MS = Number(process.env.BAILEYS_NSFW_GROUP_STATUS_CACHE_TTL_MS || 60000);
 
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "https://tarkam.fun", // Ganti dengan domain Anda, JANGAN gunakan "*"
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "https://tarkam.fun", // Ganti dengan domain Anda, JANGAN gunakan "*"
+//     methods: ["GET", "POST"],
+//     credentials: true
+//   }
+// });
 
 function readTrimmedEnv(name) {
   return String(process.env[name] || "").trim();
