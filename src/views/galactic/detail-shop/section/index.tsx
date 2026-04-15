@@ -2,6 +2,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "@/api";
+import { DisqusThread } from "@/galactic/common";
 import { galacticRoutes } from "@/galactic/data";
 import { placeholderShop } from "@/galactic/placeholders";
 import { getCartRequestPayload } from "@/galactic/session";
@@ -156,6 +157,18 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                 </ul>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="product-description padding-top padding-bottom">
+        <div className="container">
+          <div className="description">
+            <h3 className="comment-title">Komentar Produk</h3>
+            <DisqusThread
+              identifier={product.path || product.sku || String(product.id || product.name)}
+              title={product.name || "Detail Produk"}
+            />
           </div>
         </div>
       </section>

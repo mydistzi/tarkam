@@ -1355,13 +1355,16 @@ const ClassicNewsSidebar = ({
           const isActive = category.slug ? category.slug === selectedCategory : false;
           return (
             <li key={`${category.title}-${index + 1}`}>
-              <Link
-                to={category.path || "#"}
+              <a
+                href={category.path || "#"}
                 className={isActive ? "active" : ""}
-                onClick={() => onCategorySelect?.(category.slug)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onCategorySelect?.(category.slug);
+                }}
               >
                 {category.title}
-              </Link>
+              </a>
               <span>{category.count ?? 0}</span>
             </li>
           );
@@ -1393,13 +1396,16 @@ const ClassicNewsSidebar = ({
       <ul className="tags">
         {tags.map((tag) => (
           <li key={tag.slug}>
-            <Link
-              to={tag.path || buildNewsTagPath(tag.slug)}
+            <a
+              href={tag.path || buildNewsTagPath(tag.slug)}
               className={tag.slug === selectedTag ? "active" : ""}
-              onClick={() => onTagSelect?.(tag.slug)}
+              onClick={(event) => {
+                event.preventDefault();
+                onTagSelect?.(tag.slug);
+              }}
             >
               {tag.label}
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
