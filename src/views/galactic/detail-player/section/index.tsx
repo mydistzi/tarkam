@@ -267,8 +267,6 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   return (
     <>
       <PageHeader
-        className="team-details player-details player-page-header"
-        infoClassName="player-page-hero"
         title={displayName}
       >
         <div className="player-hero-shell">
