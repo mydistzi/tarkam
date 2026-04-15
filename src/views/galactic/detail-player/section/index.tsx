@@ -272,8 +272,19 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
         eyebrow="Player Profile"
         title={displayName}
         description={`${handle} | ${record.tier || "Tier belum diatur"} | ${genderLabel(record.gender)}`}
-      >
-        <div className="player-hero-shell">
+        >
+          <div className="container">
+            <div className="page-header-info player-details">
+                <div className="player-thumb"><img src={record.picture_url || placeholderPlayer} alt={displayName} /></div>
+                <h2>{displayName} <span>Tier {record.tier || "-"} {clubName}</span></h2>
+            </div>
+        </div>
+      
+      </PageHeader>
+
+      <section className="player-page-section player-stats-section padding-top">
+        <div className="container">
+          <div className="player-hero-shell">
           <div className="player-hero-portrait">
             <img src={record.picture_url || placeholderPlayer} alt={displayName} />
           </div>
@@ -304,10 +315,6 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
             </div>
           </div>
         </div>
-      </PageHeader>
-
-      <section className="player-page-section player-stats-section padding-top">
-        <div className="container">
           <div className="player-kpi-grid">
             <article className="player-kpi-card player-kpi-card--accent galactic-hover-card">
               <span>Points</span>

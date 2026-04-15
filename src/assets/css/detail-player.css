@@ -204,11 +204,11 @@
     linear-gradient(180deg, rgba(8, 13, 34, 0.98) 0%, rgba(10, 16, 41, 0.98) 100%);
 }
 
-.player-timeline-section::before {
+/* .player-timeline-section::before {
   background:
     radial-gradient(circle at 80% 24%, rgba(125, 228, 255, 0.12), transparent 22%),
     linear-gradient(180deg, rgba(6, 10, 27, 0.98) 0%, rgba(9, 12, 29, 0.99) 100%);
-}
+} */
 
 .player-stats-section::before {
   background:
@@ -217,17 +217,17 @@
     linear-gradient(180deg, rgba(8, 13, 34, 0.99) 0%, rgba(9, 14, 37, 0.99) 100%);
 }
 
-.player-ledger-section::before {
+/* .player-ledger-section::before {
   background:
     radial-gradient(circle at 90% 10%, rgba(125, 228, 255, 0.08), transparent 22%),
     linear-gradient(180deg, rgba(7, 11, 29, 0.99) 0%, rgba(10, 16, 41, 0.99) 100%);
-}
+} */
 
-.player-connection-section::before {
+/* .player-connection-section::before {
   background:
     radial-gradient(circle at 16% 18%, rgba(255, 183, 77, 0.08), transparent 20%),
     linear-gradient(180deg, rgba(8, 12, 31, 0.99) 0%, rgba(6, 10, 27, 0.99) 100%);
-}
+} */
 
 .player-kpi-grid,
 .player-info-grid,
@@ -423,7 +423,7 @@
   overflow-y: auto;
   padding-right: 8px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(125, 228, 255, 0.45) rgba(255, 255, 255, 0.06);
+  scrollbar-color: rgba(152, 62, 255, 0.45) rgba(255, 255, 255, 0.06);
 }
 
 .player-connection-scroll::-webkit-scrollbar {
@@ -436,7 +436,7 @@
 }
 
 .player-connection-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.55), rgba(255, 109, 182, 0.5));
+  background: linear-gradient(180deg, rgba(152, 62, 255, 0.55), rgba(255, 109, 182, 0.5));
   border-radius: 999px;
 }
 
