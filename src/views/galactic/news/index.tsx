@@ -61,28 +61,6 @@ const stripHtml = (value?: string) =>
 const splitContent = (value?: string) =>
   (value || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
 
-const matchesSearchTerm = (post: PostItem, keyword: string) => {
-  const normalizedKeyword = keyword.trim().toLowerCase();
-  if (!normalizedKeyword) {
-    return true;
-  }
-
-  return [
-    post.title,
-    post.category,
-    post.author,
-    post.excerpt,
-    ...post.content,
-    ...post.tags,
-  ].some((value) => value.toLowerCase().includes(normalizedKeyword));
-};
-
-const matchesCategory = (post: PostItem, categorySlug: string) =>
-  !categorySlug.trim() || slugifyTag(post.category) === categorySlug.trim().toLowerCase();
-
-const matchesTag = (post: PostItem, tagSlug: string) =>
-  !tagSlug.trim() || post.tags.some((item) => slugifyTag(item) === tagSlug.trim().toLowerCase());
-
 const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
   const category = blog.category?.title || "Berita";
   const tags = Array.isArray(blog.tags)
@@ -147,53 +125,52 @@ const NewsPage = () => {
 
   const fetchPosts = useCallback(async () => {
     try {
+      const params: Record<string, unknown> = {
+        page,
+        limit: 9,
+      };
+
+      if (search.trim()) {
+        params.search = search.trim();
+      }
+
+      if (!tag && category) {
+        params.category = category;
+      }
+
       const response = await Api.get(
         tag ? `/blogs/tag/${encodeURIComponent(tag)}` : "/blogs",
-        { params: { all: true } }
+        { params }
       );
+
       const payload = response.data?.data as {
         data?: unknown[];
         total?: number;
         last_page?: number;
       } | unknown[] | undefined;
 
-      const allItems = Array.isArray(payload)
+      const posts = Array.isArray(payload)
         ? payload.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
         : Array.isArray(payload?.data)
           ? payload.data.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
           : [];
 
-      const filteredByCategory = allItems.filter((item) =>
-        matchesSearchTerm(item, search) && matchesCategory(item, category),
+      setPosts(posts);
+      setTotalPages(
+        Array.isArray(payload)
+          ? 1
+          : Number(payload?.last_page ?? 1),
       );
-      const filteredItems = filteredByCategory.filter((item) => matchesTag(item, tag));
-      const nextTotalPages = Math.max(1, Math.ceil(filteredItems.length / 9));
-      const currentPage = Math.min(page, nextTotalPages);
-      const startIndex = (currentPage - 1) * 9;
-      const items = filteredItems.slice(startIndex, startIndex + 9);
 
-      setPosts(items);
-      setTotalPages(nextTotalPages);
       const uniqueTags = new Map<string, NewsTagWidgetItem>();
-      filteredByCategory.flatMap((item) => item.tags).forEach((tag) => {
-        const tagItem = createNewsTagItem(tag);
+      posts.flatMap((item) => item.tags).forEach((tagValue) => {
+        const tagItem = createNewsTagItem(tagValue);
         if (tagItem.slug && !uniqueTags.has(tagItem.slug)) {
           uniqueTags.set(tagItem.slug, tagItem);
         }
       });
 
-      const extractedTags = Array.from(uniqueTags.values()).slice(0, 8);
-      const fallbackTags = extractedTags.length
-        ? extractedTags
-        : Array.from(
-            new Map(
-              items
-                .map((item) => createNewsTagItem(item.category))
-                .filter((tagItem) => tagItem.slug)
-                .map((tagItem) => [tagItem.slug, tagItem] as const),
-            ).values(),
-          ).slice(0, 8);
-      setTags(fallbackTags);
+      setTags(Array.from(uniqueTags.values()).slice(0, 8));
     } catch (error) {
       console.error("Failed to load blog posts", error);
     }
