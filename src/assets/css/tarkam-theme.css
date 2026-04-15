@@ -157,7 +157,6 @@
 
 .tarkam-card-grid {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 18px;
 }
 
 .tarkam-mini-stat {
@@ -190,57 +189,38 @@
 .tarkam-schedule-card {
   display: grid;
   grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 0;
-  margin-bottom: 28px;
-  border-radius: 32px;
+  margin-bottom: 24px;
+  border-radius: 28px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: linear-gradient(180deg, rgba(15, 18, 44, 0.96), rgba(7, 10, 24, 0.98));
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
 }
 
 .tarkam-schedule-card__media {
-  min-height: 320px;
+  min-height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.tarkam-schedule-card__content p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.8;
-}
-
 .tarkam-schedule-card__content {
-  display: grid;
-  gap: 22px;
-  padding: 32px;
+  padding: 28px;
 }
 
 .tarkam-schedule-card__headline {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-start;
+  gap: 10px;
+  align-items: center;
   justify-content: space-between;
 }
 
-.tarkam-schedule-card__headline > div {
-  min-width: 0;
-}
-
-.tarkam-schedule-card__headline h3 {
-  margin: 0;
-}
-
 .tarkam-gender-card {
-  display: grid;
-  gap: 16px;
   border-radius: 20px;
-  padding: 22px;
+  padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
 }
 
 .tarkam-gender-card--male {
@@ -259,7 +239,6 @@
   gap: 12px;
   margin-bottom: 14px;
   flex-wrap: wrap;
-  align-items: flex-start;
 }
 
 .tarkam-gender-card__eyebrow {
