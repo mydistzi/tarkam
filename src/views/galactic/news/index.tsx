@@ -147,7 +147,10 @@ const NewsPage = () => {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const response = await Api.get("/blogs", { params: { all: true } });
+      const response = await Api.get(
+        tag ? `/blogs/tag/${encodeURIComponent(tag)}` : "/blogs",
+        { params: { all: true } }
+      );
       const payload = response.data?.data as {
         data?: unknown[];
         total?: number;
@@ -158,7 +161,7 @@ const NewsPage = () => {
         ? payload.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
         : Array.isArray(payload?.data)
           ? payload.data.map((item) => mapApiBlogToNewsItem(item as ApiBlogItem))
-        : [];
+          : [];
 
       const filteredByCategory = allItems.filter((item) =>
         matchesSearchTerm(item, search) && matchesCategory(item, category),
