@@ -1487,14 +1487,14 @@
 
 .accordion-button:not(.collapsed):after {
     background-image: inherit;
-    content: "\f067";
+    content: "\f068";
     color: #fff;
     transform: inherit;
 }
 
 .accordion-button:after {
     background-image: inherit;
-    content: "\f068";
+    content: "\f067";
     font-family: "Font Awesome 5 Free";
     font-size: 12px;
     position: absolute;
