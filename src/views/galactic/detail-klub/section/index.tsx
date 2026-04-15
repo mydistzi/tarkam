@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { PageHeader, PlayerCarousel } from "@/galactic/common";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { PageHeader } from "@/galactic/common";
 import { placeholderSquad } from "@/galactic/placeholders";
-import { buildPlayerDetailPath, type ClubItem, type MemberItem, type PlayerItem } from "@/galactic/data";
+import { buildPlayerDetailPath, type ClubItem, type MemberItem } from "@/galactic/data";
 
 type ClubsContentProps = {
   record?: ClubItem;
@@ -60,23 +61,34 @@ const AnimatedCounter = ({ value, delay = 300 }: { value: number; delay?: number
   return <span className="odometer">{displayValue}</span>;
 };
 
-const mapMemberToPlayerItem = (member: MemberItem): PlayerItem => ({
-  id: member.id,
-  name: member.nickname || member.username || "",
-  game: member.tier || "Player",
-  image: member.pictureUrl || member.image || placeholderSquad,
-  speciality: member.alias || "",
-  role: member.alias || "",
-  country: member.city || "Indonesia",
-  team: member.clubName || "",
-  teamLogo: member.clubLogo || placeholderSquad,
-  about: member.about || "",
-  path: member.path || buildPlayerDetailPath(member.slug || member.id || ""),
-});
+const MemberCarousel = ({ members }: { members: MemberItem[] }) => (
+  <div className="member-carousel">
+    <div className="row flex-nowrap overflow-auto gx-3">
+      {members.map((member) => (
+        <div className="col-12 col-sm-6 col-lg-4" key={`${member.slug || member.id}-${member.alias || member.nickname || member.username || "member"}`}>
+          <div className="team-item galactic-hover-card">
+            <div className="team-thumb">
+              <img
+                src={member.pictureUrl || member.image || placeholderSquad}
+                alt={member.nickname || member.username || "Member"}
+              />
+            </div>
+            <div className="team-content">
+              <span className="whte-shape" />
+              <h3>
+                <Link to={member.path || buildPlayerDetailPath(member.slug || member.id || "")}>{member.nickname || member.username || "Member"}</Link>
+              </h3>
+              <h4>{member.alias ? `@${member.alias}` : member.city || "Indonesia"}</h4>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: ClubsContentProps) => {
   const [activeTab, setActiveTab] = useState<"about" | "details">("about");
-  const playerItems = useMemo(() => members.map(mapMemberToPlayerItem), [members]);
 
   if (!record) {
     return (
@@ -170,7 +182,7 @@ const ClubsContent = ({ record, members, clubWins, clubLosses, clubPoints }: Clu
             <h2>Kenalan Sama <span>Roster</span></h2>
             <p>Setiap kartu member di bawah terhubung ke halaman detail player live.</p>
           </div>
-          <PlayerCarousel items={playerItems} />
+          <MemberCarousel members={members} />
         </div>
       </section>
       <section className="product-description padding-top">
