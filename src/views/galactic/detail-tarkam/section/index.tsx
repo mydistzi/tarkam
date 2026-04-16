@@ -3,8 +3,10 @@ import { Link, useSearchParams } from "react-router-dom";
 import Api from "@/api";
 import "@/assets/css/tarkam-theme.css";
 import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
-import { buildPlayerDetailPath, buildTeamDetailPath, buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
-import { placeholderPlayer, placeholderTeam, placeholderVideoThumb } from "@/galactic/placeholders";
+// import { buildPlayerDetailPath, buildTeamDetailPath, buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+// import { placeholderPlayer, placeholderTeam, placeholderVideoThumb } from "@/galactic/placeholders";
+import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { placeholderVideoThumb } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 
 type GenderFilter = "all" | "male" | "female";
@@ -347,6 +349,57 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               );
             })}
               </div>
+              <div className="tab-pane fade" id="sessions" role="tabpanel" aria-labelledby="sessions-tab">
+                <div className="row">
+            {visibleSessions.length ? visibleSessions.map((relation) => {
+              const session = relation.session;
+              return (
+                <div className="col-lg-4 col-md-6 sm-padding" key={relation.id || relation.session_fk}>
+                  <article className="galactic-hover-card tarkam-session-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginBottom: "10px" }}>
+                      <div>
+                        <h3 style={{ marginBottom: "6px" }}>Session {session?.sesi ?? relation.session_fk ?? "-"}</h3>
+                        <div style={{ color: "rgba(255,255,255,0.72)" }}>{statusLabel(session?.status)}</div>
+                      </div>
+                      <span style={{ padding: "6px 12px", borderRadius: "999px", background: "rgba(255,255,255,0.08)" }}>{formatNumber(session?.point)}</span>
+                    </div>
+                    <div style={{ display: "grid", gap: "6px" }}>
+                      <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Participant</span> <strong>{session?.participant || "-"}</strong></div>
+                      <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Created</span> <strong>{formatDateTime(session?.created_at || relation.created_at)}</strong></div>
+                      <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Updated</span> <strong>{formatDateTime(session?.updated_at || relation.updated_at)}</strong></div>
+                    </div>
+                  </article>
+                </div>
+              );
+            }) : <div className="col-12"><p>Belum ada sesi yang terhubung ke Tarkam ini.</p></div>}
+          </div>
+              </div>
+              <div className="tab-pane fade" id="timelines" role="tabpanel" aria-labelledby="timelines-tab">
+                <div className="row">
+            {visibleTimelines.length ? visibleTimelines.map((relation) => {
+              const timeline = relation.timeline;
+              return (
+                <div className="col-lg-6 sm-padding" key={relation.id || relation.timeline_fk || relation.session_fk}>
+                  <article className="galactic-hover-card tarkam-timeline-card">
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginBottom: "10px" }}>
+                      <div>
+                        <h3 style={{ marginBottom: "6px" }}>{timeline?.member?.nickname || timeline?.club?.name || "Tarkam"}</h3>
+                        <div style={{ color: "rgba(255,255,255,0.72)" }}>{timeline?.session?.sesi !== undefined ? `Session ${timeline.session.sesi}` : "Timeline Tarkam"}</div>
+                      </div>
+                      <span style={{ padding: "6px 12px", borderRadius: "999px", background: "rgba(255,255,255,0.08)" }}>{formatDateTime(timeline?.created_at || relation.created_at)}</span>
+                    </div>
+                    <p style={{ lineHeight: 1.75, color: "rgba(255,255,255,0.82)" }}>{timeline?.description || "Belum ada deskripsi timeline."}</p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      {timeline?.member?.gender ? <span style={{ padding: "4px 10px", borderRadius: "999px", background: "rgba(255,255,255,0.06)" }}>{timeline.member.gender}</span> : null}
+                      {timeline?.club?.name ? <span style={{ padding: "4px 10px", borderRadius: "999px", background: "rgba(255,255,255,0.06)" }}>{timeline.club.name}</span> : null}
+                      {timeline?.session?.status ? <span style={{ padding: "4px 10px", borderRadius: "999px", background: "rgba(255,255,255,0.06)" }}>{statusLabel(timeline.session.status)}</span> : null}
+                    </div>
+                  </article>
+                </div>
+              );
+            }) : <div className="col-12"><p>Belum ada timeline yang terhubung ke Tarkam ini.</p></div>}
+          </div>
+              </div>
           </div>
           </div>
             </div>
@@ -361,7 +414,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         </div>
       </section> */}
 
-      <section className="team-section padding-top tarkam-section">
+      {/* <section className="team-section padding-top tarkam-section">
         <div className="container">
           <SectionHeading
             eyebrow="Tim Peserta"
@@ -534,7 +587,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
             }) : <div className="col-12"><p>Belum ada timeline yang terhubung ke Tarkam ini.</p></div>}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section id="contests" className="blog-section blog-page padding-top tarkam-section">
         <div className="container">
