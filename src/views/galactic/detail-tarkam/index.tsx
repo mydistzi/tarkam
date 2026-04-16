@@ -4,7 +4,7 @@ import { TarkamDetailsContent } from "./section";
 
 const TarkamDetailsPage = () => {
   const { tarkamId } = useParams<{ tarkamId?: string }>();
-  const selectedId = Number(tarkamId);
+  const selectedId = Number(tarkamId?.replace(/^week-/, ""));
 
   return (
     <PageShell title="Detail Tarkam">

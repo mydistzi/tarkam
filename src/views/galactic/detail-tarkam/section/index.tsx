@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Api from "@/api";
 import "@/assets/css/tarkam-theme.css";
 // import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
 import { DisqusThread, PageHeader } from "@/galactic/common";
 // import { buildPlayerDetailPath, buildTeamDetailPath, buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 // import { placeholderPlayer, placeholderTeam, placeholderVideoThumb } from "@/galactic/placeholders";
-import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { galacticRoutes } from "@/galactic/data";
 // import { placeholderVideoThumb } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 
 type GenderFilter = "all" | "male" | "female";
-type ViewFilter = "overview" | "gender" | "teams" | "players" | "sessions" | "timelines" | "contests";
-
 type ApiEnvelope<T> = { data?: T };
 type ApiClub = { name?: string; logo?: string };
 type ApiMember = { id?: number | string; username?: string; nickname?: string; slug?: string; gender?: string; city?: string; tier?: string; picture_url?: string; points?: number | string; club?: ApiClub | null };
@@ -105,11 +103,9 @@ const MiniStat = ({ label, value }: { label: string; value: string }) => (
 );
 
 const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
-  const [searchParams] = useSearchParams();
-  const genderParam = searchParams.get("gender")?.toLowerCase();
-  const viewParam = searchParams.get("view")?.toLowerCase();
-  const genderFilter: GenderFilter = genderParam === "male" || genderParam === "female" ? genderParam : "all";
-  const activeView: ViewFilter = viewParam === "gender" || viewParam === "teams" || viewParam === "players" || viewParam === "sessions" || viewParam === "timelines" || viewParam === "contests" ? viewParam : "overview";
+  const [activeTab, setActiveTab] = useState<"gender" | "sessions" | "timelines">("gender");
+  const [activeGender, setActiveGender] = useState<GenderFilter>("male");
+  const [activeGenderTab, setActiveGenderTab] = useState<"players" | "teams" | "sessions">("players");
   const { tarkams, teams } = useGalacticContent();
   const fallbackTarkam = tarkamId ? tarkams.find((item) => item.id === tarkamId) : undefined;
   const [record, setRecord] = useState<ApiTarkamDetail | null>(null);
@@ -155,23 +151,12 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   }, [tarkamId]);
 
   const detail = record ?? (fallbackTarkam as ApiTarkamDetail | undefined) ?? null;
-  const makeQueryPath = (overrides: Partial<Record<"gender" | "view", string>>) => {
-    const params = new URLSearchParams(searchParams);
-    if (overrides.gender !== undefined) {
-      if (overrides.gender === "all") params.delete("gender");
-      else params.set("gender", overrides.gender);
-    }
-    if (overrides.view !== undefined) params.set("view", overrides.view);
-    const query = params.toString();
-    return query ? `${buildTarkamDetailPath(tarkamId || 0)}?${query}` : buildTarkamDetailPath(tarkamId || 0);
-  };
-
   useEffect(() => {
     if (!detail) return;
-    document.getElementById(activeView)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [activeView, detail]);
+    document.getElementById(activeTab)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeTab, detail]);
 
-  const visibleTeams = useMemo(() => {
+  const allTeams = useMemo(() => {
     const fallbackTeams = teams
       .filter((record) => {
         const teamTarkamId = record.team?.tarkam_fk ? Number(record.team.tarkam_fk) : NaN;
@@ -186,14 +171,20 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         group: record.group ? { name: record.group.name } : undefined,
       }));
 
-    const source = detail?.teams?.length ? detail.teams : fallbackTeams;
-    return source.filter((team) => genderFilter === "all" || String(team.gender || "").toLowerCase() === genderFilter);
-  }, [detail?.teams, teams, tarkamId, genderFilter]);
+    return detail?.teams?.length ? detail.teams : fallbackTeams;
+  }, [detail?.teams, teams, tarkamId]);
 
-  const visiblePlayers = useMemo(
-    () => asArray(detail?.players).filter((player) => genderFilter === "all" || String(player.member?.gender || "").toLowerCase() === genderFilter),
-    [detail?.players, genderFilter],
+  const filteredTeams = useMemo(
+    () => allTeams.filter((team) => activeGender === "all" || String(team.gender || "").toLowerCase() === activeGender),
+    [allTeams, activeGender],
   );
+
+  const allPlayers = useMemo(() => asArray(detail?.players), [detail?.players]);
+  const filteredPlayers = useMemo(
+    () => allPlayers.filter((player) => activeGender === "all" || String(player.member?.gender || "").toLowerCase() === activeGender),
+    [allPlayers, activeGender],
+  );
+
   const visibleSessions = asArray(detail?.sessions);
   const visibleTimelines = asArray(detail?.timelines);
   // const visibleContests = asArray(detail?.contests).filter((contest) => genderFilter === "all" || String(contest.gender || "").toLowerCase() === genderFilter);
@@ -273,8 +264,8 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               </div>
               <p style={{ marginTop: "16px", color: "rgba(255,255,255,0.76)", lineHeight: 1.8 }}>{detail.description || "Tidak ada deskripsi tambahan untuk Tarkam ini."}</p>
               <div className="tarkam-kpi-grid">
-                <MiniStat label="Teams" value={formatNumber(detail.teams_count ?? visibleTeams.length)} />
-                <MiniStat label="Players" value={formatNumber(detail.players_count ?? visiblePlayers.length)} />
+                <MiniStat label="Teams" value={formatNumber(detail.teams_count ?? allTeams.length)} />
+                <MiniStat label="Players" value={formatNumber(detail.players_count ?? allPlayers.length)} />
                 <MiniStat label="Sessions" value={formatNumber(detail.sessions_count ?? visibleSessions.length)} />
                 <MiniStat label="Timelines" value={formatNumber(detail.timelines_count ?? visibleTimelines.length)} />
               </div>
@@ -296,17 +287,19 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 {detail.updated_at || detail.created_at ? <div><strong style={{ color: "#fff" }}>Updated:</strong> {formatDateTime(detail.updated_at || detail.created_at)}</div> : null}
               </div>
               <div className="tarkam-action-row" style={{ marginTop: "20px" }}>
-                <ul className="nav tab-navigation" id="tarkam-tab-navigation" role="tablist">
-                  <li role="presentation">
-                    <Link to="#" className="default-btn active" id="gender-tab" data-bs-toggle="tab" data-bs-target="#gender" type="button" role="tab" aria-controls="home" aria-selected="true" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Gender</Link>
-                  </li>
-                  <li role="presentation">
-                    <Link to="#" className="default-btn" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#sessions" type="button" role="tab" aria-controls="sessions" aria-selected="false" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
-                  </li>
-                  <li role="presentation">
-                    <Link to="#" className="default-btn" id="timelines-tab" data-bs-toggle="tab" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link>
-                  </li>
-                </ul>
+                <div className="tab-navigation" role="tablist" style={{ display: "flex", flexWrap: "wrap", gap: "12px", borderBottom: "none", paddingBottom: 0 }}>
+                  {(["gender", "sessions", "timelines"] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      className={`default-btn${activeTab === tab ? " active" : ""}`}
+                      onClick={() => setActiveTab(tab)}
+                      style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)", whiteSpace: "nowrap" }}
+                    >
+                      {tab === "gender" ? "Gender" : tab === "sessions" ? "Sessions" : "Timelines"}
+                    </button>
+                  ))}
+                </div>
                 {/* <Link className="default-btn" to={makeQueryPath({ view: "overview" })}>Overview</Link>
                 <Link className="default-btn" to={makeQueryPath({ view: "gender" })}>Gender</Link>
                 <Link className="default-btn" to={makeQueryPath({ view: "teams" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Teams</Link>
@@ -316,8 +309,9 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               </div>
               <div className="tarkam-card-grid">
               <div className="tab-content" id="tarkam-tab-content">
-              <div className="tab-pane fade show active" id="gender" role="tabpanel" aria-labelledby="gender-tab">
-                {(["male", "female"] as GenderFilter[]).map((gender) => {
+              <div className={`tab-pane fade${activeTab === "gender" ? " show active" : ""}`} id="gender" role="tabpanel" aria-labelledby="gender-tab">
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+                  {(["male", "female"] as GenderFilter[]).map((gender) => {
               const date = gender === "male" ? detail.male_date : detail.female_date;
               const time = gender === "male" ? detail.male_time : detail.female_time;
               const slot = gender === "male" ? detail.male_slot : detail.female_slot;
@@ -341,16 +335,122 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <MiniStat label="Pool" value={formatCurrency(poolPrice)} />
                     <MiniStat label="MVP" value={mvp || "TBA"} />
                   </div>
-                  <div className="tarkam-link-row" style={{ marginTop: "16px" }}>
-                    <Link className="default-btn" to={makeQueryPath({ gender, view: "players" })}>Lihat Player {genderLabel(gender)}</Link>
-                    <Link className="default-btn" to={makeQueryPath({ gender, view: "teams" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Lihat Team {genderLabel(gender)}</Link>
-                    <Link className="default-btn" to={makeQueryPath({ gender, view: "sessions" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sesi {genderLabel(gender)}</Link>
+                  <div className="tarkam-link-row" style={{ marginTop: "16px", display: "flex", flexWrap: "wrap", gap: "12px" }}>
+                    <button
+                      type="button"
+                      className={`default-btn${activeGender === gender && activeGenderTab === "players" ? " active" : ""}`}
+                      onClick={() => { setActiveGender(gender); setActiveGenderTab("players"); }}
+                      style={{ flex: "1 1 auto", minWidth: "120px", background: activeGender === gender && activeGenderTab === "players" ? "rgba(152,65,255,0.14)" : "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
+                    >
+                      Lihat Player {genderLabel(gender)}
+                    </button>
+                    <button
+                      type="button"
+                      className={`default-btn${activeGender === gender && activeGenderTab === "teams" ? " active" : ""}`}
+                      onClick={() => { setActiveGender(gender); setActiveGenderTab("teams"); }}
+                      style={{ flex: "1 1 auto", minWidth: "120px", background: activeGender === gender && activeGenderTab === "teams" ? "rgba(152,65,255,0.14)" : "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
+                    >
+                      Lihat Team {genderLabel(gender)}
+                    </button>
+                    <button
+                      type="button"
+                      className={`default-btn${activeGender === gender && activeGenderTab === "sessions" ? " active" : ""}`}
+                      onClick={() => { setActiveGender(gender); setActiveGenderTab("sessions"); }}
+                      style={{ flex: "1 1 auto", minWidth: "120px", background: activeGender === gender && activeGenderTab === "sessions" ? "rgba(152,65,255,0.14)" : "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
+                    >
+                      Sesi {genderLabel(gender)}
+                    </button>
                   </div>
                 </div>
               );
             })}
+                </div>
+                <div className="tab-navigation" style={{ overflowX: "auto", display: "flex", gap: "12px", marginTop: "24px", paddingBottom: "8px" }}>
+                  {(["players", "teams", "sessions"] as const).map((subTab) => (
+                    <button
+                      key={subTab}
+                      type="button"
+                      className={`default-btn${activeGenderTab === subTab ? " active" : ""}`}
+                      onClick={() => setActiveGenderTab(subTab)}
+                      style={{ whiteSpace: "nowrap", minWidth: "140px", background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
+                    >
+                      {subTab === "players" ? "Players" : subTab === "teams" ? "Teams" : "Sessions"}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ marginTop: "20px" }}>
+                  {activeGenderTab === "players" && (
+                    <div className="row">
+                      {filteredPlayers.length ? filteredPlayers.map((player) => (
+                        <div className="col-lg-4 col-md-6 sm-padding" key={player.id || player.member?.slug || player.member?.nickname}>
+                          <article className="galactic-hover-card tarkam-member-card">
+                            <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "12px" }}>
+                              <img src={player.member?.picture_url || undefined} alt={player.member?.nickname || player.member?.username || "Player"} style={{ width: "72px", height: "72px", borderRadius: "18px", objectFit: "cover", background: "rgba(255,255,255,0.04)" }} />
+                              <div>
+                                <h3 style={{ marginBottom: "6px" }}>
+                                  <Link to={galacticRoutes.clubs}>{player.member?.nickname || player.member?.username || "Player"}</Link>
+                                </h3>
+                                <div style={{ color: "rgba(255,255,255,0.72)" }}>{player.member?.gender || "Unknown"} | {player.member?.tier || "-"}</div>
+                              </div>
+                            </div>
+                            <div style={{ display: "grid", gap: "6px" }}>
+                              <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Club</span> <strong>{player.member?.club?.name || "-"}</strong></div>
+                              <div><span style={{ color: "rgba(255,255,255,0.60)" }}>City</span> <strong>{player.member?.city || "-"}</strong></div>
+                              <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Score</span> <strong>{formatNumber(player.score)}</strong></div>
+                              <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Paid</span> <strong>{player.paid ? "Yes" : "No"}</strong></div>
+                            </div>
+                          </article>
+                        </div>
+                      )) : (
+                        <div className="col-12"><p>Tidak ada player {activeGender === "all" ? "untuk semua gender" : `untuk ${genderLabel(activeGender)}`}.</p></div>
+                      )}
+                    </div>
+                  )}
+                  {activeGenderTab === "teams" && (
+                    <div className="row">
+                      {filteredTeams.length ? filteredTeams.map((team) => (
+                        <div className="col-lg-4 col-md-6 sm-padding" key={team.id || team.name}>
+                          <div className="team-item galactic-hover-card tarkam-data-card">
+                            <div className="team-content">
+                              <h3 style={{ marginBottom: "12px" }}>{team.name || "Team"}</h3>
+                              <div style={{ color: "rgba(255,255,255,0.72)" }}>{team.group?.name ? `${team.group.name} | ` : ""}{team.gender || "Open"}</div>
+                              <p style={{ marginTop: "12px" }}>{formatDate(team.date)} | {team.time || "TBA"}</p>
+                            </div>
+                          </div>
+                        </div>
+                      )) : (
+                        <div className="col-12"><p>Tidak ada tim {activeGender === "all" ? "untuk semua gender" : `untuk ${genderLabel(activeGender)}`}.</p></div>
+                      )}
+                    </div>
+                  )}
+                  {activeGenderTab === "sessions" && (
+                    <div className="row">
+                      {visibleSessions.length ? visibleSessions.map((relation) => {
+                        const session = relation.session;
+                        return (
+                          <div className="col-lg-4 col-md-6 sm-padding" key={relation.id || relation.session_fk}>
+                            <article className="galactic-hover-card tarkam-session-card">
+                              <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", marginBottom: "10px" }}>
+                                <div>
+                                  <h3 style={{ marginBottom: "6px" }}>Session {session?.sesi ?? relation.session_fk ?? "-"}</h3>
+                                  <div style={{ color: "rgba(255,255,255,0.72)" }}>{statusLabel(session?.status)}</div>
+                                </div>
+                                <span style={{ padding: "6px 12px", borderRadius: "999px", background: "rgba(255,255,255,0.08)" }}>{formatNumber(session?.point)}</span>
+                              </div>
+                              <div style={{ display: "grid", gap: "6px" }}>
+                                <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Participant</span> <strong>{session?.participant || "-"}</strong></div>
+                                <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Created</span> <strong>{formatDateTime(session?.created_at || relation.created_at)}</strong></div>
+                                <div><span style={{ color: "rgba(255,255,255,0.60)" }}>Updated</span> <strong>{formatDateTime(session?.updated_at || relation.updated_at)}</strong></div>
+                              </div>
+                            </article>
+                          </div>
+                        );
+                      }) : <div className="col-12"><p>Belum ada sesi yang terhubung ke Tarkam ini.</p></div>}
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="tab-pane fade" id="sessions" role="tabpanel" aria-labelledby="sessions-tab">
+              <div className={`tab-pane fade${activeTab === "sessions" ? " show active" : ""}`} id="sessions" role="tabpanel" aria-labelledby="sessions-tab">
                 <div className="row">
             {visibleSessions.length ? visibleSessions.map((relation) => {
               const session = relation.session;
@@ -375,7 +475,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
             }) : <div className="col-12"><p>Belum ada sesi yang terhubung ke Tarkam ini.</p></div>}
           </div>
               </div>
-              <div className="tab-pane fade" id="timelines" role="tabpanel" aria-labelledby="timelines-tab">
+              <div className={`tab-pane fade${activeTab === "timelines" ? " show active" : ""}`} id="timelines" role="tabpanel" aria-labelledby="timelines-tab">
                 <div className="row">
             {visibleTimelines.length ? visibleTimelines.map((relation) => {
               const timeline = relation.timeline;
