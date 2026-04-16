@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "@/assets/css/tarkam-theme.css";
 import { PageHeader } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
-import { placeholderVideoThumb } from "@/galactic/placeholders";
+// import { placeholderVideoThumb } from "@/galactic/placeholders";
 
 type ScheduleTarkam = {
   id: number;
@@ -152,14 +152,16 @@ const ScheduleGenderPanel = ({
       <div className="tarkam-meta-grid" style={{ marginBottom: "14px" }}>
         <StatCard label="Date" value={formatDateLabel(values.date)} />
         <StatCard label="Time" value={values.time || "TBA"} />
-        <StatCard label="Slot" value={formatNumber(values.slot)} hint="Kapasitas peserta" />
-        <StatCard label="Completed" value={formatNumber(values.completed)} hint="Progress sesi" />
+        <StatCard label="Slot" value={formatNumber(values.slot)} />
+        <StatCard label="Status" value={formatNumber(values.completed) === "1" ? "Completed" : "Open"} />
+        {/* <StatCard label="Slot" value={formatNumber(values.slot)} hint="Kapasitas peserta" />
+        <StatCard label="Completed" value={formatNumber(values.completed)} hint="Progress sesi" /> */}
       </div>
       <div className="tarkam-meta-grid" style={{ marginBottom: "16px" }}>
         <StatCard label="Pool Price" value={formatCurrency(values.poolPrice)} />
         <StatCard label="MVP" value={values.mvp || "TBA"} />
       </div>
-      <div className="tarkam-link-row">
+      {/* <div className="tarkam-link-row">
         <Link className="default-btn" to={buildGenderPath(tarkam.id, gender, "overview")}>
           Lihat Detail {genderLabel}
         </Link>
@@ -170,13 +172,13 @@ const ScheduleGenderPanel = ({
         >
           Lihat Player {genderLabel}
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };
 
 const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
-  const image = tarkam.image?.trim() || tarkam.thumbnail?.trim() || placeholderVideoThumb;
+  // const image = tarkam.image?.trim() || tarkam.thumbnail?.trim() || placeholderVideoThumb;
   const totalTeams = Number(tarkam.teams_count ?? 0);
   const totalGroups = Number(tarkam.groups_count ?? 0);
   const totalContests = Number(tarkam.contests_count ?? 0);
@@ -190,7 +192,7 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
       id={`tarkam-${tarkam.id}`}
       className="galactic-hover-card tarkam-schedule-card"
     >
-      <div className="tarkam-schedule-card__media" style={{ backgroundImage: `linear-gradient(180deg, rgba(5,10,22,0.2), rgba(5,10,22,0.78)), url(${image})` }} />
+      {/* <div className="tarkam-schedule-card__media" style={{ backgroundImage: `linear-gradient(180deg, rgba(5,10,22,0.2), rgba(5,10,22,0.78)), url(${image})` }} /> */}
       <div className="tarkam-schedule-card__content">
         <div className="tarkam-schedule-card__headline">
             <div>
@@ -284,9 +286,9 @@ const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
       <PageHeader
         className="tarkam-page-header"
         infoClassName="tarkam-page-header__info"
-        eyebrow="Tarkam Mendatang"
-        title="Jadwal Tarkam yang Lebih Lengkap"
-        description="Setiap kartu menampilkan jadwal male/female, slot, timeline, session, dan pintasan langsung ke detail Tarkam."
+        eyebrow="Tarkam Schedule"
+        title="Semua Info Turnamen Tarkam"
+        description="Pantau Perkembangan Tarkam dengan Mudah."
       />
       <section className="latest-matches padding-top tarkam-section">
         <div className="container">
