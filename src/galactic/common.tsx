@@ -256,7 +256,7 @@ const getFacebookVideoPostUrl = (url: string) => {
 };
 const getFacebookEmbedUrl = (url: string) => {
   const postUrl = getFacebookVideoPostUrl(url);
-  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}&show_text=0&autoplay=1&muted=1`;
+  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}`;
 };
 const getNormalizedVideoUrl = (url: string) => {
   const normalized = String(url || "").trim();
@@ -647,15 +647,21 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
   const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
 
   return (
+    <>
+    <div id="fb-root"></div>
+    <script async defer crossOrigin="anonymous" src="https://facebook.net"></script>
     <button
       className="dl-video-popup vbox-item fb-video"
       data-video-title="Tarkam Highlight Reel"
-      data-autoplay="true" data-vbtype="video"
-      data-video-url={normalizedHref}
+      data-autoplay="true"
+      data-mute="false"
+      data-allowfullscreen="true"
+      data-href={normalizedHref}
       type="button"
     >
       <i className="lab la-youtube"></i> Watch Streem
     </button>
+    </>
   );
 };
 const MatchList = ({ items }: { items: MatchItem[] }) => (
