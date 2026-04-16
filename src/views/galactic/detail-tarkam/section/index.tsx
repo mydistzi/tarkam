@@ -325,7 +325,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <div className={`tarkam-gender-card__eyebrow ${gender === "male" ? "tarkam-gender-card__eyebrow--male" : "tarkam-gender-card__eyebrow--female"}`}>{genderLabel(gender)}</div>
                       <h3 style={{ marginBottom: 0 }}>{detail.title || "Tarkam"}</h3>
                     </div>
-                    <span className="tarkam-badge tarkam-badge--soft">{genderLabel(gender)} View</span>
+                    {/* <span className="tarkam-badge tarkam-badge--soft">{genderLabel(gender)} View</span> */}
                   </div>
                   <div className="tarkam-meta-grid">
                     <MiniStat label="Date" value={formatDate(date)} />
