@@ -55,8 +55,38 @@
   border-radius: 28px;
   padding: 28px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(15, 18, 44, 0.96), rgba(7, 10, 24, 0.98));
+  /* background: linear-gradient(180deg, rgba(15, 18, 44, 0.96), rgba(7, 10, 24, 0.98)); */
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+.tarkam-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ttarkam-panel::before {
+  content: "";
+  z-index: 1;
+  background: linear-gradient(90deg, #9841ff1a 0%, #9841ff 50%, #9841ff1a 100%);
+  width: 100%;
+  height: 4px;
+  transition: all .3s cubic-bezier(.165, .84, .44, 1);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.tarkam-panel::after {
+  content: "";
+  z-index: -1;
+  background-image: repeating-linear-gradient(-45deg, #ffffff1a, #ffffff1a 1px, #0000 1px 6px);
+  background-size: 4px 4px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .tarkam-title-line {
@@ -203,34 +233,6 @@
   overflow: hidden;
 }
 
-.tarkam-schedule-card .dl-video-popup {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 0, 0, 0.9); /* Merah khas YouTube */
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-}
-
-.tarkam-schedule-card .dl-video-popup:hover {
-    transform: scale(1.05);
-    background: #ff0000;
-}
-
-.tarkam-schedule-card .dl-video-popup i {
-    font-size: 18px;
-}
-
-
 .tarkam-schedule-card::before {
   content: "";
   z-index: 1;
@@ -260,6 +262,33 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.tarkam-schedule-card .dl-video-popup {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 0, 0, 0.9); /* Merah khas YouTube */
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.tarkam-schedule-card .dl-video-popup:hover {
+    transform: scale(1.05);
+    background: #ff0000;
+}
+
+.tarkam-schedule-card .dl-video-popup i {
+    font-size: 18px;
 }
 
 .tarkam-schedule-card__content {
