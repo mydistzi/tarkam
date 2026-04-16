@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
 import { PageHeader, PageShell } from "@/galactic/common";
-import {
-  buildClubDetailPath,
-  buildPlayerDetailPath,
-} from "@/galactic/data";
+import { buildClubDetailPath, buildPlayerDetailPath } from "@/galactic/data";
 import {
   placeholderPlayer,
   placeholderSponsor,
@@ -34,6 +31,9 @@ type LeaderboardEntry = {
   point?: number | string;
   points?: number | string;
   total_amount?: number | string;
+  total_reward?: number | string;
+  wins?: number | string;
+  team_size?: number | string;
   club_code?: string;
   club_name?: string;
   club_slug?: string;
@@ -55,7 +55,7 @@ type LeaderboardConfig = {
   eyebrow: string;
   description: string;
   endpoint: string;
-  params?: Record<string, string>;
+  params?: Record<string, string | number>;
   metricKey: "point" | "points" | "total_amount";
   metricLabel: string;
   metricFormat: MetricFormat;
@@ -65,102 +65,111 @@ type LeaderboardConfig = {
   noteDescription: string;
   emptyTitle: string;
   emptyDescription: string;
+  showReward: boolean;
 };
+
+const LEADERBOARD_LIMIT = 10;
 
 const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
   sponsor: {
     title: "Sponsor Leaderboard",
     eyebrow: "Sponsor Board",
     description:
-      "Akumulasi dukungan penyawer yang tercatat pada session aktif, lengkap dengan nickname, total amount, dan afiliasi klub.",
+      "10 besar penyawer dengan total amount akumulasi tertinggi, menampilkan nickname, total amount, dan club code jika tersedia.",
     endpoint: "/penyawer-leaderboards",
+    params: { limit: LEADERBOARD_LIMIT },
     metricKey: "total_amount",
     metricLabel: "Total Amount",
     metricFormat: "currency",
     focusLabel: "Top Penyawer",
-    summaryLabel: "Total Akumulasi Saweran",
-    noteTitle: "Sponsor leaderboard dibuat dari akumulasi saweran.",
+    summaryLabel: "Akumulasi Saweran",
+    noteTitle: "Sponsor leaderboard memakai total amount akumulasi.",
     noteDescription:
-      "Setiap total dihitung dari seluruh entri penyawer yang masih terhubung dengan session aktif, sehingga angka yang tampil adalah total amount akumulasi.",
+      "Reward tidak ditampilkan pada leaderboard sponsor karena ranking ini hanya berdasarkan total amount saweran aktif.",
     emptyTitle: "Belum ada sponsor yang tercatat.",
     emptyDescription:
       "Data penyawer akan muncul setelah server menerima saweran valid dan mengakumulasikannya.",
+    showReward: false,
   },
   global: {
     title: "Global Leaderboard",
     eyebrow: "Global Board",
     description:
-      "Peringkat gabungan semua member male dan female lintas klub, menampilkan nickname, point, dan club code secara langsung.",
+      "10 besar gabungan semua member male dan female lintas klub dengan tampilan podium, point, club code, dan total reward.",
     endpoint: "/leaderboards",
-    params: { scope: "global" },
+    params: { scope: "global", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
     metricLabel: "Point",
     metricFormat: "number",
-    focusLabel: "Top Player",
-    summaryLabel: "Total Point Tercatat",
-    noteTitle: "Leaderboard global menampilkan member aktif terbaik.",
+    focusLabel: "Overall Top Player",
+    summaryLabel: "Total Point Top 10",
+    noteTitle: "Reward dihitung dari wins dan jumlah player dalam tim.",
     noteDescription:
-      "Daftar ini mengambil poin gabungan semua member male dan female dari schema leaderboard yang sudah disinkronkan ke player, lalu dibersihkan per member agar tidak dobel.",
+      "Reward dijumlahkan dari pembagian kemenangan terhadap ukuran tim. Backend menghitungnya sebagai akumulasi pembagian per kemenangan untuk setiap player.",
     emptyTitle: "Belum ada player global yang masuk leaderboard.",
     emptyDescription:
       "Data akan terisi setelah poin member aktif tersinkron dari pertandingan dan session berjalan.",
+    showReward: true,
   },
   club: {
     title: "Club Leaderboard",
     eyebrow: "Club Board",
     description:
-      "Peringkat klub dari total point hasil akumulasi semua member yang ada di club tersebut, tetap menampilkan nickname, point, dan club code tiap klub.",
+      "10 besar klub dengan total point hasil akumulasi semua member di club tersebut, lengkap dengan club code dan total reward.",
     endpoint: "/leaderboards",
-    params: { scope: "club" },
+    params: { scope: "club", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
     metricLabel: "Point",
     metricFormat: "number",
     focusLabel: "Top Club",
-    summaryLabel: "Total Point Klub",
-    noteTitle: "Poin klub berasal dari sinkronisasi poin seluruh member klub.",
+    summaryLabel: "Total Point Top 10",
+    noteTitle: "Reward klub adalah akumulasi reward seluruh member.",
     noteDescription:
-      "Nilai setiap klub dihitung dari penjumlahan langsung point semua member non-deleted yang terhubung ke klub tersebut.",
+      "Nilai reward club dijumlahkan dari semua reward member di dalam club, sedangkan total point tetap berasal dari akumulasi point seluruh member klub.",
     emptyTitle: "Belum ada klub yang masuk leaderboard.",
     emptyDescription:
       "Leaderboard klub akan muncul setelah klub dan member aktif tercatat pada session yang berjalan.",
+    showReward: true,
   },
   male: {
     title: "Male Leaderboard",
     eyebrow: "Male Board",
     description:
-      "Peringkat member kategori male dengan nickname, point, dan club code yang langsung terhubung ke profil klub serta player.",
+      "10 besar member kategori male dengan point, club code, dan total reward yang berbasis pembagian kemenangan tim.",
     endpoint: "/leaderboards",
-    params: { scope: "male" },
+    params: { scope: "male", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
     metricLabel: "Point",
     metricFormat: "number",
     focusLabel: "Top Male Player",
-    summaryLabel: "Total Point Male",
-    noteTitle: "Kategori male diambil dari member aktif dengan gender male.",
+    summaryLabel: "Total Point Top 10",
+    noteTitle: "Reward male leaderboard memakai pembagian menurut ukuran tim.",
     noteDescription:
-      "Peringkat ini membantu melihat siapa yang paling konsisten mendulang poin pada bracket atau roster kategori male.",
+      "Reward dihitung dari akumulasi pembagian kemenangan terhadap jumlah player dalam tim pada kategori male.",
     emptyTitle: "Belum ada player male di leaderboard.",
     emptyDescription:
       "Begitu data member male aktif dan poinnya tersedia, daftar ini akan terisi otomatis.",
+    showReward: true,
   },
   female: {
     title: "Female Leaderboard",
     eyebrow: "Female Board",
     description:
-      "Peringkat member kategori female dengan nickname, point, dan club code dari session aktif yang sama dengan leaderboard lain.",
+      "10 besar member kategori female dengan point, club code, dan total reward yang berbasis pembagian kemenangan tim.",
     endpoint: "/leaderboards",
-    params: { scope: "female" },
+    params: { scope: "female", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
     metricLabel: "Point",
     metricFormat: "number",
     focusLabel: "Top Female Player",
-    summaryLabel: "Total Point Female",
-    noteTitle: "Kategori female mengikuti data member aktif pada session berjalan.",
+    summaryLabel: "Total Point Top 10",
+    noteTitle: "Reward female leaderboard memakai pembagian menurut ukuran tim.",
     noteDescription:
-      "Dengan pemisahan ini, performa roster female bisa dilihat jelas tanpa bercampur dengan kategori global.",
+      "Reward dihitung dari akumulasi pembagian kemenangan terhadap jumlah player dalam tim pada kategori female.",
     emptyTitle: "Belum ada player female di leaderboard.",
     emptyDescription:
       "Daftar ini akan tampil otomatis setelah member female aktif memperoleh poin pada sistem.",
+    showReward: true,
   },
 };
 
@@ -182,15 +191,25 @@ const formatCurrency = (value?: number | string | null) => {
       }).format(numeric);
 };
 
+const formatReward = (value?: number | string | null) => {
+  const numeric = Number(value ?? 0);
+  return Number.isNaN(numeric)
+    ? "0"
+    : new Intl.NumberFormat("id-ID", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(numeric);
+};
+
 const asMetric = (
   entry: LeaderboardEntry,
   metricKey: LeaderboardConfig["metricKey"],
 ) => Number(entry[metricKey] ?? 0);
 
-const formatMetric = (
-  value: number,
-  format: MetricFormat,
-) => (format === "currency" ? formatCurrency(value) : formatNumber(value));
+const asReward = (entry: LeaderboardEntry) => Number(entry.total_reward ?? 0);
+
+const formatMetric = (value: number, format: MetricFormat) =>
+  format === "currency" ? formatCurrency(value) : formatNumber(value);
 
 const genderLabel = (value?: string) => {
   const normalized = String(value || "").trim().toLowerCase();
@@ -237,23 +256,49 @@ const buildMetaChips = (
   if (variant === "sponsor") {
     return [
       entry.member_nickname ? `Member ${entry.member_nickname}` : null,
-      entry.donation_count != null ? `Saweran ${formatNumber(entry.donation_count)}x` : null,
-      entry.tarkam_week != null ? `Week ${entry.tarkam_week}` : entry.tarkam_title || null,
+      entry.donation_count != null
+        ? `Saweran ${formatNumber(entry.donation_count)}x`
+        : null,
+      entry.tarkam_week != null
+        ? `Week ${entry.tarkam_week}`
+        : entry.tarkam_title || null,
     ].filter(Boolean) as string[];
   }
 
   if (variant === "club") {
     return [
-      entry.member_count != null ? `Member ${formatNumber(entry.member_count)}` : null,
-      entry.male_member_count != null ? `Male ${formatNumber(entry.male_member_count)}` : null,
-      entry.female_member_count != null ? `Female ${formatNumber(entry.female_member_count)}` : null,
+      entry.member_count != null
+        ? `Member ${formatNumber(entry.member_count)}`
+        : null,
+      entry.male_member_count != null
+        ? `Male ${formatNumber(entry.male_member_count)}`
+        : null,
+      entry.female_member_count != null
+        ? `Female ${formatNumber(entry.female_member_count)}`
+        : null,
     ].filter(Boolean) as string[];
   }
 
   return [
     entry.gender ? genderLabel(entry.gender) : null,
-    entry.club_name || null,
+    entry.wins != null ? `Wins ${formatNumber(entry.wins)}` : null,
+    entry.team_size != null ? `Team ${formatNumber(entry.team_size)}` : null,
   ].filter(Boolean) as string[];
+};
+
+const podiumOrder = (entries: LeaderboardEntry[]) => {
+  const first = entries.find((entry) => entry.rank === 1);
+  const second = entries.find((entry) => entry.rank === 2);
+  const third = entries.find((entry) => entry.rank === 3);
+
+  return [second, first, third].filter(Boolean) as LeaderboardEntry[];
+};
+
+const rankBadgeLabel = (rank?: number) => {
+  if (rank === 1) return "TOP 1";
+  if (rank === 2) return "TOP 2";
+  if (rank === 3) return "TOP 3";
+  return `TOP ${rank ?? "-"}`;
 };
 
 function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
@@ -277,9 +322,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
           | ApiEnvelope<LeaderboardEntry[]>
           | LeaderboardEntry[]
           | undefined;
-        const records = Array.isArray(payload)
-          ? payload
-          : payload?.data ?? [];
+        const records = Array.isArray(payload) ? payload : payload?.data ?? [];
 
         if (!cancelled) {
           setEntries(records);
@@ -302,7 +345,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
     return () => {
       cancelled = true;
     };
-  }, [config.endpoint, config.metricKey, config.params, variant]);
+  }, [config.endpoint, config.params]);
 
   const sortedEntries = useMemo(() => {
     return [...entries]
@@ -317,24 +360,24 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
           String(right.nickname || right.name || ""),
         );
       })
+      .slice(0, LEADERBOARD_LIMIT)
       .map((entry, index) => ({
         ...entry,
-        rank: entry.rank ?? index + 1,
+        rank: index + 1,
       }));
   }, [config.metricKey, entries]);
 
   const topEntry = sortedEntries[0];
-  const podiumEntries = sortedEntries.slice(0, 3);
+  const podiumEntries = podiumOrder(sortedEntries);
+  const tableEntries = sortedEntries.slice(3);
   const totalMetric = sortedEntries.reduce(
     (sum, entry) => sum + asMetric(entry, config.metricKey),
     0,
   );
-  const averageMetric = sortedEntries.length
-    ? Math.round(totalMetric / sortedEntries.length)
-    : 0;
-  const clubLinkedCount = sortedEntries.filter(
-    (entry) => entry.club_code && entry.club_code !== "-",
-  ).length;
+  const totalReward = sortedEntries.reduce(
+    (sum, entry) => sum + asReward(entry),
+    0,
+  );
 
   return (
     <PageShell
@@ -367,145 +410,138 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
             </div>
           ) : (
             <>
-              <div className="leaderboard-hero-grid">
-                <div className="leaderboard-hero-copy">
-                  <p className="leaderboard-kicker">{config.focusLabel}</p>
-                  <h1>{topEntry?.nickname || topEntry?.name || "Belum tersedia"}</h1>
+              <section className="leaderboard-stage">
+                <div className="leaderboard-stage__halo" />
+                <div className="leaderboard-stage__summary">
+                  <span>Live Top 10</span>
+                  <strong>{config.focusLabel}</strong>
                   <p>
-                    Posisi teratas saat ini dipegang oleh{" "}
-                    <strong>{topEntry?.nickname || topEntry?.name || "-"}</strong>{" "}
-                    dengan {config.metricLabel.toLowerCase()}{" "}
-                    <strong>
-                      {formatMetric(
-                        asMetric(topEntry || {}, config.metricKey),
-                        config.metricFormat,
-                      )}
-                    </strong>
+                    {topEntry?.nickname || topEntry?.name || "-"} memimpin dengan{" "}
+                    {config.metricLabel.toLowerCase()}{" "}
+                    {formatMetric(
+                      asMetric(topEntry || {}, config.metricKey),
+                      config.metricFormat,
+                    )}
+                    {config.showReward
+                      ? ` dan total reward ${formatReward(
+                          asReward(topEntry || {}),
+                        )}`
+                      : ""}
                     .
                   </p>
-
-                  <div className="leaderboard-summary-grid">
-                    <article>
-                      <span>Total Rank</span>
-                      <strong>{formatNumber(sortedEntries.length)}</strong>
-                    </article>
-                    <article>
-                      <span>{config.summaryLabel}</span>
-                      <strong>
-                        {formatMetric(totalMetric, config.metricFormat)}
-                      </strong>
-                    </article>
-                    <article>
-                      <span>Rata-rata</span>
-                      <strong>
-                        {formatMetric(averageMetric, config.metricFormat)}
-                      </strong>
-                    </article>
-                    <article>
-                      <span>Terkait Klub</span>
-                      <strong>{formatNumber(clubLinkedCount)}</strong>
-                    </article>
-                  </div>
                 </div>
 
-                <aside className="leaderboard-focus-card">
-                  <div className="leaderboard-focus-card__media">
-                    <img
-                      src={resolveAvatar(variant, topEntry || {})}
-                      alt={topEntry?.nickname || topEntry?.name || config.title}
-                    />
-                  </div>
-                  <div className="leaderboard-focus-card__body">
-                    <span>Rank #1</span>
-                    <h2>{topEntry?.nickname || topEntry?.name || "-"}</h2>
-                    <div className="leaderboard-focus-card__metric">
-                      {formatMetric(
-                        asMetric(topEntry || {}, config.metricKey),
-                        config.metricFormat,
-                      )}
-                    </div>
-                    <ul>
-                      <li>
-                        <span>Club Code</span>
-                        <strong>{topEntry?.club_code || "-"}</strong>
-                      </li>
-                      <li>
-                        <span>{config.metricLabel}</span>
-                        <strong>
-                          {formatMetric(
-                            asMetric(topEntry || {}, config.metricKey),
-                            config.metricFormat,
-                          )}
-                        </strong>
-                      </li>
-                    </ul>
-                  </div>
-                </aside>
-              </div>
-
-              <section className="leaderboard-podium-section">
-                <div className="leaderboard-podium-grid">
+                <div className="leaderboard-stage__podium">
                   {podiumEntries.map((entry) => {
                     const primaryLink = resolvePrimaryLink(variant, entry);
                     const chips = buildMetaChips(variant, entry);
+                    const isChampion = entry.rank === 1;
 
                     return (
                       <article
-                        className={`leaderboard-podium-card leaderboard-podium-card--rank-${entry.rank}`}
+                        className={`leaderboard-podium-card leaderboard-podium-card--rank-${entry.rank} ${
+                          isChampion ? "is-champion" : ""
+                        }`}
                         key={`${entry.rank}-${entry.nickname || entry.name}`}
                       >
-                        <div className="leaderboard-podium-card__rank">
-                          #{entry.rank}
+                        <div className="leaderboard-podium-card__profile">
+                          <div className="leaderboard-podium-card__avatar">
+                            <img
+                              src={resolveAvatar(variant, entry)}
+                              alt={entry.nickname || entry.name || "Leaderboard"}
+                            />
+                          </div>
+                          <div className="leaderboard-podium-card__identity">
+                            <div className="leaderboard-podium-card__rank">
+                              {rankBadgeLabel(entry.rank)}
+                            </div>
+                            <h3>
+                              {primaryLink ? (
+                                <Link to={primaryLink}>
+                                  {entry.nickname || entry.name || "-"}
+                                </Link>
+                              ) : (
+                                entry.nickname || entry.name || "-"
+                              )}
+                            </h3>
+                          </div>
                         </div>
-                        <div className="leaderboard-podium-card__avatar">
-                          <img
-                            src={resolveAvatar(variant, entry)}
-                            alt={entry.nickname || entry.name || "Leaderboard"}
-                          />
-                        </div>
-                        <div className="leaderboard-podium-card__content">
-                          <span>{entry.club_code || "Tanpa klub"}</span>
-                          <h3>
-                            {primaryLink ? (
-                              <Link to={primaryLink}>
-                                {entry.nickname || entry.name || "-"}
-                              </Link>
-                            ) : (
-                              entry.nickname || entry.name || "-"
+
+                        <div className="leaderboard-podium-card__platform">
+                          <div className="leaderboard-podium-card__badge">
+                            #{entry.rank}
+                          </div>
+                          <span>
+                            Earn{" "}
+                            {formatMetric(
+                              asMetric(entry, config.metricKey),
+                              config.metricFormat,
                             )}
-                          </h3>
+                          </span>
                           <strong>
                             {formatMetric(
                               asMetric(entry, config.metricKey),
                               config.metricFormat,
                             )}
                           </strong>
-                          {chips.length > 0 ? (
-                            <div className="leaderboard-chip-row">
-                              {chips.map((chip) => (
-                                <span key={`${entry.rank}-${chip}`}>{chip}</span>
-                              ))}
-                            </div>
+                          <small>{config.metricLabel}</small>
+                          {config.showReward ? (
+                            <>
+                              <div className="leaderboard-podium-card__reward">
+                                {formatReward(asReward(entry))}
+                              </div>
+                              <small>Prize</small>
+                            </>
                           ) : null}
+                        </div>
+
+                        <div className="leaderboard-chip-row">
+                          <span>{entry.club_code || "-"}</span>
+                          {chips.map((chip) => (
+                            <span key={`${entry.rank}-${chip}`}>{chip}</span>
+                          ))}
                         </div>
                       </article>
                     );
                   })}
                 </div>
+
+                <div className="leaderboard-stage__footnote">
+                  <span>
+                    Menampilkan <strong>{sortedEntries.length}</strong> posisi terbaik
+                    saat ini
+                  </span>
+                  <span>
+                    {config.summaryLabel}:{" "}
+                    <strong>
+                      {formatMetric(totalMetric, config.metricFormat)}
+                    </strong>
+                  </span>
+                  {config.showReward ? (
+                    <span>
+                      Total reward: <strong>{formatReward(totalReward)}</strong>
+                    </span>
+                  ) : null}
+                </div>
               </section>
 
               <section className="leaderboard-table-section">
                 <div className="leaderboard-table-shell">
-                  <div className="leaderboard-table-head">
+                  <div
+                    className={`leaderboard-table-head ${
+                      config.showReward ? "has-reward" : ""
+                    }`}
+                  >
                     <span>Rank</span>
-                    <span>Nickname</span>
+                    <span>User name</span>
                     <span>Club Code</span>
                     <span>{config.metricLabel}</span>
+                    {config.showReward ? <span>Reward</span> : null}
                     <span>Detail</span>
                   </div>
 
                   <div className="leaderboard-table-body">
-                    {sortedEntries.map((entry) => {
+                    {tableEntries.map((entry) => {
                       const primaryLink = resolvePrimaryLink(variant, entry);
                       const clubPath = entry.club_slug
                         ? buildClubDetailPath(entry.club_slug)
@@ -514,18 +550,17 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
 
                       return (
                         <article
-                          className="leaderboard-table-row"
+                          className={`leaderboard-table-row ${
+                            config.showReward ? "has-reward" : ""
+                          }`}
                           key={`${entry.rank}-${entry.nickname || entry.name}`}
                         >
-                          <div
-                            className="leaderboard-table-row__rank"
-                            data-label="Rank"
-                          >
+                          <div className="leaderboard-table-row__rank" data-label="Rank">
                             #{entry.rank}
                           </div>
                           <div
                             className="leaderboard-table-row__name"
-                            data-label="Nickname"
+                            data-label="User name"
                           >
                             <img
                               src={resolveAvatar(variant, entry)}
@@ -573,6 +608,14 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                               config.metricFormat,
                             )}
                           </div>
+                          {config.showReward ? (
+                            <div
+                              className="leaderboard-table-row__reward"
+                              data-label="Reward"
+                            >
+                              {formatReward(asReward(entry))}
+                            </div>
+                          ) : null}
                           <div
                             className="leaderboard-table-row__detail"
                             data-label="Detail"
