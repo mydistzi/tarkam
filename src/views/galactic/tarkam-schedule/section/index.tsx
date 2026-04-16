@@ -79,15 +79,15 @@ const formatCurrency = (value?: number) =>
     maximumFractionDigits: 0,
   }).format(Number(value ?? 0));
 
-const buildGenderPath = (tarkamId: number, gender: GenderKey, view?: string) => {
-  const params = new URLSearchParams({ gender });
+// const buildGenderPath = (tarkamId: number, gender: GenderKey, view?: string) => {
+//   const params = new URLSearchParams({ gender });
 
-  if (view) {
-    params.set("view", view);
-  }
+//   if (view) {
+//     params.set("view", view);
+//   }
 
-  return `${buildTarkamDetailPath(tarkamId)}?${params.toString()}`;
-};
+//   return `${buildTarkamDetailPath(tarkamId)}?${params.toString()}`;
+// };
 
 const getGenderLabel = (gender: GenderKey) => (gender === "male" ? "Male" : "Female");
 
@@ -266,16 +266,29 @@ const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamin
             <ScheduleGenderPanel tarkam={tarkam} gender="female" />
           </div>
 
+          {tarkam.transfer_info ? (
+            <div className="tarkam-mini-stat" style={{ marginTop: "18px", color: "rgba(255,255,255,0.74)" }}>
+              <strong style={{ display: "block", marginBottom: "6px", color: "#fff" }}>Transfer Info</strong>
+              <span>{tarkam.transfer_info}</span>
+            </div>
+          ) : null}
+
+          {tarkam.points_awarded !== undefined ? (
+            <div style={{ marginTop: "14px", color: "rgba(255,255,255,0.62)", fontSize: "0.95rem" }}>
+              Poin dibagikan: <strong style={{ color: "#fff" }}>{formatNumber(tarkam.points_awarded)}</strong>
+            </div>
+          ) : null}
+
           <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center" }}>
             <Link className="default-btn" to={buildTarkamDetailPath(tarkam.id)}>
               Lihat Detail
             </Link>
-            <Link className="default-btn" to={buildGenderPath(tarkam.id, "male", "teams")} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>
+            {/* <Link className="default-btn" to={buildGenderPath(tarkam.id, "male", "teams")} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>
               Male Teams
             </Link>
             <Link className="default-btn" to={buildGenderPath(tarkam.id, "female", "teams")} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>
               Female Teams
-            </Link>
+            </Link> */}
             {tarkam.proof ? (
               <a
                 className="default-btn"
@@ -288,19 +301,6 @@ const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamin
               </a>
             ) : null}
           </div>
-
-            {tarkam.transfer_info ? (
-            <div className="tarkam-mini-stat" style={{ marginTop: "18px", color: "rgba(255,255,255,0.74)" }}>
-              <strong style={{ display: "block", marginBottom: "6px", color: "#fff" }}>Transfer Info</strong>
-              <span>{tarkam.transfer_info}</span>
-            </div>
-          ) : null}
-
-          {tarkam.points_awarded !== undefined ? (
-            <div style={{ marginTop: "14px", color: "rgba(255,255,255,0.62)", fontSize: "0.95rem" }}>
-              Poin dibagikan: <strong style={{ color: "#fff" }}>{formatNumber(tarkam.points_awarded)}</strong>
-            </div>
-          ) : null}
         </div>
       </div>
     </article>

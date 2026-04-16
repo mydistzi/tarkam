@@ -39,7 +39,7 @@ export type GalacticMenuItem = {
 export const galacticRoutes = {
   home: "/",
   tarkamSchedule: "/tarkam-schedule",
-  tarkamDetail: "/detail-tarkam",
+  tarkamDetail: "/detail-tarkam/week-",
   matchSchedule: "/jadwal-pertandingan",
   matchDetail: "/detail-pertandingan",
   playerDetail: "/detail-player",
