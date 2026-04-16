@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Api from "@/api";
 import "@/assets/css/tarkam-theme.css";
-import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
+// import { DisqusThread, PageHeader, SectionHeading } from "@/galactic/common";
+import { DisqusThread, PageHeader } from "@/galactic/common";
 // import { buildPlayerDetailPath, buildTeamDetailPath, buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 // import { placeholderPlayer, placeholderTeam, placeholderVideoThumb } from "@/galactic/placeholders";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
-import { placeholderVideoThumb } from "@/galactic/placeholders";
+// import { placeholderVideoThumb } from "@/galactic/placeholders";
 import { useGalacticContent } from "../../shared";
 
 type GenderFilter = "all" | "male" | "female";
@@ -195,9 +196,9 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   );
   const visibleSessions = asArray(detail?.sessions);
   const visibleTimelines = asArray(detail?.timelines);
-  const visibleContests = asArray(detail?.contests).filter((contest) => genderFilter === "all" || String(contest.gender || "").toLowerCase() === genderFilter);
-  const visibleWinners = asArray(detail?.winners).filter((winner) => genderFilter === "all" || String(winner.gender || "").toLowerCase() === genderFilter);
-  const visibleStreamings = asArray(detail?.streamings);
+  // const visibleContests = asArray(detail?.contests).filter((contest) => genderFilter === "all" || String(contest.gender || "").toLowerCase() === genderFilter);
+  // const visibleWinners = asArray(detail?.winners).filter((winner) => genderFilter === "all" || String(winner.gender || "").toLowerCase() === genderFilter);
+  // const visibleStreamings = asArray(detail?.streamings);
 
   if (!tarkamId) {
     return (
@@ -589,7 +590,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         </div>
       </section> */}
 
-      <section id="contests" className="blog-section blog-page padding-top tarkam-section">
+      {/* <section id="contests" className="blog-section blog-page padding-top tarkam-section">
         <div className="container">
           <SectionHeading eyebrow="Contests" title={<>Matchup <span>Contest</span></>} description="Kontes dan pemenang ditampilkan sebagai ringkasan terpisah berdasarkan gender." />
           <div className="row">
@@ -648,7 +649,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
             </div>
           </div>
         </section>
-      ) : null}
+      ) : null} */}
       <section className="blog-section blog-page padding-top tarkam-section">
         <div className="container">
           <div className="col-lg-8 offset-lg-2">
