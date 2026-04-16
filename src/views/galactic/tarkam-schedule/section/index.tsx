@@ -103,6 +103,12 @@ const getGenderValue = (tarkam: ScheduleTarkam, gender: GenderKey) => ({
   mvp: gender === "male" ? tarkam.mvp_m : tarkam.mvp_f,
 });
 
+const getGenderRemaining = (tarkam: ScheduleTarkam, gender: GenderKey) => {
+  const slot = gender === "male" ? tarkam.male_slot : tarkam.female_slot;
+  const completed = gender === "male" ? tarkam.male_completed : tarkam.female_completed;
+  return Math.max(0, Number(slot ?? 0) - Number(completed ?? 0));
+};
+
 const StatCard = ({
   label,
   value,
@@ -127,6 +133,7 @@ const ScheduleGenderPanel = ({
   gender: GenderKey;
 }) => {
   const values = getGenderValue(tarkam, gender);
+  const remaining = getGenderRemaining(tarkam, gender);
   const genderLabel = getGenderLabel(gender);
   const tone = getGenderTone(gender);
 
@@ -152,7 +159,7 @@ const ScheduleGenderPanel = ({
       <div className="tarkam-meta-grid" style={{ marginBottom: "14px" }}>
         <StatCard label="Date" value={formatDateLabel(values.date)} />
         <StatCard label="Time" value={values.time || "TBA"} />
-        <StatCard label="Slot" value={formatNumber(values.slot)} />
+        <StatCard label="Slot" value={`${formatNumber(remaining)} / ${formatNumber(values.slot)}`} />
         <StatCard label="Status" value={formatNumber(values.completed) === "1" ? "Completed" : "Open"} />
         {/* <StatCard label="Slot" value={formatNumber(values.slot)} hint="Kapasitas peserta" />
         <StatCard label="Completed" value={formatNumber(values.completed)} hint="Progress sesi" /> */}
@@ -287,7 +294,7 @@ const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
         eyebrow="Tarkam Schedule"
         title="Semua Info Turnamen Tarkam"
         description="Akses informasi komprehensif melalui jadwal yang interaktif. Setiap panel menyajikan
-        data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi secara real-time."
+data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi secara real-time."
       />
       <section className="latest-matches padding-top tarkam-section">
         <div className="container">
