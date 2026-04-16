@@ -25,6 +25,8 @@ type ScheduleTarkam = {
   female_slot?: number;
   male_completed?: number;
   female_completed?: number;
+  male_players_count?: number;
+  female_players_count?: number;
   points_awarded?: number;
   mvp_m?: string;
   mvp_f?: string;
@@ -105,8 +107,9 @@ const getGenderValue = (tarkam: ScheduleTarkam, gender: GenderKey) => ({
 
 const getGenderRemaining = (tarkam: ScheduleTarkam, gender: GenderKey) => {
   const slot = gender === "male" ? tarkam.male_slot : tarkam.female_slot;
-  const completed = gender === "male" ? tarkam.male_completed : tarkam.female_completed;
-  return Math.max(0, Number(slot ?? 0) - Number(completed ?? 0));
+  const players = gender === "male" ? tarkam.male_players_count : tarkam.female_players_count;
+  const used = players !== undefined && players !== null ? players : (gender === "male" ? tarkam.male_completed : tarkam.female_completed);
+  return Math.max(0, Number(slot ?? 0) - Number(used ?? 0));
 };
 
 const StatCard = ({
