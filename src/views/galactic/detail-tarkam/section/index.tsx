@@ -238,7 +238,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     );
   }
 
-  const heroImage = detail.image?.trim() || detail.thumbnail?.trim() || placeholderVideoThumb;
+//   const heroImage = detail.image?.trim() || detail.thumbnail?.trim() || placeholderVideoThumb;
   const title = detail.title ? `${detail.title} (Week ${detail.week || "?"})` : `Tarkam Week ${detail.week || "?"}`;
 
   return (
@@ -254,7 +254,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       <section id="overview" className="team-section padding-top tarkam-section">
         <div className="container">
           <div className="tarkam-hero-grid">
-            <div className="tarkam-hero-media" style={{ backgroundImage: `linear-gradient(180deg, rgba(5,10,22,0.18), rgba(5,10,22,0.84)), url(${heroImage})` }} />
+            {/* <div className="tarkam-hero-media" style={{ backgroundImage: `linear-gradient(180deg, rgba(5,10,22,0.18), rgba(5,10,22,0.84)), url(${heroImage})` }} /> */}
             <div className="tarkam-panel">
               <div className="tarkam-title-line">
                 <div>
@@ -281,35 +281,40 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <MiniStat label="Winners" value={formatNumber(detail.winners_count)} />
                 <MiniStat label="Points" value={formatNumber(detail.points_awarded)} />
               </div>
-              <div className="tarkam-action-row" style={{ marginTop: "20px" }}>
-                <Link className="default-btn" to={makeQueryPath({ view: "overview" })}>Overview</Link>
-                <Link className="default-btn" to={makeQueryPath({ view: "gender" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Gender</Link>
-                <Link className="default-btn" to={makeQueryPath({ view: "teams" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Teams</Link>
-                <Link className="default-btn" to={makeQueryPath({ view: "players" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Players</Link>
-                <Link className="default-btn" to={makeQueryPath({ view: "sessions" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
-                <Link className="default-btn" to={makeQueryPath({ view: "timelines" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link>
-              </div>
-              <div className="tarkam-link-row" style={{ marginTop: "18px" }}>
+              {/* <div className="tarkam-link-row" style={{ marginTop: "18px" }}>
                 <Link to={makeQueryPath({ gender: "all" })} style={{ padding: "8px 16px", color: genderFilter === "all" ? "#000" : "#fff", background: genderFilter === "all" ? "#fff" : "rgba(255,255,255,0.08)", borderRadius: "999px", textDecoration: "none", border: "1px solid rgba(255,255,255,0.18)" }}>All</Link>
                 <Link to={makeQueryPath({ gender: "male" })} style={{ padding: "8px 16px", color: genderFilter === "male" ? "#000" : "#fff", background: genderFilter === "male" ? "#fff" : "rgba(255,255,255,0.08)", borderRadius: "999px", textDecoration: "none", border: "1px solid rgba(255,255,255,0.18)" }}>Male</Link>
                 <Link to={makeQueryPath({ gender: "female" })} style={{ padding: "8px 16px", color: genderFilter === "female" ? "#000" : "#fff", background: genderFilter === "female" ? "#fff" : "rgba(255,255,255,0.08)", borderRadius: "999px", textDecoration: "none", border: "1px solid rgba(255,255,255,0.18)" }}>Female</Link>
-              </div>
+              </div> */}
               <div className="tarkam-mini-stat" style={{ marginTop: "16px", color: "rgba(255,255,255,0.72)", display: "grid", gap: "6px" }}>
                 {detail.transfer_info ? <div><strong style={{ color: "#fff" }}>Transfer:</strong> {detail.transfer_info}</div> : null}
-                {detail.proof ? <div><strong style={{ color: "#fff" }}>Proof:</strong> <a href={detail.proof} target="_blank" rel="noreferrer">Buka bukti</a></div> : null}
+                {/* {detail.proof ? <div><strong style={{ color: "#fff" }}>Proof:</strong> <a href={detail.proof} target="_blank" rel="noreferrer">Buka bukti</a></div> : null} */}
                 <div><strong style={{ color: "#fff" }}>MVP:</strong> Male {detail.mvp_m || "-"} | Female {detail.mvp_f || "-"}</div>
                 {detail.updated_at || detail.created_at ? <div><strong style={{ color: "#fff" }}>Updated:</strong> {formatDateTime(detail.updated_at || detail.created_at)}</div> : null}
               </div>
+              <div className="tarkam-action-row" style={{ marginTop: "20px" }}>
+                <ul className="nav tab-navigation" id="tarkam-tab-navigation" role="tablist">
+                  <li role="presentation">
+                    <Link className="default-btn active" id="gender-tab" data-bs-toggle="tab" data-bs-target="#gender" type="button" role="tab" aria-controls="home" aria-selected="true" to={makeQueryPath({ view: "gender" })}>Gender</Link>
+                  </li>
+                  <li role="presentation">
+                    <Link className="default-btn" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#sessions" type="button" role="tab" aria-controls="sessions" aria-selected="false" to={makeQueryPath({ view: "sessions" })}>Sessions</Link>
+                  </li>
+                  <li role="presentation">
+                    <Link className="default-btn" id="timelines-tab" data-bs-toggle="tab" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false" to={makeQueryPath({ view: "timelines" })}>Timelines</Link>
+                  </li>
+                </ul>
+                {/* <Link className="default-btn" to={makeQueryPath({ view: "overview" })}>Overview</Link>
+                <Link className="default-btn" to={makeQueryPath({ view: "gender" })}>Gender</Link>
+                <Link className="default-btn" to={makeQueryPath({ view: "teams" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Teams</Link>
+                <Link className="default-btn" to={makeQueryPath({ view: "players" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Players</Link>
+                <Link className="default-btn" to={makeQueryPath({ view: "sessions" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
+                <Link className="default-btn" to={makeQueryPath({ view: "timelines" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link> */}
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="gender" className="team-section padding-top tarkam-section">
-        <div className="container">
-          <SectionHeading eyebrow="Jadwal Gender" title={<>Pisahkan <span>Male</span> dan <span>Female</span></>} description="Setiap gender punya tanggal, jam, slot, completed, dan pool price sendiri." />
-          <div className="tarkam-card-grid">
-            {(["male", "female"] as GenderFilter[]).map((gender) => {
+            <div className="tarkam-card-grid">
+              <div className="tab-content" id="tarkam-tab-content">
+                {(["male", "female"] as GenderFilter[]).map((gender) => {
               const date = gender === "male" ? detail.male_date : detail.female_date;
               const time = gender === "male" ? detail.male_time : detail.female_time;
               const slot = gender === "male" ? detail.male_slot : detail.female_slot;
@@ -317,7 +322,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               const poolPrice = gender === "male" ? detail.pool_price_m : detail.pool_price_f;
               const mvp = gender === "male" ? detail.mvp_m : detail.mvp_f;
               return (
-                <div key={gender} className={`tarkam-gender-card ${gender === "male" ? "tarkam-gender-card--male" : "tarkam-gender-card--female"}`}>
+                <div key={gender} className={`tab-pane fade show active tarkam-gender-card ${gender === "male" ? "tarkam-gender-card--male" : "tarkam-gender-card--female"}`} id="gender" role="tabpanel" aria-labelledby="gender-tab">
                   <div className="tarkam-gender-card__head">
                     <div>
                       <div className={`tarkam-gender-card__eyebrow ${gender === "male" ? "tarkam-gender-card__eyebrow--male" : "tarkam-gender-card__eyebrow--female"}`}>{genderLabel(gender)}</div>
@@ -341,9 +346,18 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 </div>
               );
             })}
+              </div>
+          </div>
           </div>
         </div>
       </section>
+
+      {/* <section id="gender" className="team-section padding-top tarkam-section">
+        <div className="container">
+          <SectionHeading eyebrow="Jadwal Gender" title={<>Pisahkan <span>Male</span> dan <span>Female</span></>} description="Setiap gender punya tanggal, jam, slot, completed, dan pool price sendiri." />
+          
+        </div>
+      </section> */}
 
       <section className="team-section padding-top tarkam-section">
         <div className="container">
