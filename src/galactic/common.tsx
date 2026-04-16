@@ -656,7 +656,6 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
       data-autoplay="true"
       data-mute="false"
       data-allowfullscreen="true"
-      data-href={normalizedHref}
       data-video-url={normalizedHref}
       type="button"
     >
