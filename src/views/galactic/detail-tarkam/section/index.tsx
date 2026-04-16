@@ -311,8 +311,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <Link className="default-btn" to={makeQueryPath({ view: "sessions" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
                 <Link className="default-btn" to={makeQueryPath({ view: "timelines" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link> */}
               </div>
-            </div>
-            <div className="tarkam-card-grid">
+              <div className="tarkam-card-grid">
               <div className="tab-content" id="tarkam-tab-content">
                 {(["male", "female"] as GenderFilter[]).map((gender) => {
               const date = gender === "male" ? detail.male_date : detail.female_date;
@@ -348,6 +347,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
             })}
               </div>
           </div>
+            </div>
           </div>
         </div>
       </section>
