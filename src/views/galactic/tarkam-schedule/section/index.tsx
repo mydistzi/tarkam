@@ -204,7 +204,7 @@ const normalizeId = (value?: number | string | null) => {
 
 const getTarkamStreamingUrl = (tarkam: ScheduleTarkam, streamings: ScheduleStreaming[]) => {
   const stream = streamings.find((item) => normalizeId(item.tarkam_fk) === Number(tarkam.id));
-  return stream?.url?.trim() || stream?.embed?.trim() || "";
+  return stream?.embed?.trim() || stream?.url?.trim() || "";
 };
 
 const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamings: ScheduleStreaming[] }) => {
