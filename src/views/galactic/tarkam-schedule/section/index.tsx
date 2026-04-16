@@ -286,7 +286,8 @@ const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
       <PageHeader
         eyebrow="Tarkam Schedule"
         title="Semua Info Turnamen Tarkam"
-        description="Akses informasi komprehensif melalui kartu jadwal yang interaktif. Setiap panel menyajikan data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi secara real-time."
+        description="Akses informasi komprehensif melalui jadwal yang interaktif. Setiap panel menyajikan
+        data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi secara real-time."
       />
       <section className="latest-matches padding-top tarkam-section">
         <div className="container">
