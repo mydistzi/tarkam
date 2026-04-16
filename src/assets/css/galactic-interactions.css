@@ -74,9 +74,144 @@
   transition: opacity 0.6s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.global-sponsor-marquee-shell {
+  position: relative;
+  z-index: 15;
+  margin-top: -8px;
+  padding-bottom: 18px;
+}
+
+.global-sponsor-marquee {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(135deg, rgba(14, 18, 46, 0.96) 0%, rgba(8, 11, 27, 0.98) 56%, rgba(18, 24, 58, 0.98) 100%);
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.global-sponsor-marquee::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 50%, rgba(255, 195, 101, 0.14), transparent 28%),
+    radial-gradient(circle at 78% 50%, rgba(97, 195, 255, 0.18), transparent 32%);
+}
+
+.global-sponsor-marquee__label {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 20px 18px 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 191, 92, 0.14) 0%, rgba(255, 191, 92, 0.02) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.global-sponsor-marquee__label span {
+  color: rgba(255, 213, 148, 0.8);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.global-sponsor-marquee__label strong {
+  color: #fff3cf;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+
+.global-sponsor-marquee__viewport {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.global-sponsor-marquee__track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: max-content;
+  padding: 12px 0;
+  animation: global-sponsor-marquee-scroll 34s linear infinite;
+}
+
+.global-sponsor-marquee__item {
+  min-width: 340px;
+  max-width: 340px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.global-sponsor-marquee__name {
+  display: block;
+  margin-bottom: 6px;
+  color: #ffc978;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.global-sponsor-marquee__item p {
+  margin: 0;
+  color: rgba(239, 244, 255, 0.94);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.global-sponsor-marquee__item small {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: #8dd8ff;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.global-sponsor-marquee__item small::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #7fe0ff 0%, #4fa0ff 100%);
+  box-shadow: 0 0 16px rgba(79, 160, 255, 0.6);
+}
+
 .galactic-page-shell.is-ready {
   opacity: 1;
   transform: translateY(0);
+}
+
+@keyframes global-sponsor-marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-50% - 9px));
+  }
 }
 
 .galactic-hover-card {
@@ -593,7 +728,47 @@ body.video-modal-open {
   }
 }
 
+@media (max-width: 1199px) {
+  .global-sponsor-marquee {
+    grid-template-columns: 1fr;
+  }
+
+  .global-sponsor-marquee__label {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
 @media (max-width: 767px) {
+  .global-sponsor-marquee-shell {
+    margin-top: -4px;
+    padding-bottom: 14px;
+  }
+
+  .global-sponsor-marquee__label {
+    padding: 16px 18px 14px;
+  }
+
+  .global-sponsor-marquee__label strong {
+    font-size: 18px;
+  }
+
+  .global-sponsor-marquee__track {
+    gap: 14px;
+    padding: 12px 0;
+    animation-duration: 28s;
+  }
+
+  .global-sponsor-marquee__item {
+    min-width: 280px;
+    max-width: 280px;
+    padding: 13px 15px;
+  }
+
+  .global-sponsor-marquee__item p {
+    font-size: 14px;
+  }
+
   .video-modal-backdrop {
     padding: 16px;
   }

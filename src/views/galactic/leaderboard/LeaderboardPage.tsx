@@ -65,6 +65,7 @@ type LeaderboardConfig = {
   noteDescription: string;
   emptyTitle: string;
   emptyDescription: string;
+  rewardLabel?: string;
   showReward: boolean;
 };
 
@@ -89,6 +90,7 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     emptyTitle: "Belum ada sponsor yang tercatat.",
     emptyDescription:
       "Data penyawer akan muncul setelah server menerima saweran valid dan mengakumulasikannya.",
+    rewardLabel: undefined,
     showReward: false,
   },
   global: {
@@ -103,12 +105,13 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     metricFormat: "number",
     focusLabel: "Overall Top Player",
     summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward dihitung dari wins dan jumlah player dalam tim.",
+    noteTitle: "Reward global mengikuti reward kompetitif final dari backend.",
     noteDescription:
-      "Reward dijumlahkan dari pembagian kemenangan terhadap ukuran tim. Backend menghitungnya sebagai akumulasi pembagian per kemenangan untuk setiap player.",
+      "Total reward menjumlahkan bonus menang contest, bonus juara 1-3, pembagian prize per rank, serta bonus MVP dan pembagian pool. Angka ini tidak memasukkan point daftar atau undur diri.",
     emptyTitle: "Belum ada player global yang masuk leaderboard.",
     emptyDescription:
       "Data akan terisi setelah poin member aktif tersinkron dari pertandingan dan session berjalan.",
+    rewardLabel: "Total Reward",
     showReward: true,
   },
   club: {
@@ -123,12 +126,13 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     metricFormat: "number",
     focusLabel: "Top Club",
     summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward klub adalah akumulasi reward seluruh member.",
+    noteTitle: "Reward klub adalah akumulasi reward kompetitif seluruh member.",
     noteDescription:
-      "Nilai reward club dijumlahkan dari semua reward member di dalam club, sedangkan total point tetap berasal dari akumulasi point seluruh member klub.",
+      "Nilai reward club dijumlahkan dari reward kompetitif semua member di dalam club. Total point klub tetap berasal dari akumulasi lifetime point seluruh member klub.",
     emptyTitle: "Belum ada klub yang masuk leaderboard.",
     emptyDescription:
       "Leaderboard klub akan muncul setelah klub dan member aktif tercatat pada session yang berjalan.",
+    rewardLabel: "Total Reward",
     showReward: true,
   },
   male: {
@@ -143,12 +147,13 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     metricFormat: "number",
     focusLabel: "Top Male Player",
     summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward male leaderboard memakai pembagian menurut ukuran tim.",
+    noteTitle: "Reward male leaderboard memakai rumus reward kompetitif final.",
     noteDescription:
-      "Reward dihitung dari akumulasi pembagian kemenangan terhadap jumlah player dalam tim pada kategori male.",
+      "Reward male menjumlahkan kemenangan contest, bonus juara, pembagian prize juara 1-3, dan bonus MVP sesuai pembagian ukuran tim pada kategori male.",
     emptyTitle: "Belum ada player male di leaderboard.",
     emptyDescription:
       "Begitu data member male aktif dan poinnya tersedia, daftar ini akan terisi otomatis.",
+    rewardLabel: "Total Reward",
     showReward: true,
   },
   female: {
@@ -163,12 +168,13 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     metricFormat: "number",
     focusLabel: "Top Female Player",
     summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward female leaderboard memakai pembagian menurut ukuran tim.",
+    noteTitle: "Reward female leaderboard memakai rumus reward kompetitif final.",
     noteDescription:
-      "Reward dihitung dari akumulasi pembagian kemenangan terhadap jumlah player dalam tim pada kategori female.",
+      "Reward female menjumlahkan kemenangan contest, bonus juara, pembagian prize juara 1-3, dan bonus MVP sesuai pembagian ukuran tim pada kategori female.",
     emptyTitle: "Belum ada player female di leaderboard.",
     emptyDescription:
       "Daftar ini akan tampil otomatis setelah member female aktif memperoleh poin pada sistem.",
+    rewardLabel: "Total Reward",
     showReward: true,
   },
 };
@@ -301,6 +307,14 @@ const rankBadgeLabel = (rank?: number) => {
   return `TOP ${rank ?? "-"}`;
 };
 
+const metricLeadLabel = (config: LeaderboardConfig) => {
+  if (config.metricFormat === "currency") {
+    return "Current Total";
+  }
+
+  return "Current Point";
+};
+
 function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
   const config = configs[variant];
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -315,14 +329,16 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
         setLoading(true);
         setError(null);
 
-        const response = await Api.get(config.endpoint, {
+        const leaderboardResponse = await Api.get(config.endpoint, {
           params: config.params,
         });
-        const payload = response.data as
+        const leaderboardPayload = leaderboardResponse.data as
           | ApiEnvelope<LeaderboardEntry[]>
           | LeaderboardEntry[]
           | undefined;
-        const records = Array.isArray(payload) ? payload : payload?.data ?? [];
+        const records = Array.isArray(leaderboardPayload)
+          ? leaderboardPayload
+          : leaderboardPayload?.data ?? [];
 
         if (!cancelled) {
           setEntries(records);
@@ -467,32 +483,28 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                           </div>
                         </div>
 
-                        <div className="leaderboard-podium-card__platform">
+                        <div className="leaderboard-podium-card__platform-shell">
                           <div className="leaderboard-podium-card__badge">
                             #{entry.rank}
                           </div>
-                          <span>
-                            Earn{" "}
-                            {formatMetric(
-                              asMetric(entry, config.metricKey),
-                              config.metricFormat,
-                            )}
-                          </span>
-                          <strong>
-                            {formatMetric(
-                              asMetric(entry, config.metricKey),
-                              config.metricFormat,
-                            )}
-                          </strong>
-                          <small>{config.metricLabel}</small>
-                          {config.showReward ? (
-                            <>
-                              <div className="leaderboard-podium-card__reward">
-                                {formatReward(asReward(entry))}
-                              </div>
-                              <small>Prize</small>
-                            </>
-                          ) : null}
+                          <div className="leaderboard-podium-card__platform">
+                            <span>{metricLeadLabel(config)}</span>
+                            <strong>
+                              {formatMetric(
+                                asMetric(entry, config.metricKey),
+                                config.metricFormat,
+                              )}
+                            </strong>
+                            <small>{config.metricLabel}</small>
+                            {config.showReward ? (
+                              <>
+                                <div className="leaderboard-podium-card__reward">
+                                  {formatReward(asReward(entry))}
+                                </div>
+                                <small>{config.rewardLabel}</small>
+                              </>
+                            ) : null}
+                          </div>
                         </div>
 
                         <div className="leaderboard-chip-row">
@@ -536,7 +548,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                     <span>User name</span>
                     <span>Club Code</span>
                     <span>{config.metricLabel}</span>
-                    {config.showReward ? <span>Reward</span> : null}
+                    {config.showReward ? <span>{config.rewardLabel}</span> : null}
                     <span>Detail</span>
                   </div>
 
@@ -611,7 +623,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                           {config.showReward ? (
                             <div
                               className="leaderboard-table-row__reward"
-                              data-label="Reward"
+                              data-label={config.rewardLabel}
                             >
                               {formatReward(asReward(entry))}
                             </div>

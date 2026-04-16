@@ -90,6 +90,17 @@ type GalacticChromeProps = {
   menuItems?: GalacticMenuItem[];
   logoUrl?: string;
 };
+type SponsorMarqueeEntry = {
+  nickname?: string;
+  name?: string;
+  member_nickname?: string;
+  total_amount?: number | string;
+  sponsor_message?: string;
+  pesan?: string;
+};
+type ApiEnvelope<T> = {
+  data?: T;
+};
 type FooterLinkItem = {
   label: string;
   path: string;
@@ -199,6 +210,7 @@ const pageBackground = (image = brand.background): CSSProperties => ({
 });
 const formatCurrency = (value: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
 // const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
+const resolveSponsorMarqueeMessage = (entry: SponsorMarqueeEntry) => String(entry.sponsor_message || entry.pesan || "").trim();
 const getMenuPaths = (item: GalacticMenuItem): string[] => {
   const directPath = item.path ? [item.path] : [];
   const childPaths = item.children ? item.children.flatMap(getMenuPaths) : [];
@@ -1844,6 +1856,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
   const [cursorGrow, setCursorGrow] = useState(false);
   const [activeVideo, setActiveVideo] = useState<VideoModalState | null>(null);
+  const [sponsorMarqueeEntries, setSponsorMarqueeEntries] = useState<SponsorMarqueeEntry[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wowRef = useRef<WowInstance | null>(null);
 
@@ -1956,6 +1969,38 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   }, [activeVideo]);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const loadSponsorMessages = async () => {
+      try {
+        const response = await Api.get("/penyawer-leaderboards", {
+          params: { limit: 10 },
+        });
+        const payload = response.data as
+          | ApiEnvelope<SponsorMarqueeEntry[]>
+          | SponsorMarqueeEntry[]
+          | undefined;
+        const records = Array.isArray(payload) ? payload : payload?.data ?? [];
+
+        if (!cancelled) {
+          setSponsorMarqueeEntries(records);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to load sponsor marquee messages", error);
+          setSponsorMarqueeEntries([]);
+        }
+      }
+    };
+
+    void loadSponsorMessages();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target) {
@@ -2004,6 +2049,32 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   }, []);
 
   const scrollIdClass = showScroll ? "show" : "hide";
+  const sponsorMarqueeMessages = sponsorMarqueeEntries
+    .map((entry) => {
+      const sponsorMessage = resolveSponsorMarqueeMessage(entry);
+      if (!sponsorMessage) {
+        return null;
+      }
+
+      const sponsorName =
+        entry.nickname || entry.name || entry.member_nickname || "Sponsor";
+
+      return {
+        key: `${sponsorName}-${sponsorMessage}`,
+        sponsorName,
+        sponsorMessage,
+        amount: formatCurrency(Number(entry.total_amount ?? 0)),
+      };
+    })
+    .filter(Boolean) as Array<{
+    key: string;
+    sponsorName: string;
+    sponsorMessage: string;
+    amount: string;
+  }>;
+  const sponsorMarqueeLoop = sponsorMarqueeMessages.length
+    ? [...sponsorMarqueeMessages, ...sponsorMarqueeMessages]
+    : [];
 
   return (
     <>
@@ -2042,6 +2113,35 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
           logoUrl={logoUrl}
         />
       </div>
+
+      {sponsorMarqueeLoop.length ? (
+        <section className="global-sponsor-marquee-shell">
+          <div className="container">
+            <div className="global-sponsor-marquee">
+              <div className="global-sponsor-marquee__label">
+                <span>Premium Wire</span>
+                <strong>Pesan Sponsor</strong>
+              </div>
+              <div className="global-sponsor-marquee__viewport">
+                <div className="global-sponsor-marquee__track">
+                  {sponsorMarqueeLoop.map((item, index) => (
+                    <div
+                      className="global-sponsor-marquee__item"
+                      key={`${item.key}-${index}`}
+                    >
+                      <span className="global-sponsor-marquee__name">
+                        {item.sponsorName}
+                      </span>
+                      <p>{item.sponsorMessage}</p>
+                      <small>{item.amount}</small>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
 

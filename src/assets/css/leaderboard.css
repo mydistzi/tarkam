@@ -157,21 +157,52 @@
   color: #fff;
 }
 
-.leaderboard-podium-card__platform {
+.leaderboard-podium-card__platform-shell {
   position: relative;
   margin: 26px 18px 0;
-  padding: 52px 20px 24px;
+  padding-top: 34px;
+}
+
+.leaderboard-podium-card__platform {
+  position: relative;
+  margin: 0;
+  padding: 34px 20px 24px;
   border-radius: 0;
-  background:
-    linear-gradient(180deg, rgba(37, 43, 79, 0.98) 0%, rgba(11, 14, 31, 0.98) 100%);
-  clip-path: polygon(12% 0, 88% 0, 100% 18%, 100% 100%, 0 100%, 0 18%);
+  isolation: isolate;
   text-align: center;
+}
+
+.leaderboard-podium-card__platform::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(47, 56, 103, 0.98) 0%, rgba(11, 14, 31, 0.99) 100%);
+  clip-path: polygon(12% 0, 88% 0, 100% 18%, 100% 100%, 0 100%, 0 18%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: -2;
+}
+
+.leaderboard-podium-card__platform::after {
+  content: "";
+  position: absolute;
+  inset: 1px 1px auto;
+  height: 44%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+  clip-path: polygon(12% 0, 88% 0, 100% 18%, 100% 100%, 0 100%, 0 18%);
+  opacity: 0.48;
+  z-index: -1;
+}
+
+.leaderboard-podium-card__platform > * {
+  position: relative;
+  z-index: 1;
 }
 
 .leaderboard-podium-card__badge {
   position: absolute;
   left: 50%;
-  top: -18px;
+  top: 0;
   transform: translateX(-50%);
   min-width: 54px;
   min-height: 54px;
@@ -185,6 +216,7 @@
   color: #0a1025;
   background: linear-gradient(180deg, #ffd867 0%, #c79b28 100%);
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.28);
+  z-index: 3;
 }
 
 .leaderboard-podium-card--rank-2 .leaderboard-podium-card__badge {
@@ -220,7 +252,11 @@
 
 .leaderboard-podium-card__reward {
   margin-top: 26px;
-  color: #71caff;
+  background: linear-gradient(180deg, #9ae7ff 0%, #66c3ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 26px rgba(102, 195, 255, 0.18);
   font-size: 28px;
   font-weight: 700;
 }
@@ -331,6 +367,7 @@
 }
 
 .leaderboard-table-row__reward {
+  color: #9ae7ff;
   font-weight: 700;
 }
 
@@ -399,6 +436,12 @@
   color: rgba(233, 241, 255, 0.78);
 }
 
+.leaderboard-stage__footnote span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .leaderboard-empty-state {
   padding: 34px;
   text-align: center;
@@ -448,6 +491,10 @@
   .leaderboard-podium-card--rank-2,
   .leaderboard-podium-card--rank-3 {
     min-height: auto;
+  }
+
+  .leaderboard-podium-card__platform-shell {
+    margin-inline: 10px;
   }
 
   .leaderboard-table-head {
