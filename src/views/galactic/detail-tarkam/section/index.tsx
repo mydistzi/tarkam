@@ -295,13 +295,13 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               <div className="tarkam-action-row" style={{ marginTop: "20px" }}>
                 <ul className="nav tab-navigation" id="tarkam-tab-navigation" role="tablist">
                   <li role="presentation">
-                    <Link className="default-btn active" id="gender-tab" data-bs-toggle="tab" data-bs-target="#gender" type="button" role="tab" aria-controls="home" aria-selected="true" to={makeQueryPath({ view: "gender" })}>Gender</Link>
+                    <Link to="#" className="default-btn active" id="gender-tab" data-bs-toggle="tab" data-bs-target="#gender" type="button" role="tab" aria-controls="home" aria-selected="true" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Gender</Link>
                   </li>
                   <li role="presentation">
-                    <Link className="default-btn" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#sessions" type="button" role="tab" aria-controls="sessions" aria-selected="false" to={makeQueryPath({ view: "sessions" })}>Sessions</Link>
+                    <Link to="#" className="default-btn" id="sessions-tab" data-bs-toggle="tab" data-bs-target="#sessions" type="button" role="tab" aria-controls="sessions" aria-selected="false" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
                   </li>
                   <li role="presentation">
-                    <Link className="default-btn" id="timelines-tab" data-bs-toggle="tab" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false" to={makeQueryPath({ view: "timelines" })}>Timelines</Link>
+                    <Link to="#" className="default-btn" id="timelines-tab" data-bs-toggle="tab" data-bs-target="#timelines" type="button" role="tab" aria-controls="timelines" aria-selected="false" style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link>
                   </li>
                 </ul>
                 {/* <Link className="default-btn" to={makeQueryPath({ view: "overview" })}>Overview</Link>
