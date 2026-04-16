@@ -194,6 +194,7 @@ type ApiStreaming = {
   embed?: string;
   description?: string;
   user_id?: number;
+  tarkam_fk?: number | string | null;
   tags?: Array<{ id?: number; name?: string }>;
   created_at?: string;
   updated_at?: string;
@@ -473,6 +474,7 @@ type GalacticContentValue = {
   matches: MatchItem[];
   matchRecords: MatchRecord[];
   streams: StreamItem[];
+  streamings: ApiStreaming[];
   tarkams: ApiTarkam[];
   players: PlayerItem[];
   playerRecords: PlayerRecord[];
@@ -534,6 +536,7 @@ const defaultContent: GalacticContentValue = {
   matches: [],
   matchRecords: [],
   streams: [],
+  streamings: [],
   tarkams: [],
   players: [],
   playerRecords: [],
@@ -1110,6 +1113,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           matches: matchRecords.map((item) => item.item),
           matchRecords,
           streams: fallbackStreams,
+          streamings,
           tarkams,
           players: playerRecords.map((item) => item.item),
           playerRecords,

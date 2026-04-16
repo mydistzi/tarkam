@@ -203,6 +203,34 @@
   overflow: hidden;
 }
 
+.tarkam-schedule-card .dl-video-popup {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 0, 0, 0.9); /* Merah khas YouTube */
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.tarkam-schedule-card .dl-video-popup:hover {
+    transform: scale(1.05);
+    background: #ff0000;
+}
+
+.tarkam-schedule-card .dl-video-popup i {
+    font-size: 18px;
+}
+
+
 .tarkam-schedule-card::before {
   content: "";
   z-index: 1;

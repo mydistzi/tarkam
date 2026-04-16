@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "@/assets/css/tarkam-theme.css";
-import { PageHeader } from "@/galactic/common";
+import { PageHeader, VideoCardButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { useGalacticContent } from "../../shared";
 // import { placeholderVideoThumb } from "@/galactic/placeholders";
 
 type ScheduleTarkam = {
@@ -40,6 +41,13 @@ type ScheduleTarkam = {
   streamings_count?: number;
   sessions_count?: number;
   timelines_count?: number;
+};
+
+type ScheduleStreaming = {
+  id: number;
+  url?: string;
+  embed?: string;
+  tarkam_fk?: number | string | null;
 };
 
 type GenderKey = "male" | "female";
@@ -187,7 +195,19 @@ const ScheduleGenderPanel = ({
   );
 };
 
-const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
+const normalizeId = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") {
+    return NaN;
+  }
+  return Number(value);
+};
+
+const getTarkamStreamingUrl = (tarkam: ScheduleTarkam, streamings: ScheduleStreaming[]) => {
+  const stream = streamings.find((item) => normalizeId(item.tarkam_fk) === Number(tarkam.id));
+  return stream?.url?.trim() || stream?.embed?.trim() || "";
+};
+
+const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamings: ScheduleStreaming[] }) => {
   // const image = tarkam.image?.trim() || tarkam.thumbnail?.trim() || placeholderVideoThumb;
   const totalTeams = Number(tarkam.teams_count ?? 0);
   const totalGroups = Number(tarkam.groups_count ?? 0);
@@ -196,6 +216,7 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
   // const totalSessions = Number(tarkam.sessions_count ?? 0);
   // const totalTimelines = Number(tarkam.timelines_count ?? 0);
   // const totalStreamings = Number(tarkam.streamings_count ?? 0);
+  const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
 
   return (
     <article
@@ -221,6 +242,7 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
                 </span>
               ) : null}
             </div>
+            {streamUrl ? <VideoCardButton href={streamUrl} normalizeFacebook /> : null}
 
           <p style={{ marginTop: "16px", color: "rgba(255,255,255,0.74)", lineHeight: 1.8 }}>
             {tarkam.description || "Rangkuman jadwal Tarkam akan tampil di sini, termasuk sesi, timeline, dan pembagian gender."}
@@ -286,6 +308,8 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
 };
 
 const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
+  const content = useGalacticContent();
+  const streamings: ScheduleStreaming[] = (content as unknown as { streamings?: ScheduleStreaming[] }).streamings ?? [];
   const [visibleCount, setVisibleCount] = useState(4);
   const orderedTarkams = [...tarkams].sort((left, right) => Number(right.id) - Number(left.id));
   const visibleItems = orderedTarkams.slice(0, visibleCount);
@@ -304,7 +328,7 @@ data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi se
           {visibleItems.length ? (
             <>
               {visibleItems.map((tarkam) => (
-                <ScheduleCard key={tarkam.id} tarkam={tarkam} />
+                <ScheduleCard key={tarkam.id} tarkam={tarkam} streamings={streamings} />
               ))}
               {hasMore ? (
                 <div className="text-center mt-50">
