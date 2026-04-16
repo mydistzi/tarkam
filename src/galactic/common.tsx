@@ -657,6 +657,7 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
       data-mute="false"
       data-allowfullscreen="true"
       data-href={normalizedHref}
+      data-video-url={normalizedHref}
       type="button"
     >
       <i className="lab la-youtube"></i> Watch Streem
