@@ -253,7 +253,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
       <section id="overview" className="team-section padding-top tarkam-section">
         <div className="container">
-          <div className="tarkam-hero-grid">
+          {/* <div className="tarkam-hero-grid"> */}
             {/* <div className="tarkam-hero-media" style={{ backgroundImage: `linear-gradient(180deg, rgba(5,10,22,0.18), rgba(5,10,22,0.84)), url(${heroImage})` }} /> */}
             <div className="tarkam-panel">
               <div className="tarkam-title-line">
@@ -311,8 +311,8 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <Link className="default-btn" to={makeQueryPath({ view: "sessions" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Sessions</Link>
                 <Link className="default-btn" to={makeQueryPath({ view: "timelines" })} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>Timelines</Link> */}
               </div>
-              <div className="tarkam-card-grid">
-              <div className="tab-content" id="tarkam-tab-content">
+              <div className="tarkam-card-grid tab-content" id="tarkam-tab-content">
+              <div className="tab-pane fade show active" id="gender" role="tabpanel" aria-labelledby="gender-tab">
                 {(["male", "female"] as GenderFilter[]).map((gender) => {
               const date = gender === "male" ? detail.male_date : detail.female_date;
               const time = gender === "male" ? detail.male_time : detail.female_time;
@@ -321,7 +321,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               const poolPrice = gender === "male" ? detail.pool_price_m : detail.pool_price_f;
               const mvp = gender === "male" ? detail.mvp_m : detail.mvp_f;
               return (
-                <div key={gender} className={`tab-pane fade show active tarkam-gender-card ${gender === "male" ? "tarkam-gender-card--male" : "tarkam-gender-card--female"}`} id="gender" role="tabpanel" aria-labelledby="gender-tab">
+                <div key={gender} className={`tarkam-gender-card ${gender === "male" ? "tarkam-gender-card--male" : "tarkam-gender-card--female"}`}>
                   <div className="tarkam-gender-card__head">
                     <div>
                       <div className={`tarkam-gender-card__eyebrow ${gender === "male" ? "tarkam-gender-card__eyebrow--male" : "tarkam-gender-card__eyebrow--female"}`}>{genderLabel(gender)}</div>
@@ -348,7 +348,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
               </div>
           </div>
             </div>
-          </div>
+          {/* </div> */}
         </div>
       </section>
 
