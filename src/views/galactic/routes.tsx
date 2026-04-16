@@ -87,7 +87,7 @@ export const getGalacticRoutes = (): RouteObject[] => [
     children: [
       { path: "/", element: <HomeDefaultPage /> },
       { path: "/tarkam-schedule", element: <TarkamSchedulePage /> },
-      { path: "/detail-tarkam/week-:tarkamId", element: <DetailTarkamPage /> },
+      { path: "/detail-tarkam/:tarkamId", element: <DetailTarkamPage /> },
       { path: "/jadwal-pertandingan", element: <UpcomingMatchesPage /> },
       {
         path: "/detail-pertandingan/:contestId",

@@ -114,7 +114,7 @@ export type NewsTagWidgetItem = {
 const normalizeRouteParam = (value: number | string) => encodeURIComponent(String(value).trim());
 
 export const buildTarkamDetailPath = (value: number | string) =>
-  `${galacticRoutes.tarkamDetail}-${normalizeRouteParam(value)}`;
+  `${galacticRoutes.tarkamDetail}/${normalizeRouteParam(value)}`;
 
 export const buildMatchDetailPath = (value: number | string) =>
   `${galacticRoutes.matchDetail}/${normalizeRouteParam(value)}`;
