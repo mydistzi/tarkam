@@ -193,9 +193,9 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
   const totalGroups = Number(tarkam.groups_count ?? 0);
   const totalContests = Number(tarkam.contests_count ?? 0);
   const totalPlayers = Number(tarkam.players_count ?? 0);
-  const totalSessions = Number(tarkam.sessions_count ?? 0);
-  const totalTimelines = Number(tarkam.timelines_count ?? 0);
-  const totalStreamings = Number(tarkam.streamings_count ?? 0);
+  // const totalSessions = Number(tarkam.sessions_count ?? 0);
+  // const totalTimelines = Number(tarkam.timelines_count ?? 0);
+  // const totalStreamings = Number(tarkam.streamings_count ?? 0);
 
   return (
     <article
@@ -233,11 +233,11 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
             <StatCard label="Players" value={formatNumber(totalPlayers)} />
           </div>
 
-          <div className="tarkam-meta-grid">
+          {/* <div className="tarkam-meta-grid">
             <StatCard label="Sessions" value={formatNumber(totalSessions)} />
             <StatCard label="Timelines" value={formatNumber(totalTimelines)} />
             <StatCard label="Streamings" value={formatNumber(totalStreamings)} />
-          </div>
+          </div> */}
 
           <div className="tarkam-card-grid" style={{ marginTop: "22px" }}>
             <ScheduleGenderPanel tarkam={tarkam} gender="male" />
