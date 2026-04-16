@@ -659,7 +659,7 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
       data-video-url={normalizedHref}
       type="button"
     >
-      <i className="lab la-youtube"></i> Watch Streem
+      <i className="lab la-youtube"></i> Highlights
     </button>
     </>
   );
