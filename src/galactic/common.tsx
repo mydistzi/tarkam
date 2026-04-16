@@ -2119,7 +2119,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
           <div className="container">
             <div className="global-sponsor-marquee">
               <div className="global-sponsor-marquee__label">
-                {/* <span>Premium Wire</span> */}
+                <span>Premium Wire</span>
                 <strong>Pesan Sponsor</strong>
               </div>
               <div className="global-sponsor-marquee__viewport">
@@ -2131,10 +2131,9 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
                     >
                       <span className="global-sponsor-marquee__name">
                         {item.sponsorName}
-                        <p>{item.sponsorMessage}</p>
-                      <small>{item.amount}</small>
                       </span>
-                      
+                      <p>{item.sponsorMessage}</p>
+                      <small>{item.amount}</small>
                     </div>
                   ))}
                 </div>
