@@ -145,9 +145,9 @@ const ScheduleGenderPanel = ({
           </div>
           <h4 className="tarkam-gender-card__title" style={{ margin: "4px 0 0", fontSize: "1.15rem" }}>{tarkam.title || `Tarkam Week ${tarkam.week || "?"}`}</h4>
         </div>
-        <span className="tarkam-badge tarkam-badge--soft" style={{ fontSize: "0.85rem" }}>
+        {/* <span className="tarkam-badge tarkam-badge--soft" style={{ fontSize: "0.85rem" }}>
           {genderLabel} View
-        </span>
+        </span> */}
       </div>
       <div className="tarkam-meta-grid" style={{ marginBottom: "14px" }}>
         <StatCard label="Date" value={formatDateLabel(values.date)} />
@@ -236,7 +236,7 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
 
           <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center" }}>
             <Link className="default-btn" to={buildTarkamDetailPath(tarkam.id)}>
-              Buka Detail
+              Lihat Detail
             </Link>
             <Link className="default-btn" to={buildGenderPath(tarkam.id, "male", "teams")} style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}>
               Male Teams
@@ -247,7 +247,7 @@ const ScheduleCard = ({ tarkam }: { tarkam: ScheduleTarkam }) => {
             {tarkam.proof ? (
               <a
                 className="default-btn"
-                href={tarkam.proof}
+                href={`https://wa.me/${tarkam.proof}`}
                 target="_blank"
                 rel="noreferrer"
                 style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
@@ -284,8 +284,6 @@ const TarkamScheduleContent = ({ tarkams }: { tarkams: ScheduleTarkam[] }) => {
   return (
     <>
       <PageHeader
-        className="tarkam-page-header"
-        infoClassName="tarkam-page-header__info"
         eyebrow="Tarkam Schedule"
         title="Semua Info Turnamen Tarkam"
         description="Pantau Perkembangan Tarkam dengan Mudah."

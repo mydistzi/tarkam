@@ -175,7 +175,7 @@
 }
 
 .tarkam-mini-stat__value {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   margin-top: 6px;
 }
@@ -187,7 +187,7 @@
 }
 
 .tarkam-schedule-card {
-  display: grid;
+  /* display: grid; */
   grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
   margin-bottom: 24px;
   border-radius: 28px;
