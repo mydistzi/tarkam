@@ -162,7 +162,7 @@ const ScheduleGenderPanel = ({
       <div className="tarkam-meta-grid" style={{ marginBottom: "14px" }}>
         <StatCard label="Date" value={formatDateLabel(values.date)} />
         <StatCard label="Time" value={values.time || "TBA"} />
-        <StatCard label="Slot" value={`${formatNumber(remaining)} / ${formatNumber(values.slot)}`} />
+        <StatCard label="Slot" value={`${formatNumber(Number(values.slot ?? 0) - Number(remaining))} / ${formatNumber(values.slot)}`} />
         <StatCard label="Status" value={formatNumber(values.completed) === "1" ? "Completed" : "Open"} />
         {/* <StatCard label="Slot" value={formatNumber(values.slot)} hint="Kapasitas peserta" />
         <StatCard label="Completed" value={formatNumber(values.completed)} hint="Progress sesi" /> */}
