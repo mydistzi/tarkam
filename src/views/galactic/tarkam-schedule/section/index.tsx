@@ -266,16 +266,16 @@ const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamin
             <ScheduleGenderPanel tarkam={tarkam} gender="female" />
           </div>
 
+          {tarkam.points_awarded !== undefined ? (
+            <div style={{ marginTop: "14px", color: "rgba(255,255,255,0.62)", fontSize: "0.95rem" }}>
+              Poin dibagikan: <strong style={{ color: "#fff" }}>{formatNumber(tarkam.points_awarded)}</strong>
+            </div>
+          ) : null}
+
           {tarkam.transfer_info ? (
             <div className="tarkam-mini-stat" style={{ marginTop: "18px", color: "rgba(255,255,255,0.74)" }}>
               <strong style={{ display: "block", marginBottom: "6px", color: "#fff" }}>Transfer Info</strong>
               <span>{tarkam.transfer_info}</span>
-            </div>
-          ) : null}
-
-          {tarkam.points_awarded !== undefined ? (
-            <div style={{ marginTop: "14px", color: "rgba(255,255,255,0.62)", fontSize: "0.95rem" }}>
-              Poin dibagikan: <strong style={{ color: "#fff" }}>{formatNumber(tarkam.points_awarded)}</strong>
             </div>
           ) : null}
 
