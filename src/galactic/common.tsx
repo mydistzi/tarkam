@@ -649,7 +649,7 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
   return (
     <>
     <div id="fb-root"></div>
-    <script async defer crossOrigin="anonymous" src="https://facebook.net"></script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
     <button
       className="dl-video-popup vbox-item fb-video"
       data-video-title="Tarkam Highlight Reel"
