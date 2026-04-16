@@ -647,15 +647,15 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
   const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
 
   return (
-    <a
+    <button
       className="dl-video-popup vbox-item"
       data-video-title="Tarkam Highlight Reel"
       data-autoplay="true" data-vbtype="video"
-      href={normalizedHref}
+      data-video-url={normalizedHref}
       type="button"
     >
       <i className="lab la-youtube"></i> Watch Streem
-    </a>
+    </button>
   );
 };
 const MatchList = ({ items }: { items: MatchItem[] }) => (
