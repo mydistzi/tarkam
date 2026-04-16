@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "@/assets/css/tarkam-theme.css";
-import { PageHeader, VideoCardButton } from "@/galactic/common";
+import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { useGalacticContent } from "../../shared";
 // import { placeholderVideoThumb } from "@/galactic/placeholders";
@@ -242,7 +242,7 @@ const ScheduleCard = ({ tarkam, streamings }: { tarkam: ScheduleTarkam; streamin
                 </span>
               ) : null}
             </div>
-            {streamUrl ? <VideoCardButton href={streamUrl} normalizeFacebook /> : null}
+            {streamUrl ? <VideoStreemButton href={streamUrl} normalizeFacebook /> : null}
 
           <p style={{ marginTop: "16px", color: "rgba(255,255,255,0.74)", lineHeight: 1.8 }}>
             {tarkam.description || "Rangkuman jadwal Tarkam akan tampil di sini, termasuk sesi, timeline, dan pembagian gender."}

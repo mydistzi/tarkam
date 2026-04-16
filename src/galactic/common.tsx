@@ -642,6 +642,20 @@ const VideoCardButton = ({ href, normalizeFacebook = false }: { href: string; no
     </button>
   );
 };
+
+const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; normalizeFacebook?: boolean }) => {
+  const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
+
+  return (
+    <button
+      className="dl-video-popup"
+      data-video-title="Tarkam Highlight Reel"
+      data-video-url={normalizedHref}
+      type="button"
+    >
+    </button>
+  );
+};
 const MatchList = ({ items }: { items: MatchItem[] }) => (
   <ul className="upcoming-matches">
     {items.map((match) => (
@@ -2072,6 +2086,7 @@ export {
   SearchOverlay,
   Footer,
   VideoCardButton,
+  VideoStreemButton,
   MatchList,
   LatestMatchesList,
   WatchLiveGrid,
