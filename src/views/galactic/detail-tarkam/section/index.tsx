@@ -650,17 +650,15 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
           </div>
         </section>
       ) : null} */}
-      <section className="blog-section blog-page padding-top tarkam-section">
+      <section className="product-description padding-top padding-bottom">
         <div className="container">
-          <div className="col-lg-8 offset-lg-2">
-            <div className="post-details">
-              <h3 className="comment-title">Komentar Tarkam</h3>
+          <div className="description">
+            <h3 className="comment-title">Komentar Tarkam</h3>
               <DisqusThread
                 key={`tarkam-${detail.id || tarkamId}`}
                 identifier={`tarkam-${detail.id || tarkamId}`}
                 title={detail.title || `Tarkam ${detail.week || "?"}`}
               />
-            </div>
           </div>
         </div>
       </section>
