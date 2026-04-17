@@ -359,7 +359,7 @@ const PageShell = ({
       author={brand.name}
       articleTag={articleTag}
     />
-    {children}
+    <div className="galactic-page-view">{children}</div>
   </>
 );
 const SectionHeading = ({ eyebrow, title, description }: SectionHeadingProps) => (
@@ -677,19 +677,92 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
   );
 };
 const MatchList = ({ items }: { items: MatchItem[] }) => (
-  <>
-  {items.map((match) => (
-    <div className="match-details-header" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
-        <img className="left" src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
-        <h3 className="left-team"><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
-        <div className="vs">
-            <h2>vs</h2>
-        </div>
-        <h3 className="right-team"><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
-        <img className="right" src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
-    </div>
-  ))}
-  </>
+  <div className="galactic-match-list">
+    {items.map((match) => {
+      const detailPath = match.path || "#";
+      const hasVideo = Boolean(match.videoUrl?.trim());
+
+      return (
+        <article
+          className="galactic-match-card"
+          key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}
+        >
+          <div className="galactic-match-card__meta">
+            <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
+            <span className="galactic-match-card__timestamp">
+              {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""}
+            </span>
+          </div>
+
+          <div className="galactic-match-card__body">
+            <div className="galactic-match-card__team">
+              <img
+                src={getImageSource(match.leftLogo, placeholderTeam)}
+                alt={match.leftTeam}
+              />
+              <div>
+                <small>Left Team</small>
+                <h3>
+                  {match.leftTeamPath ? (
+                    <Link to={match.leftTeamPath}>{match.leftTeam}</Link>
+                  ) : (
+                    match.leftTeam
+                  )}
+                </h3>
+              </div>
+            </div>
+
+            <div className="galactic-match-card__center">
+              <span className="galactic-match-card__eyebrow">Match Focus</span>
+              <strong>{match.time || "TBA"}</strong>
+              <div className="galactic-match-card__versus">VS</div>
+            </div>
+
+            <div className="galactic-match-card__team is-right">
+              <img
+                src={getImageSource(match.rightLogo, placeholderTeam)}
+                alt={match.rightTeam}
+              />
+              <div>
+                <small>Right Team</small>
+                <h3>
+                  {match.rightTeamPath ? (
+                    <Link to={match.rightTeamPath}>{match.rightTeam}</Link>
+                  ) : (
+                    match.rightTeam
+                  )}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="galactic-match-card__actions">
+            {detailPath !== "#" ? (
+              <Link className="default-btn" to={detailPath}>
+                Lihat Detail<span />
+              </Link>
+            ) : (
+              <span className="galactic-match-card__muted">Detail belum tersedia</span>
+            )}
+
+            {hasVideo ? (
+              <button
+                className="galactic-match-card__video galactic-play-trigger"
+                data-video-title={`${match.leftTeam} vs ${match.rightTeam}`}
+                data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)}
+                type="button"
+              >
+                <i className="lab la-youtube" />
+                Highlights
+              </button>
+            ) : (
+              <span className="galactic-match-card__muted">Streaming menyusul</span>
+            )}
+          </div>
+        </article>
+      );
+    })}
+  </div>
 );
 
 // const MatchList = ({ items }: { items: MatchItem[] }) => (

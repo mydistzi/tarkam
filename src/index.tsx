@@ -25,6 +25,7 @@ import "@/assets/css/shop.css";
 import "@/assets/css/elements.css";
 import "@/assets/css/main.css";
 import "@/assets/css/galactic-interactions.css";
+import "@/assets/css/luxury-theme.css";
 import "@/assets/css/responsive.css";
 
 type OdometerWindow = Window & {
