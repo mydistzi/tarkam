@@ -129,7 +129,7 @@
 .global-sponsor-marquee__label strong {
   color: #fff3cf;
   font-size: 17px;
-  letter-spacing: 0.14em;
+  /* letter-spacing: 0.14em; */
   text-transform: uppercase;
 }
 
