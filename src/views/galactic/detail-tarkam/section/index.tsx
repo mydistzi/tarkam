@@ -1083,7 +1083,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     </article>
                   </div>
 
-                  <div className="col-12 sm-padding">
+                  <div className="col-12 sm-padding mt-20">
                     <article className="galactic-hover-card tarkam-list-card">
                       <SectionHeading
                         eyebrow="Players"
