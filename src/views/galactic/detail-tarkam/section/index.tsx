@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
-import "@/assets/css/tarkam-theme.css";
 import { DisqusThread, PageHeader, VideoStreemButton } from "@/galactic/common";
 import {
   buildPlayerDetailPath,
