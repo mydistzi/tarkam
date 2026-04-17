@@ -22,6 +22,7 @@
   --luxury-cyan: #89deff;
   --luxury-cyan-soft: rgba(137, 222, 255, 0.18);
   --luxury-cyan-strong: rgba(137, 222, 255, 0.28);
+  --luxury-purple: var(--luxury-purple);
   --luxury-gold: #ffd27a;
   --luxury-gold-soft: rgba(255, 210, 120, 0.16);
   --luxury-rose: #ff9bc6;
@@ -712,3 +713,4 @@ body::before {
     grid-template-columns: 1fr;
   }
 }
+

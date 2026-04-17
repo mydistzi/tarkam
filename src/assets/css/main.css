@@ -634,7 +634,7 @@
 }
 
 .watch-info a:hover {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 /*** 6.0 - Watch Live ***/
@@ -1230,9 +1230,9 @@
     text-transform: capitalize;
     margin-bottom: 30px;
     text-shadow:
-        0 0 5px #9841ff,
-        0 0 10px #9841ff,
-        0 0 15px #9841ff;
+        0 0 5px var(--luxury-purple),
+        0 0 10px var(--luxury-purple),
+        0 0 15px var(--luxury-purple);
 }
 
 /*** 12.0 - Gameplay Section ***/
@@ -1368,7 +1368,7 @@
 }
 
 .swiper-pagination-bullet-active {
-    background: #9841ff;
+    background: var(--luxury-purple);
 }
 
 .swiper-pagination-bullets.swiper-pagination-horizontal {
@@ -1417,7 +1417,7 @@
 }
 
 .contact-title h2 span {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 .contact-section .contact-details li {
@@ -1442,7 +1442,7 @@
 }
 
 .contact-section .contact-details li i:hover {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -1482,7 +1482,7 @@
 
 .accordion-button:not(.collapsed) {
     color: #fff;
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
 }
 
 .accordion-button:not(.collapsed):after {
@@ -1735,7 +1735,7 @@
 }
 
 .sponsor-testimonial-social a:hover {
-    background: #9841ff;
+    background: var(--luxury-purple);
 }
 
 .sponsor-testimonial-social i {
@@ -1777,7 +1777,7 @@
 }
 
 .social-list li a:hover {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -1862,7 +1862,7 @@
 
 .footer-contact li span {
     display: block;
-    color: #9841ff;
+    color: var(--luxury-purple);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;

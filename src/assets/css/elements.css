@@ -101,7 +101,7 @@ a, a:hover {
 }
 
 a:hover {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 a:focus {
@@ -310,21 +310,21 @@ a, a:hover, img, .form-control, .form-control:hover, button {
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
-    background: #9841ff;
+    background: var(--luxury-purple);
 }
 
 ::selection {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff
 }
 
 -webkit-::selection {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff
 }
 
 ::-moz-selection {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff
 }
 
@@ -352,7 +352,7 @@ body.loaded{
 }
 
 .site-preloader .spinner {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -411,7 +411,7 @@ body.loaded{
 }
 
 .dl-cursor:before {
-    background: #9841ff;
+    background: var(--luxury-purple);
     opacity: 0.5;
     content: "";
     width: 100%;
@@ -491,7 +491,7 @@ body.loaded{
 }
 
 .default-btn span {
-    background: #9841ff none repeat scroll 0 0;
+    background: var(--luxury-purple) none repeat scroll 0 0;
     border-radius: 50%;
     display: block;
     width: 0;
@@ -538,7 +538,7 @@ body.loaded{
 }
 
 .section-heading h2 span {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 .section-heading p {
@@ -652,7 +652,7 @@ body.loaded{
     letter-spacing: 0;
     text-transform: uppercase;
     text-align: center;
-    color: #9841ff;
+    color: var(--luxury-purple);
     display: inline-block;
 }
 
@@ -698,7 +698,7 @@ body.loaded{
 
 .team-details .page-header-info h2 span {
     display: block;
-    color: #9841ff;
+    color: var(--luxury-purple);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
@@ -877,3 +877,4 @@ body.loaded{
         right: 20px;
     }
 }
+

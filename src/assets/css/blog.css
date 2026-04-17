@@ -57,7 +57,7 @@
 }
 
 .post-meta li i {
-    color: #9841ff;
+    color: var(--luxury-purple);
     font-size: 20px;
     margin-right: 5px;
     margin-top: -2px;
@@ -76,7 +76,7 @@
 }
 
 .post-card .post-content h3 a {
-    background-image: linear-gradient(#9841ff 0%, #9841ff 98%);
+    background-image: linear-gradient(var(--luxury-purple) 0%, var(--luxury-purple) 98%);
     background-size: 0 4px;
     background-repeat: no-repeat;
     background-position: left 100%;
@@ -102,7 +102,7 @@
 }
 
 .post-card .post-content .read-more:before {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     position: absolute;
     content: "";
     width: 20px;
@@ -113,7 +113,7 @@
 }
 
 .post-card .post-content .read-more:hover {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 /*** 2.0 - Classic Post ***/
@@ -186,7 +186,7 @@ blockquote {
     background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
     padding: 40px;
     border: none;
-    border-left: 3px solid #9841ff;
+    border-left: 3px solid var(--luxury-purple);
     font-size: 24px;
     line-height: 32px;
     font-weight: 500;
@@ -197,7 +197,7 @@ blockquote {
 }
 
 blockquote i.fas {
-    color: #9841ff;
+    color: var(--luxury-purple);
     display: block;
     margin-bottom: 20px;
 }
@@ -208,7 +208,7 @@ blockquote span {
     font-weight: 600;
     line-height: 1;
     text-transform: uppercase;
-    color: #9841ff;
+    color: var(--luxury-purple);
     display: block;
     margin-top: 10px;
 }
@@ -315,7 +315,7 @@ blockquote span {
 }
 
 .social-icon li a:hover {
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 .social-icon li:not(:last-of-type) {
@@ -338,7 +338,7 @@ blockquote span {
 }
 
 .comment-title:before {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     width: 50%;
     height: 4px;
     position: absolute;
@@ -395,7 +395,7 @@ blockquote span {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 /*** 4.4 - Comments Form ***/
@@ -458,7 +458,7 @@ blockquote span {
 }
 
 .widget-title h3:before {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     width: 50%;
     height: 4px;
     position: absolute;
@@ -492,7 +492,7 @@ blockquote span {
     width: 50px;
     height: 100%;
     font-size: 15px;
-    color: #9841ff;
+    color: var(--luxury-purple);
 }
 
 /*** 5.3 - Category List ***/
@@ -512,7 +512,7 @@ blockquote span {
 }
 
 .category-list li a:hover {
-    color: #9841ff;
+    color: var(--luxury-purple);
     text-decoration: underline;
 }
 
@@ -529,7 +529,7 @@ blockquote span {
 }
 
 .category-list li:hover span {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -590,7 +590,7 @@ blockquote span {
 }
 
 .thumb-post .thumb-post-info .date i {
-    color: #9841ff;
+    color: var(--luxury-purple);
     margin-right: 5px;
 }
 
@@ -612,7 +612,7 @@ blockquote span {
 }
 
 .tags li a:hover {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -654,7 +654,7 @@ blockquote span {
 .pagination-wrap li a:hover,
 .pagination-wrap li button:hover,
 .pagination-wrap li button.active {
-    background-color: #9841ff;
+    background-color: var(--luxury-purple);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -726,3 +726,4 @@ blockquote span {
         right: 20px;
     }
 }
+
