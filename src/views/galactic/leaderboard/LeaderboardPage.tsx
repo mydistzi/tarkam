@@ -30,6 +30,10 @@ type LeaderboardEntry = {
   name?: string;
   point?: number | string;
   points?: number | string;
+  session_point?: number | string;
+  session_points?: number | string;
+  session_reward?: number | string;
+  lifetime_points?: number | string;
   total_amount?: number | string;
   total_reward?: number | string;
   wins?: number | string;
@@ -97,84 +101,84 @@ const configs: Record<LeaderboardVariant, LeaderboardConfig> = {
     title: "Global Leaderboard",
     eyebrow: "Global Board",
     description:
-      "10 besar gabungan semua member male dan female lintas klub dengan tampilan podium, point, club code, dan total reward.",
+      "10 besar gabungan semua member male dan female lintas klub dengan tolok ukur point session aktif dan reward session aktif.",
     endpoint: "/leaderboards",
     params: { scope: "global", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
-    metricLabel: "Point",
+    metricLabel: "Session Point",
     metricFormat: "number",
     focusLabel: "Overall Top Player",
-    summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward global mengikuti reward kompetitif final dari backend.",
+    summaryLabel: "Total Session Point Top 10",
+    noteTitle: "Leaderboard global memakai point session aktif.",
     noteDescription:
-      "Total reward menjumlahkan bonus menang contest, bonus juara 1-3, pembagian prize per rank, serta bonus MVP dan pembagian pool. Angka ini tidak memasukkan point daftar atau undur diri.",
+      "Session point dijumlahkan dari point pendaftaran, bonus menang contest +2, bonus juara 1/2/3 sebesar +5/+3/+2, bonus prize share per team, dan bonus MVP +1. Session reward hanya menjumlahkan prize share juara dan pool MVP.",
     emptyTitle: "Belum ada player global yang masuk leaderboard.",
     emptyDescription:
       "Data akan terisi setelah poin member aktif tersinkron dari pertandingan dan session berjalan.",
-    rewardLabel: "Total Reward",
+    rewardLabel: "Session Reward",
     showReward: true,
   },
   club: {
     title: "Club Leaderboard",
     eyebrow: "Club Board",
     description:
-      "10 besar klub dengan total point hasil akumulasi semua member di club tersebut, lengkap dengan club code dan total reward.",
+      "10 besar klub dengan total point session aktif hasil akumulasi semua member di club tersebut, lengkap dengan club code dan reward session.",
     endpoint: "/leaderboards",
     params: { scope: "club", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
-    metricLabel: "Point",
+    metricLabel: "Session Point",
     metricFormat: "number",
     focusLabel: "Top Club",
-    summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward klub adalah akumulasi reward kompetitif seluruh member.",
+    summaryLabel: "Total Session Point Top 10",
+    noteTitle: "Leaderboard klub mengikuti agregasi session aktif seluruh member.",
     noteDescription:
-      "Nilai reward club dijumlahkan dari reward kompetitif semua member di dalam club. Total point klub tetap berasal dari akumulasi lifetime point seluruh member klub.",
+      "Point klub berasal dari akumulasi session point semua member aktif di club. Reward klub berasal dari akumulasi session reward semua member aktif di club.",
     emptyTitle: "Belum ada klub yang masuk leaderboard.",
     emptyDescription:
       "Leaderboard klub akan muncul setelah klub dan member aktif tercatat pada session yang berjalan.",
-    rewardLabel: "Total Reward",
+    rewardLabel: "Session Reward",
     showReward: true,
   },
   male: {
     title: "Male Leaderboard",
     eyebrow: "Male Board",
     description:
-      "10 besar member kategori male dengan point, club code, dan total reward yang berbasis pembagian kemenangan tim.",
+      "10 besar member kategori male dengan point session aktif, club code, dan reward session aktif.",
     endpoint: "/leaderboards",
     params: { scope: "male", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
-    metricLabel: "Point",
+    metricLabel: "Session Point",
     metricFormat: "number",
     focusLabel: "Top Male Player",
-    summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward male leaderboard memakai rumus reward kompetitif final.",
+    summaryLabel: "Total Session Point Top 10",
+    noteTitle: "Male leaderboard memakai rumus session aktif.",
     noteDescription:
-      "Reward male menjumlahkan kemenangan contest, bonus juara, pembagian prize juara 1-3, dan bonus MVP sesuai pembagian ukuran tim pada kategori male.",
+      "Session point male memakai point pendaftaran, menang contest, bonus juara, prize share per team, dan MVP +1. Session reward male hanya menjumlahkan prize share juara dan pool MVP.",
     emptyTitle: "Belum ada player male di leaderboard.",
     emptyDescription:
       "Begitu data member male aktif dan poinnya tersedia, daftar ini akan terisi otomatis.",
-    rewardLabel: "Total Reward",
+    rewardLabel: "Session Reward",
     showReward: true,
   },
   female: {
     title: "Female Leaderboard",
     eyebrow: "Female Board",
     description:
-      "10 besar member kategori female dengan point, club code, dan total reward yang berbasis pembagian kemenangan tim.",
+      "10 besar member kategori female dengan point session aktif, club code, dan reward session aktif.",
     endpoint: "/leaderboards",
     params: { scope: "female", limit: LEADERBOARD_LIMIT },
     metricKey: "point",
-    metricLabel: "Point",
+    metricLabel: "Session Point",
     metricFormat: "number",
     focusLabel: "Top Female Player",
-    summaryLabel: "Total Point Top 10",
-    noteTitle: "Reward female leaderboard memakai rumus reward kompetitif final.",
+    summaryLabel: "Total Session Point Top 10",
+    noteTitle: "Female leaderboard memakai rumus session aktif.",
     noteDescription:
-      "Reward female menjumlahkan kemenangan contest, bonus juara, pembagian prize juara 1-3, dan bonus MVP sesuai pembagian ukuran tim pada kategori female.",
+      "Session point female memakai point pendaftaran, menang contest, bonus juara, prize share per team, dan MVP +1. Session reward female hanya menjumlahkan prize share juara dan pool MVP.",
     emptyTitle: "Belum ada player female di leaderboard.",
     emptyDescription:
       "Daftar ini akan tampil otomatis setelah member female aktif memperoleh poin pada sistem.",
-    rewardLabel: "Total Reward",
+    rewardLabel: "Session Reward",
     showReward: true,
   },
 };
@@ -312,7 +316,7 @@ const metricLeadLabel = (config: LeaderboardConfig) => {
     return "Current Total";
   }
 
-  return "Current Point";
+  return "Active Session Point";
 };
 
 function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {

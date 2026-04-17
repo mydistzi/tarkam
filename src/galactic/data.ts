@@ -222,6 +222,9 @@ export type MemberItem = {
   losses?: number;
   tMatches?: number;
   points?: number;
+  lifetimePoints?: number;
+  sessionPoints?: number;
+  sessionReward?: number;
   status?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -260,6 +263,9 @@ export type ClubItem = {
   logo?: string;
   level?: string;
   points?: number;
+  lifetimePoints?: number;
+  sessionPoints?: number;
+  sessionReward?: number;
   facebook?: string;
   instagram?: string;
   tiktok?: string;

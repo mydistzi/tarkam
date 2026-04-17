@@ -73,6 +73,9 @@ type ApiMemberRecord = {
   losses?: number;
   t_matches?: number;
   points?: number;
+  lifetime_points?: number;
+  session_points?: number;
+  session_reward?: number | string;
   status?: string;
   created_at?: string;
   updated_at?: string;
@@ -93,6 +96,9 @@ type ApiClubRecord = {
   logo?: string;
   level?: string;
   points?: number | string;
+  lifetime_points?: number | string;
+  session_points?: number | string;
+  session_reward?: number | string;
   facebook?: string;
   instagram?: string;
   tiktok?: string;
@@ -149,6 +155,9 @@ const mapMemberItem = (member: ApiMemberRecord): MemberItem => ({
   losses: Number(member.losses ?? 0),
   tMatches: Number(member.t_matches ?? 0),
   points: Number(member.points ?? 0),
+  lifetimePoints: Number(member.lifetime_points ?? member.points ?? 0),
+  sessionPoints: Number(member.session_points ?? 0),
+  sessionReward: Number(member.session_reward ?? 0),
   status: member.status,
   createdAt: member.created_at,
   updatedAt: member.updated_at,
@@ -190,6 +199,9 @@ const mapClubItem = (
   logo: club.logo,
   level: club.level,
   points: Number(club.points ?? 0),
+  lifetimePoints: Number(club.lifetime_points ?? club.points ?? 0),
+  sessionPoints: Number(club.session_points ?? 0),
+  sessionReward: Number(club.session_reward ?? 0),
   facebook: club.facebook,
   instagram: club.instagram,
   tiktok: club.tiktok,
@@ -265,7 +277,7 @@ const ClubDetailsPage = () => {
 
         setRecord(mappedClub);
         setMembers(mappedMembers);
-        setClubPoints(mappedClub.points ?? 0);
+        setClubPoints(mappedClub.sessionPoints ?? 0);
         setClubWins(mappedMembers.reduce((sum: number, item: MemberItem) => sum + (item.wins ?? 0), 0));
         setClubLosses(mappedMembers.reduce((sum: number, item: MemberItem) => sum + (item.losses ?? 0), 0));
       })

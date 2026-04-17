@@ -109,6 +109,16 @@ const formatDateLabel = (value?: string) => {
   }).format(date);
 };
 
+const formatRewardLabel = (value?: number) => {
+  const numeric = Number(value ?? 0);
+  return Number.isNaN(numeric)
+    ? "0"
+    : new Intl.NumberFormat("id-ID", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(numeric);
+};
+
 const normalizeSocialUrl = (value?: string) => {
   if (!value?.trim()) return undefined;
   if (value.startsWith("http://") || value.startsWith("https://")) return value;
@@ -243,8 +253,8 @@ const MemberCarousel = ({ members }: { members: MemberItem[] }) => {
                     <small>Lose</small>
                   </div>
                   <div>
-                    <span>{member.points ?? 0}</span>
-                    <small>Poin</small>
+                    <span>{member.sessionPoints ?? 0}</span>
+                    <small>Poin Sesi</small>
                   </div>
                 </div>
               </div>
@@ -280,7 +290,11 @@ const ClubsContent = ({
     (member) => String(member.status || "").toLowerCase() === "active",
   ).length;
   const totalMemberPoints = members.reduce(
-    (sum, member) => sum + Number(member.points ?? 0),
+    (sum, member) => sum + Number(member.sessionPoints ?? 0),
+    0,
+  );
+  const totalSessionReward = members.reduce(
+    (sum, member) => sum + Number(member.sessionReward ?? 0),
     0,
   );
   const averageMemberPoints = totalMembers
@@ -338,7 +352,7 @@ const ClubsContent = ({
 
   let topMember: MemberItem | undefined;
   for (const member of members) {
-    if (!topMember || Number(member.points ?? 0) > Number(topMember.points ?? 0)) {
+    if (!topMember || Number(member.sessionPoints ?? 0) > Number(topMember.sessionPoints ?? 0)) {
       topMember = member;
     }
   }
@@ -348,7 +362,9 @@ const ClubsContent = ({
     { label: "Kode", value: record.code || "-" },
     { label: "Slug", value: record.slug || "-" },
     { label: "Level", value: record.level || "-" },
-    { label: "Poin Klub", value: String(record.points ?? 0) },
+    { label: "Point Session Klub", value: String(record.sessionPoints ?? 0) },
+    { label: "Point Lifetime Klub", value: String(record.lifetimePoints ?? record.points ?? 0) },
+    { label: "Reward Session Klub", value: formatRewardLabel(record.sessionReward) },
     { label: "Jumlah Member", value: String(record.membersCount ?? members.length) },
     { label: "Facebook", value: record.facebook || "-" },
     { label: "Instagram", value: record.instagram || "-" },
@@ -441,7 +457,11 @@ const ClubsContent = ({
             </div>
             <div className="club-kpi-card">
               <h3><AnimatedCounter value={clubPoints} delay={340} /></h3>
-              <p>Poin Klub</p>
+              <p>Point Session Klub</p>
+            </div>
+            <div className="club-kpi-card">
+              <h3>{formatRewardLabel(totalSessionReward)}</h3>
+              <p>Reward Session</p>
             </div>
             <div className="club-kpi-card">
               <h3><AnimatedCounter value={activeMembers} delay={400} /></h3>
@@ -492,12 +512,16 @@ const ClubsContent = ({
                   <strong>{totalMatches}</strong>
                 </li>
                 <li>
-                  <span>Rata-rata poin member</span>
+                  <span>Rata-rata point session member</span>
                   <strong>{averageMemberPoints}</strong>
                 </li>
                 <li>
-                  <span>Top performer</span>
+                  <span>Top performer session</span>
                   <strong>{topMember?.nickname || topMember?.username || "-"}</strong>
+                </li>
+                <li>
+                  <span>Total reward session</span>
+                  <strong>{formatRewardLabel(totalSessionReward)}</strong>
                 </li>
               </ul>
             </article>

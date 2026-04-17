@@ -107,7 +107,8 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   pointer-events: auto;
-  clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
+  /* clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%); */
+  clip-path: polygon(16px 100%, calc(100% - 16px) 100%, 100% 0%, 0% 0%) !important;
   transition:
     box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
@@ -134,7 +135,8 @@
   background:
     linear-gradient(180deg, rgba(255, 191, 92, 0.14) 0%, rgba(255, 191, 92, 0.02) 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%);
+  /* clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%); */
+  clip-path: polygon(0% 100%, calc(100% - 16px) 100%, 100% 0%, 0% 0%) !important;
 }
 
 .global-sponsor-marquee__label strong {
@@ -250,7 +252,8 @@
 }
 
 .galactic-page-shell.has-global-sponsor-marquee {
-  padding-top: 108px;
+  /* padding-top: 108px; */
+  padding-top: 0;
 }
 
 @keyframes global-sponsor-marquee-scroll {

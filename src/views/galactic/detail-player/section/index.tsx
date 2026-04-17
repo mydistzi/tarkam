@@ -89,6 +89,9 @@ export type MemberDetailPayload = AnyObj & {
   losses?: number;
   t_matches?: number;
   points?: number;
+  lifetime_points?: number;
+  session_points?: number;
+  session_reward?: number | string;
   status?: string;
   created_at?: string;
   updated_at?: string;
@@ -119,6 +122,17 @@ const fmtNumber = (value?: number | string | null) => {
   if (value === undefined || value === null || value === "") return "0";
   const numeric = Number(value);
   return Number.isNaN(numeric) ? String(value) : new Intl.NumberFormat("id-ID").format(numeric);
+};
+
+const fmtReward = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") return "0";
+  const numeric = Number(value);
+  return Number.isNaN(numeric)
+    ? String(value)
+    : new Intl.NumberFormat("id-ID", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(numeric);
 };
 
 const fmtCoord = (value?: number) => (value === undefined || value === null || Number.isNaN(Number(value)) ? "-" : Number(value).toFixed(4));
@@ -204,7 +218,9 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   const totalWins = Number(record?.wins ?? 0);
   const totalLosses = Number(record?.losses ?? 0);
   const totalMatches = Number(record?.t_matches ?? 0);
-  const totalPoints = Number(record?.points ?? 0);
+  const lifetimePoints = Number(record?.lifetime_points ?? record?.points ?? 0);
+  const sessionPoints = Number(record?.session_points ?? 0);
+  const sessionReward = Number(record?.session_reward ?? 0);
 
   const profileRows = [
     { label: "Username", value: record?.username || "-" },
@@ -218,6 +234,9 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
     { label: "City", value: record?.city || "-" },
     { label: "Status", value: statusLabel(record?.status) },
     { label: "Club", value: record?.club?.name != null ? String(record.club.name) : "-" },
+    { label: "Point Lifetime", value: fmtNumber(lifetimePoints) },
+    { label: "Point Session", value: fmtNumber(sessionPoints) },
+    { label: "Reward Session", value: fmtReward(sessionReward) },
     { label: "Latitude", value: fmtCoord(record?.latitude) },
     { label: "Longitude", value: fmtCoord(record?.longitude) },
     { label: "Created", value: fmtDate(record?.created_at) },
@@ -296,7 +315,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               </div>
               <p className="mt-10">
                 Halaman ini menampilkan informasi lengkap <code>{displayName}</code>, mulai dari profil utama, riwayat sesi,
-                hingga timeline aktivitas terbaru.
+                point lifetime permanent, point session aktif, hingga timeline aktivitas terbaru.
               </p>
               <div className="player-hero-links">
                 <Link className="player-hero-link" to={clubPath}>
@@ -322,9 +341,19 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
         <div className="container">
           <div className="player-kpi-grid">
             <article className="player-kpi-card player-kpi-card--accent galactic-hover-card">
-              <span>Points</span>
-              <h3>{fmtNumber(totalPoints)}</h3>
-              <p>Poin saat ini.</p>
+              <span>Session Point</span>
+              <h3>{fmtNumber(sessionPoints)}</h3>
+              <p>Dipakai untuk leaderboard session aktif.</p>
+            </article>
+            <article className="player-kpi-card galactic-hover-card">
+              <span>Lifetime Point</span>
+              <h3>{fmtNumber(lifetimePoints)}</h3>
+              <p>Poin permanent global member.</p>
+            </article>
+            <article className="player-kpi-card galactic-hover-card">
+              <span>Session Reward</span>
+              <h3>{fmtReward(sessionReward)}</h3>
+              <p>Akumulasi hadiah session aktif.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Win Rate</span>
@@ -646,7 +675,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
                     </div>
                     <ul className="player-session-card__meta">
                       <li>
-                        <span>Point</span>
+                        <span>Total Session Point</span>
                         <strong>{fmtNumber(entry.item.session?.point)}</strong>
                       </li>
                       <li>
