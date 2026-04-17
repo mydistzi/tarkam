@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
-import { PageHeader, PageShell } from "@/galactic/common";
+// import { PageHeader, PageShell } from "@/galactic/common";
+import { PageShell } from "@/galactic/common";
 import { buildClubDetailPath, buildPlayerDetailPath } from "@/galactic/data";
 import {
   placeholderPlayer,
