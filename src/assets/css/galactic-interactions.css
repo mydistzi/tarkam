@@ -169,7 +169,7 @@
 }
 
 .sticky-header.sticky-fixed-top + .global-sponsor-marquee-shell {
-  top: 66px;
+  /* top: 66px; */
   width: min(calc(100vw - 280px), 1110px);
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.22));
 }
@@ -252,7 +252,8 @@
 }
 
 .galactic-page-shell.has-global-sponsor-marquee {
-  padding-top: 108px;
+  /* padding-top: 108px; */
+  padding-top: 0;
 }
 
 @keyframes global-sponsor-marquee-scroll {
