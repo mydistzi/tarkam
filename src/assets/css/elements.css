@@ -303,7 +303,7 @@ a, a:hover, img, .form-control, .form-control:hover, button {
 
 /*** 1.7 - Scrollbar Style  ***/
 ::-webkit-scrollbar {
-    background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+    background: radial-gradient(circle at 15% 20%,#ffd27824,#0000 20%),radial-gradient(circle at 86% 18%,#89deff0f,#0000 18%),linear-gradient(#07101fc2,#050c1647);
     width: 8px;
     height: 8px
 }
