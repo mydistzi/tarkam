@@ -677,38 +677,54 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
   );
 };
 const MatchList = ({ items }: { items: MatchItem[] }) => (
-  <ul className="upcoming-matches">
-    {items.map((match) => (
-      <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
-        <div className="participate-team wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="900ms">
-          <img src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
-          <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
-          <div className="match-info">{match.group}</div>
+  <>
+  {items.map((match) => (
+    <div className="match-details-header" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
+        <img className="left" src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
+        <h3 className="left-team"><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
+        <div className="vs">
+            <h2>vs</h2>
         </div>
-        <div className="match-time">
-          <h3>{match.time || "21:30"} <span>{match.date}</span></h3>
-          <ul className="watch-btn">
-            <li>
-              <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
-                <i className="lab la-youtube" />
-              </button>
-            </li>
-            <li>
-              <button className="galactic-play-trigger" data-video-title={match.rightTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
-                <i className="lab la-twitch" />
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div className="participate-team oponent wow fadeInRight" data-wow-delay="200ms" data-wow-duration="900ms">
-          <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
-          <div className="match-info">{match.group}</div>
-          <img src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
-        </div>
-      </li>
-    ))}
-  </ul>
+        <h3 className="right-team"><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
+        <img className="right" src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
+    </div>
+  ))}
+  </>
 );
+
+// const MatchList = ({ items }: { items: MatchItem[] }) => (
+//   <ul className="upcoming-matches">
+//     {items.map((match) => (
+//       <li className="matches-list" key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}>
+//         <div className="participate-team wow fadeInLeft" data-wow-delay="200ms" data-wow-duration="900ms">
+//           <img src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
+//           <h3><Link to={match.leftTeamPath || "/team-details"}>{match.leftTeam}</Link></h3>
+//           <div className="match-info">{match.group}</div>
+//         </div>
+//         <div className="match-time">
+//           <h3>{match.time || "21:30"} <span>{match.date}</span></h3>
+//           <ul className="watch-btn">
+//             <li>
+//               <button className="galactic-play-trigger" data-video-title={match.leftTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
+//                 <i className="lab la-youtube" />
+//               </button>
+//             </li>
+//             <li>
+//               <button className="galactic-play-trigger" data-video-title={match.rightTeam} data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)} type="button">
+//                 <i className="lab la-twitch" />
+//               </button>
+//             </li>
+//           </ul>
+//         </div>
+//         <div className="participate-team oponent wow fadeInRight" data-wow-delay="200ms" data-wow-duration="900ms">
+//           <h3><Link to={match.rightTeamPath || "/team-details"}>{match.rightTeam}</Link></h3>
+//           <div className="match-info">{match.group}</div>
+//           <img src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
+//         </div>
+//       </li>
+//     ))}
+//   </ul>
+// );
 const LatestMatchesList = ({
   items,
   streams,
