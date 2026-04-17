@@ -82,6 +82,11 @@
   width: min(calc(100vw - 350px), 1170px);
   transform: translateX(-50%);
   pointer-events: none;
+  transition:
+    top 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease,
+    filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .global-sponsor-marquee {
@@ -99,8 +104,14 @@
   box-shadow:
     0 20px 44px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   pointer-events: auto;
   clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 100%, 0 100%);
+  transition:
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .global-sponsor-marquee::before {
@@ -153,6 +164,21 @@
 
 .global-sponsor-marquee:hover .global-sponsor-marquee__track {
   animation-play-state: paused;
+}
+
+.sticky-header.sticky-fixed-top + .global-sponsor-marquee-shell {
+  top: 66px;
+  width: min(calc(100vw - 280px), 1110px);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.22));
+}
+
+.sticky-header.sticky-fixed-top + .global-sponsor-marquee-shell .global-sponsor-marquee {
+  border-color: rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(135deg, rgba(10, 14, 38, 0.96) 0%, rgba(7, 10, 24, 0.98) 52%, rgba(14, 18, 44, 0.98) 100%);
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .global-sponsor-marquee__item {
@@ -224,7 +250,7 @@
 }
 
 .galactic-page-shell.has-global-sponsor-marquee {
-  padding-top: 72px;
+  padding-top: 108px;
 }
 
 @keyframes global-sponsor-marquee-scroll {
@@ -752,6 +778,14 @@ body.video-modal-open {
 }
 
 @media (max-width: 1199px) {
+  .global-sponsor-marquee-shell {
+    width: min(calc(100vw - 120px), 980px);
+  }
+
+  .sticky-header.sticky-fixed-top + .global-sponsor-marquee-shell {
+    width: min(calc(100vw - 88px), 960px);
+  }
+
   .global-sponsor-marquee {
     grid-template-columns: 170px minmax(0, 1fr);
   }
@@ -765,6 +799,11 @@ body.video-modal-open {
   .global-sponsor-marquee-shell {
     top: 64px;
     width: calc(100vw - 16px);
+  }
+
+  .sticky-header.sticky-fixed-top + .global-sponsor-marquee-shell {
+    top: 58px;
+    width: calc(100vw - 12px);
   }
 
   .global-sponsor-marquee {
@@ -808,7 +847,7 @@ body.video-modal-open {
   }
 
   .galactic-page-shell.has-global-sponsor-marquee {
-    padding-top: 66px;
+    padding-top: 88px;
   }
 
   .video-modal-backdrop {
