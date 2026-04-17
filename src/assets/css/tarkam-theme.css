@@ -1,8 +1,8 @@
 :root {
   color-scheme: dark;
   --tarkam-bg: var(--luxury-bg);
-  --tarkam-surface: rgba(10, 19, 34, 0.88);
-  --tarkam-surface-soft: rgba(8, 15, 28, 0.74);
+  --tarkam-surface: var(--luxury-panel);
+  --tarkam-surface-soft: rgba(10, 19, 34, 0.74);
   --tarkam-surface-strong: rgba(8, 15, 28, 0.96);
   --tarkam-border: var(--luxury-line);
   --tarkam-border-soft: rgba(255, 255, 255, 0.06);
@@ -33,17 +33,7 @@ body {
 
 .tarkam-page-header .page-header-info p {
   max-width: 880px;
-  color: rgba(247, 251, 255, 0.78);
-}
-
-.tarkam-page-header .page-header-info h2 {
-  max-width: 14ch;
-  margin-bottom: 0;
-}
-
-.tarkam-page-header .page-header-info p {
-  max-width: 880px;
-  color: rgba(233, 241, 255, 0.78);
+  color: var(--tarkam-muted);
 }
 
 .tarkam-shell {
@@ -62,8 +52,8 @@ body {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 10%, rgba(74, 226, 255, 0.08), transparent 24%),
-    radial-gradient(circle at 88% 12%, rgba(255, 109, 182, 0.06), transparent 22%);
+    radial-gradient(circle at 15% 10%, rgba(137, 222, 255, 0.08), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(255, 210, 120, 0.06), transparent 22%);
 }
 
 .tarkam-hero-grid {
@@ -92,7 +82,7 @@ body {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(7, 10, 24, 0.08), rgba(7, 10, 24, 0.88)),
-    linear-gradient(135deg, rgba(61, 197, 255, 0.15), transparent 45%, rgba(255, 105, 180, 0.16));
+    linear-gradient(135deg, rgba(137, 222, 255, 0.15), transparent 45%, rgba(255, 210, 120, 0.16));
 }
 
 .tarkam-hero-media__content {
@@ -243,7 +233,8 @@ body {
 }
 
 .tarkam-badge--soft {
-  background: rgba(0, 132, 255, 0.29);
+  background: var(--tarkam-accent-soft);
+  color: var(--tarkam-accent);
 }
 
 .tarkam-button-row {
@@ -274,18 +265,18 @@ body {
 }
 
 .tarkam-pill.is-active {
-  background: rgba(72, 221, 162, 0.16);
-  color: #84f0c4;
+  background: rgba(255, 210, 120, 0.16);
+  color: var(--luxury-gold);
 }
 
 .tarkam-pill.is-pending {
-  background: rgba(127, 179, 255, 0.16);
-  color: #a4c4ff;
+  background: rgba(137, 222, 255, 0.16);
+  color: var(--luxury-cyan);
 }
 
 .tarkam-pill.is-complete {
-  background: rgba(88, 214, 141, 0.16);
-  color: #8ff0c0;
+  background: rgba(255, 210, 120, 0.16);
+  color: var(--luxury-gold);
 }
 
 .tarkam-pill.is-idle {
@@ -385,8 +376,8 @@ body {
   min-height: 46px;
   padding: 0 18px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--tarkam-border);
+  background: rgba(10, 19, 34, 0.18);
   color: rgba(255, 255, 255, 0.78);
   font-weight: 600;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -394,14 +385,14 @@ body {
 
 .tarkam-segment-btn:hover {
   transform: translateY(-1px);
-  border-color: rgba(141, 212, 255, 0.45);
-  color: #fff;
+  border-color: var(--tarkam-accent);
+  color: var(--luxury-text);
 }
 
 .tarkam-segment-btn.is-active {
-  border-color: rgba(141, 212, 255, 0.5);
-  background: linear-gradient(135deg, rgba(34, 112, 255, 0.28), rgba(153, 68, 255, 0.24));
-  color: #fff;
+  border-color: var(--tarkam-accent);
+  background: linear-gradient(135deg, rgba(137, 222, 255, 0.28), rgba(255, 210, 120, 0.24));
+  color: var(--luxury-text);
 }
 
 .tarkam-tab-pane {
@@ -560,8 +551,8 @@ body {
   margin-bottom: 16px;
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(127, 179, 255, 0.12);
-  color: #d3e6ff;
+  background: rgba(137, 222, 255, 0.12);
+  color: var(--luxury-text);
   font-weight: 700;
 }
 
@@ -623,8 +614,8 @@ body {
 .tarkam-stream-card__body .tarkam-inline-copy {
   position: absolute;
   right: 20px;
-  background-color: rgba(125, 77, 255, 0.92) !important;
-  color: #FFFFFF !important;
+  background-color: var(--tarkam-accent) !important;
+  color: var(--luxury-text) !important;
   border: none;
   border-radius: 4px;
   padding: 4px 10px;
@@ -639,7 +630,7 @@ body {
 }
 
 .tarkam-stream-card__body button.dl-video-popup i {
-  color: #FFFFFF !important;
+  color: var(--luxury-text) !important;
   font-size: 14px;
 }
 
@@ -677,9 +668,8 @@ body {
   margin-bottom: 24px;
   border-radius: 28px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  /* background: linear-gradient(180deg, rgba(15, 18, 44, 0.96), rgba(7, 10, 24, 0.98)); */
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--tarkam-border);
+  box-shadow: var(--tarkam-shadow);
 }
 
 .tarkam-schedule-card {
@@ -728,7 +718,7 @@ body {
     align-items: center;
     gap: 6px;
     background: var(--tarkam-accent);
-    color: #fff;
+    color: var(--luxury-text);
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 13px;
@@ -766,13 +756,13 @@ body {
 }
 
 .tarkam-gender-card--male {
-  border-color: rgba(79, 172, 254, 0.28);
-  background: linear-gradient(180deg, rgba(79, 172, 254, 0.16), rgba(7, 20, 47, 0.88));
+  border-color: rgba(137, 222, 255, 0.28);
+  background: linear-gradient(180deg, rgba(137, 222, 255, 0.16), rgba(8, 15, 28, 0.88));
 }
 
 .tarkam-gender-card--female {
-  border-color: rgba(255, 105, 180, 0.28);
-  background: linear-gradient(180deg, rgba(255, 105, 180, 0.16), rgba(35, 7, 29, 0.88));
+  border-color: rgba(255, 155, 198, 0.28);
+  background: linear-gradient(180deg, rgba(255, 155, 198, 0.16), rgba(35, 7, 29, 0.88));
 }
 
 .tarkam-gender-card__head {
@@ -790,11 +780,11 @@ body {
 }
 
 .tarkam-gender-card__eyebrow--male {
-  color: #7fd3ff;
+  color: var(--luxury-cyan);
 }
 
 .tarkam-gender-card__eyebrow--female {
-  color: #ffb0d5;
+  color: var(--luxury-rose);
 }
 
 .tarkam-gender-card__title {
@@ -811,7 +801,7 @@ body {
   border-radius: 20px;
   padding: 18px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tarkam-border);
 }
 
 .tarkam-data-card__head,
