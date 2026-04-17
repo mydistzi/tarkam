@@ -36,7 +36,7 @@
 }
 
 .hero-section:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-fade) 0%, var(--luxury-line) 50%, var(--luxury-cyan-fade) 100%);
+    background: linear-gradient(135deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 28%, #ffd27814 62%, #ffd2780a 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -1872,7 +1872,7 @@
 
 .footer-contact li span {
     display: block;
-    color: var(--luxury-line);
+    color: #ddd;
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
