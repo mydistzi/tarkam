@@ -1885,7 +1885,10 @@
 }
 
 .copyright-wrap:before {
-    background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+    background:
+    radial-gradient(circle at 15% 20%, rgba(255, 210, 120, 0.14), transparent 20%),
+    radial-gradient(circle at 86% 18%, rgba(137, 222, 255, 0.06), transparent 18%),
+    linear-gradient(180deg, rgba(7, 16, 31, 0.76), rgba(5, 12, 22, 0.28));
     clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
     content: "";
     position: absolute;
