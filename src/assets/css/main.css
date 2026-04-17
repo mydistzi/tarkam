@@ -36,7 +36,7 @@
 }
 
 .hero-section:before {
-    background: linear-gradient(135deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 28%, #ffd27814 62%, #ffd2780a 100%);
+    background: linear-gradient(90deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 50%, #ffd27814 100%, #ffd2780a 100%);
     content: "";
     position: absolute;
     width: 100%;
