@@ -84,10 +84,11 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
 
   if (loading) {
     return (
-      <section className="club-registry-section padding-top">
+      <section className="player-page-section padding-top">
         <div className="container">
-          <div className="club-registry-empty">
-            <h2>Memuat direktori klub resmi.</h2>
+          <div className="player-loading-card galactic-hover-card">
+            <span className="player-loading-chip">Loading</span>
+            <h2>Memuat direktori klub...</h2>
             <p>Mohon tunggu sejenak, data dari server sedang dipersiapkan.</p>
           </div>
         </div>
@@ -97,9 +98,9 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
 
   if (error) {
     return (
-      <section className="club-registry-section padding-top">
+      <section className="player-page-section padding-top">
         <div className="container">
-          <div className="club-registry-empty club-registry-empty--error">
+          <div className="player-empty-state player-empty-state--error">
             <h2>Direktori klub belum dapat ditampilkan.</h2>
             <p>{error}</p>
           </div>
@@ -110,11 +111,11 @@ const ClubsContent = ({ clubs, loading = false, error = null }: ClubsContentProp
 
   if (!sortedClubs.length) {
     return (
-      <section className="club-registry-section padding-top">
+      <section className="player-page-section padding-top">
         <div className="container">
-          <div className="club-registry-empty">
+          <div className="player-empty-state">
             <h2>Belum ada klub yang terdaftar.</h2>
-            <p>Data klub resmi akan muncul setelah server mengirimkan daftar yang valid.</p>
+            <p>Data klub akan muncul setelah server mengirimkan daftar yang valid.</p>
           </div>
         </div>
       </section>
