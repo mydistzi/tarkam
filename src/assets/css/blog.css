@@ -57,7 +57,7 @@
 }
 
 .post-meta li i {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     font-size: 20px;
     margin-right: 5px;
     margin-top: -2px;
@@ -76,7 +76,7 @@
 }
 
 .post-card .post-content h3 a {
-    background-image: linear-gradient(var(--luxury-purple) 0%, var(--luxury-purple) 98%);
+    background-image: linear-gradient(var(--luxury-cyan) 0%, var(--luxury-cyan) 98%);
     background-size: 0 4px;
     background-repeat: no-repeat;
     background-position: left 100%;
@@ -102,7 +102,7 @@
 }
 
 .post-card .post-content .read-more:before {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     position: absolute;
     content: "";
     width: 20px;
@@ -113,7 +113,7 @@
 }
 
 .post-card .post-content .read-more:hover {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 /*** 2.0 - Classic Post ***/
@@ -138,7 +138,7 @@
 
 /*** 3.0 - Post Category ***/
 .post-category {
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(90% 0, 100% 35%, 100% 100%, 0% 100%, 0 66%, 0 0);
     position: absolute;
     left: 0;
@@ -183,10 +183,10 @@
 }
 
 blockquote {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     padding: 40px;
     border: none;
-    border-left: 3px solid var(--luxury-purple);
+    border-left: 3px solid var(--luxury-cyan);
     font-size: 24px;
     line-height: 32px;
     font-weight: 500;
@@ -197,7 +197,7 @@ blockquote {
 }
 
 blockquote i.fas {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     display: block;
     margin-bottom: 20px;
 }
@@ -208,7 +208,7 @@ blockquote span {
     font-weight: 600;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     display: block;
     margin-top: 10px;
 }
@@ -276,7 +276,7 @@ blockquote span {
 
 /*** 4.2 - Author Box ***/
 .author-box {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     padding: 40px;
     border: none;
     border-radius: 2px;
@@ -315,7 +315,7 @@ blockquote span {
 }
 
 .social-icon li a:hover {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 .social-icon li:not(:last-of-type) {
@@ -338,7 +338,7 @@ blockquote span {
 }
 
 .comment-title:before {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     width: 50%;
     height: 4px;
     position: absolute;
@@ -395,7 +395,7 @@ blockquote span {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 /*** 4.4 - Comments Form ***/
@@ -407,7 +407,7 @@ blockquote span {
     background-color: rgba(12, 12, 53, 0.9);
     height: 60px;
     border-radius: 2px;
-    border: 2px solid rgba(152, 65, 255, 0.3);
+    border: 2px solid var(--luxury-cyan-soft);
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 20%);
     outline: none;
     color: #fff;
@@ -430,7 +430,7 @@ blockquote span {
 
 /*** 5.0 - Sidebar Widget ***/
 .sidebar-widget {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     padding: 30px;
     border-radius: 2px;
 }
@@ -458,7 +458,7 @@ blockquote span {
 }
 
 .widget-title h3:before {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     width: 50%;
     height: 4px;
     position: absolute;
@@ -478,7 +478,7 @@ blockquote span {
     box-shadow: none;
     outline: none;
     height: 60px;
-    border: 2px solid rgba(152, 65, 255, 0.3);
+    border: 2px solid var(--luxury-cyan-soft);
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 20%);
     padding-right: 40px;
     color: #fff;
@@ -492,7 +492,7 @@ blockquote span {
     width: 50px;
     height: 100%;
     font-size: 15px;
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 /*** 5.3 - Category List ***/
@@ -512,12 +512,12 @@ blockquote span {
 }
 
 .category-list li a:hover {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     text-decoration: underline;
 }
 
 .category-list li span {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     clip-path: polygon(0% 0%, 80% 0, 100% 20%, 100% 100%, 0 100%);
     font-size: 14px;
     width: 30px;
@@ -529,7 +529,7 @@ blockquote span {
 }
 
 .category-list li:hover span {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -590,7 +590,7 @@ blockquote span {
 }
 
 .thumb-post .thumb-post-info .date i {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     margin-right: 5px;
 }
 
@@ -600,7 +600,7 @@ blockquote span {
 }
 
 .tags li a {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     display: inline-block;
     font-family: "Oxanium", sans-serif;
     text-transform: capitalize;
@@ -612,7 +612,7 @@ blockquote span {
 }
 
 .tags li a:hover {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -625,7 +625,7 @@ blockquote span {
 
 .pagination-wrap li a,
 .pagination-wrap li button {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     clip-path: polygon(0% 0%, 70% 0, 100% 30%, 100% 100%, 0 100%);
     border: none;
     color: #ddd;
@@ -654,7 +654,7 @@ blockquote span {
 .pagination-wrap li a:hover,
 .pagination-wrap li button:hover,
 .pagination-wrap li button.active {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -726,4 +726,5 @@ blockquote span {
         right: 20px;
     }
 }
+
 

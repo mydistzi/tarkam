@@ -12,7 +12,7 @@
 
 /*** 1.0 - Header ***/
 .header {
-    background: #0c0c35;
+    background: var(--luxury-bg);
     width: 100%;
     height: auto;
     display: block;
@@ -27,7 +27,7 @@
     bottom: -18px;
     width: 175px;
     height: 18px;
-    background: #0c0c35;
+    background: var(--luxury-bg);
     clip-path: polygon(0 0, 100% 0%, 82% 100%, 0% 100%);
 }
 
@@ -38,7 +38,7 @@
     bottom: -18px;
     width: 175px;
     height: 18px;
-    background: #0c0c35;
+    background: var(--luxury-bg);
     clip-path: polygon(0 0, 100% 0%, 100% 100%, 18% 100%);
 }
 
@@ -133,7 +133,7 @@
 }
 
 .sticky-header .primary-header {
-    background: #0c0c35;
+    background: var(--luxury-bg);
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 30%);
 }
 
@@ -241,7 +241,7 @@
 }
 
 .header-menu-wrap ul li>a:before {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     content: '';
     position: absolute;
     left: 0;
@@ -396,7 +396,7 @@
     }
 
     .header-menu-wrap {
-        background-color: #0c0c35;
+        background-color: var(--luxury-bg);
         display: none;
         width: 100%;
         height: auto;
@@ -568,7 +568,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #f90cff;
+    background: var(--luxury-gold);
     color: #fff;
     font-size: 11px;
     display: block;
@@ -735,4 +735,5 @@
         font-size: 3em;
     }
 }
+
 

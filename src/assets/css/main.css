@@ -36,7 +36,7 @@
 }
 
 .hero-section:before {
-    background: linear-gradient(90deg, rgba(152, 65, 255, 0) 0%, rgba(152, 65, 255, 1) 50%, rgba(152, 65, 255, 0) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-fade) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-fade) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -79,8 +79,8 @@
 
 /*** 1.1 - Play Button ***/
 .play-btn {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     width: 90px;
     height: 90px;
     top: 50%;
@@ -190,8 +190,8 @@
 }
 
 .hero-element .shape {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     width: 200px;
     height: 100%;
     position: absolute;
@@ -326,8 +326,8 @@
 
 .participate-team:after,
 .participate-team:before {
-    background: #f90cff;
-    background: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(90% 0, 100% 40%, 100% 100%, 0 100%, 0 0);
     content: "";
     position: absolute;
@@ -371,8 +371,8 @@
 }
 
 .match-info {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(100% 0, 100% 100%, 10% 100%, 0 60%, 0 0);
     border-radius: 3px;
     padding: 15px 20px;
@@ -431,7 +431,7 @@
 /*** 4.0 - Match Details ***/
 
 .match-details-header {
-    background: linear-gradient(90deg, rgba(152, 65, 255, 0.1) 0%, rgba(152, 65, 255, 1) 50%, rgba(152, 65, 255, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
     width: 70%;
     border-radius: 2px;
     display: flex;
@@ -483,8 +483,8 @@
 }
 
 .match-details-header .vs {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
     display: flex;
     align-items: center;
@@ -536,7 +536,7 @@
 }
 
 .latest-matches-list {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     clip-path: polygon(95% 0, 100% 20%, 100% 100%, 0% 100%, 0 66%, 0 0);
     display: grid;
     grid-template-columns: 2fr 2fr 1fr;
@@ -549,7 +549,7 @@
 }
 
 .latest-matches-list:before {
-    background: linear-gradient(90deg, rgba(152, 65, 255, 0.1) 0%, rgba(152, 65, 255, 1) 50%, rgba(152, 65, 255, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -572,7 +572,7 @@
 }
 
 .latest-matches-list:hover {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.5) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
 }
 
 .matches-thumb img {
@@ -581,7 +581,7 @@
 }
 
 .match-category {
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(90% 0, 100% 35%, 100% 100%, 0% 100%, 0 66%, 0 0);
     font-family: "Oxanium", sans-serif;
     font-size: 12px;
@@ -634,7 +634,7 @@
 }
 
 .watch-info a:hover {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 /*** 6.0 - Watch Live ***/
@@ -743,8 +743,8 @@
 }
 
 .team-content h3 {
-    background: #f90cff;
-    background: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
     width: 90%;
     height: 60px;
@@ -771,8 +771,8 @@
 }
 
 .team-content:before {
-    background: #f90cff;
-    background: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(57% 0%, 100% 0%, 45% 100%, 0% 100%);
     border-radius: 3px;
     content: "";
@@ -809,7 +809,7 @@
 .team-content h4 {
     background-color: #ddd;
     clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
-    color: #0c0c35;
+    color: var(--luxury-bg);
     width: 60%;
     height: 25px;
     border-radius: 2px;
@@ -844,8 +844,8 @@
 }
 
 .team-thumb .shape {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(0% 0%, 80% 0, 100% 10%, 100% 100%, 0 100%);
     width: 150px;
     height: 100%;
@@ -983,8 +983,8 @@
 }
 
 .team-details-wrap {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
     height: 120px;
     border-radius: 10px;
@@ -1158,7 +1158,7 @@
 
 /*** 10.0 - Promo Section ***/
 .promo-item {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.5) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     clip-path: polygon(90% 0, 100% 10%, 100% 100%, 0% 100%, 0 66%, 0 0);
     padding: 40px;
     text-align: center;
@@ -1166,7 +1166,7 @@
 }
 
 .promo-item:before {
-    background: linear-gradient(90deg, rgba(152, 65, 255, 0.1) 0%, rgba(152, 65, 255, 1) 50%, rgba(152, 65, 255, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -1230,9 +1230,9 @@
     text-transform: capitalize;
     margin-bottom: 30px;
     text-shadow:
-        0 0 5px var(--luxury-purple),
-        0 0 10px var(--luxury-purple),
-        0 0 15px var(--luxury-purple);
+        0 0 5px var(--luxury-cyan),
+        0 0 10px var(--luxury-cyan),
+        0 0 15px var(--luxury-cyan);
 }
 
 /*** 12.0 - Gameplay Section ***/
@@ -1305,14 +1305,14 @@
 }
 
 .testimonial-item {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.5) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     clip-path: polygon(90% 0, 100% 20%, 100% 100%, 0% 100%, 0 66%, 0 0);
     padding: 40px;
     position: relative;
 }
 
 .testimonial-item:before {
-    background: linear-gradient(90deg, rgba(152, 65, 255, 0.1) 0%, rgba(152, 65, 255, 1) 50%, rgba(152, 65, 255, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -1346,7 +1346,7 @@
 .testimonial-item .testi-thumb img {
     max-width: 80px;
     border-radius: 50%;
-    border: 5px solid rgba(152, 65, 255, 0.3);
+    border: 5px solid var(--luxury-cyan-soft);
 }
 
 .testimonial-item h3 {
@@ -1368,7 +1368,7 @@
 }
 
 .swiper-pagination-bullet-active {
-    background: var(--luxury-purple);
+    background: var(--luxury-cyan);
 }
 
 .swiper-pagination-bullets.swiper-pagination-horizontal {
@@ -1417,7 +1417,7 @@
 }
 
 .contact-title h2 span {
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
 }
 
 .contact-section .contact-details li {
@@ -1427,7 +1427,7 @@
 }
 
 .contact-section .contact-details li i {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     clip-path: polygon(0% 0%, 70% 0, 100% 30%, 100% 100%, 0 100%);
     color: #fff;
     font-size: 15px;
@@ -1442,14 +1442,14 @@
 }
 
 .contact-section .contact-details li i:hover {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     color: #fff;
     transform: translateY(-2px);
 }
 
 /*** 15.0 - FAQ Section ***/
 .accordion-item {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     border-radius: 2px;
 }
 
@@ -1461,7 +1461,7 @@
 }
 
 .accordion-button {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     color: #fff;
     font-size: 18px;
     font-weight: 600;
@@ -1482,7 +1482,7 @@
 
 .accordion-button:not(.collapsed) {
     color: #fff;
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
 }
 
 .accordion-button:not(.collapsed):after {
@@ -1530,7 +1530,7 @@
 }
 
 .sponsor-grid .sponsor-item {
-    background: linear-gradient(90deg, rgba(105, 85, 180, 0.1) 0%, rgba(105, 85, 180, 0.3) 50%, rgba(105, 85, 180, 0.1) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     padding: 20px;
     position: relative;
     border-radius: 2px;
@@ -1735,7 +1735,7 @@
 }
 
 .sponsor-testimonial-social a:hover {
-    background: var(--luxury-purple);
+    background: var(--luxury-cyan);
 }
 
 .sponsor-testimonial-social i {
@@ -1766,7 +1766,7 @@
 }
 
 .social-list li a {
-    background-color: rgba(152, 65, 255, 0.3);
+    background-color: var(--luxury-cyan-soft);
     font-size: 14px;
     width: 40px;
     height: 40px;
@@ -1777,7 +1777,7 @@
 }
 
 .social-list li a:hover {
-    background-color: var(--luxury-purple);
+    background-color: var(--luxury-cyan);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -1808,13 +1808,13 @@
     height: 60px;
     border-radius: 2px;
     outline: none;
-    border: 2px solid rgba(152, 65, 255, 0.3);
+    border: 2px solid var(--luxury-cyan-soft);
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 20%);
 }
 
 .subscribe-form .submit {
-    background: #f90cff;
-    background-image: linear-gradient(to right bottom, #f90cff, #e027ff, #c534ff, #a93eff, #8a44ff, #6560ff, #3c73ff, #0081ff, #009cff, #00b3ff, #00c6f5, #0cd7e8);
+    background: var(--luxury-gold);
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
     clip-path: polygon(0% 0%, 90% 0, 100% 30%, 100% 100%, 0 100%);
     display: inline-block;
     width: 160px;
@@ -1862,7 +1862,7 @@
 
 .footer-contact li span {
     display: block;
-    color: var(--luxury-purple);
+    color: var(--luxury-cyan);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
@@ -1897,3 +1897,4 @@
 .copyright-wrap p {
     margin: 0
 }
+

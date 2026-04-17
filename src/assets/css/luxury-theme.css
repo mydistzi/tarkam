@@ -22,7 +22,9 @@
   --luxury-cyan: #89deff;
   --luxury-cyan-soft: rgba(137, 222, 255, 0.18);
   --luxury-cyan-strong: rgba(137, 222, 255, 0.28);
-  --luxury-purple: var(--luxury-purple);
+  --luxury-cyan-fade: rgba(137, 222, 255, 0.1);
+  --luxury-deep: var(--luxury-bg);
+  --luxury-deep-strong: rgba(12, 12, 53, 0.9);
   --luxury-gold: #ffd27a;
   --luxury-gold-soft: rgba(255, 210, 120, 0.16);
   --luxury-rose: #ff9bc6;
@@ -713,4 +715,5 @@ body::before {
     grid-template-columns: 1fr;
   }
 }
+
 
