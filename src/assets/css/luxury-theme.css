@@ -191,7 +191,7 @@ body::before {
 .primary-header,
 .sticky-header .primary-header {
   background: rgba(6, 15, 29, 0.58);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  /* border-bottom: 1px solid rgba(255, 255, 255, 0.05); */
   backdrop-filter: blur(18px);
 }
 
@@ -238,11 +238,11 @@ body::before {
   min-height: 0;
   margin: 0 auto;
   padding: 36px 34px;
-  border-radius: 32px;
-  border: 1px solid var(--luxury-line);
-  background:
-    linear-gradient(180deg, rgba(10, 19, 34, 0.9), rgba(8, 15, 28, 0.94));
-  box-shadow: var(--luxury-shadow);
+  /* border-radius: 32px; */
+  /* border: 1px solid var(--luxury-line); */
+  /* background: */
+    /* linear-gradient(180deg, rgba(10, 19, 34, 0.9), rgba(8, 15, 28, 0.94)); */
+  /* box-shadow: var(--luxury-shadow); */
   backdrop-filter: blur(18px);
 }
 
@@ -362,8 +362,8 @@ body::before {
 .latest-matches-list,
 .team-details-wrap,
 .player-details .team-details-wrap {
-  border: 1px solid var(--luxury-line);
-  box-shadow: var(--luxury-shadow);
+  /* border: 1px solid var(--luxury-line); */
+  /* box-shadow: var(--luxury-shadow); */
   backdrop-filter: blur(16px);
 }
 
