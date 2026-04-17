@@ -590,7 +590,7 @@
 .tarkam-stream-card__body button.dl-video-popup,
 .tarkam-stream-card__body .tarkam-inline-copy {
   position: absolute;
-  top: 20px;
+  /* top: 20px; */
   right: 20px;
   background-color: #FF0000 !important;
   color: #FFFFFF !important;
