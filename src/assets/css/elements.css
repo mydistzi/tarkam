@@ -777,8 +777,7 @@ body.loaded{
 }
 
 .scroll-to-top {
-    background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
+    background: linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, #ffd27814 62%, #ffd2780a 100%);
     width: 100%;
     height: 100%;
     text-align: center;
