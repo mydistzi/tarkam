@@ -428,7 +428,7 @@
   margin: 10px 0 0;
   color: #fff;
   font-size: 28px;
-  max-width: 18ch;
+  /* max-width: 18ch; */
 }
 
 .leaderboard-note-card p {
