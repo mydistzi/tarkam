@@ -652,7 +652,7 @@
 }
 
 .template-error-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
 }
 
 .template-error-secondary:hover {
