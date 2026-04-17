@@ -1,18 +1,18 @@
 :root {
   color-scheme: dark;
-  --tarkam-bg: #070a17;
-  --tarkam-surface: rgba(10, 14, 35, 0.92);
-  --tarkam-surface-soft: rgba(8, 12, 27, 0.78);
-  --tarkam-surface-strong: rgba(15, 18, 44, 0.96);
-  --tarkam-border: rgba(255, 255, 255, 0.1);
+  --tarkam-bg: var(--luxury-bg);
+  --tarkam-surface: rgba(10, 19, 34, 0.88);
+  --tarkam-surface-soft: rgba(8, 15, 28, 0.74);
+  --tarkam-surface-strong: rgba(8, 15, 28, 0.96);
+  --tarkam-border: var(--luxury-line);
   --tarkam-border-soft: rgba(255, 255, 255, 0.06);
-  --tarkam-text: #f5f8ff;
-  --tarkam-muted: rgba(233, 241, 255, 0.72);
+  --tarkam-text: var(--luxury-text);
+  --tarkam-muted: var(--luxury-muted);
   --tarkam-muted-strong: rgba(255, 255, 255, 0.82);
-  --tarkam-accent: #7d4dff;
-  --tarkam-accent-soft: rgba(125, 77, 255, 0.18);
-  --tarkam-accent-strong: #b592ff;
-  --tarkam-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  --tarkam-accent: var(--luxury-cyan);
+  --tarkam-accent-soft: rgba(137, 222, 255, 0.18);
+  --tarkam-accent-strong: var(--luxury-cyan);
+  --tarkam-shadow: var(--luxury-shadow);
 }
 
 html,
@@ -20,48 +20,20 @@ body {
   min-height: 100%;
 }
 
-body {
-  background: radial-gradient(circle at top left, rgba(82, 134, 255, 0.12), transparent 24%),
-              radial-gradient(circle at 90% 10%, rgba(158, 64, 255, 0.1), transparent 14%),
-              var(--tarkam-bg);
-  color: var(--tarkam-text);
-}
-
-a {
-  color: var(--tarkam-accent-strong);
-}
-
-.page-header-info h4,
-.section-heading h3 {
-  color: var(--tarkam-accent);
-}
-
-.page-header-info h2,
-.section-heading h2,
-.section-heading h3 {
-  color: var(--tarkam-text);
-}
-
-.page-header-info p,
-.section-heading p {
-  color: var(--tarkam-muted);
-}
-
-.default-btn {
-  background: linear-gradient(135deg, rgba(125, 77, 255, 0.96) 0%, rgba(68, 109, 255, 0.95) 55%, rgba(0, 179, 255, 0.88) 100%);
-  color: #fff;
-  box-shadow: 0 18px 40px rgba(5, 14, 28, 0.24);
-}
-
-.default-btn:hover {
-  transform: translateY(-2px);
-  color: #fff;
-}
-
 .tarkam-page-header .page-header-info {
   width: 100%;
   min-height: 0;
   padding: 118px 0 44px;
+}
+
+.tarkam-page-header .page-header-info h2 {
+  max-width: 14ch;
+  margin-bottom: 0;
+}
+
+.tarkam-page-header .page-header-info p {
+  max-width: 880px;
+  color: rgba(247, 251, 255, 0.78);
 }
 
 .tarkam-page-header .page-header-info h2 {
@@ -172,9 +144,9 @@ a {
 .tarkam-panel {
   border-radius: 28px;
   padding: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(15, 18, 44, 0.92), rgba(7, 10, 24, 0.98));
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--tarkam-border);
+  background: linear-gradient(180deg, rgba(10, 19, 34, 0.92), rgba(8, 15, 28, 0.98));
+  box-shadow: var(--tarkam-shadow);
 }
 
 .tarkam-panel {
@@ -216,17 +188,17 @@ a {
   align-items: center;
   gap: 8px;
   margin-bottom: 18px;
-  color: #8dd4ff;
+  color: var(--luxury-cyan);
   font-size: 0.94rem;
 }
 
 .tarkam-back-link:hover {
-  color: #fff;
+  color: var(--luxury-text);
 }
 
 .tarkam-lead {
   margin: 16px 0 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(247, 251, 255, 0.78);
   line-height: 1.8;
 }
 
@@ -497,7 +469,7 @@ a {
   border-radius: 20px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tarkam-border);
 }
 
 .tarkam-list-item {
@@ -719,7 +691,7 @@ a {
 .tarkam-schedule-card::before {
   content: "";
   z-index: 1;
-  background: linear-gradient(90deg, #9841ff1a 0%, #9841ff 50%, #9841ff1a 100%);
+  background: linear-gradient(90deg, var(--tarkam-accent-soft) 0%, var(--tarkam-accent) 50%, var(--tarkam-accent-soft) 100%);
   width: 100%;
   height: 4px;
   transition: all .3s cubic-bezier(.165, .84, .44, 1);
@@ -755,7 +727,7 @@ a {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(125, 77, 255, 0.94);
+    background: var(--tarkam-accent);
     color: #fff;
     padding: 6px 12px;
     border-radius: 4px;
@@ -767,7 +739,7 @@ a {
 
 .tarkam-schedule-card .dl-video-popup:hover {
     transform: scale(1.05);
-    background: rgba(125, 77, 255, 1);
+    background: rgba(137, 222, 255, 1);
 }
 
 .tarkam-schedule-card .dl-video-popup i {
