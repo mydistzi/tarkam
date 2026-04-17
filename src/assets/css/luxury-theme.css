@@ -3,8 +3,8 @@
   --luxury-bg-soft: #0d1a2f;
   --luxury-panel: rgba(10, 19, 34, 0.84);
   --luxury-panel-strong: rgba(8, 15, 28, 0.94);
-  --luxury-line: rgba(164, 217, 255, 0.12);
-  --luxury-line-strong: rgba(255, 210, 120, 0.28);
+  --luxury-line: rgba(255, 210, 120, 0.12);
+  --luxury-line-strong: rgba(255, 210, 120, 0.24);
   --luxury-text: #f7fbff;
   --luxury-muted: rgba(229, 240, 255, 0.68);
   --luxury-text-soft: rgba(247, 251, 255, 0.72);
@@ -19,13 +19,13 @@
   --luxury-overlay-soft: rgba(247, 251, 255, 0.12);
   --luxury-overlay-extra: rgba(247, 251, 255, 0.03);
   --luxury-muted-strong: rgba(247, 251, 255, 0.82);
-  --luxury-cyan: #89deff;
-  --luxury-cyan-soft: rgba(137, 222, 255, 0.18);
-  --luxury-cyan-strong: rgba(137, 222, 255, 0.28);
-  --luxury-cyan-fade: rgba(137, 222, 255, 0.1);
+  --luxury-cyan: rgba(137, 222, 255, 0.72);
+  --luxury-cyan-soft: rgba(137, 222, 255, 0.08);
+  --luxury-cyan-strong: rgba(137, 222, 255, 0.16);
+  --luxury-cyan-fade: rgba(137, 222, 255, 0.05);
   --luxury-deep: var(--luxury-bg);
   --luxury-bg-deep: #050b14;
-  --luxury-deep-strong: rgba(12, 12, 53, 0.9);
+  --luxury-deep-strong: rgba(7, 10, 24, 0.88);
   --luxury-gold: #ffd27a;
   --luxury-gold-soft: rgba(255, 210, 120, 0.16);
   --luxury-rose: var(--luxury-gold);
@@ -33,27 +33,27 @@
   --luxury-rose-strong: rgba(255, 210, 120, 0.28);
   --luxury-border-bright: rgba(255, 255, 255, 0.18);
   --luxury-surface-strong-dark: rgba(8, 15, 28, 0.88);
-  --luxury-stage-bg-start: rgba(16, 20, 45, 0.98);
-  --luxury-stage-bg-end: rgba(9, 12, 29, 0.99);
-  --luxury-stage-shadow: 0 32px 80px rgba(0, 0, 0, 0.28);
-  --luxury-glow-blue: rgba(137, 222, 255, 0.08);
+  --luxury-stage-bg-start: rgba(14, 18, 46, 0.96);
+  --luxury-stage-bg-end: rgba(8, 11, 27, 0.98);
+  --luxury-stage-shadow: 0 20px 44px rgba(0, 0, 0, 0.24);
+  --luxury-glow-blue: rgba(137, 222, 255, 0.04);
   --luxury-glow-gold: rgba(255, 210, 120, 0.06);
   --luxury-hero-overlay-light: rgba(7, 10, 24, 0.08);
   --luxury-hero-overlay-strong: rgba(7, 10, 24, 0.88);
-  --luxury-hero-highlight: rgba(137, 222, 255, 0.15);
-  --luxury-hero-highlight-soft: rgba(255, 210, 120, 0.16);
+  --luxury-hero-highlight: rgba(255, 210, 120, 0.16);
+  --luxury-hero-highlight-soft: rgba(255, 210, 120, 0.10);
   --luxury-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
-  --luxury-panel-gradient: linear-gradient(180deg, var(--luxury-stage-bg-start), var(--luxury-stage-bg-end));
+  --luxury-panel-gradient: linear-gradient(120deg, var(--luxury-stage-bg-start), var(--luxury-stage-bg-end));
   --luxury-panel-soft: rgba(255, 255, 255, 0.05);
   --luxury-panel-border: 1px solid var(--luxury-line);
-  --luxury-glow-accent: radial-gradient(circle, var(--luxury-cyan-soft), transparent 70%);
-  --luxury-glow-accent-alt: radial-gradient(circle, var(--luxury-gold-soft), transparent 70%);
+  --luxury-glow-accent: radial-gradient(circle, var(--luxury-gold-soft), transparent 72%);
+  --luxury-glow-accent-alt: radial-gradient(circle, rgba(255, 210, 120, 0.06), transparent 72%);
 }
 
 body {
   background:
-    radial-gradient(circle at top, rgba(137, 222, 255, 0.14), transparent 28%),
-    radial-gradient(circle at 85% 15%, rgba(255, 210, 120, 0.12), transparent 20%),
+    radial-gradient(circle at 18% 12%, rgba(255, 210, 120, 0.12), transparent 18%),
+    radial-gradient(circle at 85% 16%, rgba(137, 222, 255, 0.08), transparent 20%),
     linear-gradient(180deg, var(--luxury-bg) 0%, var(--luxury-bg-deep) 100%);
   color: var(--luxury-text);
 }
@@ -64,9 +64,9 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 8% 18%, rgba(101, 221, 255, 0.08), transparent 18%),
-    radial-gradient(circle at 92% 14%, rgba(255, 175, 121, 0.08), transparent 18%),
-    radial-gradient(circle at 50% 100%, rgba(111, 133, 255, 0.08), transparent 34%);
+    radial-gradient(circle at 8% 18%, rgba(255, 210, 120, 0.10), transparent 18%),
+    radial-gradient(circle at 92% 14%, rgba(137, 222, 255, 0.06), transparent 18%),
+    radial-gradient(circle at 50% 100%, rgba(255, 210, 120, 0.05), transparent 34%);
   z-index: 0;
 }
 
@@ -102,7 +102,7 @@ body::before {
 .hero-element .shape,
 .subscribe-form .submit {
   background:
-    linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, var(--luxury-cyan-strong) 76%, var(--luxury-cyan) 100%);
+    linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, rgba(255, 210, 120, 0.08) 62%, rgba(255, 210, 120, 0.04) 100%);
 }
 
 .hero-section .container {
@@ -114,7 +114,7 @@ body::before {
   border-radius: 34px;
   border: 1px solid var(--luxury-line);
   background:
-    radial-gradient(circle at 50% 0%, rgba(104, 208, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 120, 0.16), transparent 24%),
     linear-gradient(180deg, var(--luxury-stage-bg-start), var(--luxury-stage-bg-end));
   box-shadow: var(--luxury-stage-shadow);
   backdrop-filter: blur(16px);
@@ -210,8 +210,8 @@ body::before {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 20%, rgba(94, 220, 255, 0.14), transparent 20%),
-    radial-gradient(circle at 86% 18%, rgba(255, 209, 122, 0.12), transparent 18%),
+    radial-gradient(circle at 15% 20%, rgba(255, 210, 120, 0.14), transparent 20%),
+    radial-gradient(circle at 86% 18%, rgba(137, 222, 255, 0.06), transparent 18%),
     linear-gradient(180deg, rgba(7, 16, 31, 0.76), rgba(5, 12, 22, 0.28));
   pointer-events: none;
 }
@@ -261,7 +261,7 @@ body::before {
 
 .page-header-info h2 span,
 .section-heading h2 span {
-  color: var(--luxury-cyan);
+  color: var(--luxury-gold);
 }
 
 .page-header-info p,
@@ -274,7 +274,7 @@ body::before {
 
 .default-btn,
 .submit {
-  background: linear-gradient(135deg, #ffcb7d 0%, #ff9f67 30%, #86dfff 100%);
+  background: linear-gradient(135deg, var(--luxury-gold) 0%, rgba(255, 210, 120, 0.94) 38%, rgba(214, 170, 68, 0.96) 70%, rgba(171, 132, 35, 0.98) 100%);
   color: #06111e;
   border-radius: 999px;
   border: 0;
@@ -340,8 +340,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 12% 14%, rgba(98, 218, 255, 0.07), transparent 16%),
-    radial-gradient(circle at 86% 12%, rgba(255, 196, 112, 0.05), transparent 16%);
+    radial-gradient(circle at 12% 14%, rgba(255, 210, 120, 0.08), transparent 16%),
+    radial-gradient(circle at 86% 12%, rgba(137, 222, 255, 0.05), transparent 16%);
 }
 
 .footer-section {
@@ -398,7 +398,7 @@ body::before {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(125, 228, 255, 0.14), rgba(125, 228, 255, 0));
+  background: radial-gradient(circle, rgba(255, 210, 120, 0.14), rgba(255, 210, 120, 0));
   pointer-events: none;
 }
 
@@ -445,9 +445,9 @@ body::before {
 .galactic-match-card__timestamp,
 .galactic-match-card__eyebrow,
 .luxury-match-hero-meta span {
-  background: rgba(134, 223, 255, 0.09);
-  border: 1px solid rgba(134, 223, 255, 0.18);
-  color: var(--luxury-cyan);
+  background: rgba(255, 211, 122, 0.09);
+  border: 1px solid rgba(255, 211, 122, 0.18);
+  color: var(--luxury-gold);
 }
 
 .galactic-match-card__body {
@@ -543,9 +543,9 @@ body::before {
 }
 
 .galactic-match-card__video {
-  background: rgba(255, 61, 61, 0.08);
-  border-color: rgba(255, 61, 61, 0.2);
-  color: #ffd9d9;
+  background: rgba(255, 210, 120, 0.10);
+  border-color: rgba(255, 210, 120, 0.22);
+  color: var(--luxury-gold);
 }
 
 .match-detail-grid {
@@ -569,7 +569,7 @@ body::before {
 
 .match-detail-panel--hero {
   background:
-    radial-gradient(circle at 12% 12%, rgba(108, 212, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 12% 12%, rgba(255, 210, 120, 0.12), transparent 24%),
     linear-gradient(180deg, rgba(12, 21, 37, 0.98), rgba(8, 14, 25, 1));
 }
 

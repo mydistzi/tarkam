@@ -193,7 +193,7 @@
 
 .club-social-dock__item i {
   font-size: 24px;
-  color: #7de4ff;
+  color: var(--luxury-cyan);
 }
 
 .club-social-dock__item:hover {
@@ -376,9 +376,9 @@
 
 .club-status-pill.is-active,
 .club-member-card__status.is-active {
-  background: rgba(72, 221, 162, 0.18);
-  color: #7ef0c0;
-  border: 1px solid rgba(126, 240, 192, 0.28);
+  background: rgba(255, 210, 120, 0.18);
+  color: var(--luxury-gold);
+  border: 1px solid rgba(255, 210, 120, 0.28);
 }
 
 .club-status-pill.is-complete,
@@ -390,9 +390,9 @@
 
 .club-status-pill.is-pending,
 .club-member-card__status.is-pending {
-  background: rgba(127, 179, 255, 0.18);
-  color: #9fc5ff;
-  border: 1px solid rgba(159, 197, 255, 0.28);
+  background: rgba(137, 222, 255, 0.18);
+  color: var(--luxury-cyan);
+  border: 1px solid rgba(137, 222, 255, 0.28);
 }
 
 .club-status-pill.is-idle,
@@ -470,7 +470,7 @@
 .club-member-card__stats div {
   border-radius: 18px;
   padding: 14px 12px;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
   text-align: center;
 }
 
@@ -543,7 +543,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.14) 0%, rgba(255, 109, 182, 0.12) 100%);
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
 }
 
 .club-timeline-card__rail::before {
@@ -552,7 +552,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.4) 0%, rgba(255, 109, 182, 0.4) 100%);
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.4) 0%, rgba(255, 210, 120, 0.4) 100%);
 }
 
 .club-timeline-card__rail span {
@@ -560,8 +560,8 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #7de4ff;
-  box-shadow: 0 0 0 8px rgba(125, 228, 255, 0.12);
+  background: var(--luxury-cyan);
+  box-shadow: 0 0 0 8px rgba(137, 222, 255, 0.12);
 }
 
 .club-timeline-card__body {

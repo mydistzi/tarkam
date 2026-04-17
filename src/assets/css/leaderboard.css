@@ -9,9 +9,9 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 50% 0%, rgba(70, 136, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 50% 0%, rgba(255, 215, 115, 0.14), transparent 28%),
     radial-gradient(circle at 12% 24%, rgba(255, 155, 105, 0.1), transparent 24%),
-    radial-gradient(circle at 88% 32%, rgba(125, 228, 255, 0.1), transparent 22%);
+    radial-gradient(circle at 88% 32%, rgba(255, 215, 115, 0.08), transparent 22%);
 }
 
 .leaderboard-stage,
@@ -37,7 +37,7 @@
   inset: -20% 30% auto;
   height: 260px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(72, 137, 255, 0.2) 0%, rgba(72, 137, 255, 0) 68%);
+  background: radial-gradient(circle, rgba(255, 215, 115, 0.2) 0%, rgba(255, 215, 115, 0) 68%);
   pointer-events: none;
 }
 
@@ -96,7 +96,7 @@
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(125, 228, 255, 0.18) 0%, rgba(125, 228, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 215, 115, 0.18) 0%, rgba(255, 215, 115, 0) 70%);
   pointer-events: none;
 }
 

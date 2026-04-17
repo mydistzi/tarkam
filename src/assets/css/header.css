@@ -27,7 +27,7 @@
     bottom: -18px;
     width: 175px;
     height: 18px;
-    background: var(--luxury-bg);
+    background: rgba(6, 15, 29, 0.58);
     clip-path: polygon(0 0, 100% 0%, 82% 100%, 0% 100%);
 }
 
@@ -38,7 +38,7 @@
     bottom: -18px;
     width: 175px;
     height: 18px;
-    background: var(--luxury-bg);
+    background: rgba(6, 15, 29, 0.58);
     clip-path: polygon(0 0, 100% 0%, 100% 100%, 18% 100%);
 }
 

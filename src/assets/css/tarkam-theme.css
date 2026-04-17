@@ -19,9 +19,9 @@
   --tarkam-overlay-light: var(--luxury-overlay-light);
   --tarkam-overlay-soft: var(--luxury-overlay-soft);
   --tarkam-overlay-extra: var(--luxury-overlay-extra);
-  --tarkam-accent: var(--luxury-cyan);
-  --tarkam-accent-soft: var(--luxury-cyan-soft);
-  --tarkam-accent-strong: var(--luxury-cyan-strong);
+  --tarkam-accent: var(--luxury-gold);
+  --tarkam-accent-soft: var(--luxury-gold-soft);
+  --tarkam-accent-strong: rgba(255, 210, 120, 0.28);
   --tarkam-gold-soft: var(--luxury-gold-soft);
   --tarkam-rose-soft: var(--luxury-gold-soft);
   --tarkam-rose-strong: rgba(255, 210, 120, 0.28);
@@ -200,7 +200,7 @@ body {
   align-items: center;
   gap: 8px;
   margin-bottom: 18px;
-  color: var(--luxury-cyan);
+  color: var(--luxury-gold);
   font-size: 0.94rem;
 }
 
@@ -292,8 +292,8 @@ body {
 }
 
 .tarkam-pill.is-pending {
-  background: var(--tarkam-accent-soft);
-  color: var(--luxury-cyan);
+  background: var(--tarkam-gold-soft);
+  color: var(--luxury-gold);
 }
 
 .tarkam-pill.is-complete {
@@ -446,7 +446,7 @@ body {
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--luxury-cyan);
+  color: var(--luxury-gold);
 }
 
 .tarkam-info-grid {
@@ -803,7 +803,7 @@ body {
 
 .tarkam-gender-card__eyebrow--male,
 .tarkam-gender-card__eyebrow--female {
-  color: var(--luxury-cyan);
+  color: var(--luxury-gold);
 }
 
 .tarkam-gender-card__title {

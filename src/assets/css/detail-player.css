@@ -106,8 +106,8 @@
 }
 
 .player-pill.is-pending {
-  background: rgba(127, 179, 255, 0.16);
-  color: #a4c4ff;
+  background: rgba(255, 210, 120, 0.16);
+  color: var(--luxury-gold);
 }
 
 .player-pill.is-danger {
@@ -121,8 +121,8 @@
 }
 
 .player-pill.is-core {
-  background: rgba(125, 228, 255, 0.14);
-  color: #7de4ff;
+  background: var(--luxury-cyan-soft);
+  color: var(--luxury-cyan);
 }
 
 .player-pill.is-balanced {
@@ -183,8 +183,8 @@
 
 .player-hero-link:hover {
   transform: translateY(-3px);
-  background: rgba(125, 228, 255, 0.08);
-  border-color: rgba(125, 228, 255, 0.24);
+  background: rgba(137, 222, 255, 0.08);
+  border-color: rgba(137, 222, 255, 0.24);
 }
 
 .player-hero-link.is-static {
@@ -214,8 +214,8 @@
 
 .player-command-section::before {
   background:
-    radial-gradient(circle at 14% 14%, rgba(74, 226, 255, 0.14), transparent 26%),
-    radial-gradient(circle at 88% 12%, rgba(255, 109, 182, 0.12), transparent 24%);
+    radial-gradient(circle at 14% 14%, rgba(137, 222, 255, 0.14), transparent 26%),
+    radial-gradient(circle at 88% 12%, rgba(255, 210, 120, 0.12), transparent 24%);
 }
 
 .player-info-section::before {
@@ -225,20 +225,20 @@
 
 /* .player-timeline-section::before {
   background:
-    radial-gradient(circle at 80% 24%, rgba(125, 228, 255, 0.12), transparent 22%),
+    radial-gradient(circle at 80% 24%, rgba(137, 222, 255, 0.12), transparent 22%),
     linear-gradient(180deg, rgba(6, 10, 27, 0.98) 0%, rgba(9, 12, 29, 0.99) 100%);
 } */
 
 /* .player-stats-section::before {
   background:
-    radial-gradient(circle at 10% 20%, rgba(125, 228, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 90% 12%, rgba(255, 109, 182, 0.12), transparent 20%),
+    radial-gradient(circle at 10% 20%, rgba(137, 222, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 90% 12%, rgba(255, 210, 120, 0.12), transparent 20%),
     linear-gradient(180deg, rgba(8, 13, 34, 0.99) 0%, rgba(9, 14, 37, 0.99) 100%);
 } */
 
 /* .player-ledger-section::before {
   background:
-    radial-gradient(circle at 90% 10%, rgba(125, 228, 255, 0.08), transparent 22%),
+    radial-gradient(circle at 90% 10%, rgba(137, 222, 255, 0.08), transparent 22%),
     linear-gradient(180deg, rgba(7, 11, 29, 0.99) 0%, rgba(10, 16, 41, 0.99) 100%);
 } */
 
@@ -287,7 +287,7 @@
 .player-info-card span,
 .player-section-head span,
 .player-timeline-card__eyebrow {
-  color: #7de4ff;
+  color: var(--luxury-gold);
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -549,7 +549,7 @@
 }
 
 .player-team-card__top a {
-  color: #7de4ff;
+  color: var(--luxury-cyan);
   text-decoration: none;
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -574,7 +574,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.14), rgba(255, 109, 182, 0.12));
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.14), rgba(255, 255, 255, 0.04));
 }
 
 .player-session-card__index::before {
@@ -583,7 +583,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.4), rgba(255, 109, 182, 0.4));
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.4), rgba(255, 210, 120, 0.4));
 }
 
 .player-session-card__index span {
@@ -596,7 +596,7 @@
   border-radius: 50%;
   background: rgba(7, 12, 31, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #7de4ff;
+  color: var(--luxury-gold);
   font-size: 11px;
   font-weight: 700;
 }
@@ -614,7 +614,7 @@
 
 .player-session-card__headline span,
 .player-timeline-card__eyebrow {
-  color: #7de4ff;
+  color: var(--luxury-gold);
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -652,8 +652,8 @@
   min-height: 34px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(125, 228, 255, 0.12);
-  color: #7de4ff;
+  background: rgba(137, 222, 255, 0.12);
+  color: var(--luxury-cyan);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -731,12 +731,12 @@
 
 .player-social-dock__item i {
   font-size: 24px;
-  color: #7de4ff;
+  color: var(--luxury-cyan);
 }
 
 .player-social-dock__item:hover {
   transform: translateY(-3px);
-  border-color: rgba(125, 228, 255, 0.26);
+  border-color: rgba(137, 222, 255, 0.26);
 }
 
 .player-empty-inline,
@@ -773,9 +773,9 @@
 .player-load-more-btn {
   min-height: 44px;
   padding: 0 20px;
-  border: 1px solid rgba(125, 228, 255, 0.22);
+  border: 1px solid rgba(255, 210, 120, 0.24);
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(125, 228, 255, 0.18), rgba(255, 109, 182, 0.12));
+  background: linear-gradient(135deg, rgba(255, 210, 120, 0.18), rgba(255, 210, 120, 0.12));
   color: #f7f9ff;
   font-size: 13px;
   letter-spacing: 0.08em;
@@ -786,8 +786,8 @@
 
 .player-load-more-btn:hover {
   transform: translateY(-2px);
-  border-color: rgba(125, 228, 255, 0.36);
-  background: linear-gradient(135deg, rgba(125, 228, 255, 0.24), rgba(255, 109, 182, 0.16));
+  border-color: rgba(255, 210, 120, 0.36);
+  background: linear-gradient(135deg, rgba(255, 210, 120, 0.24), rgba(255, 210, 120, 0.16));
 }
 
 .player-timeline-card {
@@ -803,7 +803,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.14) 0%, rgba(255, 109, 182, 0.12) 100%);
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
 }
 
 .player-timeline-card__rail::before {
@@ -812,7 +812,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, rgba(125, 228, 255, 0.4) 0%, rgba(255, 109, 182, 0.4) 100%);
+  background: linear-gradient(180deg, rgba(255, 210, 120, 0.4) 0%, rgba(255, 210, 120, 0.4) 100%);
 }
 
 .player-timeline-card__rail span {
@@ -820,9 +820,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: rgba(7, 12, 31, 0.95);
+  background: var(--luxury-cyan);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #7de4ff;
+  color: #fff;
   font-size: 11px;
   font-weight: 700;
   display: flex;

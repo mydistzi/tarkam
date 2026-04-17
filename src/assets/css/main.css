@@ -1885,7 +1885,7 @@
 }
 
 .copyright-wrap:before {
-    background-color: rgb(12 12 53 / 80%);
+    background: rgba(12, 12, 53, 0.8);
     clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
     content: "";
     position: absolute;
