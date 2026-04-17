@@ -1,0 +1,487 @@
+blog.css: #0081ff
+blog.css: #009cff
+blog.css: #00b3ff
+blog.css: #00c6f5
+blog.css: #0cd7e8
+blog.css: #3c73ff
+blog.css: #6560ff
+blog.css: #8a44ff
+blog.css: #9841ff
+blog.css: #a5a6aa
+blog.css: #a93eff
+blog.css: #c534ff
+blog.css: #ddd
+blog.css: #e027ff
+blog.css: #f1d6c5
+blog.css: #f90cff
+blog.css: #fff
+blog.css: rgba(105, 85, 180, 0.1)
+blog.css: rgba(105, 85, 180, 0.3)
+blog.css: rgba(12, 12, 53, 0.9)
+blog.css: rgba(152, 65, 255, 0.3)
+club-registry.css: #7de4ff
+club-registry.css: #fff
+club-registry.css: rgba(0, 0, 0, 0.18)
+club-registry.css: rgba(10, 16, 41, 0.98)
+club-registry.css: rgba(125, 228, 255, 0)
+club-registry.css: rgba(125, 228, 255, 0.08)
+club-registry.css: rgba(125, 228, 255, 0.1)
+club-registry.css: rgba(125, 228, 255, 0.18)
+club-registry.css: rgba(125, 228, 255, 0.22)
+club-registry.css: rgba(125, 228, 255, 0.24)
+club-registry.css: rgba(125, 228, 255, 0.4)
+club-registry.css: rgba(18, 23, 57, 0.96)
+club-registry.css: rgba(233, 241, 255, 0.66)
+club-registry.css: rgba(233, 241, 255, 0.76)
+club-registry.css: rgba(233, 241, 255, 0.78)
+club-registry.css: rgba(233, 241, 255, 0.8)
+club-registry.css: rgba(255, 109, 182, 0.12)
+club-registry.css: rgba(255, 109, 182, 0.16)
+club-registry.css: rgba(255, 255, 255, 0.04)
+club-registry.css: rgba(255, 255, 255, 0.08)
+club-registry.css: rgba(255, 255, 255, 0.1)
+club-registry.css: rgba(255, 90, 120, 0.26)
+club-registry.css: rgba(6, 9, 25, 0.99)
+club-registry.css: rgba(7, 11, 28, 0.98)
+club-registry.css: rgba(8, 12, 31, 0.97)
+club-registry.css: rgba(8, 12, 31, 0.98)
+detail-club.css: #7de4ff
+detail-club.css: #7ef0c0
+detail-club.css: #9fc5ff
+detail-club.css: #f7f9ff
+detail-club.css: #ffc56f
+detail-club.css: #fff
+detail-club.css: rgba(0, 0, 0, 0.18)
+detail-club.css: rgba(0, 0, 0, 0.2)
+detail-club.css: rgba(0, 0, 0, 0.24)
+detail-club.css: rgba(10, 14, 35, 0.95)
+detail-club.css: rgba(11, 18, 51, 0.95)
+detail-club.css: rgba(125, 228, 255, 0.08)
+detail-club.css: rgba(125, 228, 255, 0.12)
+detail-club.css: rgba(125, 228, 255, 0.14)
+detail-club.css: rgba(125, 228, 255, 0.4)
+detail-club.css: rgba(126, 160, 255, 0.16)
+detail-club.css: rgba(126, 240, 192, 0.28)
+detail-club.css: rgba(127, 179, 255, 0.18)
+detail-club.css: rgba(159, 197, 255, 0.28)
+detail-club.css: rgba(17, 23, 56, 0.98)
+detail-club.css: rgba(17, 24, 60, 0.98)
+detail-club.css: rgba(18, 23, 57, 0.95)
+detail-club.css: rgba(21, 32, 79, 0.98)
+detail-club.css: rgba(233, 241, 255, 0.6)
+detail-club.css: rgba(233, 241, 255, 0.66)
+detail-club.css: rgba(233, 241, 255, 0.68)
+detail-club.css: rgba(233, 241, 255, 0.72)
+detail-club.css: rgba(233, 241, 255, 0.78)
+detail-club.css: rgba(255, 109, 182, 0.12)
+detail-club.css: rgba(255, 109, 182, 0.14)
+detail-club.css: rgba(255, 109, 182, 0.4)
+detail-club.css: rgba(255, 183, 77, 0.18)
+detail-club.css: rgba(255, 197, 111, 0.28)
+detail-club.css: rgba(255, 255, 255, 0.03)
+detail-club.css: rgba(255, 255, 255, 0.04)
+detail-club.css: rgba(255, 255, 255, 0.05)
+detail-club.css: rgba(255, 255, 255, 0.08)
+detail-club.css: rgba(255, 255, 255, 0.09)
+detail-club.css: rgba(255, 255, 255, 0.1)
+detail-club.css: rgba(255, 255, 255, 0.12)
+detail-club.css: rgba(255, 255, 255, 0.14)
+detail-club.css: rgba(255, 255, 255, 0.16)
+detail-club.css: rgba(255, 255, 255, 0.78)
+detail-club.css: rgba(6, 10, 29, 0.99)
+detail-club.css: rgba(6, 11, 30, 0.82)
+detail-club.css: rgba(6, 11, 31, 0.98)
+detail-club.css: rgba(6, 12, 33, 0.98)
+detail-club.css: rgba(72, 221, 162, 0.18)
+detail-club.css: rgba(74, 226, 255, 0)
+detail-club.css: rgba(74, 226, 255, 0.12)
+detail-club.css: rgba(74, 226, 255, 0.16)
+detail-club.css: rgba(74, 226, 255, 0.32)
+detail-club.css: rgba(8, 12, 31, 0.96)
+detail-club.css: rgba(8, 14, 40, 0.98)
+detail-club.css: rgba(9, 14, 38, 0)
+detail-club.css: rgba(9, 14, 38, 0.98)
+detail-club.css: rgba(9, 15, 41, 0.98)
+detail-player.css: #7de4ff
+detail-player.css: #84f0c4
+detail-player.css: #8ff0c0
+detail-player.css: #a4c4ff
+detail-player.css: #d7b1ff
+detail-player.css: #d7f7ff
+detail-player.css: #f7f9ff
+detail-player.css: #ff9bb3
+detail-player.css: #ffc86d
+detail-player.css: #fff
+detail-player.css: rgba(0, 0, 0, 0.18)
+detail-player.css: rgba(0, 0, 0, 0.28)
+detail-player.css: rgba(10, 16, 41, 0.98)
+detail-player.css: rgba(10, 16, 41, 0.99)
+detail-player.css: rgba(125, 228, 255, 0.08)
+detail-player.css: rgba(125, 228, 255, 0.12)
+detail-player.css: rgba(125, 228, 255, 0.14)
+detail-player.css: rgba(125, 228, 255, 0.16)
+detail-player.css: rgba(125, 228, 255, 0.18)
+detail-player.css: rgba(125, 228, 255, 0.22)
+detail-player.css: rgba(125, 228, 255, 0.24)
+detail-player.css: rgba(125, 228, 255, 0.26)
+detail-player.css: rgba(125, 228, 255, 0.36)
+detail-player.css: rgba(125, 228, 255, 0.4)
+detail-player.css: rgba(127, 179, 255, 0.16)
+detail-player.css: rgba(152, 62, 255, 0.45)
+detail-player.css: rgba(152, 62, 255, 0.55)
+detail-player.css: rgba(18, 23, 57, 0.95)
+detail-player.css: rgba(187, 125, 255, 0.16)
+detail-player.css: rgba(233, 241, 255, 0.65)
+detail-player.css: rgba(233, 241, 255, 0.66)
+detail-player.css: rgba(233, 241, 255, 0.68)
+detail-player.css: rgba(233, 241, 255, 0.78)
+detail-player.css: rgba(255, 109, 182, 0.1)
+detail-player.css: rgba(255, 109, 182, 0.12)
+detail-player.css: rgba(255, 109, 182, 0.16)
+detail-player.css: rgba(255, 109, 182, 0.4)
+detail-player.css: rgba(255, 109, 182, 0.5)
+detail-player.css: rgba(255, 183, 77, 0.08)
+detail-player.css: rgba(255, 183, 77, 0.16)
+detail-player.css: rgba(255, 255, 255, 0.03)
+detail-player.css: rgba(255, 255, 255, 0.04)
+detail-player.css: rgba(255, 255, 255, 0.06)
+detail-player.css: rgba(255, 255, 255, 0.08)
+detail-player.css: rgba(255, 255, 255, 0.1)
+detail-player.css: rgba(255, 255, 255, 0.12)
+detail-player.css: rgba(255, 255, 255, 0.14)
+detail-player.css: rgba(255, 255, 255, 0.18)
+detail-player.css: rgba(255, 255, 255, 0.74)
+detail-player.css: rgba(255, 90, 120, 0.16)
+detail-player.css: rgba(255, 90, 120, 0.26)
+detail-player.css: rgba(6, 10, 27, 0.98)
+detail-player.css: rgba(6, 10, 27, 0.99)
+detail-player.css: rgba(7, 11, 29, 0.99)
+detail-player.css: rgba(7, 12, 31, 0.92)
+detail-player.css: rgba(7, 12, 31, 0.95)
+detail-player.css: rgba(72, 221, 162, 0.16)
+detail-player.css: rgba(74, 226, 255, 0.14)
+detail-player.css: rgba(8, 12, 31, 0.96)
+detail-player.css: rgba(8, 12, 31, 0.99)
+detail-player.css: rgba(8, 13, 34, 0.98)
+detail-player.css: rgba(8, 13, 34, 0.99)
+detail-player.css: rgba(88, 214, 141, 0.16)
+detail-player.css: rgba(9, 12, 29, 0.99)
+detail-player.css: rgba(9, 14, 37, 0.99)
+elements.css: #0081ff
+elements.css: #009cff
+elements.css: #00b3ff
+elements.css: #00c16e
+elements.css: #00c6f5
+elements.css: #0c0c35
+elements.css: #0cd7e8
+elements.css: #111
+elements.css: #150e3c
+elements.css: #1b0e22
+elements.css: #200e43
+elements.css: #2b0d49
+elements.css: #370a4e
+elements.css: #3c73ff
+elements.css: #6560ff
+elements.css: #8a44ff
+elements.css: #9841ff
+elements.css: #a93eff
+elements.css: #c534ff
+elements.css: #ccc
+elements.css: #ddd
+elements.css: #e027ff
+elements.css: #eee
+elements.css: #f90cff
+elements.css: #fafafa
+elements.css: #FF9529
+elements.css: #fff
+elements.css: rgba(147, 65, 255, 0.2)
+elements.css: rgba(152, 65, 255, 0.3)
+elements.css: rgba(152, 65, 255, 0.5)
+elements.css: rgba(152, 65, 255, 1)
+elements.css: rgba(255, 255, 255, 0.05)
+elements.css: rgba(255, 255, 255, 0.25)
+galactic-interactions.css: #000
+galactic-interactions.css: #090d28
+galactic-interactions.css: #4fa0ff
+galactic-interactions.css: #7fe0ff
+galactic-interactions.css: #8dd8ff
+galactic-interactions.css: #9841ff
+galactic-interactions.css: #ffc978
+galactic-interactions.css: #fff
+galactic-interactions.css: #fff3cf
+galactic-interactions.css: rgba(0, 0, 0, 0.2)
+galactic-interactions.css: rgba(0, 0, 0, 0.22)
+galactic-interactions.css: rgba(0, 0, 0, 0.3)
+galactic-interactions.css: rgba(0, 0, 0, 0.35)
+galactic-interactions.css: rgba(0, 0, 0, 0.45)
+galactic-interactions.css: rgba(0, 0, 0, 0.95)
+galactic-interactions.css: rgba(10, 14, 38, 0.96)
+galactic-interactions.css: rgba(105, 85, 180, 0.1)
+galactic-interactions.css: rgba(105, 85, 180, 0.28)
+galactic-interactions.css: rgba(12, 12, 53, 0.02)
+galactic-interactions.css: rgba(12, 12, 53, 0.5)
+galactic-interactions.css: rgba(12, 12, 53, 0.62)
+galactic-interactions.css: rgba(14, 18, 44, 0.98)
+galactic-interactions.css: rgba(14, 18, 46, 0.96)
+galactic-interactions.css: rgba(152, 65, 255, 0.22)
+galactic-interactions.css: rgba(152, 65, 255, 0.3)
+galactic-interactions.css: rgba(152, 65, 255, 0.34)
+galactic-interactions.css: rgba(18, 24, 58, 0.98)
+galactic-interactions.css: rgba(239, 244, 255, 0.9)
+galactic-interactions.css: rgba(255, 191, 92, 0.02)
+galactic-interactions.css: rgba(255, 191, 92, 0.14)
+galactic-interactions.css: rgba(255, 195, 101, 0.14)
+galactic-interactions.css: rgba(255, 201, 120, 0)
+galactic-interactions.css: rgba(255, 201, 120, 0.08)
+galactic-interactions.css: rgba(255, 201, 120, 0.22)
+galactic-interactions.css: rgba(255, 201, 120, 0.45)
+galactic-interactions.css: rgba(255, 255, 255, 0.05)
+galactic-interactions.css: rgba(255, 255, 255, 0.08)
+galactic-interactions.css: rgba(255, 255, 255, 0.1)
+galactic-interactions.css: rgba(255, 255, 255, 0.12)
+galactic-interactions.css: rgba(255, 255, 255, 0.14)
+galactic-interactions.css: rgba(255, 255, 255, 0.2)
+galactic-interactions.css: rgba(255, 255, 255, 0.5)
+galactic-interactions.css: rgba(7, 10, 24, 0.98)
+galactic-interactions.css: rgba(79, 160, 255, 0.6)
+galactic-interactions.css: rgba(8, 11, 27, 0.98)
+galactic-interactions.css: rgba(97, 195, 255, 0.18)
+header.css: #07122D
+header.css: #0c0c35
+header.css: #0e1318
+header.css: #222222
+header.css: #444
+header.css: #6a7c92
+header.css: #9841ff
+header.css: #bbb
+header.css: #ddd
+header.css: #f90cff
+header.css: #fff
+header.css: rgba(12, 13, 53, 0.95)
+header.css: rgba(255, 255, 255, 0.05)
+header.css: rgba(255, 255, 255, 0.2)
+leaderboard.css: #0a1025
+leaderboard.css: #66c3ff
+leaderboard.css: #71caff
+leaderboard.css: #8c6544
+leaderboard.css: #9ae7ff
+leaderboard.css: #9caac4
+leaderboard.css: #c79b28
+leaderboard.css: #d7b38b
+leaderboard.css: #e8edf8
+leaderboard.css: #ffc565
+leaderboard.css: #ffd867
+leaderboard.css: #fff
+leaderboard.css: rgba(0, 0, 0, 0.2)
+leaderboard.css: rgba(0, 0, 0, 0.24)
+leaderboard.css: rgba(0, 0, 0, 0.28)
+leaderboard.css: rgba(10, 13, 30, 0.99)
+leaderboard.css: rgba(102, 195, 255, 0.18)
+leaderboard.css: rgba(11, 14, 31, 0.99)
+leaderboard.css: rgba(11, 14, 31, 1)
+leaderboard.css: rgba(125, 228, 255, 0)
+leaderboard.css: rgba(125, 228, 255, 0.1)
+leaderboard.css: rgba(125, 228, 255, 0.18)
+leaderboard.css: rgba(16, 20, 45, 0.98)
+leaderboard.css: rgba(18, 22, 47, 0.98)
+leaderboard.css: rgba(233, 241, 255, 0.64)
+leaderboard.css: rgba(233, 241, 255, 0.66)
+leaderboard.css: rgba(233, 241, 255, 0.78)
+leaderboard.css: rgba(233, 241, 255, 0.8)
+leaderboard.css: rgba(233, 241, 255, 0.82)
+leaderboard.css: rgba(233, 241, 255, 0.86)
+leaderboard.css: rgba(255, 140, 105, 0.08)
+leaderboard.css: rgba(255, 140, 105, 0.26)
+leaderboard.css: rgba(255, 155, 105, 0.1)
+leaderboard.css: rgba(255, 215, 115, 0.36)
+leaderboard.css: rgba(255, 255, 255, 0)
+leaderboard.css: rgba(255, 255, 255, 0.04)
+leaderboard.css: rgba(255, 255, 255, 0.05)
+leaderboard.css: rgba(255, 255, 255, 0.06)
+leaderboard.css: rgba(255, 255, 255, 0.08)
+leaderboard.css: rgba(255, 255, 255, 0.12)
+leaderboard.css: rgba(255, 90, 120, 0.28)
+leaderboard.css: rgba(26, 31, 66, 0.98)
+leaderboard.css: rgba(28, 34, 67, 0.9)
+leaderboard.css: rgba(47, 56, 103, 0.98)
+leaderboard.css: rgba(70, 136, 255, 0.16)
+leaderboard.css: rgba(72, 137, 255, 0)
+leaderboard.css: rgba(72, 137, 255, 0.2)
+leaderboard.css: rgba(9, 12, 29, 0.99)
+luxury-theme.css: #04111f
+luxury-theme.css: #050b14
+luxury-theme.css: #06111e
+luxury-theme.css: #07111f
+luxury-theme.css: #08111d
+luxury-theme.css: #0d1a2f
+luxury-theme.css: #55bbff
+luxury-theme.css: #7fdfff
+luxury-theme.css: #86dfff
+luxury-theme.css: #89deff
+luxury-theme.css: #f7fbff
+luxury-theme.css: #ff8a63
+luxury-theme.css: #ff9a64
+luxury-theme.css: #ff9bc6
+luxury-theme.css: #ff9f67
+luxury-theme.css: #ffcb7d
+luxury-theme.css: #ffd27a
+luxury-theme.css: #ffd9d9
+luxury-theme.css: rgba(0, 0, 0, 0.22)
+luxury-theme.css: rgba(0, 0, 0, 0.34)
+luxury-theme.css: rgba(0, 0, 0, 0.36)
+luxury-theme.css: rgba(10, 19, 34, 0.84)
+luxury-theme.css: rgba(10, 19, 34, 0.88)
+luxury-theme.css: rgba(10, 19, 34, 0.9)
+luxury-theme.css: rgba(101, 221, 255, 0.08)
+luxury-theme.css: rgba(104, 208, 255, 0.16)
+luxury-theme.css: rgba(108, 212, 255, 0.12)
+luxury-theme.css: rgba(11, 19, 34, 0.96)
+luxury-theme.css: rgba(111, 133, 255, 0.08)
+luxury-theme.css: rgba(12, 21, 37, 0.96)
+luxury-theme.css: rgba(12, 21, 37, 0.98)
+luxury-theme.css: rgba(125, 228, 255, 0)
+luxury-theme.css: rgba(125, 228, 255, 0.14)
+luxury-theme.css: rgba(134, 223, 255, 0.09)
+luxury-theme.css: rgba(134, 223, 255, 0.18)
+luxury-theme.css: rgba(14, 26, 47, 0.78)
+luxury-theme.css: rgba(164, 217, 255, 0.12)
+luxury-theme.css: rgba(229, 240, 255, 0.62)
+luxury-theme.css: rgba(229, 240, 255, 0.68)
+luxury-theme.css: rgba(233, 241, 255, 0.54)
+luxury-theme.css: rgba(233, 241, 255, 0.56)
+luxury-theme.css: rgba(25, 37, 65, 0.96)
+luxury-theme.css: rgba(255, 175, 121, 0.08)
+luxury-theme.css: rgba(255, 192, 120, 0.12)
+luxury-theme.css: rgba(255, 196, 112, 0.05)
+luxury-theme.css: rgba(255, 209, 122, 0.12)
+luxury-theme.css: rgba(255, 210, 120, 0.28)
+luxury-theme.css: rgba(255, 211, 122, 0.12)
+luxury-theme.css: rgba(255, 211, 122, 0.24)
+luxury-theme.css: rgba(255, 255, 255, 0.04)
+luxury-theme.css: rgba(255, 255, 255, 0.05)
+luxury-theme.css: rgba(255, 255, 255, 0.08)
+luxury-theme.css: rgba(255, 255, 255, 0.6)
+luxury-theme.css: rgba(255, 61, 61, 0.08)
+luxury-theme.css: rgba(255, 61, 61, 0.2)
+luxury-theme.css: rgba(4, 10, 20, 0.98)
+luxury-theme.css: rgba(5, 12, 22, 0.28)
+luxury-theme.css: rgba(5, 14, 28, 0.24)
+luxury-theme.css: rgba(6, 14, 27, 0)
+luxury-theme.css: rgba(6, 14, 27, 0.82)
+luxury-theme.css: rgba(6, 15, 29, 0.58)
+luxury-theme.css: rgba(6, 17, 30, 0.16)
+luxury-theme.css: rgba(7, 13, 24, 0.98)
+luxury-theme.css: rgba(7, 14, 26, 0.98)
+luxury-theme.css: rgba(7, 16, 31, 0.76)
+luxury-theme.css: rgba(8, 14, 24, 0.74)
+luxury-theme.css: rgba(8, 14, 25, 1)
+luxury-theme.css: rgba(8, 15, 28, 0.94)
+luxury-theme.css: rgba(8, 20, 38, 0.92)
+luxury-theme.css: rgba(87, 181, 255, 0.14)
+luxury-theme.css: rgba(9, 15, 28, 0.98)
+luxury-theme.css: rgba(94, 220, 255, 0.14)
+luxury-theme.css: rgba(98, 218, 255, 0.07)
+main.css: #0081ff
+main.css: #009cff
+main.css: #00b3ff
+main.css: #00c6f5
+main.css: #0c0c35
+main.css: #0cd7e8
+main.css: #3c73ff
+main.css: #6560ff
+main.css: #8a44ff
+main.css: #9841ff
+main.css: #a93eff
+main.css: #c534ff
+main.css: #ddd
+main.css: #e027ff
+main.css: #eee
+main.css: #f90cff
+main.css: #ff0000
+main.css: #fff
+main.css: rgba(0, 27, 103, .35)
+main.css: rgba(105, 85, 180, 0.1)
+main.css: rgba(105, 85, 180, 0.3)
+main.css: rgba(105, 85, 180, 0.5)
+main.css: rgba(12, 12, 53, 0)
+main.css: rgba(12, 12, 53, 0.9)
+main.css: rgba(12, 12, 53, 1)
+main.css: rgba(152, 65, 255, 0)
+main.css: rgba(152, 65, 255, 0.1)
+main.css: rgba(152, 65, 255, 0.3)
+main.css: rgba(152, 65, 255, 1)
+main.css: rgba(18, 14, 57, 0.95)
+main.css: rgba(244, 68, 56, .0)
+main.css: rgba(255, 255, 255, 0.03)
+main.css: rgba(255, 255, 255, 0.05)
+main.css: rgba(255, 255, 255, 0.08)
+main.css: rgba(255, 255, 255, 0.1)
+main.css: rgba(255, 255, 255, 0.15)
+main.css: rgba(255, 255, 255, 0.25)
+main.css: rgba(255, 255, 255, 0.5)
+main.css: rgba(255, 255, 255, 0.50)
+main.css: rgba(255, 255, 255, 0.65)
+main.css: rgba(255, 255, 255, 0.75)
+main.css: rgba(255, 255, 255, 0.78)
+shop.css: #0081ff
+shop.css: #009cff
+shop.css: #00aeff
+shop.css: #00b3ff
+shop.css: #00c6f5
+shop.css: #0abf53
+shop.css: #0c0c35
+shop.css: #0cd7e8
+shop.css: #333
+shop.css: #333333
+shop.css: #3c73ff
+shop.css: #5dce53
+shop.css: #6560ff
+shop.css: #8a44ff
+shop.css: #9841ff
+shop.css: #a6a6a6
+shop.css: #a93eff
+shop.css: #c534ff
+shop.css: #ddd
+shop.css: #e027ff
+shop.css: #eee
+shop.css: #ef3c3c
+shop.css: #f1d6c5
+shop.css: #f90cff
+shop.css: #fe4819
+shop.css: #ff4c4c
+shop.css: #FF9529
+shop.css: #ffc845
+shop.css: #fff
+shop.css: rgba(105, 85, 180, 0.1)
+shop.css: rgba(105, 85, 180, 0.3)
+shop.css: rgba(12, 12, 53, 0.9)
+shop.css: rgba(152, 65, 255, 0.1)
+shop.css: rgba(152, 65, 255, 0.3)
+shop.css: rgba(152, 65, 255, 1)
+shop.css: rgba(255, 255, 255, 0.05)
+shop.css: rgba(255, 255, 255, 0.1)
+shop.css: rgba(255, 255, 255, 0.2)
+tarkam-theme.css: rgba(137, 222, 255, 0.08)
+tarkam-theme.css: rgba(137, 222, 255, 0.15)
+tarkam-theme.css: rgba(137, 222, 255, 0.18)
+tarkam-theme.css: rgba(137, 222, 255, 0.28)
+tarkam-theme.css: rgba(247, 251, 255, 0.03)
+tarkam-theme.css: rgba(247, 251, 255, 0.04)
+tarkam-theme.css: rgba(247, 251, 255, 0.08)
+tarkam-theme.css: rgba(247, 251, 255, 0.12)
+tarkam-theme.css: rgba(247, 251, 255, 0.48)
+tarkam-theme.css: rgba(247, 251, 255, 0.58)
+tarkam-theme.css: rgba(247, 251, 255, 0.62)
+tarkam-theme.css: rgba(247, 251, 255, 0.72)
+tarkam-theme.css: rgba(247, 251, 255, 0.78)
+tarkam-theme.css: rgba(247, 251, 255, 0.82)
+tarkam-theme.css: rgba(247, 251, 255, 0.88)
+tarkam-theme.css: rgba(255, 155, 198, 0.16)
+tarkam-theme.css: rgba(255, 155, 198, 0.28)
+tarkam-theme.css: rgba(255, 210, 120, 0.06)
+tarkam-theme.css: rgba(255, 210, 120, 0.16)
+tarkam-theme.css: rgba(255, 255, 255, 0.18)
+tarkam-theme.css: rgba(255, 255, 255, 0.66)
+tarkam-theme.css: rgba(7, 10, 24, 0.08)
+tarkam-theme.css: rgba(7, 10, 24, 0.88)
+tarkam-theme.css: rgba(8, 15, 28, 0.88)
