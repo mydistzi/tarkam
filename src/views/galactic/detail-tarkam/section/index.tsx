@@ -671,9 +671,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       <PageHeader
         className="tarkam-page-header"
         infoClassName="tarkam-page-header__info"
-        eyebrow="Detail Tarkam"
-        title="Informasi lengkap untuk turnamen Tarkam ini"
-        description="Lihat detail jadwal, roster, sesi, timeline, pertandingan, dan streaming untuk Tarkam ini."
+        eyebrow="Detail Tarkam" title="Informasi lengkap untuk turnamen Tarkam ini" description="Lihat detail jadwal, roster, sesi, timeline, pertandingan, dan streaming untuk Tarkam ini."
       />
 
       <section className="team-section padding-top tarkam-section">
