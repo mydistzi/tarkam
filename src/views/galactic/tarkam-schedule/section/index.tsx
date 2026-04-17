@@ -329,7 +329,7 @@ const TarkamScheduleContent = () => {
       <PageHeader
         eyebrow="Tarkam Schedule"
         title="Semua Info Turnamen Tarkam"
-        description="Halaman ini sekarang memuat jadwal secara spesifik dari endpoint ringan `/tarkams` dan `/streamings`, jadi beban request-nya jauh lebih kecil."
+        description="Akses informasi komprehensif melalui kartu yang interaktif. Setiap panel menyajikan data kategori <code>(Male/Female)</code>, sisa slot tim, serta pembagian sesi secara real-time."
       />
 
       <section className="latest-matches padding-top tarkam-section">

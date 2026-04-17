@@ -546,9 +546,9 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     [bundle.winners, activeGender],
   );
 
-  const title = detail?.title
-    ? `${detail.title} (Week ${detail.week || "?"})`
-    : `Tarkam Week ${detail?.week || tarkamId || "?"}`;
+//   const title = detail?.title
+//     ? `${detail.title} (Week ${detail.week || "?"})`
+//     : `Tarkam Week ${detail?.week || tarkamId || "?"}`;
 
   if (!tarkamId) {
     return (
@@ -672,8 +672,8 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         className="tarkam-page-header"
         infoClassName="tarkam-page-header__info"
         eyebrow="Detail Tarkam"
-        title={title}
-        description={pageDescription}
+        title="Informasi lengkap untuk turnamen Tarkam ini"
+        description="Lihat detail jadwal, roster, sesi, timeline, pertandingan, dan streaming untuk Tarkam ini."
       />
 
       <section className="team-section padding-top tarkam-section">
