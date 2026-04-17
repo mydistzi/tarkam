@@ -2062,7 +2062,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       return {
         key: `${sponsorName}-${sponsorMessage}`,
         sponsorName,
-        sponsorMessage: `${sponsorName}: ${sponsorMessage}`,
+        sponsorMessage,
         amount: formatCurrency(Number(entry.total_amount ?? 0)),
       };
     })
