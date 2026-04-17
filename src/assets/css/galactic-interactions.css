@@ -252,8 +252,9 @@
 }
 
 .galactic-page-shell.has-global-sponsor-marquee {
-  /* padding-top: 108px; */
-  padding-top: 0;
+  padding-top: 108px;
+  background: transparent;
+  overflow: hidden;
 }
 
 @keyframes global-sponsor-marquee-scroll {

@@ -405,11 +405,11 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
       description={config.description}
       image={resolveAvatar(variant, topEntry || {})}
     >
-      <PageHeader
+      {/* <PageHeader
         eyebrow={config.eyebrow}
         title={config.title}
         description={config.description}
-      />
+      /> */}
 
       <section className="leaderboard-showcase padding-top">
         <div className="container">
