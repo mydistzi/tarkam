@@ -676,7 +676,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 </button>
                 {proofHref ? (
                   <a className="default-btn tarkam-button--ghost" href={proofHref} target="_blank" rel="noreferrer">
-                    Hubungi bukti transfer
+                    Kirim bukti transfer
                   </a>
                 ) : null}
               </div>
@@ -704,7 +704,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <SectionHeading
                   eyebrow="Ringkasan"
                   title="Gambaran event dalam satu panel"
-                  summary="Jadwal utama, kapasitas slot, hadiah, dan nama MVP ditata ulang agar lebih cepat dipindai."
+                  summary=""
                 />
 
                 <div className="tarkam-card-grid">
@@ -749,7 +749,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <SectionHeading
                       eyebrow="Operasional"
                       title="Informasi pembayaran"
-                      summary="Semua arahan transfer dan bukti disatukan agar panitia mudah mengarahkan pemain."
+                      summary=""
                     />
                     <div className="tarkam-detail-stack">
                       <div className="tarkam-detail-row">
@@ -771,7 +771,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <SectionHeading
                       eyebrow="Highlight"
                       title="Angka utama event"
-                      summary="Panel ini merangkum skala event dari jumlah pemain, grup, hingga pertandingan."
+                      summary=""
                     />
                     <div className="tarkam-meta-grid">
                       <MiniStat label="Players" value={totalPlayers} />
@@ -785,7 +785,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <SectionHeading
                       eyebrow="Broadcast"
                       title="Kesiapan live event"
-                      summary="Streaming, sesi, dan timeline aktif ditampilkan sebagai sinyal kesiapan pertandingan."
+                      summary=""
                     />
                     <div className="tarkam-detail-stack">
                       <div className="tarkam-detail-row">
@@ -815,7 +815,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <SectionHeading
                   eyebrow="Divisi"
                   title={`Roster dan group untuk ${genderLabel(activeGender)}`}
-                  summary="Filter ini membantu cek pembagian group, komposisi tim, dan status pemain per divisi."
+                  summary=""
                 />
 
                 <div className="tarkam-filter-nav" role="tablist" aria-label="Filter gender Tarkam">
@@ -837,7 +837,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <SectionHeading
                         eyebrow="Groups"
                         title="Pembagian grup"
-                        summary="Jumlah tim per group untuk filter yang sedang aktif."
+                        summary=""
                       />
                       {filteredGroups.length ? (
                         filteredGroups.map((group) => (
@@ -863,7 +863,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <SectionHeading
                         eyebrow="Teams"
                         title="Roster per tim"
-                        summary="Nama tim, group, jadwal singkat, dan komposisi member tampil dalam satu daftar."
+                        summary=""
                       />
                       {filteredTeams.length ? (
                         filteredTeams.map((team) => {
@@ -905,7 +905,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       <SectionHeading
                         eyebrow="Players"
                         title="Status player terdaftar"
-                        summary="Poin, tier, kota, dan status pembayaran pemain dibuat lebih mudah dibaca."
+                        summary=""
                       />
 
                       {filteredPlayers.length ? (
@@ -976,7 +976,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <SectionHeading
                   eyebrow="Sessions"
                   title="Riwayat sesi pertandingan"
-                  summary="Setiap sesi menampilkan status, poin, snapshot peserta, dan waktu sinkronisasi."
+                  summary=""
                 />
 
                 <div className="row">
@@ -1026,7 +1026,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <div className="col-12">
                       <InlineEmptyState
                         title="Belum ada sesi"
-                        description="Tarkam ini belum memiliki sesi yang terhubung dari endpoint relasi."
+                        description=""
                       />
                     </div>
                   )}
@@ -1039,7 +1039,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <SectionHeading
                   eyebrow="Timelines"
                   title="Catatan aktivitas event"
-                  summary="Timeline dibuat lebih ringkas dengan identitas pelaku, sesi terkait, dan timestamp yang jelas."
+                  summary=""
                 />
 
                 <div className="row">
@@ -1100,7 +1100,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 <SectionHeading
                   eyebrow="Competition"
                   title={`Pertandingan dan pemenang untuk ${genderLabel(activeGender)}`}
-                  summary="Streaming, daftar contest, dan pemenang akhir digabung agar alur kompetisinya lebih enak diikuti."
+                  summary=""
                 />
 
                 <div className="tarkam-filter-nav" role="tablist" aria-label="Filter gender competition">
@@ -1148,7 +1148,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <SectionHeading
                       eyebrow="Contests"
                       title="Daftar pertandingan"
-                      summary="Memantau pairing, skor, dan pemenang match untuk filter divisi aktif."
+                      summary=""
                     />
                     {filteredContests.length ? (
                       filteredContests.map((contest) => (
@@ -1178,7 +1178,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     <SectionHeading
                       eyebrow="Winners"
                       title="Daftar pemenang"
-                      summary="Nama pemenang, ranking, hadiah, dan tim dirapikan sebagai hasil akhir event."
+                      summary=""
                     />
                     {filteredWinners.length ? (
                       filteredWinners.map((winner) => (
