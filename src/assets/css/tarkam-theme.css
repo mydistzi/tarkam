@@ -581,6 +581,33 @@
 .tarkam-stream-card__body {
   display: grid;
   gap: 12px;
+  flex-direction: column;
+}
+
+button.dl-video-popup {
+    background-color: #ff0000 !important; /* Merah YouTube */
+    color: #ffffff !important;           /* Teks Putih */
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button.dl-video-popup:hover {
+    background-color: #cc0000 !important; /* Merah lebih gelap saat hover */
+}
+
+/* 4. Pastikan Ikon YouTube juga berwarna putih */
+button.dl-video-popup i {
+    color: #ffffff !important;
+    font-size: 16px;
 }
 
 .tarkam-stream-card__body p {
