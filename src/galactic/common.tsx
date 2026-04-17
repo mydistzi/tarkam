@@ -2062,7 +2062,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       return {
         key: `${sponsorName}-${sponsorMessage}`,
         sponsorName,
-        sponsorMessage,
+        sponsorMessage: `${sponsorName}: ${sponsorMessage}`,
         amount: formatCurrency(Number(entry.total_amount ?? 0)),
       };
     })
@@ -2116,27 +2116,22 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
 
       {sponsorMarqueeLoop.length ? (
         <section className="global-sponsor-marquee-shell">
-          <div className="container">
-            <div className="global-sponsor-marquee">
-              <div className="global-sponsor-marquee__label">
-                <span>Premium Wire</span>
-                <strong>Pesan Sponsor</strong>
-              </div>
-              <div className="global-sponsor-marquee__viewport">
-                <div className="global-sponsor-marquee__track">
-                  {sponsorMarqueeLoop.map((item, index) => (
-                    <div
-                      className="global-sponsor-marquee__item"
-                      key={`${item.key}-${index}`}
-                    >
-                      <span className="global-sponsor-marquee__name">
-                        {item.sponsorName}
-                      </span>
-                      <p>{item.sponsorMessage}</p>
-                      <small>{item.amount}</small>
-                    </div>
-                  ))}
-                </div>
+          <div className="global-sponsor-marquee">
+            <div className="global-sponsor-marquee__label">
+              <strong>Pesan Sponsor</strong>
+            </div>
+            <div className="global-sponsor-marquee__viewport">
+              <div className="global-sponsor-marquee__track">
+                {sponsorMarqueeLoop.map((item, index) => (
+                  <div
+                    className="global-sponsor-marquee__item"
+                    key={`${item.key}-${index}`}
+                  >
+                    <span className="global-sponsor-marquee__tag">ZETH</span>
+                    <p>{item.sponsorMessage}</p>
+                    <small>{item.amount}</small>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -2147,7 +2142,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
 
       <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />
 
-      <main className={`galactic-page-shell${loading ? "" : " is-ready"}`}>
+      <main className={`galactic-page-shell${loading ? "" : " is-ready"}${sponsorMarqueeLoop.length ? " has-global-sponsor-marquee" : ""}`}>
         {children}
       </main>
 
