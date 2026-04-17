@@ -24,14 +24,18 @@
   --luxury-cyan-strong: rgba(137, 222, 255, 0.28);
   --luxury-cyan-fade: rgba(137, 222, 255, 0.1);
   --luxury-deep: var(--luxury-bg);
+  --luxury-bg-deep: #050b14;
   --luxury-deep-strong: rgba(12, 12, 53, 0.9);
   --luxury-gold: #ffd27a;
   --luxury-gold-soft: rgba(255, 210, 120, 0.16);
-  --luxury-rose: #ff9bc6;
-  --luxury-rose-soft: rgba(255, 155, 198, 0.16);
-  --luxury-rose-strong: rgba(255, 155, 198, 0.28);
+  --luxury-rose: var(--luxury-gold);
+  --luxury-rose-soft: var(--luxury-gold-soft);
+  --luxury-rose-strong: rgba(255, 210, 120, 0.28);
   --luxury-border-bright: rgba(255, 255, 255, 0.18);
   --luxury-surface-strong-dark: rgba(8, 15, 28, 0.88);
+  --luxury-stage-bg-start: rgba(16, 20, 45, 0.98);
+  --luxury-stage-bg-end: rgba(9, 12, 29, 0.99);
+  --luxury-stage-shadow: 0 32px 80px rgba(0, 0, 0, 0.28);
   --luxury-glow-blue: rgba(137, 222, 255, 0.08);
   --luxury-glow-gold: rgba(255, 210, 120, 0.06);
   --luxury-hero-overlay-light: rgba(7, 10, 24, 0.08);
@@ -39,13 +43,18 @@
   --luxury-hero-highlight: rgba(137, 222, 255, 0.15);
   --luxury-hero-highlight-soft: rgba(255, 210, 120, 0.16);
   --luxury-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+  --luxury-panel-gradient: linear-gradient(180deg, var(--luxury-stage-bg-start), var(--luxury-stage-bg-end));
+  --luxury-panel-soft: rgba(255, 255, 255, 0.05);
+  --luxury-panel-border: 1px solid var(--luxury-line);
+  --luxury-glow-accent: radial-gradient(circle, var(--luxury-cyan-soft), transparent 70%);
+  --luxury-glow-accent-alt: radial-gradient(circle, var(--luxury-gold-soft), transparent 70%);
 }
 
 body {
   background:
-    radial-gradient(circle at top, rgba(87, 181, 255, 0.14), transparent 28%),
-    radial-gradient(circle at 85% 15%, rgba(255, 192, 120, 0.12), transparent 20%),
-    linear-gradient(180deg, #08111d 0%, #050b14 100%);
+    radial-gradient(circle at top, rgba(137, 222, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 85% 15%, rgba(255, 210, 120, 0.12), transparent 20%),
+    linear-gradient(180deg, var(--luxury-bg) 0%, var(--luxury-bg-deep) 100%);
   color: var(--luxury-text);
 }
 
@@ -61,6 +70,26 @@ body::before {
   z-index: 0;
 }
 
+.luxury-panel {
+  position: relative;
+  overflow: hidden;
+  border: var(--luxury-panel-border);
+  border-radius: 34px;
+  background: var(--luxury-panel-gradient);
+  box-shadow: var(--luxury-stage-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.luxury-panel-soft {
+  position: relative;
+  overflow: hidden;
+  border: var(--luxury-panel-border);
+  border-radius: 32px;
+  background: var(--luxury-panel-soft);
+  box-shadow: var(--luxury-stage-shadow);
+  backdrop-filter: blur(16px);
+}
+
 .hero-section::before,
 .promo-item::before,
 .testimonial-item::before,
@@ -73,7 +102,7 @@ body::before {
 .hero-element .shape,
 .subscribe-form .submit {
   background:
-    linear-gradient(135deg, #ffd27a 0%, #ff9a64 28%, #7fdfff 76%, #55bbff 100%);
+    linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, var(--luxury-cyan-strong) 76%, var(--luxury-cyan) 100%);
 }
 
 .hero-section .container {
@@ -82,12 +111,12 @@ body::before {
 
 .hero-content {
   padding: 120px 36px 48px;
-  border-radius: 38px;
+  border-radius: 34px;
   border: 1px solid var(--luxury-line);
   background:
     radial-gradient(circle at 50% 0%, rgba(104, 208, 255, 0.16), transparent 24%),
-    linear-gradient(180deg, rgba(10, 19, 34, 0.88), rgba(8, 14, 24, 0.74));
-  box-shadow: var(--luxury-shadow);
+    linear-gradient(180deg, var(--luxury-stage-bg-start), var(--luxury-stage-bg-end));
+  box-shadow: var(--luxury-stage-shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -129,11 +158,11 @@ body::before {
   max-width: 1360px;
   margin: 0 auto;
   padding: 14px;
-  border-radius: 22px;
+  border-radius: 32px;
   border: 1px solid var(--luxury-line);
   background:
     linear-gradient(120deg, rgba(8, 20, 38, 0.92), rgba(14, 26, 47, 0.78));
-  box-shadow: var(--luxury-shadow);
+  box-shadow: var(--luxury-stage-shadow);
   backdrop-filter: blur(16px);
 }
 
@@ -150,8 +179,8 @@ body::before {
 }
 
 .global-sponsor-marquee__tag {
-  background: linear-gradient(135deg, var(--luxury-gold), #ff8a63);
-  color: #04111f;
+  background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+  color: #06111e;
 }
 
 .header,
@@ -283,6 +312,15 @@ body::before {
 .sponsor-section,
 .match-details-section {
   position: relative;
+}
+
+.match-details {
+  border: var(--luxury-panel-border);
+  border-radius: 28px;
+  background: var(--luxury-panel-gradient);
+  box-shadow: var(--luxury-shadow);
+  backdrop-filter: blur(16px);
+  padding: 36px 32px;
 }
 
 .matches-section::before,

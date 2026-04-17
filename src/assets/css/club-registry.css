@@ -46,7 +46,7 @@
 
 .club-registry-note {
   margin: 0 0 16px;
-  color: #7de4ff;
+  color: var(--luxury-cyan);
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -79,9 +79,9 @@
 .club-registry-card,
 .club-registry-empty,
 .club-registry-banner {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(18, 23, 57, 0.96) 0%, rgba(8, 12, 31, 0.97) 100%);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border: var(--luxury-panel-border);
+  background: var(--luxury-panel-gradient);
+  box-shadow: var(--luxury-shadow);
 }
 
 .club-registry-summary div {
@@ -122,7 +122,7 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(125, 228, 255, 0.24) 0%, rgba(125, 228, 255, 0) 72%);
+  background: var(--luxury-glow-accent);
 }
 
 .club-registry-focus__header h2 {
@@ -138,8 +138,8 @@
   justify-content: center;
   min-height: 260px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--luxury-panel-soft);
+  border: var(--luxury-panel-border);
 }
 
 .club-registry-focus__media img {
@@ -160,8 +160,8 @@
 .club-registry-focus__meta li {
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--luxury-panel-soft);
+  border: var(--luxury-panel-border);
 }
 
 .club-registry-focus__meta strong {
@@ -187,7 +187,7 @@
 
 .club-registry-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(125, 228, 255, 0.22);
+  border-color: var(--luxury-cyan-strong);
 }
 
 .club-registry-card__brand {
@@ -201,8 +201,8 @@
   width: 72px;
   height: 72px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--luxury-panel-soft);
+  border: var(--luxury-panel-border);
   display: flex;
   align-items: center;
   justify-content: center;

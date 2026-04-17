@@ -652,12 +652,12 @@ body.loaded{
     letter-spacing: 0;
     text-transform: uppercase;
     text-align: center;
-    color: var(--luxury-cyan);
+    color: var(--luxury-gold);
     display: inline-block;
 }
 
 .page-header-info h2 {
-    color: #fff;
+    color: var(--luxury-text);
     font-size: 46px;
     margin-bottom: 20px;
 }
@@ -667,7 +667,7 @@ body.loaded{
 }
 
 .page-header-info p {
-    color: #ddd;
+    color: var(--luxury-muted);
     margin: 0;
 }
 

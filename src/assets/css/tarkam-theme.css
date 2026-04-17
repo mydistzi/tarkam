@@ -23,8 +23,8 @@
   --tarkam-accent-soft: var(--luxury-cyan-soft);
   --tarkam-accent-strong: var(--luxury-cyan-strong);
   --tarkam-gold-soft: var(--luxury-gold-soft);
-  --tarkam-rose-soft: var(--luxury-rose-soft);
-  --tarkam-rose-strong: var(--luxury-rose-strong);
+  --tarkam-rose-soft: var(--luxury-gold-soft);
+  --tarkam-rose-strong: rgba(255, 210, 120, 0.28);
   --tarkam-border-bright: var(--luxury-border-bright);
   --tarkam-text-softer: var(--luxury-text-softer);
   --tarkam-surface-strong-dark: var(--luxury-surface-strong-dark);
@@ -783,8 +783,8 @@ body {
 }
 
 .tarkam-gender-card--female {
-  border-color: var(--tarkam-rose-strong);
-  background: linear-gradient(180deg, var(--tarkam-rose-soft), var(--tarkam-surface-strong-dark));
+  border-color: var(--tarkam-accent-strong);
+  background: linear-gradient(180deg, var(--tarkam-accent-soft), var(--tarkam-surface-strong-dark));
 }
 
 .tarkam-gender-card__head {
@@ -801,12 +801,9 @@ body {
   font-size: 0.78rem;
 }
 
-.tarkam-gender-card__eyebrow--male {
-  color: var(--luxury-cyan);
-}
-
+.tarkam-gender-card__eyebrow--male,
 .tarkam-gender-card__eyebrow--female {
-  color: var(--luxury-rose);
+  color: var(--luxury-cyan);
 }
 
 .tarkam-gender-card__title {

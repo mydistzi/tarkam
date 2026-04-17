@@ -23,8 +23,8 @@
 
 .club-command-section::before {
   background:
-    radial-gradient(circle at 15% 10%, rgba(74, 226, 255, 0.16), transparent 28%),
-    radial-gradient(circle at 85% 30%, rgba(255, 109, 182, 0.14), transparent 24%);
+    radial-gradient(circle at 15% 10%, var(--luxury-cyan-soft), transparent 28%),
+    radial-gradient(circle at 85% 30%, var(--luxury-gold-soft), transparent 24%);
 }
 
 /* .club-intel-section::before {
@@ -63,11 +63,12 @@
 .club-orbit-card {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(126, 160, 255, 0.16);
-  background: linear-gradient(180deg, rgba(17, 24, 60, 0.98) 0%, rgba(9, 14, 38, 0.98) 100%);
+  border: var(--luxury-panel-border);
+  background: var(--luxury-panel-gradient);
   border-radius: 28px;
   padding: 32px;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.24);
+  box-shadow: var(--luxury-shadow);
+  backdrop-filter: blur(16px);
 }
 
 .club-orbit-card--primary {
@@ -81,7 +82,7 @@
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(74, 226, 255, 0.32) 0%, rgba(74, 226, 255, 0) 72%);
+  background: var(--luxury-glow-accent);
   pointer-events: none;
 }
 
@@ -96,8 +97,8 @@
   width: 108px;
   height: 108px;
   border-radius: 26px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(145deg, rgba(21, 32, 79, 0.98), rgba(6, 12, 33, 0.98));
+  border: var(--luxury-panel-border);
+  background: linear-gradient(145deg, rgba(10, 19, 34, 0.9), rgba(8, 15, 28, 0.92));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,7 +119,7 @@
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #7de4ff;
+  color: var(--luxury-cyan);
 }
 
 .club-orbit-card__brand h2,
@@ -165,9 +166,9 @@
   min-height: 38px;
   padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: #f7f9ff;
+  border: var(--luxury-panel-border);
+  background: var(--luxury-panel-soft);
+  color: var(--luxury-text);
   font-size: 13px;
 }
 
@@ -197,8 +198,8 @@
 
 .club-social-dock__item:hover {
   transform: translateY(-4px);
-  border-color: rgba(125, 228, 255, 0.4);
-  background: rgba(125, 228, 255, 0.08);
+  border-color: var(--luxury-cyan-strong);
+  background: var(--luxury-cyan-soft);
 }
 
 .club-radar-note,
@@ -206,8 +207,8 @@
   margin-top: 22px;
   padding: 18px 20px;
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: var(--luxury-panel-border);
+  background: var(--luxury-panel-soft);
 }
 
 .club-radar-note strong {
@@ -227,9 +228,9 @@
 .club-info-card,
 .club-session-card,
 .club-timeline-card {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(18, 23, 57, 0.95) 0%, rgba(8, 12, 31, 0.96) 100%);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border: var(--luxury-panel-border);
+  background: var(--luxury-panel-gradient);
+  box-shadow: var(--luxury-shadow);
 }
 
 .club-kpi-card {

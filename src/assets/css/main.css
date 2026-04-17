@@ -434,6 +434,8 @@
     background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
     width: 70%;
     border-radius: 2px;
+    border: var(--luxury-panel-border);
+    box-shadow: var(--luxury-shadow);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -983,8 +985,8 @@
 }
 
 .team-details-wrap {
-    background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background: var(--luxury-panel-gradient);
+    border: var(--luxury-panel-border);
     clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
     height: 120px;
     border-radius: 10px;
@@ -992,7 +994,7 @@
     width: 90%;
     margin: 0 auto;
     margin-top: -60px;
-    box-shadow: 0px 5px 10px 0px rgb(0 0 0 / 30%);
+    box-shadow: var(--luxury-shadow);
 }
 
 .team-details-wrap:before {
@@ -1055,7 +1057,7 @@
 }
 
 .team-details-wrap .rating li {
-    color: rgba(12, 12, 53, 0.9);
+    color: var(--luxury-text-soft);
 }
 
 .about-team-section .section-heading p {
