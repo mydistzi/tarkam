@@ -2,16 +2,38 @@
   color-scheme: dark;
   --tarkam-bg: var(--luxury-bg);
   --tarkam-surface: var(--luxury-panel);
-  --tarkam-surface-soft: rgba(10, 19, 34, 0.74);
-  --tarkam-surface-strong: rgba(8, 15, 28, 0.96);
+  --tarkam-surface-soft: var(--luxury-panel);
+  --tarkam-surface-strong: var(--luxury-panel-strong);
   --tarkam-border: var(--luxury-line);
-  --tarkam-border-soft: rgba(255, 255, 255, 0.06);
+  --tarkam-border-soft: var(--luxury-line);
   --tarkam-text: var(--luxury-text);
   --tarkam-muted: var(--luxury-muted);
-  --tarkam-muted-strong: rgba(255, 255, 255, 0.82);
+  --tarkam-muted-strong: rgba(247, 251, 255, 0.82);
+  --tarkam-text-soft: rgba(247, 251, 255, 0.72);
+  --tarkam-text-medium: rgba(247, 251, 255, 0.62);
+  --tarkam-text-muted: rgba(247, 251, 255, 0.58);
+  --tarkam-text-subtle: rgba(247, 251, 255, 0.48);
+  --tarkam-text-emphasis: rgba(247, 251, 255, 0.78);
+  --tarkam-text-strong: rgba(247, 251, 255, 0.88);
+  --tarkam-overlay-xlight: rgba(247, 251, 255, 0.04);
+  --tarkam-overlay-light: rgba(247, 251, 255, 0.08);
+  --tarkam-overlay-soft: rgba(247, 251, 255, 0.12);
+  --tarkam-overlay-extra: rgba(247, 251, 255, 0.03);
   --tarkam-accent: var(--luxury-cyan);
   --tarkam-accent-soft: rgba(137, 222, 255, 0.18);
-  --tarkam-accent-strong: var(--luxury-cyan);
+  --tarkam-accent-strong: rgba(137, 222, 255, 0.28);
+  --tarkam-gold-soft: rgba(255, 210, 120, 0.16);
+  --tarkam-rose-soft: rgba(255, 155, 198, 0.16);
+  --tarkam-rose-strong: rgba(255, 155, 198, 0.28);
+  --tarkam-border-bright: rgba(255, 255, 255, 0.18);
+  --tarkam-text-softer: rgba(255, 255, 255, 0.66);
+  --tarkam-surface-strong-dark: rgba(8, 15, 28, 0.88);
+  --tarkam-glow-blue: rgba(137, 222, 255, 0.08);
+  --tarkam-glow-gold: rgba(255, 210, 120, 0.06);
+  --tarkam-hero-overlay-light: rgba(7, 10, 24, 0.08);
+  --tarkam-hero-overlay-strong: rgba(7, 10, 24, 0.88);
+  --tarkam-hero-highlight: rgba(137, 222, 255, 0.15);
+  --tarkam-hero-highlight-soft: rgba(255, 210, 120, 0.16);
   --tarkam-shadow: var(--luxury-shadow);
 }
 
@@ -52,8 +74,8 @@ body {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 10%, rgba(137, 222, 255, 0.08), transparent 24%),
-    radial-gradient(circle at 88% 12%, rgba(255, 210, 120, 0.06), transparent 22%);
+    radial-gradient(circle at 15% 10%, var(--tarkam-glow-blue), transparent 24%),
+    radial-gradient(circle at 88% 12%, var(--tarkam-glow-gold), transparent 22%);
 }
 
 .tarkam-hero-grid {
@@ -69,11 +91,11 @@ body {
   min-height: 360px;
   border-radius: 28px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--tarkam-border);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--tarkam-shadow);
 }
 
 .tarkam-hero-media::before {
@@ -81,8 +103,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(7, 10, 24, 0.08), rgba(7, 10, 24, 0.88)),
-    linear-gradient(135deg, rgba(137, 222, 255, 0.15), transparent 45%, rgba(255, 210, 120, 0.16));
+    linear-gradient(180deg, var(--tarkam-hero-overlay-light), var(--tarkam-hero-overlay-strong)),
+    linear-gradient(135deg, var(--tarkam-hero-highlight), transparent 45%, var(--tarkam-hero-highlight-soft));
 }
 
 .tarkam-hero-media__content {
@@ -101,7 +123,7 @@ body {
 
 .tarkam-hero-media__content p {
   margin-bottom: 0;
-  color: rgba(233, 241, 255, 0.78);
+  color: var(--tarkam-text-emphasis);
 }
 
 .tarkam-hero-media__footer {
@@ -113,8 +135,8 @@ body {
 .tarkam-hero-media__footer > div {
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(7, 10, 24, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--tarkam-surface-soft);
+  border: 1px solid var(--tarkam-border);
   backdrop-filter: blur(10px);
 }
 
@@ -124,7 +146,7 @@ body {
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--tarkam-text-muted);
 }
 
 .tarkam-hero-media__footer strong {
@@ -135,7 +157,7 @@ body {
   border-radius: 28px;
   padding: 28px;
   border: 1px solid var(--tarkam-border);
-  background: linear-gradient(180deg, rgba(10, 19, 34, 0.92), rgba(8, 15, 28, 0.98));
+  background: linear-gradient(180deg, var(--luxury-panel), var(--luxury-panel-strong));
   box-shadow: var(--tarkam-shadow);
 }
 
@@ -160,7 +182,7 @@ body {
 .tarkam-panel::after {
   content: "";
   z-index: -1;
-  background-image: repeating-linear-gradient(-45deg, #ffffff1a, #ffffff1a 1px, #0000 1px 6px);
+  background-image: repeating-linear-gradient(-45deg, var(--tarkam-border), var(--tarkam-border) 1px, transparent 1px 6px);
   background-size: 4px 4px;
   width: 100%;
   height: 100%;
@@ -188,7 +210,7 @@ body {
 
 .tarkam-lead {
   margin: 16px 0 0;
-  color: rgba(247, 251, 255, 0.78);
+  color: var(--tarkam-text-emphasis);
   line-height: 1.8;
 }
 
@@ -205,7 +227,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--tarkam-text-muted);
 }
 
 .tarkam-title {
@@ -227,9 +249,9 @@ body {
   min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  border: 1px solid var(--tarkam-border);
+  background: var(--tarkam-overlay-light);
+  color: var(--luxury-text);
 }
 
 .tarkam-badge--soft {
@@ -246,7 +268,7 @@ body {
 
 .tarkam-button--ghost {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--tarkam-border-bright);
 }
 
 .tarkam-pill {
@@ -256,32 +278,32 @@ body {
   min-height: 36px;
   padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: #f7f9ff;
+  border: 1px solid var(--tarkam-border);
+  background: var(--tarkam-overlay-light);
+  color: var(--luxury-text);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .tarkam-pill.is-active {
-  background: rgba(255, 210, 120, 0.16);
+  background: var(--tarkam-gold-soft);
   color: var(--luxury-gold);
 }
 
 .tarkam-pill.is-pending {
-  background: rgba(137, 222, 255, 0.16);
+  background: var(--tarkam-accent-soft);
   color: var(--luxury-cyan);
 }
 
 .tarkam-pill.is-complete {
-  background: rgba(255, 210, 120, 0.16);
+  background: var(--tarkam-gold-soft);
   color: var(--luxury-gold);
 }
 
 .tarkam-pill.is-idle {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.74);
+  background: var(--tarkam-overlay-light);
+  color: var(--tarkam-text-soft);
 }
 
 .tarkam-kpi-grid,
@@ -309,15 +331,15 @@ body {
   height: 100%;
   padding: 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--tarkam-overlay);
+  border: 1px solid var(--tarkam-border-bright);
 }
 
 .tarkam-mini-stat__label {
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--tarkam-text-muted);
 }
 
 .tarkam-mini-stat__value {
@@ -328,7 +350,7 @@ body {
 
 .tarkam-mini-stat__hint {
   margin-top: 6px;
-  color: rgba(255, 255, 255, 0.66);
+  color: var(--tarkam-text-softer);
   font-size: 0.92rem;
 }
 
@@ -342,8 +364,8 @@ body {
 .tarkam-inline-meta__item {
   padding: 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tarkam-overlay);
+  border: 1px solid var(--tarkam-border-soft);
 }
 
 .tarkam-inline-meta__item span {
@@ -352,12 +374,12 @@ body {
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.56);
+  color: var(--tarkam-text-subtle);
 }
 
 .tarkam-inline-meta__item strong {
   display: block;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--tarkam-text-strong);
   line-height: 1.6;
 }
 
@@ -377,8 +399,8 @@ body {
   padding: 0 18px;
   border-radius: 999px;
   border: 1px solid var(--tarkam-border);
-  background: rgba(10, 19, 34, 0.18);
-  color: rgba(255, 255, 255, 0.78);
+  background: var(--tarkam-overlay-xlight);
+  color: var(--tarkam-text-emphasis);
   font-weight: 600;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
@@ -391,7 +413,7 @@ body {
 
 .tarkam-segment-btn.is-active {
   border-color: var(--tarkam-accent);
-  background: linear-gradient(135deg, rgba(137, 222, 255, 0.28), rgba(255, 210, 120, 0.24));
+  background: linear-gradient(135deg, var(--tarkam-accent-strong), var(--tarkam-gold-soft));
   color: var(--luxury-text);
 }
 
@@ -415,7 +437,7 @@ body {
 .tarkam-section-heading p {
   max-width: 520px;
   margin-bottom: 0;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--tarkam-text-softer);
   line-height: 1.7;
 }
 
@@ -424,7 +446,7 @@ body {
   font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: rgba(141, 212, 255, 0.78);
+  color: var(--luxury-cyan);
 }
 
 .tarkam-info-grid {
@@ -447,11 +469,11 @@ body {
 }
 
 .tarkam-detail-row span {
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--tarkam-text-muted);
 }
 
 .tarkam-detail-row strong {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--tarkam-text-strong);
   text-align: right;
 }
 
@@ -459,13 +481,13 @@ body {
   height: 100%;
   border-radius: 20px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--tarkam-overlay);
   border: 1px solid var(--tarkam-border);
 }
 
 .tarkam-list-item {
   padding: 14px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--tarkam-border-soft);
 }
 
 .tarkam-list-item:first-of-type {
@@ -488,12 +510,12 @@ body {
 
 .tarkam-list-item__main span,
 .tarkam-list-item__meta span {
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--tarkam-text-medium);
 }
 
 .tarkam-inline-copy {
   margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--tarkam-text-soft);
   line-height: 1.7;
 }
 
@@ -519,7 +541,7 @@ body {
   height: 54px;
   object-fit: cover;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--tarkam-border);
 }
 
 .tarkam-member-card__identity {
@@ -533,7 +555,7 @@ body {
 
 .tarkam-member-card__identity p {
   margin-bottom: 0;
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--tarkam-text-medium);
 }
 
 .tarkam-player-meta {
@@ -551,7 +573,7 @@ body {
   margin-bottom: 16px;
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(137, 222, 255, 0.12);
+  background: var(--tarkam-accent-soft);
   color: var(--luxury-text);
   font-weight: 700;
 }
@@ -560,8 +582,8 @@ body {
   margin-top: 16px;
   padding: 14px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.72);
+  background: var(--tarkam-overlay);
+  color: var(--tarkam-text-soft);
   line-height: 1.7;
 }
 
@@ -575,7 +597,7 @@ body {
 
 .tarkam-timeline-card__description {
   margin-bottom: 16px;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--tarkam-text-muted-strong);
   line-height: 1.8;
 }
 
@@ -636,7 +658,7 @@ body {
 
 .tarkam-stream-card__body p {
   margin-bottom: 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--tarkam-text-soft);
   line-height: 1.7;
 }
 
@@ -649,8 +671,8 @@ body {
 .tarkam-empty-block {
   padding: 18px;
   border-radius: 18px;
-  border: 1px dashed rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--tarkam-border-soft);
+  background: var(--tarkam-overlay-extra);
 }
 
 .tarkam-empty-block h4 {
@@ -659,7 +681,7 @@ body {
 
 .tarkam-empty-block p {
   margin-bottom: 0;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--tarkam-text-softer);
 }
 
 .tarkam-schedule-card {
@@ -693,7 +715,7 @@ body {
 .tarkam-schedule-card::after {
   content: "";
   z-index: -1;
-  background-image: repeating-linear-gradient(-45deg, #ffffff1a, #ffffff1a 1px, #0000 1px 6px);
+  background-image: repeating-linear-gradient(-45deg, var(--tarkam-border), var(--tarkam-border) 1px, transparent 1px 6px);
   background-size: 4px 4px;
   width: 100%;
   height: 100%;
@@ -729,7 +751,7 @@ body {
 
 .tarkam-schedule-card .dl-video-popup:hover {
     transform: scale(1.05);
-    background: rgba(137, 222, 255, 1);
+    background: var(--tarkam-accent);
 }
 
 .tarkam-schedule-card .dl-video-popup i {
@@ -751,18 +773,18 @@ body {
 .tarkam-gender-card {
   border-radius: 20px;
   padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--tarkam-border);
+  box-shadow: var(--tarkam-shadow);
 }
 
 .tarkam-gender-card--male {
-  border-color: rgba(137, 222, 255, 0.28);
-  background: linear-gradient(180deg, rgba(137, 222, 255, 0.16), rgba(8, 15, 28, 0.88));
+  border-color: var(--tarkam-accent-strong);
+  background: linear-gradient(180deg, var(--tarkam-accent-soft), var(--tarkam-surface-strong-dark));
 }
 
 .tarkam-gender-card--female {
-  border-color: rgba(255, 155, 198, 0.28);
-  background: linear-gradient(180deg, rgba(255, 155, 198, 0.16), rgba(35, 7, 29, 0.88));
+  border-color: var(--tarkam-rose-strong);
+  background: linear-gradient(180deg, var(--tarkam-rose-soft), var(--tarkam-surface-strong-dark));
 }
 
 .tarkam-gender-card__head {
@@ -800,7 +822,7 @@ body {
 .tarkam-stream-card {
   border-radius: 20px;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--tarkam-overlay);
   border: 1px solid var(--tarkam-border);
 }
 
@@ -819,7 +841,7 @@ body {
 .tarkam-session-card__meta,
 .tarkam-timeline-card__meta,
 .tarkam-contest-card__meta {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--tarkam-text-soft);
 }
 
 .tarkam-data-card__image {
@@ -833,14 +855,14 @@ body {
 .tarkam-empty-state {
   text-align: center;
   padding: 60px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--tarkam-border);
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--tarkam-overlay);
 }
 
 .tarkam-empty-state p {
   margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--tarkam-text-soft);
 }
 
 @media (max-width: 991px) {
