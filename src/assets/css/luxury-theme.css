@@ -90,7 +90,7 @@ body::before {
   backdrop-filter: blur(16px);
 }
 
-.hero-section::before,
+/* .hero-section::before, */
 .promo-item::before,
 .testimonial-item::before,
 .latest-matches-list::before,
