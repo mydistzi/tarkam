@@ -119,7 +119,7 @@
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
 }
 
 .club-orbit-card__brand h2,
@@ -193,7 +193,7 @@
 
 .club-social-dock__item i {
   font-size: 24px;
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
 }
 
 .club-social-dock__item:hover {
@@ -391,7 +391,7 @@
 .club-status-pill.is-pending,
 .club-member-card__status.is-pending {
   background: rgba(137, 222, 255, 0.18);
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
   border: 1px solid rgba(137, 222, 255, 0.28);
 }
 
@@ -560,7 +560,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--luxury-cyan);
+  background: var(--luxury-line);
   box-shadow: 0 0 0 8px rgba(137, 222, 255, 0.12);
 }
 

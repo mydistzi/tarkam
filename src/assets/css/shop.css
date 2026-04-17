@@ -29,7 +29,7 @@
 }
 
 .shop-section.single:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-line) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -146,7 +146,7 @@
 }
 
 .shop-action li a:hover {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff;
 }
 
@@ -173,7 +173,7 @@
 
 /*** 3.0 - Sale Tag ***/
 .product-thumb .badge {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     height: 20px;
     line-height: 20px;
     display: inline-block;
@@ -244,7 +244,7 @@
     font-size: 22px;
     font-weight: 600;
     text-transform: uppercase;
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     display: block;
 }
 
@@ -269,7 +269,7 @@
 }
 
 .shop-sidebar-widget .shop-widget-title h3 span {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     line-height: 1;
     font-weight: 600;
 }
@@ -289,21 +289,21 @@
 
 .shop-sidebar-widget .category-list::-webkit-scrollbar-thumb {
     cursor: pointer;
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
 }
 
 .shop-sidebar-widget .category-list::selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
 .shop-sidebar-widget .category-list-webkit-::selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
 .shop-sidebar-widget .category-list::-moz-selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
@@ -328,14 +328,14 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
     cursor: pointer;
 }
 
 .range-slider input::-moz-range-thumb {
     width: 20px;
     height: 20px;
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
     cursor: pointer;
 }
 
@@ -443,7 +443,7 @@
 }
 
 .size-list li a:hover {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -541,7 +541,7 @@
 
 .purchase-btn {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0% 0%, 90% 0, 100% 30%, 100% 100%, 0 100%);
     font-size: 15px;
     font-weight: 600;
@@ -576,7 +576,7 @@
 }
 
 .product-details .product-meta li {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     font-size: 14px;
     text-transform: uppercase;
     font-weight: 600;
@@ -635,7 +635,7 @@
     right: 0;
     width: 0;
     height: 1px;
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     transition: .5s;
     opacity: 0;
 }
@@ -647,7 +647,7 @@
 
 .tab-navigation button.active,
 .tab-navigation button:hover {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 /*** 7.2 - Tab Description ***/
@@ -668,7 +668,7 @@
 }
 
 .description-meta li span {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     font-weight: 600;
     margin-right: 5px;
 }
@@ -696,7 +696,7 @@
 }
 
 .product-table thead tr th {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 .product-table tbody tr td {
@@ -800,7 +800,7 @@
 }
 
 .cart-body .cart-item .cart-content a:hover {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 .cart-body .cart-item p {
@@ -838,7 +838,7 @@
 }
 
 .cart-body .cart-item .remove:hover {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff;
 }
 

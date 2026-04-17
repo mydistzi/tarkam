@@ -101,7 +101,7 @@ a, a:hover {
 }
 
 a:hover {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 a:focus {
@@ -310,21 +310,21 @@ a, a:hover, img, .form-control, .form-control:hover, button {
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
 }
 
 ::selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
 -webkit-::selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
 ::-moz-selection {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff
 }
 
@@ -352,7 +352,7 @@ body.loaded{
 }
 
 .site-preloader .spinner {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -411,7 +411,7 @@ body.loaded{
 }
 
 .dl-cursor:before {
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
     opacity: 0.5;
     content: "";
     width: 100%;
@@ -460,7 +460,7 @@ body.loaded{
 
 .default-btn {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0% 0%, 90% 0, 100% 30%, 100% 100%, 0 100%);
     color: #fff;
     font-family: 'Oxanium', sans-serif;
@@ -491,7 +491,7 @@ body.loaded{
 }
 
 .default-btn span {
-    background: var(--luxury-cyan) none repeat scroll 0 0;
+    background: var(--luxury-line) none repeat scroll 0 0;
     border-radius: 50%;
     display: block;
     width: 0;
@@ -538,7 +538,7 @@ body.loaded{
 }
 
 .section-heading h2 span {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 .section-heading p {
@@ -578,7 +578,7 @@ body.loaded{
 }
 
 .page-header:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-strong) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-strong) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-strong) 0%, var(--luxury-line) 50%, var(--luxury-cyan-strong) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -590,7 +590,7 @@ body.loaded{
 
 .page-header .page-header-shape .shape {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0 0, 100% 0%, 85% 100%, 0 100%);
     width: 200px;
     height: 60px;
@@ -698,7 +698,7 @@ body.loaded{
 
 .team-details .page-header-info h2 span {
     display: block;
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
@@ -778,7 +778,7 @@ body.loaded{
 
 .scroll-to-top {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     width: 100%;
     height: 100%;
     text-align: center;

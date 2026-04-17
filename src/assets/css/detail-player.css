@@ -122,7 +122,7 @@
 
 .player-pill.is-core {
   background: var(--luxury-cyan-soft);
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
 }
 
 .player-pill.is-balanced {
@@ -132,7 +132,7 @@
 
 .player-pill.is-advanced {
   background: var(--luxury-cyan-soft);
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
 }
 
 .player-pill.is-elite {
@@ -455,7 +455,7 @@
 }
 
 .player-connection-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--luxury-cyan), var(--luxury-gold));
+  background: linear-gradient(180deg, var(--luxury-line), var(--luxury-gold));
   border-radius: 999px;
 }
 
@@ -549,7 +549,7 @@
 }
 
 .player-team-card__top a {
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
   text-decoration: none;
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -653,7 +653,7 @@
   padding: 0 14px;
   border-radius: 999px;
   background: rgba(137, 222, 255, 0.12);
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -731,7 +731,7 @@
 
 .player-social-dock__item i {
   font-size: 24px;
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
 }
 
 .player-social-dock__item:hover {
@@ -820,7 +820,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--luxury-cyan);
+  background: var(--luxury-line);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
   font-size: 11px;

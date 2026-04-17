@@ -624,7 +624,7 @@
 .template-error-kicker {
   display: inline-block;
   margin-bottom: 18px;
-  color: var(--luxury-cyan);
+  color: var(--luxury-line);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.04em;

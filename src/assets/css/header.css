@@ -241,7 +241,7 @@
 }
 
 .header-menu-wrap ul li>a:before {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     content: '';
     position: absolute;
     left: 0;
@@ -278,6 +278,7 @@
 
 .header-menu-wrap li ul {
     background-color: rgba(12, 13, 53, 0.95);
+    border: 1px solid rgba(255, 210, 120, 0.14);
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 30%);
     border-radius: 2px;
     width: 220px;
@@ -335,7 +336,11 @@
 }
 
 .header-menu-wrap li li>a:hover {
-    color: aliceblue#fff;
+    color: #fff;
+}
+
+.header-menu-wrap li li:hover {
+    background: rgba(255, 210, 120, 0.04);
 }
 
 .header-menu-wrap li ul li ul {

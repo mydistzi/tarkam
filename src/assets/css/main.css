@@ -36,7 +36,7 @@
 }
 
 .hero-section:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-fade) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-fade) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-fade) 0%, var(--luxury-line) 50%, var(--luxury-cyan-fade) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -80,7 +80,7 @@
 /*** 1.1 - Play Button ***/
 .play-btn {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     width: 90px;
     height: 90px;
     top: 50%;
@@ -191,7 +191,7 @@
 
 .hero-element .shape {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     width: 200px;
     height: 100%;
     position: absolute;
@@ -327,7 +327,7 @@
 .participate-team:after,
 .participate-team:before {
     background: var(--luxury-gold);
-    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(90% 0, 100% 40%, 100% 100%, 0 100%, 0 0);
     content: "";
     position: absolute;
@@ -372,7 +372,7 @@
 
 .match-info {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(100% 0, 100% 100%, 10% 100%, 0 60%, 0 0);
     border-radius: 3px;
     padding: 15px 20px;
@@ -431,7 +431,7 @@
 /*** 4.0 - Match Details ***/
 
 .match-details-header {
-    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-line) 50%, var(--luxury-cyan-soft) 100%);
     width: 70%;
     border-radius: 2px;
     border: var(--luxury-panel-border);
@@ -486,7 +486,7 @@
 
 .match-details-header .vs {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
     display: flex;
     align-items: center;
@@ -551,7 +551,7 @@
 }
 
 .latest-matches-list:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-line) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -583,7 +583,7 @@
 }
 
 .match-category {
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(90% 0, 100% 35%, 100% 100%, 0% 100%, 0 66%, 0 0);
     font-family: "Oxanium", sans-serif;
     font-size: 12px;
@@ -636,7 +636,7 @@
 }
 
 .watch-info a:hover {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 /*** 6.0 - Watch Live ***/
@@ -746,7 +746,7 @@
 
 .team-content h3 {
     background: var(--luxury-gold);
-    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
     width: 90%;
     height: 60px;
@@ -774,7 +774,7 @@
 
 .team-content:before {
     background: var(--luxury-gold);
-    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(57% 0%, 100% 0%, 45% 100%, 0% 100%);
     border-radius: 3px;
     content: "";
@@ -847,7 +847,7 @@
 
 .team-thumb .shape {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0% 0%, 80% 0, 100% 10%, 100% 100%, 0 100%);
     width: 150px;
     height: 100%;
@@ -1168,7 +1168,7 @@
 }
 
 .promo-item:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-line) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -1232,9 +1232,9 @@
     text-transform: capitalize;
     margin-bottom: 30px;
     text-shadow:
-        0 0 5px var(--luxury-cyan),
-        0 0 10px var(--luxury-cyan),
-        0 0 15px var(--luxury-cyan);
+        0 0 5px var(--luxury-line),
+        0 0 10px var(--luxury-line),
+        0 0 15px var(--luxury-line);
 }
 
 /*** 12.0 - Gameplay Section ***/
@@ -1314,7 +1314,7 @@
 }
 
 .testimonial-item:before {
-    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan) 50%, var(--luxury-cyan-soft) 100%);
+    background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-line) 50%, var(--luxury-cyan-soft) 100%);
     content: "";
     position: absolute;
     width: 100%;
@@ -1370,7 +1370,7 @@
 }
 
 .swiper-pagination-bullet-active {
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
 }
 
 .swiper-pagination-bullets.swiper-pagination-horizontal {
@@ -1419,7 +1419,7 @@
 }
 
 .contact-title h2 span {
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
 }
 
 .contact-section .contact-details li {
@@ -1444,7 +1444,7 @@
 }
 
 .contact-section .contact-details li i:hover {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -1484,7 +1484,7 @@
 
 .accordion-button:not(.collapsed) {
     color: #fff;
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
 }
 
 .accordion-button:not(.collapsed):after {
@@ -1737,7 +1737,7 @@
 }
 
 .sponsor-testimonial-social a:hover {
-    background: var(--luxury-cyan);
+    background: var(--luxury-line);
 }
 
 .sponsor-testimonial-social i {
@@ -1779,7 +1779,7 @@
 }
 
 .social-list li a:hover {
-    background-color: var(--luxury-cyan);
+    background-color: var(--luxury-line);
     color: #fff;
     transform: translateY(-2px);
 }
@@ -1816,7 +1816,7 @@
 
 .subscribe-form .submit {
     background: var(--luxury-gold);
-    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-cyan));
+    background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0% 0%, 90% 0, 100% 30%, 100% 100%, 0 100%);
     display: inline-block;
     width: 160px;
@@ -1864,7 +1864,7 @@
 
 .footer-contact li span {
     display: block;
-    color: var(--luxury-cyan);
+    color: var(--luxury-line);
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
