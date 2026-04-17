@@ -492,7 +492,8 @@ blockquote span {
     width: 50px;
     height: 100%;
     font-size: 15px;
-    color: var(--luxury-line);
+    /* color: var(--luxury-line); */
+    background: rgba(6, 15, 29, 0.58);
 }
 
 /*** 5.3 - Category List ***/

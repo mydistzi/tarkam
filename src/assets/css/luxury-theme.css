@@ -372,7 +372,7 @@ body::before {
 .orderby {
   border-radius: 18px;
   border: 1px solid var(--luxury-line);
-  background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+  /* background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft)); */
 }
 
 .galactic-match-list {
