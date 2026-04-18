@@ -102,11 +102,11 @@
 }
 
 .post-card .post-content .read-more:before {
-    background-color: var(--luxury-line);
+    background: linear-gradient(90deg,#ffc97873,#ffc97800);
     position: absolute;
     content: "";
     width: 20px;
-    height: 4px;
+    height: 2px;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
@@ -186,7 +186,7 @@ blockquote {
     background: linear-gradient(90deg, var(--luxury-cyan-soft) 0%, var(--luxury-cyan-strong) 50%, var(--luxury-cyan-soft) 100%);
     padding: 40px;
     border: none;
-    border-left: 3px solid var(--luxury-line);
+    border-left: 3px solid var(--luxury-cyan-strong);
     font-size: 24px;
     line-height: 32px;
     font-weight: 500;
@@ -197,7 +197,7 @@ blockquote {
 }
 
 blockquote i.fas {
-    color: var(--luxury-line);
+    color: var(--luxury-cyan);
     display: block;
     margin-bottom: 20px;
 }
@@ -208,7 +208,7 @@ blockquote span {
     font-weight: 600;
     line-height: 1;
     text-transform: uppercase;
-    color: var(--luxury-line);
+    color: var(--luxury-cyan);
     display: block;
     margin-top: 10px;
 }
@@ -340,7 +340,7 @@ blockquote span {
 .comment-title:before {
     background: linear-gradient(90deg,#ffc97873,#ffc97800);
     width: 50%;
-    height: 4px;
+    height: 2px;
     position: absolute;
     content: "";
     left: 0;
