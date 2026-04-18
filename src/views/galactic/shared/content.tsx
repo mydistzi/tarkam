@@ -404,6 +404,7 @@ type SiteMeta = {
 type MatchRecord = {
   id: number;
   item: MatchItem;
+  date?: string;
   contest?: ApiContest;
   team1?: ApiTeam;
   team2?: ApiTeam;
@@ -609,6 +610,24 @@ const formatDateLabel = (value?: string) => {
     year: "numeric",
   });
 };
+
+const formatTimeLabel = (value?: string) => {
+  if (!value) {
+    return "TBA";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
+};
+
 
 const normalizeMenuPath = (value: string) => {
   const normalized = value.trim();
@@ -955,7 +974,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             group:
               tarkam?.title ||
               (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : ""),
-            time: contest.score ? String(contest.score) : tarkam?.male_time || tarkam?.female_time || "",
+            time: formatTimeLabel(contest.time) || "TBA",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
             path: buildMatchDetailPath(contest.id),
             leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
