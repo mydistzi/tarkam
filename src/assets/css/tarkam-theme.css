@@ -636,7 +636,7 @@ body {
 .tarkam-stream-card__body .tarkam-inline-copy {
   position: absolute;
   right: 20px;
-  background-color: var(--tarkam-accent) !important;
+  background-color: #FF0000 !important;
   color: var(--luxury-text) !important;
   border: none;
   border-radius: 4px;
