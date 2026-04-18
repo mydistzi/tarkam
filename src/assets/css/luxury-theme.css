@@ -518,7 +518,7 @@ body::before {
 
 .galactic-match-card__center strong,
 .match-detail-versus strong {
-  font-size: clamp(26px, 3vw, 38px);
+  /* font-size: clamp(26px, 3vw, 38px); */
   line-height: 1;
 }
 
