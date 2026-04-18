@@ -712,7 +712,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
               </div>
             </div> */}
 
-            <div className="match-details-header">
+            <div className="match-details-header home">
                 <img className="left" src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
                 <small>Left Team</small>
                 <h3 className="left-team">
@@ -723,8 +723,10 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
                         )
                     }
                 </h3>
+                <div className="galactic-match-card__center">
                 <div className="vs">
                     <h2>vs</h2>
+                </div>
                 </div>
                 <small>Right Team</small>
                 <h3 className="right-team">

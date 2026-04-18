@@ -532,6 +532,19 @@
     margin-top: -6px;
 }
 
+.match-details-header .home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 750px;
+    margin: 0px auto;
+    text-align: center;
+    gap: 40px;
+    flex-direction: row;
+    position: relative;
+}
+
 /*** 5.0 - Latest Matches ***/
 .latest-matches-lists:not(:last-of-type) {
     margin-bottom: 20px;
