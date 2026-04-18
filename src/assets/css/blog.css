@@ -457,9 +457,9 @@ blockquote span {
 }
 
 .widget-title h3:before {
-    background-color: var(--luxury-line);
+    background: linear-gradient(90deg, rgba(255, 201, 120, 0.45), rgba(255, 201, 120, 0));
     width: 50%;
-    height: 4px;
+    height: 2px;
     position: absolute;
     content: "";
     left: 0;
