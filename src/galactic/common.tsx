@@ -695,7 +695,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
           </div>
 
           <div className="galactic-match-card__body">
-            <div className="galactic-match-card__team">
+            {/* <div className="galactic-match-card__team">
               <img
                 src={getImageSource(match.leftLogo, placeholderTeam)}
                 alt={match.leftTeam}
@@ -710,9 +710,34 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
                   )}
                 </h3>
               </div>
+            </div> */}
+
+            <div className="match-details-header">
+                <img className="left" src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
+                <small>Left Team</small>
+                <h3 className="left-team">
+                    {match.leftTeamPath ? (
+                        <Link to={match.leftTeamPath}>{match.leftTeam}</Link>
+                        ) : (
+                            match.leftTeam
+                        )
+                    }
+                </h3>
+                <div className="vs">
+                    <h2>vs</h2>
+                </div>
+                <small>Right Team</small>
+                <h3 className="right-team">
+                    {match.rightTeamPath ? (
+                    <Link to={match.rightTeamPath}>{match.rightTeam}</Link>
+                  ) : (
+                    match.rightTeam
+                  )}
+                </h3>
+                <img className="right" src={getImageSource(match.rightLogo, placeholderTeam)} alt={match.rightTeam} />
             </div>
 
-            <div className="galactic-match-card__center">
+            {/* <div className="galactic-match-card__center">
               <span className="galactic-match-card__eyebrow">Match Focus</span>
               <strong>{match.time || "TBA"}</strong>
               <div className="galactic-match-card__versus">VS</div>
@@ -733,7 +758,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
                   )}
                 </h3>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="galactic-match-card__actions">
