@@ -485,7 +485,7 @@
 }
 
 .match-details-header .vs {
-    background: var(--luxury-gold);
+    background:linear-gradient(#ffbf5c24 0%,#ffbf5c05 100%);
     background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
     display: flex;
