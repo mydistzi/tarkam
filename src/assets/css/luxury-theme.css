@@ -102,7 +102,8 @@ body::before {
 .hero-element .shape,
 .subscribe-form .submit {
   background:
-    linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, rgba(255, 210, 120, 0.08) 62%, rgba(255, 210, 120, 0.04) 100%);
+    /* linear-gradient(135deg, var(--luxury-gold) 0%, var(--luxury-gold-soft) 28%, rgba(255, 210, 120, 0.08) 62%, rgba(255, 210, 120, 0.04) 100%); */
+    linear-gradient(90deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 50%, #ffd27814 100%)
 }
 
 .hero-section .container {

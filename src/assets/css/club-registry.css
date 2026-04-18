@@ -80,7 +80,7 @@
 .club-registry-empty,
 .club-registry-banner {
   border: var(--luxury-panel-border);
-  background: var(--luxury-panel-gradient);
+  /* background: var(--luxury-panel-gradient); */
   box-shadow: var(--luxury-shadow);
 }
 
