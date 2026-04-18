@@ -230,7 +230,7 @@ const asMetric = (
 const asReward = (entry: LeaderboardEntry) => Number(entry.total_reward ?? 0);
 
 const formatMetric = (value: number, format: MetricFormat) =>
-  format === "currency" ? formatCurrency(value) : formatNumber(value);
+  format === "currency" ? formatCurrency(value) : formatRounded(value);
 
 const genderLabel = (value?: string) => {
   const normalized = String(value || "").trim().toLowerCase();
@@ -514,7 +514,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                             {config.showReward ? (
                               <>
                                 <div className="leaderboard-podium-card__reward">
-                                  {formatRounded(formatReward(asReward(entry)))}
+                                  {formatReward(asReward(entry))}
                                 </div>
                                 <small>{config.rewardLabel}</small>
                               </>
@@ -546,7 +546,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                   </span>
                   {config.showReward ? (
                     <span>
-                      Total reward: <strong>{formatRounded(formatReward(totalReward))}</strong>
+                      Total reward: <strong>{formatReward(totalReward)}</strong>
                     </span>
                   ) : null}
                 </div>
@@ -640,7 +640,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                               className="leaderboard-table-row__reward"
                               data-label={config.rewardLabel}
                             >
-                              {formatRounded(formatReward(asReward(entry)))}
+                              {formatReward(asReward(entry))}
                             </div>
                           ) : null}
                           <div
