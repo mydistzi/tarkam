@@ -690,8 +690,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
           <div className="galactic-match-card__meta">
             <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
             <span className="galactic-match-card__timestamp">
-              {/* {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""} */}
-              {match.date || "Tanggal menyusul"}
+              {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""}
             </span>
           </div>
 
@@ -715,7 +714,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
 
             <div className="galactic-match-card__center">
               <span className="galactic-match-card__eyebrow">Match Focus</span>
-              {/* <strong>{match.time || "TBA"}</strong> */}
+              <strong>{match.time || "TBA"}</strong>
               <div className="galactic-match-card__versus">VS</div>
             </div>
 

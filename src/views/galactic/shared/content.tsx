@@ -346,6 +346,7 @@ type ApiContest = {
   score?: number | string;
   tarkam_fk?: number | string | null;
   gender?: string;
+  time?: string;
   tarkam?: ApiTarkam;
   created_at?: string;
   updated_at?: string;
