@@ -638,7 +638,7 @@
     right: 0;
     width: 0;
     height: 1px;
-    background-color: var(--luxury-line);
+    background-color: var(--luxury-cyan);
     transition: .5s;
     opacity: 0;
 }
@@ -650,7 +650,7 @@
 
 .tab-navigation button.active,
 .tab-navigation button:hover {
-    color: var(--luxury-line);
+    color: var(--luxury-cyan);
 }
 
 /*** 7.2 - Tab Description ***/
