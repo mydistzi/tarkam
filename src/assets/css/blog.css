@@ -33,6 +33,15 @@
     position: relative;
 }
 
+.post-thumb {
+    background: radial-gradient(circle at 15% 20%, #ffd27824, #0000 20%), radial-gradient(circle at 86% 18%, #89deff0f, #0000 18%), linear-gradient(#07101fc2, #050c1647);
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px #0003;
+}
+
 .post-content-wrap {
     padding: 30px;
 }
