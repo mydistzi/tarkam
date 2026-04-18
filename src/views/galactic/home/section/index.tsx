@@ -145,7 +145,7 @@ const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
 const HomeJoinSection = () => <JoinMailSection />;
 
 const HomeSponsorsSection = ({ items }: { items: SponsorItem[] }) => (
-  <div className="sponsor-section padding-bottom">
+  <div className="sponsor-section">
     <div className="container">
       <div className="outside-spacing">
         <SponsorCarousel items={items} />

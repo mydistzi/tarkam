@@ -825,7 +825,7 @@ const LatestMatchesList = ({
               style={{ cursor: match.path ? "pointer" : undefined }}
             >
               <div className="matches-thumb">
-                <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.jpg")} alt={match.leftTeam} />
+                <img src={getImageSource(match.leftLogo, "/assets/images/video-thumb.png")} alt={match.leftTeam} />
               </div>
               <div className="latest-match-info">
                 <a href="#" className="match-category">{match.group}</a>
