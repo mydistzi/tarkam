@@ -25,7 +25,7 @@
 }
 
 .post-card {
-    background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+    /* background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft)); */
     box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 20%);
 }
 
