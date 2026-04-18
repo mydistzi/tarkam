@@ -188,7 +188,10 @@ const formatNumber = (value?: number | string | null) => {
   const numeric = Number(value ?? 0);
   return Number.isNaN(numeric)
     ? "0"
-    : new Intl.NumberFormat("id-ID").format(numeric);
+
+    : new Intl.NumberFormat("id-ID", { 
+        maximumFractionDigits: 0 
+      }).format(numeric);
 };
 
 const formatCurrency = (value?: number | string | null) => {
@@ -202,13 +205,20 @@ const formatCurrency = (value?: number | string | null) => {
       }).format(numeric);
 };
 
+const formatRounded = (value?: number | string | null) => {
+  const numeric = Number(value ?? 0);
+  return Number.isNaN(numeric)
+    ? "0"
+    : new Intl.NumberFormat("id-ID").format(Math.round(numeric));
+};
+
 const formatReward = (value?: number | string | null) => {
   const numeric = Number(value ?? 0);
   return Number.isNaN(numeric)
     ? "0"
     : new Intl.NumberFormat("id-ID", {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 0, 
       }).format(numeric);
 };
 
@@ -504,7 +514,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                             {config.showReward ? (
                               <>
                                 <div className="leaderboard-podium-card__reward">
-                                  {formatReward(asReward(entry))}
+                                  {formatRounded(formatReward(asReward(entry)))}
                                 </div>
                                 <small>{config.rewardLabel}</small>
                               </>
@@ -536,7 +546,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                   </span>
                   {config.showReward ? (
                     <span>
-                      Total reward: <strong>{formatReward(totalReward)}</strong>
+                      Total reward: <strong>{formatRounded(formatReward(totalReward))}</strong>
                     </span>
                   ) : null}
                 </div>
@@ -630,7 +640,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
                               className="leaderboard-table-row__reward"
                               data-label={config.rewardLabel}
                             >
-                              {formatReward(asReward(entry))}
+                              {formatRounded(formatReward(asReward(entry)))}
                             </div>
                           ) : null}
                           <div
