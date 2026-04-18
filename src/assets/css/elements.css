@@ -310,7 +310,7 @@ a, a:hover, img, .form-control, .form-control:hover, button {
 
 ::-webkit-scrollbar-thumb {
     cursor: pointer;
-    background: var(--luxury-line);
+    background: linear-gradient(90deg,#ffc97873,#ffc97800);
 }
 
 ::selection {
