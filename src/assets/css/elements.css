@@ -589,7 +589,7 @@ body.loaded{
 }
 
 .page-header .page-header-shape .shape {
-    background: var(--luxury-gold);
+    /* background: var(--luxury-gold); */
     background-image: linear-gradient(to right bottom, var(--luxury-gold), var(--luxury-line));
     clip-path: polygon(0 0, 100% 0%, 85% 100%, 0 100%);
     width: 200px;

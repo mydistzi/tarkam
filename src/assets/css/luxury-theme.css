@@ -199,11 +199,11 @@ body::before {
   padding-bottom: 40px;
 }
 
-.page-header {
+/* .page-header {
   position: relative;
   overflow: hidden;
   padding: 34px 0 18px;
-}
+} */
 
 .page-header::before {
   content: "";
@@ -314,14 +314,14 @@ body::before {
   position: relative;
 }
 
-.match-details {
+/* .match-details {
   border: var(--luxury-panel-border);
   border-radius: 28px;
   background: var(--luxury-panel-gradient);
   box-shadow: var(--luxury-shadow);
   backdrop-filter: blur(16px);
   padding: 36px 32px;
-}
+} */
 
 .matches-section::before,
 .watch-live-section::before,
