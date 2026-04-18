@@ -712,7 +712,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => (
               </div>
             </div> */}
 
-            <div className="match-details-header home">
+            <div className="match-details-header2">
                 <img className="left" src={getImageSource(match.leftLogo, placeholderTeam)} alt={match.leftTeam} />
                 <small>Left Team</small>
                 <h3 className="left-team">
