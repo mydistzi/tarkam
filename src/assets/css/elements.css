@@ -352,7 +352,8 @@ body.loaded{
 }
 
 .site-preloader .spinner {
-    background-color: var(--luxury-line);
+    /* background-color: var(--luxury-line); */
+    background: linear-gradient(90deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 50%, #ffd27814 100%);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -411,7 +412,7 @@ body.loaded{
 }
 
 .dl-cursor:before {
-    background: var(--luxury-line);
+    background: linear-gradient(90deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 50%, #ffd27814 100%);
     opacity: 0.5;
     content: "";
     width: 100%;
