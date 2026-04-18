@@ -798,6 +798,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     href={proofHref}
                     target="_blank"
                     rel="noreferrer"
+                    style={{ color: "#ddd" }}
                   >
                     Kirim bukti transfer
                   </a>

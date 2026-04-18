@@ -258,7 +258,7 @@ const ScheduleCard = ({
                 href={`https://wa.me/${tarkam.proof}`}
                 target="_blank"
                 rel="noreferrer"
-                style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)" }}
+                style={{ background: "transparent", border: "1px solid rgba(255,255,255,0.18)", color: "#ddd" }}
               >
                 Proof
               </a>
