@@ -950,7 +950,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
         {filteredItems.length > 1 && (
           <div className="galactic-match-list-toggle">
             <button className="default-btn" onClick={toggleExpanded} type="button">
-              {isExpanded ? 'Show Less' : 'Show More'}<span />
+              {isExpanded ? 'Collapse' : 'Expand'}<span />
             </button>
           </div>
         )}
