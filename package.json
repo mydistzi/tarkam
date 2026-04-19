@@ -12,6 +12,9 @@
     "preview": "vite preview",
     "sitemap": "node sitemap-server.js",
     "sitemap:dev": "cross-env BASE_URL=http://localhost:5173 node sitemap-server.js",
+    "sitemap:test": "node sitemap-monitor.js test",
+    "sitemap:validate": "node sitemap-monitor.js validate",
+    "sitemap:monitor": "node sitemap-monitor.js monitor",
     "whatsapp:baileys": "node baileys/server.js",
     "start:services": "concurrently \"npm run dev\" \"npm run whatsapp:baileys\""
   },
@@ -21,6 +24,7 @@
     "axios": "^1.13.6",
     "disqus-react": "^1.1.7",
     "express": "^5.2.1",
+    "fast-xml-parser": "^5.7.1",
     "laravel-echo": "^2.3.4",
     "pino": "^9.14.0",
     "prop-types": "^15.8.1",
