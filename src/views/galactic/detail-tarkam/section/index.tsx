@@ -1290,7 +1290,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
                       return (
                         <div
-                          className="col-lg-6 sm-padding"
+                          className="col-lg-6 sm-padding mt-10"
                           key={String(
                             relation.id ||
                               relation.timeline_fk ||
