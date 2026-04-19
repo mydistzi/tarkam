@@ -798,6 +798,12 @@ body.video-modal-open {
   }
 }
 
+@media (max-width: 991px) {
+  .global-sponsor-marquee-shell {
+    top: 0 !important;
+  }
+}
+
 @media (max-width: 767px) {
   .global-sponsor-marquee-shell {
     top: 64px;
