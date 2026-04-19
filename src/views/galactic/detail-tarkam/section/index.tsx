@@ -778,6 +778,18 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                   <span>Kontak Bukti</span>
                   <strong>{detail.proof || "Belum disediakan"}</strong>
                 </div>
+                {detail.mvp_m && (
+                  <div className="tarkam-inline-meta__item">
+                    <span>MVP Male</span>
+                    <strong>{detail.mvp_m}</strong>
+                  </div>
+                )}
+                {detail.mvp_f && (
+                  <div className="tarkam-inline-meta__item">
+                    <span>MVP Female</span>
+                    <strong>{detail.mvp_f}</strong>
+                  </div>
+                )}
                 <div className="tarkam-inline-meta__item">
                   <span>Updated</span>
                   <strong>{updatedLabel}</strong>

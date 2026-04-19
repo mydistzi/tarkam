@@ -241,6 +241,14 @@ const ScheduleCard = ({
             </div>
           ) : null}
 
+          {(tarkam.mvp_m || tarkam.mvp_f) ? (
+            <div style={{ marginTop: "14px", color: "rgba(255,255,255,0.62)", fontSize: "0.95rem" }}>
+              MVP: {tarkam.mvp_m && <strong style={{ color: "#fff" }}>Male: {tarkam.mvp_m}</strong>}
+              {tarkam.mvp_m && tarkam.mvp_f && " | "}
+              {tarkam.mvp_f && <strong style={{ color: "#fff" }}>Female: {tarkam.mvp_f}</strong>}
+            </div>
+          ) : null}
+
           {tarkam.transfer_info ? (
             <div className="tarkam-mini-stat" style={{ marginTop: "18px", color: "rgba(255,255,255,0.74)" }}>
               <strong style={{ display: "block", marginBottom: "6px", color: "#fff" }}>Transfer Info</strong>

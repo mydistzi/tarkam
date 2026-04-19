@@ -92,6 +92,7 @@ export type MemberDetailPayload = AnyObj & {
   lifetime_points?: number;
   session_points?: number;
   session_reward?: number | string;
+  mvp_count?: number;
   status?: string;
   created_at?: string;
   updated_at?: string;
@@ -377,6 +378,11 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               <span>Matches</span>
               <h3>{fmtNumber(totalMatches)}</h3>
               <p>Total pertandingan.</p>
+            </article>
+            <article className="player-kpi-card galactic-hover-card">
+              <span>Total MVP</span>
+              <h3>{fmtNumber(record?.mvp_count ?? 0)}</h3>
+              <p>Jumlah kali menjadi MVP.</p>
             </article>
             <article className="player-kpi-card galactic-hover-card">
               <span>Sessions</span>
