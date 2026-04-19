@@ -1,8 +1,9 @@
+import axios from 'axios';
+
 export default async function handler(req, res) {
   console.log('🔍 Debug Sitemap - Testing API calls');
   
   try {
-    const axios = require('axios');
     const baseUrl = 'https://tarkam-api-web-production.up.railway.app/api/v1';
     
     console.log('📍 API Base URL:', baseUrl);
