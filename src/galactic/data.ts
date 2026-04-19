@@ -168,6 +168,7 @@ export type MatchItem = {
   leftTeamPath?: string;
   rightTeamPath?: string;
   videoUrl?: string;
+  gender?: 'male' | 'female' | 'mixed';
 };
 
 export type StreamItem = {

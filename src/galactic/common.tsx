@@ -676,94 +676,129 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
     </>
   );
 };
-const MatchList = ({ items }: { items: MatchItem[] }) => (
-  <div className="galactic-match-list">
-    {items.map((match) => {
-      const detailPath = match.path || "#";
-      const hasVideo = Boolean(match.videoUrl?.trim());
+const MatchList = ({ items }: { items: MatchItem[] }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [genderFilter, setGenderFilter] = useState<'all' | 'male' | 'female'>('all');
 
-      return (
-        <article
-          className="galactic-match-card"
-          key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}
+  const filteredItems = items.filter((match) => {
+    if (genderFilter === 'all') return true;
+    return match.gender === genderFilter || match.gender === 'mixed';
+  });
+
+  const toggleExpanded = () => setIsExpanded(!isExpanded);
+
+  return (
+    <>
+      <div className="galactic-match-list-wrapper">
+        <div
+          className="galactic-match-list"
+          style={{
+            maxHeight: isExpanded ? 'none' : '318px',
+            overflow: 'hidden',
+            transition: 'max-height 0.5s ease-in-out',
+          }}
         >
-          <div className="galactic-match-card__meta">
-            <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
-            <span className="galactic-match-card__timestamp">
-              {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""}
-            </span>
-          </div>
+          {filteredItems.map((match) => {
+            const detailPath = match.path || "#";
+            const hasVideo = Boolean(match.videoUrl?.trim());
 
-          <div className="galactic-match-card__body">
-            <div className="galactic-match-card__team">
-              <img
-                src={getImageSource(match.leftLogo, placeholderTeam)}
-                alt={match.leftTeam}
-              />
-              <div>
-                <small>Left Team</small>
-                <h3>
-                  {match.leftTeamPath ? (
-                    <Link to={match.leftTeamPath}>{match.leftTeam}</Link>
-                  ) : (
-                    match.leftTeam
-                  )}
-                </h3>
-              </div>
-            </div>
-
-            <div className="galactic-match-card__center">
-              <span className="galactic-match-card__eyebrow">Match Focus</span>
-              <strong>{match.time || "TBA"}</strong>
-              <div className="galactic-match-card__versus">VS</div>
-            </div>
-
-            <div className="galactic-match-card__team is-right">
-              <img
-                src={getImageSource(match.rightLogo, placeholderTeam)}
-                alt={match.rightTeam}
-              />
-              <div>
-                <small>Right Team</small>
-                <h3>
-                  {match.rightTeamPath ? (
-                    <Link to={match.rightTeamPath}>{match.rightTeam}</Link>
-                  ) : (
-                    match.rightTeam
-                  )}
-                </h3>
-              </div>
-            </div>
-          </div>
-
-          <div className="galactic-match-card__actions">
-            {detailPath !== "#" ? (
-              <Link className="default-btn" to={detailPath}>
-                Lihat Detail<span />
-              </Link>
-            ) : (
-              <span className="galactic-match-card__muted">Detail belum tersedia</span>
-            )}
-
-            {hasVideo ? (
-              <button
-                className="galactic-match-card__video galactic-play-trigger"
-                data-video-title={`${match.leftTeam} vs ${match.rightTeam}`}
-                data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)}
-                type="button"
+            return (
+              <article
+                className="galactic-match-card"
+                key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}
               >
-                <i className="lab la-youtube" />
-                Highlights
-              </button>
-            ) : (
-              <span className="galactic-match-card__muted">Streaming menyusul</span>
-            )}
+                <div className="galactic-match-card__meta">
+                  <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
+                  <span className="galactic-match-card__timestamp">
+                    {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""}
+                  </span>
+                </div>
+
+                <div className="galactic-match-card__body">
+                  <div className="galactic-match-card__team">
+                    <img
+                      src={getImageSource(match.leftLogo, placeholderTeam)}
+                      alt={match.leftTeam}
+                    />
+                    <div>
+                      <small>Left Team</small>
+                      <h3>
+                        {match.leftTeamPath ? (
+                          <Link to={match.leftTeamPath}>{match.leftTeam}</Link>
+                        ) : (
+                          match.leftTeam
+                        )}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="galactic-match-card__center">
+                    <div className="galactic-match-card__filter" style={{ textAlign: 'center', marginBottom: '10px' }}>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'all' ? 1 : 0.5 }} onClick={() => setGenderFilter('all')}>All</span>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'male' ? 1 : 0.5 }} onClick={() => setGenderFilter('male')}>Male</span>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', cursor: 'pointer', opacity: genderFilter === 'female' ? 1 : 0.5 }} onClick={() => setGenderFilter('female')}>Female</span>
+                    </div>
+                    <span className="galactic-match-card__eyebrow">Match Focus</span>
+                    <strong>{match.time || "TBA"}</strong>
+                    <div className="galactic-match-card__versus">VS</div>
+                  </div>
+
+                  <div className="galactic-match-card__team is-right">
+                    <img
+                      src={getImageSource(match.rightLogo, placeholderTeam)}
+                      alt={match.rightTeam}
+                    />
+                    <div>
+                      <small>Right Team</small>
+                      <h3>
+                        {match.rightTeamPath ? (
+                          <Link to={match.rightTeamPath}>{match.rightTeam}</Link>
+                        ) : (
+                          match.rightTeam
+                        )}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="galactic-match-card__actions">
+                  {detailPath !== "#" ? (
+                    <Link className="default-btn" to={detailPath}>
+                      Lihat Detail<span />
+                    </Link>
+                  ) : (
+                    <span className="galactic-match-card__muted">Detail belum tersedia</span>
+                  )}
+
+                  {hasVideo ? (
+                    <button
+                      className="galactic-match-card__video galactic-play-trigger"
+                      data-video-title={`${match.leftTeam} vs ${match.rightTeam}`}
+                      data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)}
+                      type="button"
+                    >
+                      <i className="lab la-youtube" />
+                      Highlights
+                    </button>
+                  ) : (
+                    <span className="galactic-match-card__muted">Streaming menyusul</span>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        {filteredItems.length > 1 && (
+          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <button className="default-btn" onClick={toggleExpanded} type="button">
+              {isExpanded ? 'Show Less' : 'Show More'}<span />
+            </button>
           </div>
-        </article>
-      );
-    })}
-  </div>
-);
+        )}
+      </div>
+    </>
+  );
+};
 
 // const MatchList = ({ items }: { items: MatchItem[] }) => (
 //   <ul className="upcoming-matches">
