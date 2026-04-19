@@ -200,7 +200,8 @@ const MatchDetailsContent = ({
         description={`Bracket ${record?.contest?.gender || "open"} dari ${
           record?.tarkam?.title ||
           (record?.tarkam?.week ? `Tarkam Week ${record.tarkam.week}` : "turnamen resmi")
-        } dengan focus pada hasil pertandingan, winner, dan progression round.`}
+        } dengan focus pada hasil pertandingan,
+winner, dan progression round.`}
         className="luxury-page-header luxury-page-header--match"
         meta={
           <div className="luxury-match-hero-meta">
