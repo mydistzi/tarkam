@@ -657,6 +657,15 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   ];
   const maleSnapshot = getGenderSnapshot(detail, "male");
   const femaleSnapshot = getGenderSnapshot(detail, "female");
+  const currentMvpText =
+    activeGender === "male"
+      ? detail.mvp_m || "Belum ada MVP"
+      : activeGender === "female"
+      ? detail.mvp_f || "Belum ada MVP"
+      : `${detail.mvp_m ? `Male: ${detail.mvp_m}` : "Male: TBA"}${
+          detail.mvp_m && detail.mvp_f ? " | " : ""
+        }${detail.mvp_f ? `Female: ${detail.mvp_f}` : "Female: TBA"}`;
+
   const tabItems: Array<{ key: DetailTab; label: string }> = [
     { key: "overview", label: "Overview" },
     { key: "gender", label: "Divisi" },
@@ -1478,6 +1487,12 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       title="Daftar pemenang"
                       summary=""
                     />
+                    <div className="tarkam-list-item tarkam-list-item--highlight">
+                      <div className="tarkam-list-item__main">
+                        <strong>MVP</strong>
+                        <span>{currentMvpText}</span>
+                      </div>
+                    </div>
                     {filteredWinners.length ? (
                       filteredWinners.map((winner) => (
                         <div
