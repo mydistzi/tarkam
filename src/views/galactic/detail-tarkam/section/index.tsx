@@ -659,10 +659,10 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const femaleSnapshot = getGenderSnapshot(detail, "female");
   const currentMvpText =
     activeGender === "male"
-      ? detail.mvp_m || "Belum ada MVP"
+      ? detail.mvp_m || "Belum ada MVP "
       : activeGender === "female"
       ? detail.mvp_f || "Belum ada MVP"
-      : `${detail.mvp_m ? `Male: ${detail.mvp_m}` : "Male: TBA"}${
+      : `${detail.mvp_m ? `Male: ${detail.mvp_m} ` : "Male: TBA "}${
           detail.mvp_m && detail.mvp_f ? " | " : ""
         }${detail.mvp_f ? `Female: ${detail.mvp_f}` : "Female: TBA"}`;
 
