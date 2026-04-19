@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   try {
     // Clear cache if refresh query param is set
     if (req.query.refresh === 'true') {
-      console.log('🔄 Cache refresh requested');
       clearSitemapCache();
     }
 
@@ -13,7 +12,7 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.status(200).send(sitemap);
   } catch (error) {
-    console.error('Error serving sitemap:', error);
+    console.error('Sitemap error:', error.message);
     res.status(500).send('Error generating sitemap');
   }
 }
