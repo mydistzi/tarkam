@@ -974,11 +974,11 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             rightLogo: team2Record?.logo || "",
             group:
               tarkam?.title ||
-              (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : ""),
+              (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : (team1?.gender === team2?.gender ? `${team1?.gender} bracket` : 'Mixed bracket')),
             time: formatTimeLabel(contest.time) || "TBA",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
             path: buildMatchDetailPath(contest.id),
-            gender: contest.gender as "male" | "female" | "mixed" | undefined,
+            gender: contest.gender as "male" | "female" | "mixed" | undefined || (team1?.gender === team2?.gender ? team1?.gender as "male" | "female" : 'mixed'),
             leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
             rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
             videoUrl: stream?.url || stream?.embed || "",
