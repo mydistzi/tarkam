@@ -15,6 +15,10 @@
     "sitemap:test": "node sitemap-monitor.js test",
     "sitemap:validate": "node sitemap-monitor.js validate",
     "sitemap:monitor": "node sitemap-monitor.js monitor",
+    "deploy:vercel": "node deploy-vercel.js deploy",
+    "deploy:vercel:dev": "node deploy-vercel.js dev",
+    "deploy:vercel:env": "node deploy-vercel.js env",
+    "deploy:vercel:test": "node deploy-vercel.js test",
     "whatsapp:baileys": "node baileys/server.js",
     "start:services": "concurrently \"npm run dev\" \"npm run whatsapp:baileys\""
   },
