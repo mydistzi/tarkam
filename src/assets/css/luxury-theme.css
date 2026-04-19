@@ -379,7 +379,7 @@ body::before {
 .galactic-match-list {
   display: grid;
   gap: 22px;
-  max-height: 318px;
+  max-height: 360px;
   overflow: hidden;
   transition: max-height 0.5s ease-in-out;
 }
