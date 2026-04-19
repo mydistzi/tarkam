@@ -1273,7 +1273,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                   summary=""
                 />
 
-                <div className="row">
+                <div className="row tarkam-timelines-scroll">
                   {bundle.timelines.length ? (
                     bundle.timelines.map((relation) => {
                       const timeline = relation.timeline;
