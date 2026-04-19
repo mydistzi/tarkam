@@ -379,6 +379,55 @@ body::before {
 .galactic-match-list {
   display: grid;
   gap: 22px;
+  max-height: 318px;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.galactic-match-list.is-expanded {
+  max-height: none;
+}
+
+.galactic-match-list-wrapper {
+  width: 100%;
+}
+
+.galactic-match-list-header {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.galactic-match-list-header .galactic-match-card__eyebrow {
+  padding: 8px 14px;
+  min-width: 90px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.galactic-match-list-header .galactic-match-card__eyebrow:hover,
+.galactic-match-list-header .galactic-match-card__eyebrow.is-active {
+  opacity: 1;
+  transform: translateY(-1px);
+  background: rgba(255, 211, 122, 0.14);
+  border-color: rgba(255, 211, 122, 0.24);
+}
+
+.galactic-match-list-toggle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.galactic-match-card__center .galactic-match-card__eyebrow {
+  margin-bottom: 6px;
+}
+
+.galactic-match-card__center {
+  min-height: 180px;
 }
 
 .galactic-match-card {
@@ -748,6 +797,20 @@ body::before {
   .match-detail-team.is-right {
     flex-direction: column;
     text-align: center;
+  }
+
+  .galactic-match-list-header {
+    gap: 8px;
+  }
+
+  .galactic-match-list-header .galactic-match-card__eyebrow {
+    min-width: 0;
+    flex: 1 1 100%;
+    white-space: normal;
+  }
+
+  .galactic-match-list-toggle {
+    margin-top: 16px;
   }
 
   .match-detail-stat-grid {

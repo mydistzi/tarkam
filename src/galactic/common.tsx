@@ -682,7 +682,27 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
 
   const filteredItems = items.filter((match) => {
     if (genderFilter === 'all') return true;
-    return match.gender === genderFilter || match.gender === 'mixed';
+
+    if (match.gender) {
+      return match.gender === genderFilter || match.gender === 'mixed';
+    }
+
+    const label = String(match.group || '').toLowerCase();
+    if (genderFilter === 'male' && label.includes('male')) {
+      return true;
+    }
+    if (genderFilter === 'female' && label.includes('female')) {
+      return true;
+    }
+
+    if (genderFilter === 'male') {
+      return Boolean(match.malePath);
+    }
+    if (genderFilter === 'female') {
+      return Boolean(match.femalePath);
+    }
+
+    return true;
   });
 
   const toggleExpanded = () => setIsExpanded(!isExpanded);
@@ -690,14 +710,29 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
   return (
     <>
       <div className="galactic-match-list-wrapper">
-        <div
-          className="galactic-match-list"
-          style={{
-            maxHeight: isExpanded ? 'none' : '318px',
-            overflow: 'hidden',
-            transition: 'max-height 0.5s ease-in-out',
-          }}
-        >
+        <div className="galactic-match-list-header">
+          <span
+            className={`galactic-match-card__eyebrow${genderFilter === 'all' ? ' is-active' : ''}`}
+            onClick={() => setGenderFilter('all')}
+          >
+            All
+          </span>
+          <span
+            className={`galactic-match-card__eyebrow${genderFilter === 'male' ? ' is-active' : ''}`}
+            onClick={() => setGenderFilter('male')}
+          >
+            Male
+          </span>
+          <span
+            className={`galactic-match-card__eyebrow${genderFilter === 'female' ? ' is-active' : ''}`}
+            onClick={() => setGenderFilter('female')}
+          >
+            Female
+          </span>
+        </div>
+
+        <div className={`galactic-match-list${isExpanded ? ' is-expanded' : ''}`}>
+
           {filteredItems.map((match) => {
             const detailPath = match.path || "#";
             const hasVideo = Boolean(match.videoUrl?.trim());
@@ -707,11 +742,6 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
                 className="galactic-match-card"
                 key={`${match.id || "match"}-${match.leftTeam}-${match.rightTeam}`}
               >
-                <div className="galactic-match-card__filter" style={{ textAlign: 'center', marginBottom: '10px' }}>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'all' ? 1 : 0.5 }} onClick={() => setGenderFilter('all')}>All</span>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'male' ? 1 : 0.5 }} onClick={() => setGenderFilter('male')}>Male</span>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', cursor: 'pointer', opacity: genderFilter === 'female' ? 1 : 0.5 }} onClick={() => setGenderFilter('female')}>Female</span>
-                    </div>
                 <div className="galactic-match-card__meta">
                   <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
                   <span className="galactic-match-card__timestamp">
@@ -789,7 +819,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
           })}
         </div>
         {filteredItems.length > 1 && (
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div className="galactic-match-list-toggle">
             <button className="default-btn" onClick={toggleExpanded} type="button">
               {isExpanded ? 'Show Less' : 'Show More'}<span />
             </button>
