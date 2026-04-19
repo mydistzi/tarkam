@@ -550,18 +550,147 @@ const HeaderMarkup = ({
   </div>
 );
 };
-const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }) => (
-  <div id="popup-search-box" className={open ? "toggled" : ""} onClick={onClose}>
-    <div className="box-inner-wrap d-flex align-items-center" onClick={(event) => event.stopPropagation()}>
-      <form id="form" action="#" method="get" role="search" onSubmit={preventSubmit}>
-        <input id="popup-search" type="text" name="s" placeholder="Ketik kata kunci..." />
-        <button id="popup-search-button" type="submit" name="submit">
-          <i className="las la-search" />
-        </button>
-      </form>
+const SearchOverlay = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{
+    clubs: any[];
+    members: any[];
+    tarkams: any[];
+  }>({ clubs: [], members: [], tarkams: [] });
+  const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
+
+  const performSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults({ clubs: [], members: [], tarkams: [] });
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const [clubsRes, membersRes, tarkamsRes] = await Promise.allSettled([
+        Api.get("/clubs", { params: { search: query, limit: 5 } }),
+        Api.get("/members", { params: { search: query, limit: 5 } }),
+        Api.get("/tarkams", { params: { search: query, limit: 5 } }),
+      ]);
+
+      const clubs = clubsRes.status === "fulfilled" ? clubsRes.value.data?.data || [] : [];
+      const members = membersRes.status === "fulfilled" ? membersRes.value.data?.data || [] : [];
+      const tarkams = tarkamsRes.status === "fulfilled" ? tarkamsRes.value.data?.data || [] : [];
+
+      setSearchResults({ clubs, members, tarkams });
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults({ clubs: [], members: [], tarkams: [] });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    performSearch(searchQuery);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchQuery(value);
+    // Debounce search
+    const timeoutId = setTimeout(() => performSearch(value), 300);
+    return () => clearTimeout(timeoutId);
+  };
+
+  const handleResultClick = (type: string, item: any) => {
+    onClose();
+    setSearchQuery("");
+    setSearchResults({ clubs: [], members: [], tarkams: [] });
+
+    switch (type) {
+      case "club":
+        navigate(`/detail-klub/${item.slug}`);
+        break;
+      case "member":
+        navigate(`/detail-player/${item.slug}`);
+        break;
+      case "tarkam":
+        navigate(`/detail-tarkam/${item.id}`);
+        break;
+    }
+  };
+
+  return (
+    <div id="popup-search-box" className={open ? "toggled" : ""} onClick={onClose}>
+      <div className="box-inner-wrap" onClick={(event) => event.stopPropagation()}>
+        <form id="form" action="#" method="get" role="search" onSubmit={handleSubmit}>
+          <input
+            id="popup-search"
+            type="text"
+            name="s"
+            placeholder="Cari club code, club name, member nickname, atau tarkam week..."
+            value={searchQuery}
+            onChange={handleInputChange}
+            autoFocus={open}
+          />
+          <button id="popup-search-button" type="submit" name="submit" disabled={isSearching}>
+            <i className={isSearching ? "las la-spinner la-spin" : "las la-search"} />
+          </button>
+        </form>
+
+        {(searchResults.clubs.length > 0 || searchResults.members.length > 0 || searchResults.tarkams.length > 0) && (
+          <div className="search-results">
+            {searchResults.clubs.length > 0 && (
+              <div className="search-section">
+                <h4>Clubs</h4>
+                <ul>
+                  {searchResults.clubs.map((club) => (
+                    <li key={club.id} onClick={() => handleResultClick("club", club)}>
+                      <div className="search-result-item">
+                        <strong>{club.name}</strong>
+                        <span>Code: {club.code}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {searchResults.members.length > 0 && (
+              <div className="search-section">
+                <h4>Members</h4>
+                <ul>
+                  {searchResults.members.map((member) => (
+                    <li key={member.id} onClick={() => handleResultClick("member", member)}>
+                      <div className="search-result-item">
+                        <strong>{member.nickname}</strong>
+                        {member.club && <span>{member.club.name}</span>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {searchResults.tarkams.length > 0 && (
+              <div className="search-section">
+                <h4>Tarkams</h4>
+                <ul>
+                  {searchResults.tarkams.map((tarkam) => (
+                    <li key={tarkam.id} onClick={() => handleResultClick("tarkam", tarkam)}>
+                      <div className="search-result-item">
+                        <strong>{tarkam.title || `Week ${tarkam.week}`}</strong>
+                        <span>Week {tarkam.week}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 const Footer = ({
   logoUrl,
   siteName = brand.name,

@@ -743,4 +743,57 @@
     }
 }
 
+/*** Search Results ***/
+.search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-section h4 {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+.search-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-section li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-section li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.search-result-item strong {
+    color: #fff;
+    font-size: 16px;
+}
+
+.search-result-item span {
+    color: #bbb;
+    font-size: 14px;
+}
+
 
