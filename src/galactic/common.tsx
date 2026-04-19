@@ -375,7 +375,7 @@ function replaceWithBr(description: ReactNode) {
 }
 const renderPageHeaderDescription = (description?: ReactNode) =>
   description ? (
-    <p style={{ whiteSpace: "pre" }} dangerouslySetInnerHTML={{ __html: replaceWithBr(description) }} />
+    <p style={{ whiteSpace: "normal !important" }} dangerouslySetInnerHTML={{ __html: replaceWithBr(description) }} />
   ) : null;
 const PageHeader = ({
   eyebrow,

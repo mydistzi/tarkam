@@ -235,10 +235,14 @@ body::before {
 }
 
 .page-header-info {
-  max-width: 1120px;
+  /* max-width: 1120px; */
   min-height: 0;
   margin: 0 auto;
   padding: 36px 34px;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px; /* Sesuaikan padding untuk mobile */
+  padding-right: 15px;
   /* border-radius: 32px; */
   /* border: 1px solid var(--luxury-line); */
   /* background: */
@@ -624,7 +628,11 @@ body::before {
 }
 
 .luxury-page-header--match .page-header-info {
-  max-width: 1240px;
+  /* max-width: 1240px; */
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 15px; /* Sesuaikan padding untuk mobile */
+  padding-right: 15px;
 }
 
 .luxury-match-hero-meta {
