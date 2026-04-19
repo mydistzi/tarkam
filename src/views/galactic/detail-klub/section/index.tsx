@@ -112,10 +112,12 @@ const formatDateLabel = (value?: string) => {
 const formatRewardLabel = (value?: number) => {
   const numeric = Number(value ?? 0);
   return Number.isNaN(numeric)
-    ? "0"
+    ? "Rp0"
     : new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 0,
       }).format(numeric);
 };
 

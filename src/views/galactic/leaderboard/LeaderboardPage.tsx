@@ -215,10 +215,12 @@ const formatRounded = (value?: number | string | null) => {
 const formatReward = (value?: number | string | null) => {
   const numeric = Number(value ?? 0);
   return Number.isNaN(numeric)
-    ? "0"
+    ? "Rp0"
     : new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0, 
+        maximumFractionDigits: 0,
       }).format(numeric);
 };
 
@@ -227,7 +229,8 @@ const asMetric = (
   metricKey: LeaderboardConfig["metricKey"],
 ) => Number(entry[metricKey] ?? 0);
 
-const asReward = (entry: LeaderboardEntry) => Number(entry.total_reward ?? 0);
+const asReward = (entry: LeaderboardEntry) =>
+  Number(entry.session_reward ?? entry.total_reward ?? 0);
 
 const formatMetric = (value: number, format: MetricFormat) =>
   format === "currency" ? formatCurrency(value) : formatRounded(value);

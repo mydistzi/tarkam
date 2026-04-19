@@ -126,13 +126,15 @@ const fmtNumber = (value?: number | string | null) => {
 };
 
 const fmtReward = (value?: number | string | null) => {
-  if (value === undefined || value === null || value === "") return "0";
+  if (value === undefined || value === null || value === "") return "Rp0";
   const numeric = Number(value);
   return Number.isNaN(numeric)
     ? String(value)
     : new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 0,
       }).format(numeric);
 };
 
