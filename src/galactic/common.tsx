@@ -709,6 +709,11 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
               >
                 <div className="galactic-match-card__meta">
                   <span className="galactic-match-card__tag">{match.group || "Official Match"}</span>
+                  <div className="galactic-match-card__filter" style={{ textAlign: 'center', marginBottom: '10px' }}>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'all' ? 1 : 0.5 }} onClick={() => setGenderFilter('all')}>All</span>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'male' ? 1 : 0.5 }} onClick={() => setGenderFilter('male')}>Male</span>
+                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', cursor: 'pointer', opacity: genderFilter === 'female' ? 1 : 0.5 }} onClick={() => setGenderFilter('female')}>Female</span>
+                    </div>
                   <span className="galactic-match-card__timestamp">
                     {match.date || "Tanggal menyusul"}{match.time ? ` • ${match.time}` : ""}
                   </span>
@@ -733,11 +738,6 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
                   </div>
 
                   <div className="galactic-match-card__center">
-                    <div className="galactic-match-card__filter" style={{ textAlign: 'center', marginBottom: '10px' }}>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'all' ? 1 : 0.5 }} onClick={() => setGenderFilter('all')}>All</span>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', marginRight: '10px', cursor: 'pointer', opacity: genderFilter === 'male' ? 1 : 0.5 }} onClick={() => setGenderFilter('male')}>Male</span>
-                      <span className="galactic-match-card__eyebrow" style={{ display: 'inline-block', cursor: 'pointer', opacity: genderFilter === 'female' ? 1 : 0.5 }} onClick={() => setGenderFilter('female')}>Female</span>
-                    </div>
                     <span className="galactic-match-card__eyebrow">Match Focus</span>
                     <strong>{match.time || "TBA"}</strong>
                     <div className="galactic-match-card__versus">VS</div>
