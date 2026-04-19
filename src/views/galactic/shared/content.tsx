@@ -405,6 +405,7 @@ type MatchRecord = {
   id: number;
   item: MatchItem;
   date?: string;
+  gender?: string;
   contest?: ApiContest;
   team1?: ApiTeam;
   team2?: ApiTeam;
@@ -977,6 +978,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             time: formatTimeLabel(contest.time) || "TBA",
             date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
             path: buildMatchDetailPath(contest.id),
+            gender: contest.gender as "male" | "female" | "mixed" | undefined,
             leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
             rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
             videoUrl: stream?.url || stream?.embed || "",
