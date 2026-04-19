@@ -11,9 +11,6 @@ const UpcomingMatchesContent = ({ items }: { items: MatchItem[] }) => (
     <section className="matches-section padding-top">
       <div className="container">
         <MatchList items={items} />
-        <div className="text-center mt-50">
-          <a className="default-btn" href="#top">Muat Lagi Pertandingan</a>
-        </div>
       </div>
     </section>
   </>
