@@ -1,18 +1,9 @@
 
 # https://www.robotstxt.org/robotstxt.html
-User-agent: Mediapartners-Google
-User-agent: Googlebot
-User-agent: Googlebot-Image
-User-agent: Googlebot-news
-User-agent: AdsBot-Google
+User-agent: *
 Allow: /
 
 User-agent: Unnecessarybot
 Disallow: /
-Allow: /public/
-
-User-agent: *
-Disallow: /
-Allow: /public/
 
 Sitemap: https://tarkam.fun/sitemap.xml

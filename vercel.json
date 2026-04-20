@@ -5,7 +5,7 @@
     { "source": "/sitemap-plain.xml", "destination": "/api/sitemap-plain" },
     { "source": "/health-sitemap", "destination": "/api/health-sitemap" },
     {
-      "source": "/((?!api/|sitemap\\.xml$|sitemap-plain\\.xml$|health-sitemap$).*)",
+      "source": "/((?!api/|_next/|sitemap\\.xml|sitemap-plain\\.xml|health-sitemap|robots\\.txt|public/).*)",
       "destination": "/"
     }
   ]
