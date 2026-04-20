@@ -884,7 +884,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             team: team?.name || club?.name || "",
             teamLogo: club?.logo || "",
             about: tarkam?.description || "",
-            path: buildPlayerDetailPath(player.id),
+            path: buildPlayerDetailPath(member?.slug || player.id),
             teamPath: team ? buildTeamDetailPath(team.id) : undefined,
           };
 
