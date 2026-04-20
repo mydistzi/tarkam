@@ -27,6 +27,7 @@ import SEO from "@/components/SEO";
 import { useGalacticContent } from "@/views/galactic/shared";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { getCartRequestPayload } from "@/galactic/session";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import {
   brand,
   buildNewsTagPath,
@@ -2129,6 +2130,7 @@ const FaqAccordion = () => {
 const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) => {
   const location = useLocation();
   const { loading: contentLoading } = useGalacticContent();
+  const liveKey = useLiveUpdate();
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sticky, setSticky] = useState(false);
@@ -2281,7 +2283,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [liveKey]);
 
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
@@ -2404,7 +2406,10 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
               <strong>Pesan Sponsor</strong>
             </div>
             <div className="global-sponsor-marquee__viewport">
-              <div className="global-sponsor-marquee__track">
+              <div 
+                className="global-sponsor-marquee__track"
+                key={sponsorMarqueeMessages.map(item => item.key).join('-')}
+              >
                 {sponsorMarqueeLoop.map((item, index) => (
                   <div
                     className="global-sponsor-marquee__item"
