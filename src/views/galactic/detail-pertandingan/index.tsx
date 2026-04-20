@@ -16,10 +16,17 @@ const MatchDetailsPage = () => {
       )
     : [];
 
+  const pageTitle = record
+    ? `${record.item.leftTeam} vs ${record.item.rightTeam}`
+    : "Detail Pertandingan";
+  const pageDescription = record
+    ? `Detail pertandingan ${record.item.leftTeam} vs ${record.item.rightTeam}, jadwal dan statistik lengkap.`
+    : "Detail pertandingan";
+
   return (
     <PageShell
-      title="Detail Pertandingan"
-      description={record ? `${record.item.leftTeam} vs ${record.item.rightTeam} detail pertandingan.` : "Detail pertandingan"}
+      title={pageTitle}
+      description={pageDescription}
       image={record?.item.leftLogo}
     >
       <MatchDetailsContent record={record} relatedRecords={relatedRecords} />

@@ -18,10 +18,15 @@ const NewsDetailsPage = () => {
   const previousPath = currentIndex > 0 ? newsRecords[currentIndex - 1]?.item.path : undefined;
   const nextPath = currentIndex >= 0 && currentIndex < newsRecords.length - 1 ? newsRecords[currentIndex + 1]?.item.path : undefined;
 
+  const pageTitle = record?.item.title
+    ? `${record.item.title} | Artikel Tarkam`
+    : "Detail Artikel";
+  const pageDescription = record?.item.excerpt || "Baca artikel terbaru tentang Tarkam, event, dan berita community.";
+
   return (
     <PageShell
-      title="Detail Artikel"
-      description={record?.item.excerpt}
+      title={pageTitle}
+      description={pageDescription}
       type="article"
       image={record?.item.image}
       articleTag={record?.item.tags}

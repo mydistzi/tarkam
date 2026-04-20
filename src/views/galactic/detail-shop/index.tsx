@@ -36,8 +36,15 @@ const ShopDetailsPage = () => {
     );
   }
 
+  const pageTitle = record?.item.name
+    ? `${record.item.name} | Detail Toko`
+    : "Detail Toko";
+  const pageDescription = record?.item.description
+    ? record.item.description
+    : "Detail produk Tarkam lengkap dengan harga, spesifikasi, dan informasi toko.";
+
   return (
-    <PageShell title="Detail Toko" image={record?.item.image?.trim() || placeholderShop}>
+    <PageShell title={pageTitle} description={pageDescription} image={record?.item.image?.trim() || placeholderShop}>
       <ShopDetailsContent record={record} />
     </PageShell>
   );
