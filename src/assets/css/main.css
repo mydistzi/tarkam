@@ -985,7 +985,7 @@
 }
 
 .team-details-wrap {
-    background: var(--luxury-panel-gradient);
+    background: var(--luxury-glow-gold);
     border: var(--luxury-panel-border);
     clip-path: polygon(2% 0, 98% 0, 100% 50%, 98% 100%, 2% 100%, 0% 50%);
     height: 120px;
