@@ -209,11 +209,16 @@ body::before {
 .page-header::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background:
+  /* inset: 0; */
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--luxury-gold-soft) 0%, var(--luxury-gold) 50%, #ffd27814 100%);
+  /* background:
     radial-gradient(circle at 15% 20%, rgba(255, 210, 120, 0.14), transparent 20%),
     radial-gradient(circle at 86% 18%, rgba(137, 222, 255, 0.06), transparent 18%),
-    linear-gradient(180deg, rgba(7, 16, 31, 0.76), rgba(5, 12, 22, 0.28));
+    linear-gradient(180deg, rgba(7, 16, 31, 0.76), rgba(5, 12, 22, 0.28)); */
   pointer-events: none;
 }
 
