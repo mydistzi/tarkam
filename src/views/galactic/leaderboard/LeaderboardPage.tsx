@@ -242,9 +242,16 @@ const genderLabel = (value?: string) => {
   return value || "-";
 };
 
+const resolveClubLogoUrl = (logo?: string) => {
+  if (!logo) return undefined;
+  if (/^https?:\/\//i.test(logo)) return logo;
+  if (logo.startsWith('/')) return logo;
+  return `/storage/clubs/${logo}`;
+};
+
 const resolveAvatar = (variant: LeaderboardVariant, entry: LeaderboardEntry) => {
   if (variant === "club") {
-    return entry.club_logo || placeholderSquad;
+    return resolveClubLogoUrl(entry.club_logo) || placeholderSquad;
   }
 
   if (variant === "sponsor") {
