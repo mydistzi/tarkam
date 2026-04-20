@@ -122,10 +122,10 @@
   width: 96px;
   height: 96px;
   margin: 0 auto;
-  border-radius: 24px;
+  /* border-radius: 24px; */
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+  /* background: rgba(255, 255, 255, 0.06); */
+  /* box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24); */
 }
 
 .leaderboard-podium-card__avatar img {
@@ -383,7 +383,7 @@
   height: 56px;
   border-radius: 18px;
   object-fit: cover;
-  background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft));
+  /* background: linear-gradient(135deg, var(--luxury-gold), var(--luxury-gold-soft)); */
 }
 
 .leaderboard-table-row__name strong {
