@@ -76,9 +76,15 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
       window.dispatchEvent(new CustomEvent("tarkam:update", { detail: data }));
     };
 
-    channel.listen("BroadcastChanged", handleUpdate);
-    channel.listen("ResourceChanged", handleUpdate);
+    const handleResourceChanged = (data?: unknown) => {
+      console.log("[SocketProvider] Received ResourceChanged event:", data);
+      handleUpdate(data);
+    };
 
+    channel.listen("BroadcastChanged", handleUpdate);
+    channel.listen("ResourceChanged", handleResourceChanged);
+
+    console.log("[SocketProvider] Echo connected to broadcasts channel");
     setClient(echo);
 
     return () => {
@@ -93,6 +99,8 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
       const liveEvent = event as CustomEvent<LiveUpdateDetail>;
       const payload = liveEvent.detail ?? {};
       const resource = typeof payload.resource === "string" ? payload.resource : "";
+
+      console.log("[SocketProvider] Live event received:", { resource, action: payload.action, id: payload.id });
 
       setGlobalTick((current) => current + 1);
       if (resource) {

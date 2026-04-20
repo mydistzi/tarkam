@@ -2257,6 +2257,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     let cancelled = false;
 
     const loadSponsorMessages = async () => {
+      console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
         const response = await Api.get("/penyawer-leaderboards", {
           params: { limit: 10 },
@@ -2268,6 +2269,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         const records = Array.isArray(payload) ? payload : payload?.data ?? [];
 
         if (!cancelled) {
+          console.log("[GalacticChrome] Sponsor marquee updated:", records.length, "entries");
           setSponsorMarqueeEntries(records);
         }
       } catch (error) {
