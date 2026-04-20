@@ -10,7 +10,10 @@ type ApiEnvelope<T> = {
 };
 
 const PlayerDetailsPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["members", "aliases", "clubs"],
+    { fallbackIntervalMs: 45000 },
+  );
   const { slug } = useParams();
   const hasSlug = Boolean(slug?.trim());
   const [record, setRecord] = useState<MemberDetailPayload | null>(null);

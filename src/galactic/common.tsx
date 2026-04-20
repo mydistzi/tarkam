@@ -2130,7 +2130,10 @@ const FaqAccordion = () => {
 const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) => {
   const location = useLocation();
   const { loading: contentLoading } = useGalacticContent();
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["penyawers", "penyawer-leaderboards"],
+    { fallbackIntervalMs: 45000 },
+  );
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sticky, setSticky] = useState(false);

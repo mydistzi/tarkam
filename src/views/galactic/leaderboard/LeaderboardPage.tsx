@@ -343,7 +343,10 @@ const metricLeadLabel = (config: LeaderboardConfig) => {
 
 function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
   const config = configs[variant];
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["leaderboards", "penyawers", "players", "winners", "contests", "members", "clubs", "tarkams", "sessions"],
+    { fallbackIntervalMs: 30000 },
+  );
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

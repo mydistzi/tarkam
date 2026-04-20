@@ -217,7 +217,10 @@ const mapClubItem = (
 });
 
 const ClubDetailsPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["clubs", "members", "sessions", "timelines", "member-timeline"],
+    { fallbackIntervalMs: 45000 },
+  );
   const { slug } = useParams();
   const normalizedSlug = slug?.trim().toLowerCase();
   const invalidSlug = !normalizedSlug;

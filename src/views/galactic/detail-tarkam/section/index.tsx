@@ -435,7 +435,10 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "timelines", "penyawers"],
+    { fallbackIntervalMs: 30000 },
+  );
 
   useEffect(() => {
     if (!tarkamId) {

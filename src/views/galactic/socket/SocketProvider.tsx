@@ -22,6 +22,13 @@ type LiveUpdateContextValue = {
   resourceTicks: Record<string, number>;
 };
 
+type LiveUpdateTarget = string | string[] | undefined;
+
+type LiveUpdateOptions = {
+  fallbackIntervalMs?: number;
+  enabled?: boolean;
+};
+
 const SocketContext = createContext<SocketContextValue>(null);
 const LiveUpdateContext = createContext<LiveUpdateContextValue>({
   globalTick: 0,
@@ -52,6 +59,27 @@ const buildReverbConfig = (): EchoOptions<"reverb"> => {
     disableStats: true,
     authEndpoint: "/broadcasting/auth",
   };
+};
+
+const normalizeResourceKey = (value: string) =>
+  value.trim().toLowerCase().replace(/[\s_]+/g, "-");
+
+const buildResourceAliases = (target: LiveUpdateTarget) => {
+  const values = Array.isArray(target) ? target : target ? [target] : [];
+  const aliases = new Set<string>();
+
+  values.forEach((value) => {
+    const normalized = normalizeResourceKey(value);
+
+    if (!normalized) {
+      return;
+    }
+
+    aliases.add(normalized);
+    aliases.add(normalized.replace(/-/g, "_"));
+  });
+
+  return Array.from(aliases);
 };
 
 const SocketProvider = ({ children }: SocketProviderProps) => {
@@ -98,7 +126,9 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     const handleLiveEvent = (event: Event) => {
       const liveEvent = event as CustomEvent<LiveUpdateDetail>;
       const payload = liveEvent.detail ?? {};
-      const resource = typeof payload.resource === "string" ? payload.resource : "";
+      const resource = typeof payload.resource === "string"
+        ? normalizeResourceKey(payload.resource)
+        : "";
 
       console.log("[SocketProvider] Live event received:", { resource, action: payload.action, id: payload.id });
 
@@ -136,14 +166,38 @@ const useSocket = () => {
   return useContext(SocketContext);
 };
 
-const useLiveUpdate = (resource?: string) => {
+const useLiveUpdate = (
+  resource?: LiveUpdateTarget,
+  options: LiveUpdateOptions = {},
+) => {
   const { globalTick, resourceTicks } = useContext(LiveUpdateContext);
+  const {
+    fallbackIntervalMs = 0,
+    enabled = true,
+  } = options;
+  const [fallbackTick, setFallbackTick] = useState(0);
+
+  useEffect(() => {
+    if (!enabled || fallbackIntervalMs <= 0) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setFallbackTick((current) => current + 1);
+    }, fallbackIntervalMs);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [enabled, fallbackIntervalMs]);
 
   if (!resource) {
-    return globalTick;
+    return globalTick + fallbackTick;
   }
 
-  return resourceTicks[resource] ?? 0;
+  const aliases = buildResourceAliases(resource);
+
+  return aliases.reduce((total, alias) => total + (resourceTicks[alias] ?? 0), 0) + fallbackTick;
 };
 
 export { SocketProvider, useSocket, useLiveUpdate };

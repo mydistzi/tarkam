@@ -285,7 +285,10 @@ const TarkamScheduleContent = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [tarkams, setTarkams] = useState<ScheduleTarkam[]>([]);
   const [streamings, setStreamings] = useState<ScheduleStreaming[]>([]);
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "penyawers"],
+    { fallbackIntervalMs: 30000 },
+  );
 
   useEffect(() => {
     let cancelled = false;
