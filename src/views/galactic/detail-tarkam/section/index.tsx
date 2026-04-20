@@ -12,6 +12,7 @@ import {
   placeholderTeam,
   placeholderVideoThumb,
 } from "@/galactic/placeholders";
+import { useLiveUpdate } from "../../socket/SocketProvider";
 
 type GenderFilter = "all" | "male" | "female";
 type GenderKey = Exclude<GenderFilter, "all">;
@@ -434,6 +435,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
+  const liveKey = useLiveUpdate();
 
   useEffect(() => {
     if (!tarkamId) {
@@ -506,7 +508,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     return () => {
       cancelled = true;
     };
-  }, [tarkamId]);
+  }, [tarkamId, liveKey]);
 
   const detail = bundle.detail;
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Api from "@/api";
 import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { useLiveUpdate } from "../../socket/SocketProvider";
 
 type ApiEnvelope<T> = {
   data?: T;
@@ -284,6 +285,7 @@ const TarkamScheduleContent = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [tarkams, setTarkams] = useState<ScheduleTarkam[]>([]);
   const [streamings, setStreamings] = useState<ScheduleStreaming[]>([]);
+  const liveKey = useLiveUpdate();
 
   useEffect(() => {
     let cancelled = false;
@@ -322,7 +324,7 @@ const TarkamScheduleContent = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [liveKey]);
 
   const orderedTarkams = useMemo(
     () => [...tarkams].sort((left, right) => Number(right.id) - Number(left.id)),

@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Api from "@/api";
+import { useLiveUpdate } from "../socket/SocketProvider";
 
 type AuthUser = {
   id: number;
@@ -30,6 +31,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const liveKey = useLiveUpdate();
 
   useEffect(() => {
     const serialized = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -74,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     void validateSession();
-  }, [token]);
+  }, [token, liveKey]);
 
   const setAuthState = (nextToken: string, nextUser: AuthUser) => {
     setToken(nextToken);

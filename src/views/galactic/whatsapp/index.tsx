@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { PageHeader, PageShell } from "@/galactic/common";
 import { useGalacticContent } from "../shared";
+import { useLiveUpdate } from "../socket/SocketProvider";
 
 type WhatsAppSession = {
   provider: string;
@@ -30,6 +31,7 @@ const getAuthHeaders = () => {
 
 const WhatsAppPage = () => {
   const { meta } = useGalacticContent();
+  const liveKey = useLiveUpdate();
   const [session, setSession] = useState<WhatsAppSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +74,7 @@ const WhatsAppPage = () => {
 
   useEffect(() => {
     void fetchSession();
-  }, []);
+  }, [liveKey]);
 
   const handleSendMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
