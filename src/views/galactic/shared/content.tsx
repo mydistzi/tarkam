@@ -7,6 +7,7 @@ import {
 } from "react";
 import Api from "@/api";
 import { getCartQueryString } from "@/galactic/session";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import {
   placeholderPlayer,
   placeholderShop,
@@ -773,6 +774,7 @@ const buildFooterLinks = (_menuTree: GalacticMenuItem[], usefulls: ApiUsefull[])
 };
 
 export function GalacticDataProvider({ children }: { children: ReactNode }) {
+  const liveKey = useLiveUpdate();
   const [content, setContent] = useState<GalacticContentValue>(defaultContent);
 
   useEffect(() => {
@@ -1165,7 +1167,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, []);
+  }, [liveKey]);
 
   return <GalacticContentContext.Provider value={content}>{children}</GalacticContentContext.Provider>;
 }

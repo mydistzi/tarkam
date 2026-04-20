@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import { ClubsContent } from "./section";
 import { buildPlayerDetailPath } from "@/galactic/data";
@@ -216,6 +217,7 @@ const mapClubItem = (
 });
 
 const ClubDetailsPage = () => {
+  const liveKey = useLiveUpdate();
   const { slug } = useParams();
   const normalizedSlug = slug?.trim().toLowerCase();
   const invalidSlug = !normalizedSlug;
@@ -300,7 +302,7 @@ const ClubDetailsPage = () => {
       cancelled = true;
       window.cancelAnimationFrame(frameId);
     };
-  }, [normalizedSlug]);
+  }, [normalizedSlug, liveKey]);
 
   return (
     <PageShell title={record?.name || "Detail Klub"} image={record?.logo}>

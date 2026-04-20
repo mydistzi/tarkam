@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import {
   buildNewsCategoryPath,
@@ -79,6 +80,7 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
 };
 
 const NewsGridPage = () => {
+  const liveKey = useLiveUpdate();
   const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);
@@ -207,11 +209,11 @@ const NewsGridPage = () => {
     void fetchCategories();
     void fetchTags();
     void fetchRecentPosts();
-  }, [fetchCategories, fetchTags, fetchRecentPosts]);
+  }, [fetchCategories, fetchTags, fetchRecentPosts, liveKey]);
 
   useEffect(() => {
     void fetchPosts();
-  }, [fetchPosts]);
+  }, [fetchPosts, liveKey]);
 
   return (
     <PageShell title="Grid News">

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import { ShopGridContent, mapApiProductToProductItem, type ApiShopProduct } from "./section";
 import type { ProductItem } from "@/galactic/data";
@@ -19,6 +20,7 @@ type ApiCatalogCategory = {
 };
 
 const ShopGridPage = () => {
+  const liveKey = useLiveUpdate();
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [categories, setCategories] = useState<CatprodWidgetItem[]>([]);
   const [recentItems, setRecentItems] = useState<ProductItem[]>([]);
@@ -100,11 +102,11 @@ const ShopGridPage = () => {
   useEffect(() => {
     void fetchCategories();
     void fetchRecentItems();
-  }, [fetchCategories, fetchRecentItems]);
+  }, [fetchCategories, fetchRecentItems, liveKey]);
 
   useEffect(() => {
     void fetchProducts();
-  }, [fetchProducts]);
+  }, [fetchProducts, liveKey]);
 
   const resultText = useMemo(() => {
     const from = products.length ? (page - 1) * 9 + 1 : 0;

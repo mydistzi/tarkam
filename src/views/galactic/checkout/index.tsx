@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import { useGalacticContent } from "../shared";
 import { getCartQueryString } from "@/galactic/session";
@@ -7,6 +8,7 @@ import { CheckoutContent } from "./section";
 import type { CartRecord } from "../shared";
 
 const CheckoutPage = () => {
+  const liveKey = useLiveUpdate();
   const { cartItems, meta } = useGalacticContent();
   const [items, setItems] = useState<CartRecord[]>(cartItems);
 
@@ -35,7 +37,7 @@ const CheckoutPage = () => {
     return () => {
       active = false;
     };
-  }, []);
+  }, [liveKey]);
 
   return (
     <PageShell title="Pembayaran">

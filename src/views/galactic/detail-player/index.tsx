@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import { PlayerDetailsContent, type MemberDetailPayload } from "./section";
 
@@ -9,6 +10,7 @@ type ApiEnvelope<T> = {
 };
 
 const PlayerDetailsPage = () => {
+  const liveKey = useLiveUpdate();
   const { slug } = useParams();
   const hasSlug = Boolean(slug?.trim());
   const [record, setRecord] = useState<MemberDetailPayload | null>(null);
@@ -63,7 +65,7 @@ const PlayerDetailsPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [hasSlug, slug]);
+  }, [hasSlug, slug, liveKey]);
 
   const title = record?.nickname || record?.username || "Detail Member";
 

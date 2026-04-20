@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import {
   buildNewsCategoryPath,
@@ -80,6 +81,7 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
 };
 
 const NewsPage = () => {
+  const liveKey = useLiveUpdate();
   const navigate = useNavigate();
   const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -229,11 +231,11 @@ const NewsPage = () => {
     void fetchCategories();
     void fetchTags();
     void fetchRecentPosts();
-  }, [fetchCategories, fetchTags, fetchRecentPosts]);
+  }, [fetchCategories, fetchTags, fetchRecentPosts, liveKey]);
 
   useEffect(() => {
     void fetchPosts();
-  }, [fetchPosts]);
+  }, [fetchPosts, liveKey]);
 
   return (
     <PageShell title="News">

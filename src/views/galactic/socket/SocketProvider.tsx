@@ -8,9 +8,25 @@ declare global {
   }
 }
 
+type LiveUpdateDetail = {
+  resource?: string;
+  action?: string;
+  id?: string | number | null;
+  payload?: unknown;
+};
+
 type SocketContextValue = Echo<"reverb"> | null;
 
+type LiveUpdateContextValue = {
+  globalTick: number;
+  resourceTicks: Record<string, number>;
+};
+
 const SocketContext = createContext<SocketContextValue>(null);
+const LiveUpdateContext = createContext<LiveUpdateContextValue>({
+  globalTick: 0,
+  resourceTicks: {},
+});
 
 interface SocketProviderProps {
   children: ReactNode;
@@ -40,6 +56,8 @@ const buildReverbConfig = (): EchoOptions<"reverb"> => {
 
 const SocketProvider = ({ children }: SocketProviderProps) => {
   const [client, setClient] = useState<Echo<"reverb"> | null>(null);
+  const [globalTick, setGlobalTick] = useState(0);
+  const [resourceTicks, setResourceTicks] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const options = buildReverbConfig();
@@ -59,22 +77,65 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     };
 
     channel.listen("BroadcastChanged", handleUpdate);
+    channel.listen("ResourceChanged", handleUpdate);
 
     setClient(echo);
 
     return () => {
       channel.stopListening("BroadcastChanged");
+      channel.stopListening("ResourceChanged");
       echo.disconnect();
     };
   }, []);
 
-  const value = useMemo(() => client, [client]);
+  useEffect(() => {
+    const handleLiveEvent = (event: Event) => {
+      const liveEvent = event as CustomEvent<LiveUpdateDetail>;
+      const payload = liveEvent.detail ?? {};
+      const resource = typeof payload.resource === "string" ? payload.resource : "";
 
-  return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
+      setGlobalTick((current) => current + 1);
+      if (resource) {
+        setResourceTicks((current) => ({
+          ...current,
+          [resource]: (current[resource] ?? 0) + 1,
+        }));
+      }
+    };
+
+    window.addEventListener("tarkam:update", handleLiveEvent);
+    return () => {
+      window.removeEventListener("tarkam:update", handleLiveEvent);
+    };
+  }, []);
+
+  const socketValue = useMemo(() => client, [client]);
+  const liveUpdateValue = useMemo(
+    () => ({ globalTick, resourceTicks }),
+    [globalTick, resourceTicks],
+  );
+
+  return (
+    <SocketContext.Provider value={socketValue}>
+      <LiveUpdateContext.Provider value={liveUpdateValue}>
+        {children}
+      </LiveUpdateContext.Provider>
+    </SocketContext.Provider>
+  );
 };
 
 const useSocket = () => {
   return useContext(SocketContext);
 };
 
-export { SocketProvider, useSocket };
+const useLiveUpdate = (resource?: string) => {
+  const { globalTick, resourceTicks } = useContext(LiveUpdateContext);
+
+  if (!resource) {
+    return globalTick;
+  }
+
+  return resourceTicks[resource] ?? 0;
+};
+
+export { SocketProvider, useSocket, useLiveUpdate };

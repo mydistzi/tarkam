@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
 import { ClubsContent } from "./section";
 import type { ClubItem } from "@/galactic/data";
@@ -35,6 +36,7 @@ type ClubRegistryRecord = ClubItem & {
 };
 
 const ClubPage = () => {
+  const liveKey = useLiveUpdate();
   const [clubs, setClubs] = useState<ClubRegistryRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +91,7 @@ const ClubPage = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [liveKey]);
 
   return (
     <PageShell title="Direktori Klub Resmi" image={clubs[0]?.logo}>

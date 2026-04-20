@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
+import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 // import { PageHeader, PageShell } from "@/galactic/common";
 import { PageShell } from "@/galactic/common";
 import { buildClubDetailPath, buildPlayerDetailPath } from "@/galactic/data";
@@ -342,6 +343,7 @@ const metricLeadLabel = (config: LeaderboardConfig) => {
 
 function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
   const config = configs[variant];
+  const liveKey = useLiveUpdate();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -386,7 +388,7 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
     return () => {
       cancelled = true;
     };
-  }, [config.endpoint, config.params]);
+  }, [config.endpoint, config.params, liveKey]);
 
   const sortedEntries = useMemo(() => {
     return [...entries]
