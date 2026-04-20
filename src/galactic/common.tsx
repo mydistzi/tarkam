@@ -2410,7 +2410,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
                     className="global-sponsor-marquee__item"
                     key={`${item.key}-${index}`}
                   >
-                    <span className="global-sponsor-marquee__tag">ZETH</span>
+                    <span className="global-sponsor-marquee__tag">{item.sponsorName}</span>
                     <p>{item.sponsorMessage}</p>
                     <small>{item.amount}</small>
                   </div>
