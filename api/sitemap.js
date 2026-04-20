@@ -1,18 +1,13 @@
-import { generateSitemapXml, clearSitemapCache } from '../lib/sitemap.js';
+import { generateSitemapXml } from '../lib/sitemap.js';
 
 export default async function handler(req, res) {
   try {
-    // Clear cache if refresh query param is set
-    if (req.query.refresh === 'true') {
-      clearSitemapCache();
-    }
-
     const sitemap = await generateSitemapXml();
     res.setHeader('Content-Type', 'text/xml; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.setHeader('Cache-Control', 'public, max-age=300');
     res.status(200).send(sitemap);
   } catch (error) {
-    console.error('Sitemap error:', error.message);
+    console.error('Sitemap error:', error);
     res.status(500).send('Error generating sitemap');
   }
 }
