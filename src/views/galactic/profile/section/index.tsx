@@ -273,7 +273,7 @@ export const ProfileContent = () => {
     <section className="checkout-section padding-top">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-6 sm-padding">
+            <div className="col-lg-12 sm-padding">
         {!nicknameEntered ? (
           // Step 1: Enter Nickname
             <form onSubmit={handleNicknameSubmit} className="checkout-form-wrap">
