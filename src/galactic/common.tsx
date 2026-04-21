@@ -2361,7 +2361,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   const sponsorMarqueeMessages = sponsorMarqueeEntries
     .map((entry) => {
       const sponsorMessage = resolveSponsorMarqueeMessage(entry);
-      if (!sponsorMessage && entry.showing === "yes") {
+      if (!sponsorMessage && entry.showing === "no") {
         return null;
       }
 
