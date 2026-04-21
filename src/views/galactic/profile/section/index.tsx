@@ -267,7 +267,7 @@ export const ProfileContent = () => {
   return (
     <PageShell title="Sinkronisasi Profil">
       <PageHeader
-        eyebrow="Profil Saya"
+        eyebrow="Halaman Profil"
         title="Sinkronisasi Profil Anda"
         description="Perbarui informasi profil Anda untuk memastikan semua data akurat."
       />
@@ -278,28 +278,28 @@ export const ProfileContent = () => {
         {!nicknameEntered ? (
           // Step 1: Enter Nickname
             <form onSubmit={handleNicknameSubmit} className="checkout-form-wrap">
-              <h2>Profil</h2>
+              <h2>Detail Profil</h2>
               <div className="checkout-form mb-30">
                   <div className="form-field">
                 <input
                   type="text"
+                  id="name"
+                  name="name"
+                  autoComplete="name"
                   value={tempNickname}
                   onChange={(e) => setTempNickname(e.target.value)}
-                  placeholder="Masukkan nickname favorit Anda"
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  placeholder="Masukkan nickname Anda"
+                  className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
                   disabled={submitting}
                 />
               </div>
 
               <div className="form-field">
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Gender <span className="text-red-500">*</span>
-                </label>
                 <select
                   name="gender"
                   value={formData.gender || "male"}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
                   disabled={submitting}
                 >
                   <option value="male">Male</option>
@@ -311,7 +311,7 @@ export const ProfileContent = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
+                className="default-btn transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
               >
                 {submitting ? "Menyimpan..." : "Lanjutkan"}
               </button>
