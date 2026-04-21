@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { useLiveUpdate } from "../../socket/SocketProvider";
-import { useAuth } from "../../auth/AuthProvider";
 
 type ApiEnvelope<T> = {
   data?: T;
@@ -203,12 +202,13 @@ const ScheduleCard = ({
   streamings: ScheduleStreaming[];
 }) => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
   const [registering, setRegistering] = useState<"male" | "female" | null>(null);
   const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
 
   const handleRegister = async (gender: "male" | "female") => {
-    if (!isAuthenticated) {
+    // Check if user has a valid token (more reliable than isAuthenticated during initial load)
+    const authData = localStorage.getItem("tarkam_auth_user");
+    if (!authData) {
       navigate("/signin", { state: { from: location }, replace: false });
       return;
     }
@@ -227,9 +227,9 @@ const ScheduleCard = ({
           "success"
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       const message =
-        error.response?.data?.message ||
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         "Gagal melakukan registrasi. Silakan coba lagi.";
       Swal.fire("Error", message, "error");
     } finally {

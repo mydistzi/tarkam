@@ -13,6 +13,7 @@ type AuthContextValue = {
   user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   signIn: (email: string, password: string) => Promise<AuthUser>;
   signUp: (name: string, email: string, password: string, passwordConfirmation: string) => Promise<AuthUser>;
   signOut: () => Promise<void>;
@@ -30,6 +31,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const serialized = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -40,7 +42,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(stored.token);
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
+        setIsLoading(false);
       }
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
@@ -66,10 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setUser(nextUser);
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token, user: nextUser }));
+        setIsLoading(false);
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
         setUser(null);
         setToken(null);
+        setIsLoading(false);
       }
     };
 
@@ -149,11 +156,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       token,
       isAuthenticated: Boolean(user && token),
+      isLoading,
       signIn,
       signUp,
       signOut,
     }),
-    [user, token, signIn, signUp, signOut],
+    [user, token, isLoading, signIn, signUp, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
