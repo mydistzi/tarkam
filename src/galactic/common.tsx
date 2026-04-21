@@ -105,6 +105,7 @@ type SponsorMarqueeEntry = {
   total_amount?: number | string;
   sponsor_message?: string;
   pesan?: string;
+  showing?: string;
 };
 type ApiEnvelope<T> = {
   data?: T;
@@ -2360,7 +2361,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   const sponsorMarqueeMessages = sponsorMarqueeEntries
     .map((entry) => {
       const sponsorMessage = resolveSponsorMarqueeMessage(entry);
-      if (!sponsorMessage) {
+      if (!sponsorMessage && entry.showing === "yes") {
         return null;
       }
 

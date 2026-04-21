@@ -142,6 +142,7 @@ type ApiPenyawer = {
   logo?: string;
   image?: string;
   url?: string;
+  showing?: string;
   detail?: string;
   description?: string;
   facebook?: string;
@@ -208,6 +209,7 @@ type ApiClub = {
   slug?: string;
   name?: string;
   logo?: string;
+  slogan?: string;
   facebook?: string;
   instagram?: string;
   tiktok?: string;
@@ -233,6 +235,7 @@ type ApiMember = {
   latitude?: number;
   longitude?: number;
   picture_url?: string;
+  image_sponsor?: string;
   tier?: string;
   city?: string;
   club_fk?: number | string | null;
@@ -242,6 +245,7 @@ type ApiMember = {
   points?: number;
   status?: string;
   alias?: ApiAlias;
+  guild_position?: string;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
@@ -290,6 +294,7 @@ type ApiTeam = {
   tarkam_fk?: number | string | null;
   date?: string;
   time?: string;
+  logo?: string;
   member1?: ApiMember;
   member2?: ApiMember;
   member3?: ApiMember;
@@ -352,6 +357,7 @@ type ApiContest = {
   tarkam_fk?: number | string | null;
   gender?: string;
   time?: string;
+  streem?: string;
   tarkam?: ApiTarkam;
   created_at?: string;
   updated_at?: string;
