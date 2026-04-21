@@ -24,7 +24,6 @@ type ApiResponse<T> = {
 export const ProfileDropdown = () => {
   const navigate = useNavigate();
   const { signOut, isAuthenticated } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
   const [memberProfile, setMemberProfile] = useState<MemberProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const refetchRef = useRef<(() => Promise<void>) | null>(null);
@@ -71,7 +70,6 @@ export const ProfileDropdown = () => {
   }, []);
 
   const handleLogout = async () => {
-    setIsOpen(false);
     await signOut();
     navigate("/", { replace: true });
   };
@@ -85,121 +83,20 @@ export const ProfileDropdown = () => {
   }
 
   return (
-    <div className="profile-dropdown-container" style={{ position: "relative", display: "inline-block" }}>
-      <button
-        className="profile-dropdown-trigger"
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          color: "white",
-          fontSize: "0.9rem",
-        }}
-      >
-        {memberProfile.picture_url && (
-          <img
-            src={memberProfile.picture_url}
-            alt={memberProfile.nickname}
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        )}
-        <span>{memberProfile.nickname}</span>
-        <i className={`las ${isOpen ? "la-chevron-up" : "la-chevron-down"}`} />
-      </button>
-
-      {isOpen && (
-        <div
-          className="profile-dropdown-menu"
-          style={{
-            position: "absolute",
-            top: "100%",
-            right: 0,
-            marginTop: "8px",
-            background: "#1f2937",
-            border: "1px solid #374151",
-            borderRadius: "8px",
-            minWidth: "200px",
-            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
-            zIndex: 1000,
-          }}
-        >
-          <Link
-            to="/profile"
-            className="dropdown-item"
-            onClick={() => setIsOpen(false)}
-            style={{
-              display: "block",
-              padding: "12px 16px",
-              color: "white",
-              textDecoration: "none",
-              fontSize: "0.9rem",
-              borderBottom: "1px solid #374151",
-              transition: "background-color 0.2s",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)")
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-          >
-            <i className="las la-user" /> Profil Saya
-          </Link>
-
+    <div className="user-profile-dropdown">
+      <div className="profile-info"><span>{memberProfile.nickname}</span></div>
+      <div className="profile-image"><img src={memberProfile.picture_url} alt={memberProfile.nickname} /></div>
+      <div className="dropdown-content">
+          <Link to="/profile"><i className="fa fa-user"></i> Profil</Link>
           {memberProfile.guild_position === "leader" && memberProfile.club && (
-            <Link
-              to="/club-profile"
-              className="dropdown-item"
-              onClick={() => setIsOpen(false)}
-              style={{
-                display: "block",
-                padding: "12px 16px",
-                color: "white",
-                textDecoration: "none",
-                fontSize: "0.9rem",
-                borderBottom: "1px solid #374151",
-                transition: "background-color 0.2s",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)")
-              }
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-            >
-              <i className="las la-cog" /> Club Management
-            </Link>
+            <Link to="/club-profile"><i className="fa fa-users"></i> Klub</Link>
           )}
-
-          <button
-            onClick={handleLogout}
-            className="dropdown-item"
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "12px 16px",
-              color: "white",
-              background: "none",
-              border: "none",
-              textAlign: "left",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              transition: "background-color 0.2s",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)")
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-          >
-            <i className="las la-sign-out-alt" /> Logout
-          </button>
-        </div>
-      )}
+          <hr style={{ borderTop: "1px solid #333", margin: "0" }} />
+          <a onClick={(e) => {
+            e.preventDefault();
+            handleLogout();
+          }}><i className="las la-sign-out-alt"></i> Logout</a>
+      </div>
     </div>
   );
 };

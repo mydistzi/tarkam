@@ -12,7 +12,7 @@ const SignInPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || "/checkout";
+  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname || "/profile";
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
