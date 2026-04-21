@@ -404,6 +404,7 @@ const ClubsContent = ({
                   Basis komando {record.name || "klub ini"} menampilkan seluruh identitas klub,
                   performa roster, relasi sesi, dan history timeline dalam satu layar.
                 </p>
+                {record.slogan ? `<span>${record.slogan}</span>` : ""}
               </div>
               <div className="club-orbit-card__footer">
                 <span className="club-chip">{getStatusLabel(activeMembers > 0 ? "active" : "inactive")}</span>

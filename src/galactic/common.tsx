@@ -1269,7 +1269,7 @@ const SponsorGrid = ({ items = [] }: { items?: SponsorItem[] }) => (
     {items.map((sponsor, index) => (
       <div className="sponsor-item" key={`sponsor-grid-${index + 1}`}>
         <a href={sponsor.url || "#"} rel="noreferrer" target={sponsor.url?.startsWith("http") ? "_blank" : undefined}>
-          <img src={getImageSource(sponsor.image, placeholderSponsor)} alt={sponsor.name} />
+          <img src={getImageSource(sponsor.memberImage, placeholderSponsor)} alt={sponsor.name} />
         </a>
       </div>
     ))}
@@ -1304,7 +1304,7 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
                 <div className="testimonial-item sponsor-testimonial-card">
                   <div className="testi-thumb">
                     <img
-                      src={getImageSource(sponsor.memberImage, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=0c0c35`)}
+                      src={getImageSource(sponsor.memberPicture, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=0c0c35`)}
                       alt={sponsor.memberNickname || sponsor.name}
                     />
                     <h3>{sponsor.name}

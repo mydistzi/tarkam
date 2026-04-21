@@ -262,6 +262,7 @@ export type ClubItem = {
   slug?: string;
   name?: string;
   logo?: string;
+  slogan?: string;
   level?: string;
   points?: number;
   lifetimePoints?: number;
@@ -321,6 +322,7 @@ export type SponsorItem = {
   amount?: number;
   message?: string;
   detail?: string;
+  memberPicture?: string;
   memberImage?: string;
   memberNickname?: string;
   socialLinks?: Array<{ icon: string; href: string }>;

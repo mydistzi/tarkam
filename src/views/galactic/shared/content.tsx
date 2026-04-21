@@ -968,7 +968,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
         });
 
         const matchRecords: MatchRecord[] = contests.map((contest) => {
-          const stream = streamings.find((item) => item.id === contest.id);
+        //   const stream = streamings.find((item) => item.id === contest.id);
           const team1 = normalizeId(contest.team1_fk) != null ? teamMap.get(normalizeId(contest.team1_fk)!) : undefined;
           const team2 = normalizeId(contest.team2_fk) != null ? teamMap.get(normalizeId(contest.team2_fk)!) : undefined;
           const team1Record = teamRecords.find((item) => item.id === team1?.id);
@@ -981,9 +981,9 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           const item: MatchItem = {
             id: contest.id,
             leftTeam: team1?.name || `Team ${contest.team1_fk ?? contest.id}`,
-            leftLogo: team1Record?.logo || "",
+            leftLogo: team1?.logo || team1Record?.logo || "",
             rightTeam: team2?.name || `Team ${contest.team2_fk ?? contest.id}`,
-            rightLogo: team2Record?.logo || "",
+            rightLogo: team2?.logo || team2Record?.logo || "",
             group:
               tarkam?.title ||
               (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : (team1?.gender === team2?.gender ? `${team1?.gender} bracket` : 'Mixed bracket')),
@@ -993,7 +993,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             gender: contest.gender as "male" | "female" | "mixed" | undefined || (team1?.gender === team2?.gender ? team1?.gender as "male" | "female" : 'mixed'),
             leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
             rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
-            videoUrl: stream?.url || stream?.embed || "",
+            videoUrl: contest?.streem || "",
           };
 
           return {
