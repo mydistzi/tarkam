@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Api from "@/api";
@@ -43,7 +43,6 @@ export const ProfileContent = () => {
   const [submitting, setSubmitting] = useState(false);
   const [nicknameInput, setNicknameInput] = useState("");
   const [profile, setProfile] = useState<MemberProfile | null>(() => {
-    // Try to load from localStorage on initial render
     try {
       const saved = localStorage.getItem("tarkam_profile");
       return saved ? JSON.parse(saved) : null;
@@ -51,9 +50,10 @@ export const ProfileContent = () => {
       return null;
     }
   });
+
   const [formData, setFormData] = useState<Partial<MemberProfile>>({
     username: "",
-    gender: "",
+    gender: "male",
     latitude: 0,
     longitude: 0,
     picture_url: "",
@@ -63,100 +63,71 @@ export const ProfileContent = () => {
     instagram: "",
     tiktok: "",
   });
+
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [sponsorFile, setSponsorFile] = useState<File | null>(null);
 
-  // Save profile to localStorage whenever it changes
+  // Helper to sync form with profile data
+  const syncFormWithProfile = useCallback((data: MemberProfile) => {
+    setFormData({
+      username: data.username || "",
+      gender: data.gender || "male",
+      latitude: data.latitude || 0,
+      longitude: data.longitude || 0,
+      picture_url: data.picture_url || "",
+      image_sponsor: data.image_sponsor || "",
+      city: data.city || "",
+      facebook: data.facebook || "",
+      instagram: data.instagram || "",
+      tiktok: data.tiktok || "",
+    });
+    if (data.nickname) setNicknameInput(data.nickname);
+  }, []);
+
+  // Effect for localStorage and initial sync
   useEffect(() => {
     if (profile) {
       localStorage.setItem("tarkam_profile", JSON.stringify(profile));
+      // Only sync if form is empty/initial
+      if (!formData.username && profile.username) {
+        syncFormWithProfile(profile);
+      }
     } else {
       localStorage.removeItem("tarkam_profile");
     }
-  }, [profile]);
+  }, [profile, syncFormWithProfile]);
 
-  // Save profile to localStorage whenever it changes
+  // Auth Guard
   useEffect(() => {
-    if (profile) {
-      localStorage.setItem("tarkam_profile", JSON.stringify(profile));
-    } else {
-      localStorage.removeItem("tarkam_profile");
-    }
-  }, [profile]);
-
-  // Check authentication - wait until auth validation is complete
-  useEffect(() => {
-    // Don't redirect while auth is still loading
-    if (authLoading) {
-      return;
-    }
-
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       navigate("/signin", { replace: true });
-      return;
     }
   }, [isAuthenticated, authLoading, navigate]);
 
-  // Save profile to localStorage whenever it changes
+  // Load profile from API
   useEffect(() => {
-    if (profile) {
-      localStorage.setItem("tarkam_profile", JSON.stringify(profile));
-    } else {
-      localStorage.removeItem("tarkam_profile");
-    }
-  }, [profile]);
-
-  useEffect(() => {
-    if (authLoading || !isAuthenticated) {
-      return;
-    }
-
-    // Only load if we don't have profile data yet
-    if (profile !== null) {
-      return;
-    }
+    if (authLoading || !isAuthenticated || profile) return;
 
     const loadExistingProfile = async () => {
       try {
-        console.log("Attempting to auto-load existing profile...");
         setLoading(true);
-        const response = await Api.get<ApiResponse<MemberProfile>>(
-          "/members/profile/me",
-        );
-
+        const response = await Api.get<ApiResponse<MemberProfile>>("/members/profile/me");
         if (response.data?.success && response.data?.data) {
-          const memberData = response.data.data;
-          console.log("Auto-loaded existing profile:", memberData);
-          setProfile(memberData);
-          setFormData({
-            username: memberData.username || "",
-            gender: memberData.gender || "male",
-            latitude: memberData.latitude || 0,
-            longitude: memberData.longitude || 0,
-            picture_url: memberData.picture_url || "",
-            image_sponsor: memberData.image_sponsor || "",
-            city: memberData.city || "",
-            facebook: memberData.facebook || "",
-            instagram: memberData.instagram || "",
-            tiktok: memberData.tiktok || "",
-          });
-        } else {
-          console.log("No existing profile found, response:", response.data);
+          setProfile(response.data.data);
+          syncFormWithProfile(response.data.data);
         }
       } catch (error) {
-        console.log("No existing profile found, error:", error);
-        // Don't show error, just leave profile as null so user can input nickname
+        console.error("No active profile session:", error);
       } finally {
         setLoading(false);
       }
     };
 
     loadExistingProfile();
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, authLoading, profile, syncFormWithProfile]);
 
   const handleSyncProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!nicknameInput.trim()) {
       Swal.fire("Error", "Nickname tidak boleh kosong", "error");
       return;
@@ -166,141 +137,76 @@ export const ProfileContent = () => {
       setLoading(true);
       const response = await Api.post<ApiResponse<MemberProfile>>(
         "/members/sync-profile",
-        { nickname: nicknameInput.trim() },
+        { nickname: nicknameInput.trim() }
       );
 
       if (response.data?.success && response.data?.data) {
         const memberData = response.data.data;
-        console.log("Sync successful, member data:", memberData);
         setProfile(memberData);
-        setFormData({
-          username: memberData.username || "",
-          gender: memberData.gender || "male",
-          latitude: memberData.latitude || 0,
-          longitude: memberData.longitude || 0,
-          picture_url: memberData.picture_url || "",
-          image_sponsor: memberData.image_sponsor || "",
-          city: memberData.city || "",
-          facebook: memberData.facebook || "",
-          instagram: memberData.instagram || "",
-          tiktok: memberData.tiktok || "",
-        });
-        Swal.fire("Sukses", "Profil ditemukan dan disinkronisasi", "success");
-
-        // Trigger ProfileDropdown refetch
+        syncFormWithProfile(memberData);
+        Swal.fire("Sukses", "Profil berhasil disinkronisasi", "success");
         await refetchProfileDropdown();
-
-        // Dispatch event for other components
         window.dispatchEvent(new Event("profile-sync-complete"));
       } else {
-        console.log("Sync failed, response:", response.data);
         Swal.fire("Error", response.data?.message || "Sync gagal", "error");
-        setProfile(null);
       }
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || "Gagal menemukan profil. Silakan coba lagi.";
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Gagal sinkronisasi.";
       Swal.fire("Error", message, "error");
-      setProfile(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        name === "latitude" || name === "longitude" ? parseFloat(value) : value,
+      [name]: name === "latitude" || name === "longitude" ? parseFloat(value) || 0 : value,
     }));
   };
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: "picture" | "sponsor",
-  ) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "picture" | "sponsor") => {
     const file = e.target.files?.[0];
     if (file) {
-      if (type === "picture") {
-        setPictureFile(file);
-      } else {
-        setSponsorFile(file);
-      }
+      type === "picture" ? setPictureFile(file) : setSponsorFile(file);
     }
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!profile?.nickname) {
-      Swal.fire("Error", "Nickname tidak ditemukan", "error");
-      return;
-    }
+    if (!profile?.nickname) return;
 
     try {
       setSubmitting(true);
+      const data = new FormData();
+      data.append("username", formData.username || "");
+      data.append("nickname", profile.nickname);
+      data.append("gender", formData.gender || "male");
+      data.append("latitude", String(formData.latitude || 0));
+      data.append("longitude", String(formData.longitude || 0));
+      data.append("city", formData.city || "");
+      data.append("facebook", formData.facebook || "");
+      data.append("instagram", formData.instagram || "");
+      data.append("tiktok", formData.tiktok || "");
 
-      const formDataToSend = new FormData();
-      formDataToSend.append("username", formData.username || "");
-      formDataToSend.append("nickname", profile.nickname);
-      formDataToSend.append("gender", formData.gender || "");
-      formDataToSend.append("latitude", String(formData.latitude || 0));
-      formDataToSend.append("longitude", String(formData.longitude || 0));
-      formDataToSend.append("city", formData.city || "");
-      formDataToSend.append("facebook", formData.facebook || "");
-      formDataToSend.append("instagram", formData.instagram || "");
-      formDataToSend.append("tiktok", formData.tiktok || "");
+      if (pictureFile) data.append("picture_url", pictureFile);
+      if (sponsorFile) data.append("image_sponsor", sponsorFile);
 
-      if (pictureFile) {
-        formDataToSend.append("picture_url", pictureFile);
-      }
-
-      if (sponsorFile) {
-        formDataToSend.append("image_sponsor", sponsorFile);
-      }
-
-      const response = await Api.put<ApiResponse<MemberProfile>>(
-        `/members/${profile.nickname}`,
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
+      const response = await Api.put<ApiResponse<MemberProfile>>(`/members/${profile.nickname}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       if (response.data?.success && response.data?.data) {
         setProfile(response.data.data);
-        setFormData({
-          username: response.data.data.username || "",
-          gender: response.data.data.gender || "",
-          latitude: response.data.data.latitude || 0,
-          longitude: response.data.data.longitude || 0,
-          picture_url: response.data.data.picture_url || "",
-          image_sponsor: response.data.data.image_sponsor || "",
-          city: response.data.data.city || "",
-          facebook: response.data.data.facebook || "",
-          instagram: response.data.data.instagram || "",
-          tiktok: response.data.data.tiktok || "",
-        });
+        syncFormWithProfile(response.data.data);
         setPictureFile(null);
         setSponsorFile(null);
-
         Swal.fire("Sukses", "Profil berhasil diupdate", "success");
-
-        // Trigger ProfileDropdown refetch to update photo/name if changed
         await refetchProfileDropdown();
-        window.dispatchEvent(new Event("profile-sync-complete"));
       }
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response
-          ?.data?.message || "Gagal mengupdate profil. Silakan coba lagi.";
-      Swal.fire("Error", message, "error");
+    } catch (error: any) {
+      Swal.fire("Error", error.response?.data?.message || "Gagal update.", "error");
     } finally {
       setSubmitting(false);
     }
@@ -319,29 +225,20 @@ export const ProfileContent = () => {
       <PageHeader
         eyebrow="Profil"
         title="Profil Saya"
-        description="Masukan nickname Anda untuk sinkronisasi profil"
+        description={profile ? "Update informasi profil Anda" : "Masukan nickname Anda untuk sinkronisasi"}
       />
       <section className="checkout-section padding-top">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-8 sm-padding">
+              
               {!profile ? (
-                // Input Nickname
-                <form
-                  onSubmit={handleSyncProfile}
-                  className="checkout-form-wrap"
-                >
+                /* FORM SINKRONISASI */
+                <form onSubmit={handleSyncProfile} className="checkout-form-wrap">
                   <h2>Sinkronisasi Profil</h2>
-                  <p
-                    style={{
-                      color: "rgba(255,255,255,0.7)",
-                      marginBottom: "24px",
-                    }}
-                  >
-                    Masukan nickname Anda untuk menemukan dan sinkronisasi
-                    profil member
+                  <p style={{ color: "rgba(255,255,255,0.7)", marginBottom: "24px" }}>
+                    Masukan nickname Anda untuk menemukan profil member.
                   </p>
-
                   <div className="checkout-form mb-30">
                     <div className="form-field">
                       <label style={{ color: "rgba(255,255,255,0.8)" }}>
@@ -351,344 +248,90 @@ export const ProfileContent = () => {
                         type="text"
                         value={nicknameInput}
                         onChange={(e) => setNicknameInput(e.target.value)}
-                        placeholder="Masukan nickname Anda"
+                        placeholder="Contoh: BangTarkam77"
                         required
-                        style={{
-                          backgroundColor: "rgba(255,255,255,0.1)",
-                          border: "1px solid rgba(255,255,255,0.2)",
-                          color: "white",
-                          padding: "12px",
-                          borderRadius: "4px",
-                        }}
+                        className="form-control"
+                        style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "white" }}
                       />
                     </div>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "24px",
-                      }}
-                    >
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="default-btn transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                      >
+                    <div className="flex justify-end mt-6">
+                      <button type="submit" disabled={loading} className="default-btn">
                         {loading ? "Mencari..." : "Sinkronisasi Profil"}
                         <span />
                       </button>
                     </div>
                   </div>
                 </form>
-              ) : profile && profile.nickname ? (
-                <form
-                  onSubmit={handleSaveProfile}
-                  className="checkout-form-wrap"
-                >
-                  <h2>Edit Profil</h2>
-                  <p
-                    style={{
-                      color: "rgba(255,255,255,0.7)",
-                      marginBottom: "24px",
-                    }}
-                  >
-                    Update informasi profil Anda
-                  </p>
-
-                  <div className="checkout-form mb-30">
-                    <div className="form-field">
-                      <label style={{ color: "rgba(255,255,255,0.8)" }}>
-                        Nickname
-                      </label>
-                      <input
-                        type="text"
-                        value={nicknameInput}
-                        onChange={(e) => setNicknameInput(e.target.value)}
-                        placeholder="Contoh: CozyGamer99"
-                        className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                        disabled={loading}
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="default-btn transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                  >
-                    {loading ? "Mencari..." : "Cari Profil"}
-                    <span />
-                  </button>
-                </form>
               ) : (
-                // Edit Profile
-                <div
-                  className="checkout-form-wrap"
-                  style={{
-                    background: "rgba(15, 23, 42, 0.8)",
-                    border: "1px solid rgba(71, 85, 105, 0.3)",
-                  }}
-                >
-                  <h2 style={{ marginBottom: "8px" }}>
-                    Profil {profile?.nickname}
-                  </h2>
-                  {profile?.club && (
-                    <p
-                      style={{
-                        color: "rgba(255,255,255,0.6)",
-                        marginBottom: "24px",
-                      }}
-                    >
-                      Club: {profile.club.name}
+                /* FORM EDIT PROFIL */
+                <div className="checkout-form-wrap" style={{ background: "rgba(15, 23, 42, 0.8)", border: "1px solid rgba(71, 85, 105, 0.3)" }}>
+                  <h2 style={{ marginBottom: "8px" }}>Profil {profile.nickname}</h2>
+                  {profile.club && (
+                    <p style={{ color: "rgba(255,255,255,0.6)", marginBottom: "24px" }}>
+                      Club: <strong>{profile.club.name}</strong>
                     </p>
                   )}
 
-                  <form
-                    onSubmit={handleSaveProfile}
-                    style={{ display: "grid", gap: "24px" }}
-                  >
-                    {/* Profile Picture */}
-                    {profile?.picture_url && (
+                  <form onSubmit={handleSaveProfile} style={{ display: "grid", gap: "24px" }}>
+                    {/* Preview Foto */}
+                    <div className="flex gap-4 items-end">
                       <div>
-                        <p
-                          style={{
-                            color: "rgba(255,255,255,0.7)",
-                            marginBottom: "8px",
-                            fontSize: "0.875rem",
-                          }}
-                        >
-                          Foto Profil Saat Ini
-                        </p>
-                        <img
-                          src={
-                            profile.picture_url ||
-                            `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.nickname || "User")}&color=FCFCFC&background=0c0c35`
-                          }
-                          alt="Profile"
-                          style={{
-                            width: "120px",
-                            height: "120px",
-                            borderRadius: "8px",
-                            objectFit: "cover",
-                            marginBottom: "12px",
-                          }}
+                        <p className="text-sm mb-2 text-white/70">Foto Profil</p>
+                        <img 
+                          src={profile.picture_url || `https://ui-avatars.com/api/?name=${profile.nickname}&background=0c0c35&color=fff`} 
+                          alt="Avatar" 
+                          className="w-24 h-24 rounded-lg object-cover border border-white/20"
                         />
                       </div>
-                    )}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Update Foto Profil
-                      </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e, "picture")}
-                        disabled={submitting}
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* Username */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* Gender */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Gender
-                      </label>
-                      <select
-                        name="gender"
-                        value={formData.gender || "male"}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        className="form-control"
-                      >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </select>
-                    </div>
-
-                    {/* City */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Kota
-                      </label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        placeholder="Jakarta"
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* Social Media - Facebook */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Facebook
-                      </label>
-                      <input
-                        type="text"
-                        name="facebook"
-                        value={formData.facebook}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        placeholder="https://facebook.com/..."
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* Instagram */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Instagram
-                      </label>
-                      <input
-                        type="text"
-                        name="instagram"
-                        value={formData.instagram}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        placeholder="@username"
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* TikTok */}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        TikTok
-                      </label>
-                      <input
-                        type="text"
-                        name="tiktok"
-                        value={formData.tiktok}
-                        onChange={handleInputChange}
-                        disabled={submitting}
-                        placeholder="@username"
-                        className="form-control"
-                      />
-                    </div>
-
-                    {/* Sponsor Image */}
-                    {profile?.image_sponsor && (
-                      <div>
-                        <p
-                          style={{
-                            color: "rgba(255,255,255,0.7)",
-                            marginBottom: "8px",
-                            fontSize: "0.875rem",
-                          }}
-                        >
-                          Foto Sponsor Saat Ini
-                        </p>
-                        <img
-                          src={profile.image_sponsor}
-                          alt="Sponsor"
-                          style={{
-                            width: "120px",
-                            height: "120px",
-                            borderRadius: "8px",
-                            objectFit: "cover",
-                            marginBottom: "12px",
-                          }}
-                        />
+                      <div className="flex-1">
+                        <label className="form-label text-white/70">Update Foto</label>
+                        <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, "picture")} className="form-control" />
                       </div>
-                    )}
-                    <div>
-                      <label
-                        className="form-label"
-                        style={{ color: "rgba(255,255,255,0.7)" }}
-                      >
-                        Update Foto Sponsor
-                      </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e, "sponsor")}
-                        disabled={submitting}
-                        className="form-control"
-                      />
                     </div>
 
-                    {/* Action Buttons */}
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "12px",
-                        justifyContent: "flex-end",
-                        marginTop: "24px",
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfile(null);
-                          setNicknameInput("");
-                          setFormData({
-                            username: "",
-                            gender: "",
-                            latitude: 0,
-                            longitude: 0,
-                            picture_url: "",
-                            image_sponsor: "",
-                            city: "",
-                            facebook: "",
-                            instagram: "",
-                            tiktok: "",
-                          });
-                        }}
-                        disabled={submitting}
-                        className="default-btn"
-                        style={{
-                          background: "transparent",
-                          border: "1px solid rgba(255,255,255,0.2)",
-                        }}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="form-label text-white/70">Username</label>
+                        <input type="text" name="username" value={formData.username} onChange={handleInputChange} className="form-control" />
+                      </div>
+                      <div>
+                        <label className="form-label text-white/70">Gender</label>
+                        <select name="gender" value={formData.gender} onChange={handleInputChange} className="form-control">
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="form-label text-white/70">Kota</label>
+                      <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Contoh: Jakarta" className="form-control" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="form-label text-white/70">Instagram</label>
+                        <input type="text" name="instagram" value={formData.instagram} onChange={handleInputChange} placeholder="@username" className="form-control" />
+                      </div>
+                      <div>
+                        <label className="form-label text-white/70">Facebook</label>
+                        <input type="text" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder="URL Facebook" className="form-control" />
+                      </div>
+                      <div>
+                        <label className="form-label text-white/70">TikTok</label>
+                        <input type="text" name="tiktok" value={formData.tiktok} onChange={handleInputChange} placeholder="@username" className="form-control" />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end gap-3 mt-6">
+                      <button 
+                        type="button" 
+                        onClick={() => { setProfile(null); localStorage.removeItem("tarkam_profile"); }} 
+                        className="default-btn !bg-transparent border border-white/20"
                       >
-                        Kembali
-                        <span />
+                        Ganti Nickname
                       </button>
-                      <button
-                        type="submit"
-                        disabled={submitting}
-                        className="default-btn transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                      >
+                      <button type="submit" disabled={submitting} className="default-btn">
                         {submitting ? "Menyimpan..." : "Simpan Perubahan"}
                         <span />
                       </button>
@@ -696,6 +339,7 @@ export const ProfileContent = () => {
                   </form>
                 </div>
               )}
+
             </div>
           </div>
         </div>
