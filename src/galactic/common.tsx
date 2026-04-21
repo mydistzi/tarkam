@@ -44,7 +44,7 @@ import {
   type SponsorItem,
   type StreamItem,
 } from "@/galactic/data";
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Carousel = (CarouselLib as unknown as { default: React.ComponentType<any> }).default || (CarouselLib as React.ComponentType<any>);
 const getImageSource = (src?: string, fallback?: string): string | undefined => {
   const normalized = src?.trim();
@@ -2147,7 +2147,7 @@ const FaqAccordion = () => {
 
 const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) => {
   const location = useLocation();
-  const { loading: contentLoading, tarkams } = useGalacticContent();
+  const { loading: contentLoading } = useGalacticContent();
   const liveKey = useLiveUpdate(
     ["penyawers", "penyawer-leaderboards"],
     { fallbackIntervalMs: 45000 },
@@ -2280,9 +2280,8 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     const loadSponsorMessages = async () => {
       console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
-        const lastTarkamId = tarkams.length ? Math.max(...tarkams.map(t => t.id)) : undefined;
         const response = await Api.get("/penyawer-leaderboards", {
-          params: { limit: 10, showing: "yes", ...(lastTarkamId ? { last_tarkam_fk: lastTarkamId } : {}) },
+          params: { limit: 10 },
         });
         const payload = response.data as
           | ApiEnvelope<SponsorMarqueeEntry[]>

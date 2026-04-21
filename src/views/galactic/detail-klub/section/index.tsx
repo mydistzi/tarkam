@@ -364,7 +364,6 @@ const ClubsContent = ({
     { label: "Kode", value: record.code || "-" },
     { label: "Slug", value: record.slug || "-" },
     { label: "Level", value: record.level || "-" },
-    { label: "Slogan", value: record.slogan || "-" },
     { label: "Point Session Klub", value: String(record.sessionPoints ?? 0) },
     { label: "Point Lifetime Klub", value: String(record.lifetimePoints ?? record.points ?? 0) },
     { label: "Reward Session Klub", value: formatRewardLabel(record.sessionReward) },

@@ -233,7 +233,6 @@ type ApiMember = {
   latitude?: number;
   longitude?: number;
   picture_url?: string;
-  image_sponsor?: string;
   tier?: string;
   city?: string;
   club_fk?: number | string | null;
@@ -242,7 +241,6 @@ type ApiMember = {
   t_matches?: number;
   points?: number;
   status?: string;
-  guild_position?: string;
   alias?: ApiAlias;
   created_at?: string;
   updated_at?: string;
@@ -285,7 +283,6 @@ type ApiTeam = {
   id: number;
   name?: string;
   gender?: string;
-  logo?: string;
   member1_fk?: number | string | null;
   member2_fk?: number | string | null;
   member3_fk?: number | string | null;
@@ -921,6 +918,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             (item) => item.winner_team_fk != null && normalizeId(item.winner_team_fk) !== team.id
           ).length;
           const draws = relatedContests.filter((item) => item.winner_team_fk == null).length;
+          const firstClub = membersForTeam[0]?.club;
           const teamTarkamId = normalizeId(team.tarkam_fk);
           const firstTarkam = teamTarkamId != null ? tarkamMap.get(teamTarkamId) : undefined;
           const teamGroup = team.group || (() => {
@@ -943,7 +941,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             id: team.id,
             team,
             name: team.name || `Team ${team.id}`,
-            logo: team.logo || "",
+            logo: firstClub?.logo || "",
             teamPath: buildTeamDetailPath(team.id),
             gender: team.gender || "Open",
             members: membersForTeam.map((item) => item.item),
@@ -1111,7 +1109,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               }
 
               return {
-                image: member?.image_sponsor?.trim() || placeholderSponsor,
+                image: item.logo || item.image || member?.picture_url?.trim() || placeholderSponsor,
                 name: item.name || `Sponsor ${item.id}`,
                 url: item.url || "#",
                 amount: item.amount,

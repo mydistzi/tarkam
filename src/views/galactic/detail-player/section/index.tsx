@@ -84,7 +84,6 @@ export type MemberDetailPayload = AnyObj & {
   picture_url?: string;
   tier?: string;
   city?: string;
-  guild_position?: string;
   club_fk?: number | string | null;
   wins?: number;
   losses?: number;
@@ -235,7 +234,6 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
     // { label: "Tunisia Phone", value: record?.tunisia_phone || "-" },
     { label: "Gender", value: genderLabel(record?.gender) },
     { label: "Tier", value: record?.tier || "-" },
-    { label: "Guild Position", value: record?.guild_position || "-" },
     { label: "City", value: record?.city || "-" },
     { label: "Status", value: statusLabel(record?.status) },
     { label: "Club", value: record?.club?.name != null ? String(record.club.name) : "-" },
