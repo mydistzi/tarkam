@@ -24,6 +24,7 @@ import comment3 from "@/assets/images/comment-3.png";
 import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
+import type { StructuredDataInput } from "@/lib/structuredData";
 import { useGalacticContent } from "@/views/galactic/shared";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { getCartRequestPayload } from "@/galactic/session";
@@ -61,7 +62,13 @@ type PageShellProps = {
   description?: string;
   type?: "website" | "article" | "profile";
   image?: string;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  keywords?: string[];
+  articleSection?: string;
   articleTag?: string[];
+  structuredData?: StructuredDataInput;
   children: ReactNode;
 };
 type PageHeaderProps = {
@@ -347,7 +354,13 @@ const PageShell = ({
   description = brand.description,
   type = "website",
   image = brand.logo,
+  author,
+  publishedTime,
+  modifiedTime,
+  keywords,
+  articleSection,
   articleTag = [],
+  structuredData,
   children,
 }: PageShellProps) => (
   <>
@@ -357,8 +370,13 @@ const PageShell = ({
       image={image}
       type={type}
       siteName={brand.name}
-      author={brand.name}
+      author={author || brand.name}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      keywords={keywords}
+      articleSection={articleSection}
       articleTag={articleTag}
+      structuredData={structuredData}
     />
     <div className="galactic-page-view">{children}</div>
   </>

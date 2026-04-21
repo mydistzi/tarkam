@@ -29,6 +29,11 @@ const NewsDetailsPage = () => {
       description={pageDescription}
       type="article"
       image={record?.item.image}
+      author={record?.item.author}
+      publishedTime={record?.news.created_at}
+      modifiedTime={record?.news.updated_at}
+      articleSection={record?.item.category}
+      keywords={record?.item.tags}
       articleTag={record?.item.tags}
     >
       <NewsDetailsContent record={record} previousPath={previousPath} nextPath={nextPath} />

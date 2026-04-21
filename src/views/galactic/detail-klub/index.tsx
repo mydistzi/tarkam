@@ -3,8 +3,14 @@ import { useParams } from "react-router-dom";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
-import { ClubsContent } from "./section";
 import { buildPlayerDetailPath } from "@/galactic/data";
+import {
+  buildOrganizationEntitySchema,
+  normalizeSiteUrl,
+  toAbsoluteUrl,
+} from "@/lib/structuredData";
+import { useGalacticContent } from "../shared";
+import { ClubsContent } from "./section";
 import type { ClubItem, ClubSessionItem, ClubTimelineItem, MemberItem } from "@/galactic/data";
 
 type ApiResourceEnvelope<T> = {
@@ -222,6 +228,7 @@ const ClubDetailsPage = () => {
     { fallbackIntervalMs: 45000 },
   );
   const { slug } = useParams();
+  const { meta } = useGalacticContent();
   const normalizedSlug = slug?.trim().toLowerCase();
   const invalidSlug = !normalizedSlug;
   const [record, setRecord] = useState<ClubItem | null>(null);
@@ -231,6 +238,35 @@ const ClubDetailsPage = () => {
   const [clubPoints, setClubPoints] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const siteUrl = normalizeSiteUrl(meta.siteUrl, "https://tarkam.fun");
+  const pageUrl =
+    toAbsoluteUrl(`/detail-klub/${encodeURIComponent(record?.slug || normalizedSlug || "")}`, siteUrl) ||
+    siteUrl;
+  const normalizeSocialUrl = (value?: string) => {
+    const normalized = String(value || "").trim();
+    if (!normalized) {
+      return undefined;
+    }
+
+    return /^https?:\/\//i.test(normalized)
+      ? normalized
+      : `https://${normalized.replace(/^\/+/, "")}`;
+  };
+  const structuredData = record
+    ? buildOrganizationEntitySchema({
+        entityId: `${pageUrl}#club`,
+        entityType: "SportsOrganization",
+        name: record.name || "Klub Tarkam",
+        url: pageUrl,
+        description: `${record.name || "Klub Tarkam"} memiliki ${members.length} member dengan total ${clubPoints} poin session.`,
+        imageUrl: toAbsoluteUrl(record.logo, siteUrl),
+        sameAs: [
+          normalizeSocialUrl(record.facebook),
+          normalizeSocialUrl(record.instagram),
+          normalizeSocialUrl(record.tiktok),
+        ].filter((item): item is string => Boolean(item)),
+      })
+    : undefined;
 
   useEffect(() => {
     if (!normalizedSlug) {
@@ -308,7 +344,11 @@ const ClubDetailsPage = () => {
   }, [normalizedSlug, liveKey]);
 
   return (
-    <PageShell title={record?.name || "Detail Klub"} image={record?.logo}>
+    <PageShell
+      title={record?.name || "Detail Klub"}
+      image={record?.logo}
+      structuredData={structuredData}
+    >
       {invalidSlug ? (
         <section className="about-team-section padding-top">
           <div className="container">

@@ -51,7 +51,6 @@ const GalacticLayout = () => {
         <meta name="application-name" content={meta.siteName} />
         <meta property="og:site_name" content={meta.siteName} />
         <meta property="og:locale" content="id_ID" />
-        <link rel="canonical" href={meta.siteUrl} />
         {meta.faviconUrl ? <link rel="icon" href={meta.faviconUrl} /> : null}
       </Helmet>
       <Outlet />
