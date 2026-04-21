@@ -157,7 +157,6 @@
     position: relative;
     cursor: pointer;
     font-family: 'Oxanium', sans-serif;
-    z-index: 9999;
 }
 
 /* Pengaturan Urutan: Username lalu Foto */
@@ -209,8 +208,6 @@
     margin-top: 10px;
     border-radius: 4px;
     overflow: hidden;
-    z-index: 100;
-    display: block;
 }
 
 .user-profile-dropdown:hover .dropdown-content {
