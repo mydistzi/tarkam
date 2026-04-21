@@ -263,6 +263,7 @@ export type ClubItem = {
   name?: string;
   logo?: string;
   level?: string;
+  slogan?: string;
   points?: number;
   lifetimePoints?: number;
   sessionPoints?: number;

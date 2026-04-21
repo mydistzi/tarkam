@@ -2281,7 +2281,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
         const response = await Api.get("/penyawer-leaderboards", {
-          params: { limit: 10 },
+          params: { limit: 10, showing: "yes", last_tarkam_fk: true },
         });
         const payload = response.data as
           | ApiEnvelope<SponsorMarqueeEntry[]>

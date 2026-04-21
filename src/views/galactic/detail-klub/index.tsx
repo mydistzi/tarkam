@@ -102,6 +102,7 @@ type ApiClubRecord = {
   name?: string;
   logo?: string;
   level?: string;
+  slogan?: string;
   points?: number | string;
   lifetime_points?: number | string;
   session_points?: number | string;
@@ -205,6 +206,7 @@ const mapClubItem = (
   name: club.name,
   logo: club.logo,
   level: club.level,
+  slogan: club.slogan,
   points: Number(club.points ?? 0),
   lifetimePoints: Number(club.lifetime_points ?? club.points ?? 0),
   sessionPoints: Number(club.session_points ?? 0),
