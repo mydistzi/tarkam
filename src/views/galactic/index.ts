@@ -16,6 +16,8 @@ export { default as CheckoutPage } from "./checkout";
 export { default as SignInPage } from "./auth/SignIn";
 export { default as RegisterPage } from "./auth/Register";
 export { default as LogoutPage } from "./auth/Logout";
+export { default as ProfilePage } from "./profile";
+export { default as ClubProfilePage } from "./club-profile";
 export { default as SponsorsPage } from "./sponsors";
 export { default as SponsorLeaderboardPage } from "./sponsor-leaderboard";
 export { default as GlobalLeaderboardPage } from "./global-leaderboard";

@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Api from "@/api";
+import Swal from "sweetalert2";
 import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { useLiveUpdate } from "../../socket/SocketProvider";
+import { useAuth } from "../../auth/AuthProvider";
 
 type ApiEnvelope<T> = {
   data?: T;
@@ -200,7 +202,40 @@ const ScheduleCard = ({
   tarkam: ScheduleTarkam;
   streamings: ScheduleStreaming[];
 }) => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [registering, setRegistering] = useState<"male" | "female" | null>(null);
   const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
+
+  const handleRegister = async (gender: "male" | "female") => {
+    if (!isAuthenticated) {
+      navigate("/signin", { state: { from: location }, replace: false });
+      return;
+    }
+
+    try {
+      setRegistering(gender);
+      const response = await Api.post(
+        `/tarkams/${tarkam.id}/register`,
+        {}
+      );
+
+      if (response.data?.success) {
+        Swal.fire(
+          "Sukses",
+          `Pendaftaran ${gender === "male" ? "male" : "female"} berhasil! Selamat berjuang!`,
+          "success"
+        );
+      }
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        "Gagal melakukan registrasi. Silakan coba lagi.";
+      Swal.fire("Error", message, "error");
+    } finally {
+      setRegistering(null);
+    }
+  };
 
   return (
     <article id={`tarkam-${tarkam.id}`} className="galactic-hover-card tarkam-schedule-card">
@@ -257,7 +292,7 @@ const ScheduleCard = ({
             </div>
           ) : null}
 
-          <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center" }}>
+          <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center", gap: "12px" }}>
             <Link className="default-btn" to={buildTarkamDetailPath(tarkam.id)}>
               Lihat Detail
             </Link>
@@ -272,6 +307,37 @@ const ScheduleCard = ({
                 Proof
               </a>
             ) : null}
+
+            {/* Registration buttons */}
+            {Number(tarkam.male_completed ?? 0) === 0 && (
+              <button
+                onClick={() => handleRegister("male")}
+                disabled={registering === "male"}
+                className="default-btn"
+                style={{
+                  background: "rgba(79, 172, 254, 0.8)",
+                  border: "1px solid rgba(79, 172, 254, 0.5)",
+                }}
+              >
+                {registering === "male" ? "Mendaftar..." : "Daftar Male"}
+                <span />
+              </button>
+            )}
+
+            {Number(tarkam.female_completed ?? 0) === 0 && (
+              <button
+                onClick={() => handleRegister("female")}
+                disabled={registering === "female"}
+                className="default-btn"
+                style={{
+                  background: "rgba(255, 105, 180, 0.8)",
+                  border: "1px solid rgba(255, 105, 180, 0.5)",
+                }}
+              >
+                {registering === "female" ? "Mendaftar..." : "Daftar Female"}
+                <span />
+              </button>
+            )}
           </div>
         </div>
       </div>

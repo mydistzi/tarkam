@@ -21,6 +21,8 @@ import {
   SignInPage,
   RegisterPage,
   LogoutPage,
+  ProfilePage,
+  ClubProfilePage,
   SponsorsPage,
   SponsorLeaderboardPage,
   GlobalLeaderboardPage,
@@ -122,6 +124,22 @@ export const getGalacticRoutes = (): RouteObject[] => [
       { path: "/ketentuan-penghapusan-data", element: <DataDeletionPolicy /> },
       { path: "/hubungi-kami", element: <ContactPage /> },
       { path: "/cart", element: <CartPage /> },
+      {
+        path: "/profile",
+        element: (
+          <RequireAuth>
+            <ProfilePage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/club-profile",
+        element: (
+          <RequireAuth>
+            <ClubProfilePage />
+          </RequireAuth>
+        ),
+      },
       {
         path: "/checkout",
         element: (

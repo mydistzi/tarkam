@@ -27,6 +27,7 @@ import SEO from "@/components/SEO";
 import type { StructuredDataInput } from "@/lib/structuredData";
 import { useGalacticContent } from "@/views/galactic/shared";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
+import { ProfileDropdown } from "@/galactic/ProfileDropdown";
 import { getCartRequestPayload } from "@/galactic/session";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import {
@@ -513,7 +514,7 @@ const HeaderMarkup = ({
   menuItems?: GalacticMenuItem[];
   logoUrl?: string;
 }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="primary-header">
@@ -538,12 +539,7 @@ const HeaderMarkup = ({
             <i className="las la-search" />
           </div>
           {isAuthenticated ? (
-            <>
-              <span className="header-user-label">Hai, {user?.name || user?.email}</span>
-              <Link className="default-btn" to="/logout">
-                Logout<span />
-              </Link>
-            </>
+            <ProfileDropdown />
           ) : (
             <>
               <Link className="default-btn" to="/signin">
@@ -2536,4 +2532,5 @@ export {
   aboutCharacters,
   type GalacticMenuItem,
   GalacticChrome,
+  ProfileDropdown,
 }
