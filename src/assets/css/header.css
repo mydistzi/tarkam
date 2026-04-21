@@ -179,16 +179,18 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid var(--luxury-gold, #ffd27a);
+    border: 2px solid var(--luxury-line);
     overflow: hidden;
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
 /* Dropdown Menu */
@@ -197,10 +199,12 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: #1a1a1a;
-    border: 1px solid var(--luxury-gold, #ffd27a);
+    /* background: #1a1a1a; */
+    border: 1px solid var(--luxury-line);
     min-width: 180px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    backdrop-filter: blur(18px);
+    background: #060f1d94;
     z-index: 10000;
     margin-top: 10px;
     border-radius: 4px;
