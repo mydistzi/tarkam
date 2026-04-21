@@ -2280,8 +2280,9 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     const loadSponsorMessages = async () => {
       console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
+        const lastTarkamId = content.tarkams.length ? Math.max(...content.tarkams.map(t => t.id)) : undefined;
         const response = await Api.get("/penyawer-leaderboards", {
-          params: { limit: 10, showing: "yes", last_tarkam_fk: true },
+          params: { limit: 10, showing: "yes", ...(lastTarkamId ? { last_tarkam_fk: lastTarkamId } : {}) },
         });
         const payload = response.data as
           | ApiEnvelope<SponsorMarqueeEntry[]>
