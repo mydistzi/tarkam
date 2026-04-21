@@ -105,7 +105,7 @@ type SponsorMarqueeEntry = {
   total_amount?: number | string;
   sponsor_message?: string;
   pesan?: string;
-  showing?: boolean | string;
+  showing?: string;
 };
 type ApiEnvelope<T> = {
   data?: T;
@@ -2365,7 +2365,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         return null;
       }
 
-      const isShowing = entry.showing === true || entry.showing === "yes";
+      const isShowing = entry.showing === "yes";
       if (!isShowing) {
         return null;
       }
