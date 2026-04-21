@@ -22,7 +22,7 @@ type ApiResponse<T> = {
 
 export const ProfileDropdown = () => {
   const navigate = useNavigate();
-  const { signOut, user } = useAuth();
+  const { signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [memberProfile, setMemberProfile] = useState<MemberProfile | null>(null);
   const [loading, setLoading] = useState(true);
