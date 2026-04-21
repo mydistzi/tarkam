@@ -154,7 +154,7 @@ const SEO = ({
       : meta.keywords?.length
         ? meta.keywords.join(", ")
         : "tarkam, gaming, streaming, komunitas, esports";
-  const pageAuthor = author || meta.author || siteDisplayName;
+  const pageAuthor = author || meta.author || "dist" || siteDisplayName;
   const organizationId = `${siteUrl}/#organization`;
   const websiteId = `${siteUrl}/#website`;
   const pageId = `${pageUrl}#webpage`;
