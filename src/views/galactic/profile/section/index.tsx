@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Api from "@/api";
+import { PageHeader, PageShell } from "@/galactic/common";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 
 type MemberProfile = {
@@ -264,19 +265,22 @@ export const ProfileContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 py-12">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <PageShell title="Sinkronisasi Profil">
+      <PageHeader
+        eyebrow="Profil Saya"
+        title="Sinkronisasi Profil Anda"
+        description="Perbarui informasi profil Anda untuk memastikan semua data akurat."
+      />
+    <section className="checkout-section padding-top">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-6 sm-padding">
         {!nicknameEntered ? (
           // Step 1: Enter Nickname
-          <div className="bg-slate-800 rounded-lg border border-slate-700 p-8">
-            <h2 className="text-3xl font-bold text-white mb-6">
-              Buat Nickname Anda
-            </h2>
-            <form onSubmit={handleNicknameSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Nickname <span className="text-red-500">*</span>
-                </label>
+            <form onSubmit={handleNicknameSubmit} className="checkout-form-wrap">
+              <h2>Profil</h2>
+              <div className="checkout-form mb-30">
+                  <div className="form-field">
                 <input
                   type="text"
                   value={tempNickname}
@@ -287,7 +291,7 @@ export const ProfileContent = () => {
                 />
               </div>
 
-              <div>
+              <div className="form-field">
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   Gender <span className="text-red-500">*</span>
                 </label>
@@ -302,6 +306,7 @@ export const ProfileContent = () => {
                   <option value="female">Female</option>
                 </select>
               </div>
+              </div>
 
               <button
                 type="submit"
@@ -311,7 +316,6 @@ export const ProfileContent = () => {
                 {submitting ? "Menyimpan..." : "Lanjutkan"}
               </button>
             </form>
-          </div>
         ) : (
           // Step 2: Edit Profile
           <div className="bg-slate-800 rounded-lg border border-slate-700 p-8">
@@ -516,6 +520,9 @@ export const ProfileContent = () => {
         )}
       </div>
     </div>
+    </div>
+    </section>
+    </PageShell>
   );
 };
 
