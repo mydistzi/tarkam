@@ -54,8 +54,8 @@ export const ProfileDropdown = () => {
 
   if (loading || !memberProfile?.nickname) {
     return (
-      <Link className="default-btn" to="/profile">
-        Profile<span />
+      <Link className="default-btn" to="/signin">
+        Login<span />
       </Link>
     );
   }
