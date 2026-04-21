@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
+import { setProfileRefetch } from "@/galactic/profileDropdownUtils";
 
 type MemberProfile = {
   id: number;
@@ -22,28 +23,51 @@ type ApiResponse<T> = {
 
 export const ProfileDropdown = () => {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [memberProfile, setMemberProfile] = useState<MemberProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const refetchRef = useRef<(() => Promise<void>) | null>(null);
+
+  const fetchMemberProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await Api.get<ApiResponse<MemberProfile>>(
+        "/members/profile/me"
+      );
+      if (response.data?.success && response.data?.data) {
+        setMemberProfile(response.data.data);
+      } else {
+        setMemberProfile(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch member profile:", error);
+      setMemberProfile(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Store refetch function in ref and global
+  useEffect(() => {
+    refetchRef.current = fetchMemberProfile;
+    setProfileRefetch(fetchMemberProfile);
+  }, []);
 
   useEffect(() => {
-    const fetchMemberProfile = async () => {
-      try {
-        const response = await Api.get<ApiResponse<MemberProfile>>(
-          "/members/profile/me"
-        );
-        if (response.data?.success && response.data?.data) {
-          setMemberProfile(response.data.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch member profile:", error);
-      } finally {
-        setLoading(false);
-      }
+    fetchMemberProfile();
+  }, [isAuthenticated]);
+
+  // Listen to profile-updated event from other components
+  useEffect(() => {
+    const handleProfileUpdated = () => {
+      fetchMemberProfile();
     };
 
-    fetchMemberProfile();
+    window.addEventListener("profile-sync-complete", handleProfileUpdated);
+    return () => {
+      window.removeEventListener("profile-sync-complete", handleProfileUpdated);
+    };
   }, []);
 
   const handleLogout = async () => {

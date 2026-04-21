@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import Api from "@/api";
 import { PageHeader, PageShell } from "@/galactic/common";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
+import { refetchProfileDropdown } from "@/galactic/profileDropdownUtils";
 
 type MemberProfile = {
   id: number;
@@ -96,6 +97,12 @@ export const ProfileContent = () => {
           tiktok: memberData.tiktok || "",
         });
         Swal.fire("Sukses", "Profil ditemukan dan disinkronisasi", "success");
+        
+        // Trigger ProfileDropdown refetch
+        await refetchProfileDropdown();
+        
+        // Dispatch event for other components
+        window.dispatchEvent(new Event("profile-sync-complete"));
       }
     } catch (error: unknown) {
       const message =
@@ -190,6 +197,10 @@ export const ProfileContent = () => {
         setSponsorFile(null);
 
         Swal.fire("Sukses", "Profil berhasil diupdate", "success");
+        
+        // Trigger ProfileDropdown refetch to update photo/name if changed
+        await refetchProfileDropdown();
+        window.dispatchEvent(new Event("profile-sync-complete"));
       }
     } catch (error: unknown) {
       const message =
