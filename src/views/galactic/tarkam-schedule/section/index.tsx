@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import Swal from "sweetalert2";
 import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { useLiveUpdate } from "../../socket/SocketProvider";
+import { useAuth } from "../../auth/AuthProvider";
 
 type ApiEnvelope<T> = {
   data?: T;
@@ -202,13 +203,18 @@ const ScheduleCard = ({
   streamings: ScheduleStreaming[];
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [registering, setRegistering] = useState<"male" | "female" | null>(null);
   const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
 
   const handleRegister = async (gender: "male" | "female") => {
-    // Check if user has a valid token (more reliable than isAuthenticated during initial load)
     const authData = localStorage.getItem("tarkam_auth_user");
-    if (!authData) {
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !authData) {
       navigate("/signin", { state: { from: location }, replace: false });
       return;
     }
@@ -312,14 +318,18 @@ const ScheduleCard = ({
             {Number(tarkam.male_completed ?? 0) === 0 && (
               <button
                 onClick={() => handleRegister("male")}
-                disabled={registering === "male"}
+                disabled={registering === "male" || authLoading}
                 className="default-btn"
                 style={{
                   background: "rgba(79, 172, 254, 0.8)",
                   border: "1px solid rgba(79, 172, 254, 0.5)",
                 }}
               >
-                {registering === "male" ? "Mendaftar..." : "Daftar Male"}
+                {registering === "male"
+                  ? "Mendaftar..."
+                  : !isAuthenticated
+                    ? "Login untuk Daftar Male"
+                    : "Daftar Male"}
                 <span />
               </button>
             )}
@@ -327,14 +337,18 @@ const ScheduleCard = ({
             {Number(tarkam.female_completed ?? 0) === 0 && (
               <button
                 onClick={() => handleRegister("female")}
-                disabled={registering === "female"}
+                disabled={registering === "female" || authLoading}
                 className="default-btn"
                 style={{
                   background: "rgba(255, 105, 180, 0.8)",
                   border: "1px solid rgba(255, 105, 180, 0.5)",
                 }}
               >
-                {registering === "female" ? "Mendaftar..." : "Daftar Female"}
+                {registering === "female"
+                  ? "Mendaftar..."
+                  : !isAuthenticated
+                    ? "Login untuk Daftar Female"
+                    : "Daftar Female"}
                 <span />
               </button>
             )}

@@ -1,5 +1,6 @@
 ﻿import { type CSSProperties, type FormEvent, type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import Swal from "sweetalert2";
 import Api from "@/api";
 import CarouselLib, { type ButtonGroupProps } from "react-multi-carousel";
@@ -107,6 +108,7 @@ type SponsorMarqueeEntry = {
   sponsor_message?: string;
   pesan?: string;
   showing?: string;
+  tarkam_fk?: number | string | null;
 };
 type ApiEnvelope<T> = {
   data?: T;
@@ -221,6 +223,14 @@ const pageBackground = (image = brand.background): CSSProperties => ({
 const formatCurrency = (value: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
 // const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
 const resolveSponsorMarqueeMessage = (entry: SponsorMarqueeEntry) => String(entry.sponsor_message || entry.pesan || "").trim();
+const toNumericId = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+};
 const getMenuPaths = (item: GalacticMenuItem): string[] => {
   const directPath = item.path ? [item.path] : [];
   const childPaths = item.children ? item.children.flatMap(getMenuPaths) : [];
@@ -2277,9 +2287,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     const loadSponsorMessages = async () => {
       console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
-        const response = await Api.get("/penyawer-leaderboards", {
-          params: { limit: 10 },
-        });
+        const response = await Api.get("/penyawer-leaderboards");
         const payload = response.data as
           | ApiEnvelope<SponsorMarqueeEntry[]>
           | SponsorMarqueeEntry[]
@@ -2354,29 +2362,40 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   }, []);
 
   const scrollIdClass = showScroll ? "show" : "hide";
-  const sponsorMarqueeMessages = sponsorMarqueeEntries
-    .map((entry) => {
-      const sponsorMessage = resolveSponsorMarqueeMessage(entry);
-      if (!sponsorMessage || entry.showing === 'no') {
-        return null;
+  const sponsorMarqueeMessages = useMemo(() => {
+    const latestTarkamFk = sponsorMarqueeEntries.reduce<number | null>((latest, entry) => {
+      const tarkamId = toNumericId(entry.tarkam_fk);
+      if (tarkamId === null) {
+        return latest;
       }
 
-      const sponsorName =
-        entry.nickname || entry.name || entry.member_nickname || "Sponsor";
+      return latest === null ? tarkamId : Math.max(latest, tarkamId);
+    }, null);
 
-      return {
-        key: `${sponsorName}-${sponsorMessage}`,
-        sponsorName,
-        sponsorMessage,
-        amount: formatCurrency(Number(entry.total_amount ?? 0)),
-      };
-    })
-    .filter(Boolean) as Array<{
-    key: string;
-    sponsorName: string;
-    sponsorMessage: string;
-    amount: string;
-  }>;
+    if (latestTarkamFk === null) {
+      return [];
+    }
+
+    return sponsorMarqueeEntries
+      .filter((entry) => {
+        const sponsorMessage = resolveSponsorMarqueeMessage(entry);
+        const showing = String(entry.showing || "").trim().toLowerCase();
+        return sponsorMessage && showing === "yes" && toNumericId(entry.tarkam_fk) === latestTarkamFk;
+      })
+      .map((entry) => {
+        const sponsorMessage = resolveSponsorMarqueeMessage(entry);
+        const sponsorName =
+          entry.nickname || entry.name || entry.member_nickname || "Sponsor";
+
+        return {
+          key: `${entry.tarkam_fk}-${sponsorName}-${sponsorMessage}`,
+          sponsorName,
+          sponsorMessage,
+          amount: formatCurrency(Number(entry.total_amount ?? 0)),
+        };
+      })
+      .filter((entry, index, items) => items.findIndex((candidate) => candidate.key === entry.key) === index);
+  }, [sponsorMarqueeEntries]);
   const sponsorMarqueeLoop = sponsorMarqueeMessages.length
     ? [...sponsorMarqueeMessages, ...sponsorMarqueeMessages]
     : [];
