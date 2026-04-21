@@ -45,7 +45,7 @@ export const ProfileContent = () => {
   const [tempNickname, setTempNickname] = useState("");
   const [formData, setFormData] = useState<Partial<MemberProfile>>({
     username: "",
-    gender: "male",
+    gender: "",
     latitude: 0,
     longitude: 0,
     picture_url: "",
@@ -131,7 +131,6 @@ export const ProfileContent = () => {
         "/members",
         {
           nickname: tempNickname,
-          gender: formData.gender || "male",
           username: user?.name || "",
         }
       );
@@ -140,7 +139,7 @@ export const ProfileContent = () => {
         setProfile(response.data.data);
         setFormData({
           username: response.data.data.username || "",
-          gender: response.data.data.gender || "male",
+          gender: response.data.data.gender || "",
           latitude: response.data.data.latitude || 0,
           longitude: response.data.data.longitude || 0,
           picture_url: response.data.data.picture_url || "",
@@ -267,9 +266,9 @@ export const ProfileContent = () => {
   return (
     <PageShell title="Sinkronisasi Profil">
       <PageHeader
-        eyebrow="Halaman Profil"
+        eyebrow="Profil"
         title="Sinkronisasi Profil Anda"
-        description="Perbarui informasi profil Anda untuk memastikan semua data akurat."
+        description="Masukan nickname Anda untuk memastikan semua data akurat."
       />
     <section className="checkout-section padding-top">
         <div className="container">
@@ -281,31 +280,18 @@ export const ProfileContent = () => {
               <h2>Detail Profil</h2>
               <div className="checkout-form mb-30">
                   <div className="form-field">
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  autoComplete="name"
-                  value={tempNickname}
-                  onChange={(e) => setTempNickname(e.target.value)}
-                  placeholder="Masukkan nickname Anda"
-                  className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                  disabled={submitting}
-                />
-              </div>
-
-              <div className="form-field">
-                <select
-                  name="gender"
-                  value={formData.gender || "male"}
-                  onChange={handleInputChange}
-                  className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
-                  disabled={submitting}
-                >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      autoComplete="name"
+                      value={tempNickname}
+                      onChange={(e) => setTempNickname(e.target.value)}
+                      placeholder="Masukkan nickname Anda"
+                      className="form-control transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
+                      disabled={submitting}
+                    />
+                  </div>
               </div>
 
               <button
