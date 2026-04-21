@@ -42,7 +42,15 @@ export const ProfileContent = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [nicknameInput, setNicknameInput] = useState("");
-  const [profile, setProfile] = useState<MemberProfile | null>(null);
+  const [profile, setProfile] = useState<MemberProfile | null>(() => {
+    // Try to load from localStorage on initial render
+    try {
+      const saved = localStorage.getItem("tarkam_profile");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [formData, setFormData] = useState<Partial<MemberProfile>>({
     username: "",
     gender: "",
@@ -58,6 +66,24 @@ export const ProfileContent = () => {
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [sponsorFile, setSponsorFile] = useState<File | null>(null);
 
+  // Save profile to localStorage whenever it changes
+  useEffect(() => {
+    if (profile) {
+      localStorage.setItem("tarkam_profile", JSON.stringify(profile));
+    } else {
+      localStorage.removeItem("tarkam_profile");
+    }
+  }, [profile]);
+
+  // Save profile to localStorage whenever it changes
+  useEffect(() => {
+    if (profile) {
+      localStorage.setItem("tarkam_profile", JSON.stringify(profile));
+    } else {
+      localStorage.removeItem("tarkam_profile");
+    }
+  }, [profile]);
+
   // Check authentication - wait until auth validation is complete
   useEffect(() => {
     // Don't redirect while auth is still loading
@@ -71,6 +97,63 @@ export const ProfileContent = () => {
     }
   }, [isAuthenticated, authLoading, navigate]);
 
+  // Save profile to localStorage whenever it changes
+  useEffect(() => {
+    if (profile) {
+      localStorage.setItem("tarkam_profile", JSON.stringify(profile));
+    } else {
+      localStorage.removeItem("tarkam_profile");
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) {
+      return;
+    }
+
+    // Only load if we don't have profile data yet
+    if (profile !== null) {
+      return;
+    }
+
+    const loadExistingProfile = async () => {
+      try {
+        console.log("Attempting to auto-load existing profile...");
+        setLoading(true);
+        const response = await Api.get<ApiResponse<MemberProfile>>(
+          "/members/profile/me",
+        );
+
+        if (response.data?.success && response.data?.data) {
+          const memberData = response.data.data;
+          console.log("Auto-loaded existing profile:", memberData);
+          setProfile(memberData);
+          setFormData({
+            username: memberData.username || "",
+            gender: memberData.gender || "male",
+            latitude: memberData.latitude || 0,
+            longitude: memberData.longitude || 0,
+            picture_url: memberData.picture_url || "",
+            image_sponsor: memberData.image_sponsor || "",
+            city: memberData.city || "",
+            facebook: memberData.facebook || "",
+            instagram: memberData.instagram || "",
+            tiktok: memberData.tiktok || "",
+          });
+        } else {
+          console.log("No existing profile found, response:", response.data);
+        }
+      } catch (error) {
+        console.log("No existing profile found, error:", error);
+        // Don't show error, just leave profile as null so user can input nickname
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadExistingProfile();
+  }, [isAuthenticated, authLoading]);
+
   const handleSyncProfile = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -83,15 +166,16 @@ export const ProfileContent = () => {
       setLoading(true);
       const response = await Api.post<ApiResponse<MemberProfile>>(
         "/members/sync-profile",
-        { nickname: nicknameInput.trim() }
+        { nickname: nicknameInput.trim() },
       );
 
       if (response.data?.success && response.data?.data) {
         const memberData = response.data.data;
+        console.log("Sync successful, member data:", memberData);
         setProfile(memberData);
         setFormData({
           username: memberData.username || "",
-          gender: memberData.gender || "",
+          gender: memberData.gender || "male",
           latitude: memberData.latitude || 0,
           longitude: memberData.longitude || 0,
           picture_url: memberData.picture_url || "",
@@ -102,17 +186,21 @@ export const ProfileContent = () => {
           tiktok: memberData.tiktok || "",
         });
         Swal.fire("Sukses", "Profil ditemukan dan disinkronisasi", "success");
-        
+
         // Trigger ProfileDropdown refetch
         await refetchProfileDropdown();
-        
+
         // Dispatch event for other components
         window.dispatchEvent(new Event("profile-sync-complete"));
+      } else {
+        console.log("Sync failed, response:", response.data);
+        Swal.fire("Error", response.data?.message || "Sync gagal", "error");
+        setProfile(null);
       }
     } catch (error: unknown) {
       const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || "Gagal menemukan profil. Silakan coba lagi.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Gagal menemukan profil. Silakan coba lagi.";
       Swal.fire("Error", message, "error");
       setProfile(null);
     } finally {
@@ -121,18 +209,19 @@ export const ProfileContent = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "latitude" || name === "longitude" ? parseFloat(value) : value,
+      [name]:
+        name === "latitude" || name === "longitude" ? parseFloat(value) : value,
     }));
   };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "picture" | "sponsor"
+    type: "picture" | "sponsor",
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -181,7 +270,7 @@ export const ProfileContent = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       if (response.data?.success && response.data?.data) {
@@ -202,15 +291,15 @@ export const ProfileContent = () => {
         setSponsorFile(null);
 
         Swal.fire("Sukses", "Profil berhasil diupdate", "success");
-        
+
         // Trigger ProfileDropdown refetch to update photo/name if changed
         await refetchProfileDropdown();
         window.dispatchEvent(new Event("profile-sync-complete"));
       }
     } catch (error: unknown) {
       const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || "Gagal mengupdate profil. Silakan coba lagi.";
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message || "Gagal mengupdate profil. Silakan coba lagi.";
       Swal.fire("Error", message, "error");
     } finally {
       setSubmitting(false);
@@ -243,8 +332,68 @@ export const ProfileContent = () => {
                   className="checkout-form-wrap"
                 >
                   <h2>Sinkronisasi Profil</h2>
-                  <p style={{ color: "rgba(255,255,255,0.7)", marginBottom: "24px" }}>
-                    Masukan nickname Anda untuk menemukan dan sinkronisasi profil member
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.7)",
+                      marginBottom: "24px",
+                    }}
+                  >
+                    Masukan nickname Anda untuk menemukan dan sinkronisasi
+                    profil member
+                  </p>
+
+                  <div className="checkout-form mb-30">
+                    <div className="form-field">
+                      <label style={{ color: "rgba(255,255,255,0.8)" }}>
+                        Nickname <span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={nicknameInput}
+                        onChange={(e) => setNicknameInput(e.target.value)}
+                        placeholder="Masukan nickname Anda"
+                        required
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.1)",
+                          border: "1px solid rgba(255,255,255,0.2)",
+                          color: "white",
+                          padding: "12px",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "24px",
+                      }}
+                    >
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="default-btn transition duration-200 disabled:bg-slate-600 disabled:cursor-not-allowed"
+                      >
+                        {loading ? "Mencari..." : "Sinkronisasi Profil"}
+                        <span />
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              ) : profile && profile.nickname ? (
+                <form
+                  onSubmit={handleSaveProfile}
+                  className="checkout-form-wrap"
+                >
+                  <h2>Edit Profil</h2>
+                  <p
+                    style={{
+                      color: "rgba(255,255,255,0.7)",
+                      marginBottom: "24px",
+                    }}
+                  >
+                    Update informasi profil Anda
                   </p>
 
                   <div className="checkout-form mb-30">
@@ -285,20 +434,37 @@ export const ProfileContent = () => {
                     Profil {profile?.nickname}
                   </h2>
                   {profile?.club && (
-                    <p style={{ color: "rgba(255,255,255,0.6)", marginBottom: "24px" }}>
+                    <p
+                      style={{
+                        color: "rgba(255,255,255,0.6)",
+                        marginBottom: "24px",
+                      }}
+                    >
                       Club: {profile.club.name}
                     </p>
                   )}
 
-                  <form onSubmit={handleSaveProfile} style={{ display: "grid", gap: "24px" }}>
+                  <form
+                    onSubmit={handleSaveProfile}
+                    style={{ display: "grid", gap: "24px" }}
+                  >
                     {/* Profile Picture */}
                     {profile?.picture_url && (
                       <div>
-                        <p style={{ color: "rgba(255,255,255,0.7)", marginBottom: "8px", fontSize: "0.875rem" }}>
+                        <p
+                          style={{
+                            color: "rgba(255,255,255,0.7)",
+                            marginBottom: "8px",
+                            fontSize: "0.875rem",
+                          }}
+                        >
                           Foto Profil Saat Ini
                         </p>
                         <img
-                          src={profile.picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.nickname || 'User')}&color=FCFCFC&background=0c0c35`}
+                          src={
+                            profile.picture_url ||
+                            `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.nickname || "User")}&color=FCFCFC&background=0c0c35`
+                          }
                           alt="Profile"
                           style={{
                             width: "120px",
@@ -311,7 +477,10 @@ export const ProfileContent = () => {
                       </div>
                     )}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Update Foto Profil
                       </label>
                       <input
@@ -325,7 +494,10 @@ export const ProfileContent = () => {
 
                     {/* Username */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Username
                       </label>
                       <input
@@ -340,7 +512,10 @@ export const ProfileContent = () => {
 
                     {/* Gender */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Gender
                       </label>
                       <select
@@ -357,7 +532,10 @@ export const ProfileContent = () => {
 
                     {/* City */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Kota
                       </label>
                       <input
@@ -373,7 +551,10 @@ export const ProfileContent = () => {
 
                     {/* Social Media - Facebook */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Facebook
                       </label>
                       <input
@@ -389,7 +570,10 @@ export const ProfileContent = () => {
 
                     {/* Instagram */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Instagram
                       </label>
                       <input
@@ -405,7 +589,10 @@ export const ProfileContent = () => {
 
                     {/* TikTok */}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         TikTok
                       </label>
                       <input
@@ -422,7 +609,13 @@ export const ProfileContent = () => {
                     {/* Sponsor Image */}
                     {profile?.image_sponsor && (
                       <div>
-                        <p style={{ color: "rgba(255,255,255,0.7)", marginBottom: "8px", fontSize: "0.875rem" }}>
+                        <p
+                          style={{
+                            color: "rgba(255,255,255,0.7)",
+                            marginBottom: "8px",
+                            fontSize: "0.875rem",
+                          }}
+                        >
                           Foto Sponsor Saat Ini
                         </p>
                         <img
@@ -439,7 +632,10 @@ export const ProfileContent = () => {
                       </div>
                     )}
                     <div>
-                      <label className="form-label" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      <label
+                        className="form-label"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
                         Update Foto Sponsor
                       </label>
                       <input
@@ -452,7 +648,14 @@ export const ProfileContent = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "24px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        justifyContent: "flex-end",
+                        marginTop: "24px",
+                      }}
+                    >
                       <button
                         type="button"
                         onClick={() => {

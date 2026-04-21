@@ -45,11 +45,11 @@ const SignInPage = () => {
   };
 
   return (
-    <PageShell title="Masuk untuk Checkout">
+    <PageShell title="Login">
       <PageHeader
         eyebrow="Halaman Login"
-        title="Masuk untuk melanjutkan pembelian"
-        description="Akun diperlukan untuk memproses checkout dan menyimpan data pesanan Anda dengan aman."
+        title="Masuk untuk melanjutkan"
+        description="Akun diperlukan untuk sinkronisasi profil dan semua feature lain."
       />
       <section className="checkout-section padding-top">
         <div className="container">
