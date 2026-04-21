@@ -85,7 +85,7 @@ export const ProfileDropdown = () => {
   return (
     <div className="user-profile-dropdown">
       <div className="profile-info"><span>{memberProfile.nickname}</span></div>
-      <div className="profile-image"><img src={memberProfile.picture_url} alt={memberProfile.nickname} /></div>
+      <div className="profile-image"><img src={memberProfile.picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(memberProfile.nickname || 'User')}&color=FCFCFC&background=0c0c35`} alt={memberProfile.nickname} /></div>
       <div className="dropdown-content">
           <Link to="/profile"><i className="fa fa-user"></i> Profil</Link>
           {memberProfile.guild_position === "leader" && memberProfile.club && (
