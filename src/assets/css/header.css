@@ -209,6 +209,8 @@
     margin-top: 10px;
     border-radius: 4px;
     overflow: hidden;
+    z-index: 100;
+    display: block;
 }
 
 .user-profile-dropdown:hover .dropdown-content {
