@@ -323,7 +323,9 @@ type ApiTarkam = {
   female_completed?: number;
   points_awarded?: number;
   mvp_m?: string;
+  mvp_m_reward?: number;
   mvp_f?: string;
+  mvp_f_reward?: number;
   location?: string;
   teams_count?: number;
   groups_count?: number;
@@ -334,6 +336,8 @@ type ApiTarkam = {
   streamings_count?: number;
   sessions_count?: number;
   timelines_count?: number;
+  male_players_count?: number;
+  female_players_count?: number;
   created_at?: string;
   updated_at?: string;
   deleted_at?: string;
