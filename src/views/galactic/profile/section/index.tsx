@@ -38,14 +38,14 @@ type ApiResponse<T> = {
 
 export const ProfileContent = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [nicknameInput, setNicknameInput] = useState("");
   const [profile, setProfile] = useState<MemberProfile | null>(null);
   const [formData, setFormData] = useState<Partial<MemberProfile>>({
     username: "",
-    gender: "male",
+    gender: "",
     latitude: 0,
     longitude: 0,
     picture_url: "",
@@ -58,13 +58,18 @@ export const ProfileContent = () => {
   const [pictureFile, setPictureFile] = useState<File | null>(null);
   const [sponsorFile, setSponsorFile] = useState<File | null>(null);
 
-  // Check authentication
+  // Check authentication - wait until auth validation is complete
   useEffect(() => {
+    // Don't redirect while auth is still loading
+    if (authLoading) {
+      return;
+    }
+
     if (!isAuthenticated) {
       navigate("/signin", { replace: true });
       return;
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleSyncProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +91,7 @@ export const ProfileContent = () => {
         setProfile(memberData);
         setFormData({
           username: memberData.username || "",
-          gender: memberData.gender || "male",
+          gender: memberData.gender || "",
           latitude: memberData.latitude || 0,
           longitude: memberData.longitude || 0,
           picture_url: memberData.picture_url || "",
@@ -153,7 +158,7 @@ export const ProfileContent = () => {
       const formDataToSend = new FormData();
       formDataToSend.append("username", formData.username || "");
       formDataToSend.append("nickname", profile.nickname);
-      formDataToSend.append("gender", formData.gender || "male");
+      formDataToSend.append("gender", formData.gender || "");
       formDataToSend.append("latitude", String(formData.latitude || 0));
       formDataToSend.append("longitude", String(formData.longitude || 0));
       formDataToSend.append("city", formData.city || "");
@@ -183,7 +188,7 @@ export const ProfileContent = () => {
         setProfile(response.data.data);
         setFormData({
           username: response.data.data.username || "",
-          gender: response.data.data.gender || "male",
+          gender: response.data.data.gender || "",
           latitude: response.data.data.latitude || 0,
           longitude: response.data.data.longitude || 0,
           picture_url: response.data.data.picture_url || "",
@@ -212,7 +217,7 @@ export const ProfileContent = () => {
     }
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
@@ -293,7 +298,7 @@ export const ProfileContent = () => {
                           Foto Profil Saat Ini
                         </p>
                         <img
-                          src={profile.picture_url}
+                          src={profile.picture_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(profile?.nickname || 'User')}&color=FCFCFC&background=0c0c35`}
                           alt="Profile"
                           style={{
                             width: "120px",
@@ -455,7 +460,7 @@ export const ProfileContent = () => {
                           setNicknameInput("");
                           setFormData({
                             username: "",
-                            gender: "male",
+                            gender: "",
                             latitude: 0,
                             longitude: 0,
                             picture_url: "",

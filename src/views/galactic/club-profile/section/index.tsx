@@ -33,7 +33,7 @@ type ApiResponse<T> = {
 
 export const ClubProfileContent = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [memberProfile, setMemberProfile] = useState<MemberProfile | null>(null);
@@ -46,17 +46,22 @@ export const ClubProfileContent = () => {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [isLeader, setIsLeader] = useState(false);
 
-  // Check authentication
+  // Check authentication - wait until auth validation is complete
   useEffect(() => {
+    // Don't redirect while auth is still loading
+    if (authLoading) {
+      return;
+    }
+
     if (!isAuthenticated) {
       navigate("/signin", { replace: true });
       return;
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   // Fetch member profile
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAuthenticated) return;
 
     const fetchProfile = async () => {
       try {
@@ -103,7 +108,7 @@ export const ClubProfileContent = () => {
     };
 
     fetchProfile();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -176,7 +181,7 @@ export const ClubProfileContent = () => {
     }
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>

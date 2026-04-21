@@ -40,6 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const stored = JSON.parse(serialized) as StoredAuth;
         setUser(stored.user);
         setToken(stored.token);
+        // Set isLoading false setelah berhasil load dari localStorage
+        setIsLoading(false);
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
         setIsLoading(false);
