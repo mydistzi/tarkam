@@ -106,6 +106,7 @@ export type MemberDetailPayload = AnyObj & {
   teamsAsMember2?: AnyObj[];
   teamsAsMember3?: AnyObj[];
   penyawers?: AnyObj[];
+  guildPosition?: string;
 };
 
 type Props = { record?: MemberDetailPayload | null; loading?: boolean; error?: string | null };
@@ -224,6 +225,7 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   const lifetimePoints = Number(record?.lifetime_points ?? record?.points ?? 0);
   const sessionPoints = Number(record?.session_points ?? 0);
   const sessionReward = Number(record?.session_reward ?? 0);
+  const guildPosition = record?.guildPosition ? String(record.guildPosition) : null;
 
   const profileRows = [
     { label: "Username", value: record?.username || "-" },
@@ -390,6 +392,11 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
               <span>Sessions</span>
               <h3>{fmtNumber(sessionEntries.length)}</h3>
               <p>Session aktif member.</p>
+            </article>
+            <article className="player-kpi-card galactic-hover-card">
+              <span>Posisi</span>
+              <h3>{guildPosition || "Member"}</h3>
+              <p>Posisi dalam klub.</p>
             </article>
           </div>
         </div>
