@@ -105,7 +105,7 @@ type SponsorMarqueeEntry = {
   total_amount?: number | string;
   sponsor_message?: string;
   pesan?: string;
-  showing?: string;
+  showing?: boolean | string;
 };
 type ApiEnvelope<T> = {
   data?: T;
