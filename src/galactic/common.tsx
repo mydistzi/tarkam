@@ -2365,7 +2365,8 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         return null;
       }
 
-      if (entry.showing != "yes") {
+      const isShowing = entry.showing === true || entry.showing === "yes";
+      if (!isShowing) {
         return null;
       }
 
