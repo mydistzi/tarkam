@@ -35,6 +35,11 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
       </button>
       <Swiper
         autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        breakpoints={{
+          0: { slidesPerView: 1.2 },
+          768: { slidesPerView: 2 },
+          1200: { slidesPerView: 3 },
+        }}
         centeredSlides
         className="watch-carousel swiper-container swiper-coverflow swiper-3d swiper-initialized swiper-horizontal swiper-pointer-events"
         coverflowEffect={{
@@ -55,7 +60,7 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
-        slidesPerView={2}
+        slidesPerView={3}
         spaceBetween={0}
         speed={650}
       >
