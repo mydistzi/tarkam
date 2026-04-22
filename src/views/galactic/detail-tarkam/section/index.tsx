@@ -966,27 +966,6 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 >
                   Lihat competition
                 </button>
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={handlePrintQris}
-                  disabled={printingQris || authLoading || registrationClosed}
-                  style={{
-                    background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
-                    border: "1px solid rgba(17, 203, 126, 0.45)",
-                  }}
-                >
-                  {registrationClosed
-                    ? "Pendaftaran Ditutup"
-                    : printingQris
-                      ? "Menyiapkan QRIS..."
-                      : !isAuthenticated
-                        ? "Bayar"
-                        : "Bayar Sekarang"}
-                </button>
-                <span className="tarkam-pill tarkam-pill--auto-check">
-                  Auto check tiap 1 menit
-                </span>
                 {Number(detail.male_completed ?? 0) === 0 ? (
                   <button
                     className="default-btn"
@@ -1064,6 +1043,27 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     Hubungi Pembayaran
                   </a>
                 ) : null}
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={handlePrintQris}
+                  disabled={printingQris || authLoading || registrationClosed}
+                  style={{
+                    background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
+                    border: "1px solid rgba(17, 203, 126, 0.45)",
+                  }}
+                >
+                  {registrationClosed
+                    ? "Pendaftaran Ditutup"
+                    : printingQris
+                      ? "Menyiapkan QRIS..."
+                      : !isAuthenticated
+                        ? "Bayar"
+                        : "Bayar Sekarang"}
+                </button>
+                <span className="tarkam-pill tarkam-pill--auto-check">
+                  Auto check tiap 1 menit
+                </span>
               </div>
             </article>
           </div>

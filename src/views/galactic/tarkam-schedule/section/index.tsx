@@ -416,27 +416,6 @@ const ScheduleCard = ({
               </a>
             ) : null}
 
-            <button
-              onClick={handlePrintQris}
-              disabled={printingQris || authLoading || registrationClosed}
-              className="default-btn"
-              style={{
-                background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
-                border: "1px solid rgba(17, 203, 126, 0.45)",
-              }}
-            >
-              {registrationClosed
-                ? "Pendaftaran Ditutup"
-                : printingQris
-                  ? "Menyiapkan QRIS..."
-                  : !isAuthenticated
-                    ? "Bayar"
-                    : "Bayar Sekarang"}
-              <span />
-            </button>
-            <span className="tarkam-pill tarkam-pill--auto-check">
-              Auto check tiap 1 menit
-            </span>
             {Number(tarkam.male_completed ?? 0) === 0 ? (
               <button
                 onClick={() => handleRegister("male")}
@@ -501,6 +480,28 @@ const ScheduleCard = ({
               //   Pendaftaran Female Ditutup
               // </button>
             )}
+
+            <button
+              onClick={handlePrintQris}
+              disabled={printingQris || authLoading || registrationClosed}
+              className="default-btn"
+              style={{
+                background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
+                border: "1px solid rgba(17, 203, 126, 0.45)",
+              }}
+            >
+              {registrationClosed
+                ? "Pendaftaran Ditutup"
+                : printingQris
+                  ? "Menyiapkan QRIS..."
+                  : !isAuthenticated
+                    ? "Bayar"
+                    : "Bayar Sekarang"}
+              <span />
+            </button>
+            <span className="tarkam-pill tarkam-pill--auto-check">
+              Auto check tiap 1 menit
+            </span>
           </div>
         </div>
       </div>
