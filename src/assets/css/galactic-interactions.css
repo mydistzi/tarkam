@@ -385,14 +385,14 @@
 }
 
 .watch-carousel-slide {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-    width: clamp(320px, 67vw, 972px);
-    min-height: clamp(270px, 26vw, 390px);
-    border-radius: 3px;
-    background: #090d28;
-    box-shadow: 0 5px 10px rgb(0 0 0 / 30%);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  width: clamp(320px, 67vw, 972px);
+  min-height: clamp(270px, 26vw, 390px);
+  border-radius: 3px;
+  background: #090d28;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 30%);
 }
 
 .watch-carousel-slide::after {
@@ -1254,13 +1254,13 @@ body.video-modal-open {
   }
 
   .watch-carousel {
-      width: 100%;
-      margin-left: 0;
-    }
+    width: 100%;
+    margin-left: 0;
+  }
 
   .watch-carousel > .galactic-carousel-nav {
-      left: 0;
-      right: 0;
+    left: 0;
+    right: 0;
   }
 
   .watch-carousel-slide img {
