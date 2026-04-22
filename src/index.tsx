@@ -6,7 +6,6 @@ import { AuthProvider } from "@/views/galactic/auth/AuthProvider";
 import { SocketProvider } from "@/views/galactic/socket/SocketProvider";
 import { getGalacticRoutes } from "@/views/galactic/routes";
 import "@/assets/css/bootstrap.min.css";
-import "react-multi-carousel/lib/styles.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-coverflow";

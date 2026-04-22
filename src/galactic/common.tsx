@@ -242,7 +242,9 @@ const templateHeaderDescription = (
   </>
 );
 const pageBackground = (image = brand.background): CSSProperties => ({
-  backgroundImage: `linear-gradient(rgba(12, 12, 53, 0.78), rgba(12, 12, 53, 0.88)), url(${image})`,
+  backgroundImage: image
+    ? `linear-gradient(rgba(12, 12, 53, 0.78), rgba(12, 12, 53, 0.88)), url(${image})`
+    : "linear-gradient(rgba(12, 12, 53, 0.78), rgba(12, 12, 53, 0.88))",
   backgroundPosition: "center center",
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",

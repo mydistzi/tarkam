@@ -1,4 +1,3 @@
-import bodyBg from "@/assets/images/body-bg.jpg";
 import client1 from "@/assets/images/client-1.png";
 import client2 from "@/assets/images/client-2.png";
 import client3 from "@/assets/images/client-3.png";
@@ -334,7 +333,7 @@ export const brand = {
   description:
     "Tarkam adalah komunitas game tempat para pemain berkumpul untuk berkompetisi, streaming, dan menikmati pertarungan tim acak.",
   logo,
-  background: bodyBg,
+  background: "",
   heroImage: gameCharacters,
   contact: {
     location: "in-game",

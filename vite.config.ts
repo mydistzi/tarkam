@@ -43,5 +43,37 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes('node_modules')) {
+            return;
+          }
+
+          if (id.includes('react-dom') || id.includes('react-router') || id.includes('react-helmet-async')) {
+            return 'react-core';
+          }
+
+          if (
+            id.includes('swiper') ||
+            id.includes('react-multi-carousel') ||
+            id.includes('sweetalert2') ||
+            id.includes('qrcode')
+          ) {
+            return 'ui-widgets';
+          }
+
+          if (id.includes('pusher-js') || id.includes('laravel-echo')) {
+            return 'realtime';
+          }
+
+          if (id.includes('disqus-react')) {
+            return 'comments';
+          }
+
+          return 'vendor';
+        },
+      },
+    },
   },
 })
