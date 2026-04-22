@@ -396,7 +396,8 @@ const ScheduleCard = ({
           ) : null}
 
           <div style={{ marginTop: "18px" }}>
-            <PaymentSupportPanel note={tarkam.transfer_info || undefined} />
+            {/* <PaymentSupportPanel note={tarkam.transfer_info || undefined} /> */}
+            <PaymentSupportPanel note="" />
           </div>
 
           <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center", gap: "12px" }}>
@@ -429,7 +430,7 @@ const ScheduleCard = ({
                 : printingQris
                   ? "Menyiapkan QRIS..."
                   : !isAuthenticated
-                    ? "Login untuk Bayar"
+                    ? "Bayar"
                     : "Bayar Sekarang"}
               <span />
             </button>
@@ -450,7 +451,7 @@ const ScheduleCard = ({
                 {registering === "male"
                   ? "Memproses Male..."
                   : !isAuthenticated
-                    ? "Login untuk Daftar Male"
+                    ? "Daftar Male"
                     : "Daftar Male"}
                 <span />
               </button>
@@ -481,7 +482,7 @@ const ScheduleCard = ({
                 {registering === "female"
                   ? "Memproses Female..."
                   : !isAuthenticated
-                    ? "Login untuk Daftar Female"
+                    ? "Daftar Female"
                     : "Daftar Female"}
                 <span />
               </button>

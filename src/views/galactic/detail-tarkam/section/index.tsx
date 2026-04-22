@@ -981,7 +981,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     : printingQris
                       ? "Menyiapkan QRIS..."
                       : !isAuthenticated
-                        ? "Login untuk Bayar"
+                        ? "Bayar"
                         : "Bayar Sekarang"}
                 </button>
                 <span className="tarkam-pill tarkam-pill--auto-check">
@@ -1002,7 +1002,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     {registering === "male"
                       ? "Memproses Male..."
                       : !isAuthenticated
-                        ? "Login untuk Daftar Male"
+                        ? "Daftar Male"
                         : "Daftar Male"}
                   </button>
                 ) : (
@@ -1034,7 +1034,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     {registering === "female"
                       ? "Memproses Female..."
                       : !isAuthenticated
-                        ? "Login untuk Daftar Female"
+                        ? "Daftar Female"
                         : "Daftar Female"}
                   </button>
                 ) : (
@@ -1161,12 +1161,13 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       title="Informasi pembayaran"
                       summary=""
                     />
-                    <PaymentSupportPanel note={detail.transfer_info || undefined} />
+                    {/* <PaymentSupportPanel note={detail.transfer_info || undefined} /> */}
+                    <PaymentSupportPanel note="" />
                     <div className="tarkam-detail-stack" style={{ marginTop: "18px" }}>
-                      <div className="tarkam-detail-row">
+                      {/* <div className="tarkam-detail-row">
                         <span>Kontak pembayaran</span>
                         <strong>{detail.proof || "Belum ada kontak."}</strong>
-                      </div>
+                      </div> */}
                       <div className="tarkam-detail-row">
                         <span>Update terakhir</span>
                         <strong>{updatedLabel}</strong>
