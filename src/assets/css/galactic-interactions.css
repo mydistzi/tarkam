@@ -376,80 +376,43 @@
 
 .watch-carousel {
   width: 150%;
-  margin-left: -25%;
-  overflow: visible;
+  left: -25%;
+  overflow: hidden !important;
+}
+
+.watch-carousel-clip {
+  overflow: hidden;
+  width: 100%;
 }
 
 .watch-carousel .swiper-wrapper {
-  align-items: center;
-}
-
-.watch-carousel-slide {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
-  width: clamp(320px, 67vw, 972px);
-  min-height: clamp(270px, 26vw, 390px);
-  border-radius: 3px;
-  background: #090d28;
-  box-shadow: 0 5px 10px rgb(0 0 0 / 30%);
-}
-
-.watch-carousel-slide::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(12, 12, 53, 0.02) 0%, rgba(12, 12, 53, 0.5) 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.watch-carousel-slide img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-  z-index: 0;
+  overflow: visible;
 }
 
 .watch-carousel .swiper-slide {
-  opacity: 0.42;
-  transition: opacity 0.4s ease;
+  position: relative;
 }
 
-.watch-carousel .swiper-slide-visible {
-  opacity: 0.68;
-}
-
-.watch-carousel .swiper-slide-active {
-  opacity: 1;
-  z-index: 3;
+.watch-carousel .swiper-slide img {
+  border-radius: 3px;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 30%);
+  position: relative;
+  margin-bottom: 5px;
+  width: 100%;
 }
 
 .watch-carousel .play-btn {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 92px;
-  height: 92px;
-  transform: translate(-50%, -50%) scale(0.82);
+  transform: translate(-50%, -50%);
   visibility: hidden;
   opacity: 0;
-  z-index: 8;
 }
 
 .watch-carousel .swiper-slide-active .play-btn {
   visibility: visible;
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.watch-carousel .swiper-slide-active .watch-carousel-slide::after,
-.watch-carousel .swiper-slide-active::after {
-  opacity: 0.2;
-  z-index: 1;
 }
 
 .watch-carousel-shell .swiper-nav {
@@ -1255,7 +1218,7 @@ body.video-modal-open {
 
   .watch-carousel {
     width: 100%;
-    margin-left: 0;
+    left: 0;
   }
 
   .watch-carousel > .galactic-carousel-nav {
@@ -1263,19 +1226,8 @@ body.video-modal-open {
     right: 0;
   }
 
-  .watch-carousel-slide img {
+  .watch-carousel .swiper-slide img {
     object-position: center 18%;
-  }
-
-  .watch-carousel-slide,
-  .watch-carousel-slide.is-prev,
-  .watch-carousel-slide.is-next,
-  .watch-carousel-slide.is-prev-far,
-  .watch-carousel-slide.is-next-far,
-  .watch-carousel-slide.is-featured {
-    opacity: 1;
-    transform: none;
-    filter: none;
   }
 
   .galactic-carousel-nav.is-watch .swiper-prev {

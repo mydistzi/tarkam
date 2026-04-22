@@ -61,21 +61,23 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         spaceBetween={30}
         speed={650}
       >
-        {loopItems.map((stream, index) => (
-          <SwiperSlide className="watch-carousel-slide" key={`${stream.title}-${index + 1}`}>
-            <img src={getImageSource(stream.image, placeholderVideoThumb)} alt="thumb" />
-            <button
-              className="dl-video-popup play-btn vbox-item galactic-play-trigger"
-              data-video-title={stream.title}
-              data-video-url={getNormalizedVideoUrl(stream.videoUrl)}
-              data-video-source-url={getExternalVideoUrl(stream.videoUrl)}
-              type="button"
-            >
-              <PlaySvg />
-              <div className="ripple" />
-            </button>
-          </SwiperSlide>
-        ))}
+        <div className="watch-carousel-clip">
+          {loopItems.map((stream, index) => (
+            <SwiperSlide key={`${stream.title}-${index + 1}`}>
+              <img src={getImageSource(stream.image, placeholderVideoThumb)} alt="thumb" />
+              <button
+                className="dl-video-popup play-btn vbox-item galactic-play-trigger"
+                data-video-title={stream.title}
+                data-video-url={getNormalizedVideoUrl(stream.videoUrl)}
+                data-video-source-url={getExternalVideoUrl(stream.videoUrl)}
+                type="button"
+              >
+                <PlaySvg />
+                <div className="ripple" />
+              </button>
+            </SwiperSlide>
+          ))}
+        </div>
       </Swiper>
     </div>
   );
