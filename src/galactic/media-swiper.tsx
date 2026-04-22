@@ -36,9 +36,9 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
       <Swiper
         autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
         breakpoints={{
-          0: { spaceBetween: 12 },
-          768: { spaceBetween: 18 },
-          1200: { spaceBetween: 24 },
+          0: { slidesPerView: 1.15, spaceBetween: 0 },
+          768: { slidesPerView: 1.8, spaceBetween: 0 },
+          1200: { slidesPerView: 2.6, spaceBetween: 0 },
         }}
         centeredSlides
         className="watch-carousel swiper-container swiper-coverflow swiper-3d swiper-initialized swiper-horizontal swiper-pointer-events"
@@ -60,8 +60,8 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
-        slidesPerView="auto"
-        spaceBetween={24}
+        slidesPerView={2.6}
+        spaceBetween={0}
         speed={650}
       >
         {loopItems.map((stream, index) => (

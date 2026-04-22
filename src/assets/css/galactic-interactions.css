@@ -388,7 +388,7 @@
     position: relative;
     overflow: hidden;
     aspect-ratio: 16 / 9;
-    width: clamp(260px, 31vw, 440px);
+    width: clamp(320px, 67vw, 972px);
     min-height: clamp(270px, 26vw, 390px);
     border-radius: 3px;
     background: #090d28;
@@ -1258,13 +1258,9 @@ body.video-modal-open {
       margin-left: 0;
     }
 
-  .watch-carousel-slide {
-      width: min(78vw, 420px);
-    }
-
   .watch-carousel > .galactic-carousel-nav {
-    left: 0;
-    right: 0;
+      left: 0;
+      right: 0;
   }
 
   .watch-carousel-slide img {
