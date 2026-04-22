@@ -107,6 +107,60 @@ const availabilityForProduct = (badge?: string, badgeClass?: string) => {
     : "https://schema.org/InStock";
 };
 
+const eventAvailabilityFromStatus = (status?: string) => {
+  const normalized = String(status || "").toLowerCase();
+  return /cancel/.test(normalized)
+    ? "https://schema.org/SoldOut"
+    : "https://schema.org/InStock";
+};
+
+const eventStatusUrl = ({
+  status,
+  hasWinner,
+}: {
+  status?: string;
+  hasWinner?: boolean;
+}) => {
+  const normalized = String(status || "").toLowerCase();
+
+  if (hasWinner || /complete|completed|finish|finished|done|selesai/.test(normalized)) {
+    return "https://schema.org/EventCompleted";
+  }
+
+  if (/cancel|dibatalkan/.test(normalized)) {
+    return "https://schema.org/EventCancelled";
+  }
+
+  if (/postpone|ditunda/.test(normalized)) {
+    return "https://schema.org/EventPostponed";
+  }
+
+  if (/resched|jadwal ulang/.test(normalized)) {
+    return "https://schema.org/EventRescheduled";
+  }
+
+  if (/live|ongoing|berlangsung/.test(normalized)) {
+    return "https://schema.org/EventScheduled";
+  }
+
+  return "https://schema.org/EventScheduled";
+};
+
+const estimateEventEndDate = (value?: string, durationHours = 2) => {
+  const rawValue = String(value || "").trim();
+  if (!rawValue) {
+    return undefined;
+  }
+
+  const date = new Date(rawValue);
+  if (Number.isNaN(date.getTime())) {
+    return undefined;
+  }
+
+  date.setHours(date.getHours() + durationHours);
+  return date.toISOString();
+};
+
 const SEO = ({
   title,
   description,
@@ -491,6 +545,14 @@ const SEO = ({
     }
 
     if (matchedMatchRecord) {
+      const matchStartDate =
+        matchedMatchRecord.contest?.time ||
+        matchedMatchRecord.tarkam?.male_date ||
+        matchedMatchRecord.tarkam?.female_date;
+      const matchStatus = matchedMatchRecord.contest?.gender || matchedMatchRecord.tarkam?.status;
+      const homeTeamUrl = toAbsoluteUrl(matchedMatchRecord.item.leftTeamPath, siteUrl);
+      const awayTeamUrl = toAbsoluteUrl(matchedMatchRecord.item.rightTeamPath, siteUrl);
+
       nodes.push(
         buildSportsEventSchema({
           eventId,
@@ -502,20 +564,41 @@ const SEO = ({
               matchedMatchRecord.item.leftLogo || matchedMatchRecord.item.rightLogo || pageImage,
               siteUrl,
             ) || pageImage,
-          startDate:
-            matchedMatchRecord.contest?.time ||
-            matchedMatchRecord.tarkam?.male_date ||
-            matchedMatchRecord.tarkam?.female_date,
+          startDate: matchStartDate,
+          endDate: estimateEventEndDate(matchStartDate, 2),
+          eventStatus: eventStatusUrl({
+            status: matchedMatchRecord.tarkam?.status || matchStatus,
+            hasWinner: Boolean(matchedMatchRecord.winnerTeam),
+          }),
           locationName: matchedMatchRecord.tarkam?.location || meta.address || "Online",
+          locationAddress: meta.address || matchedMatchRecord.tarkam?.location,
           organizerId: organizationId,
           homeTeam: {
-            id: `${toAbsoluteUrl(matchedMatchRecord.item.leftTeamPath, siteUrl) || pageUrl}#team`,
+            id: `${homeTeamUrl || pageUrl}#team`,
             name: matchedMatchRecord.item.leftTeam,
+            url: homeTeamUrl,
+            imageUrl: toAbsoluteUrl(matchedMatchRecord.item.leftLogo, siteUrl),
           },
           awayTeam: {
-            id: `${toAbsoluteUrl(matchedMatchRecord.item.rightTeamPath, siteUrl) || pageUrl}#team`,
+            id: `${awayTeamUrl || pageUrl}#team`,
             name: matchedMatchRecord.item.rightTeam,
+            url: awayTeamUrl,
+            imageUrl: toAbsoluteUrl(matchedMatchRecord.item.rightLogo, siteUrl),
           },
+          performer: [
+            {
+              id: `${homeTeamUrl || pageUrl}#team`,
+              name: matchedMatchRecord.item.leftTeam,
+              url: homeTeamUrl,
+              imageUrl: toAbsoluteUrl(matchedMatchRecord.item.leftLogo, siteUrl),
+            },
+            {
+              id: `${awayTeamUrl || pageUrl}#team`,
+              name: matchedMatchRecord.item.rightTeam,
+              url: awayTeamUrl,
+              imageUrl: toAbsoluteUrl(matchedMatchRecord.item.rightLogo, siteUrl),
+            },
+          ],
           winnerTeam: matchedMatchRecord.winnerTeam
             ? {
                 id: `${toAbsoluteUrl(
@@ -525,14 +608,37 @@ const SEO = ({
                   siteUrl,
                 ) || pageUrl}#team`,
                 name: matchedMatchRecord.winnerTeam.name || "Pemenang",
+                url: matchedMatchRecord.winnerTeam.id
+                  ? toAbsoluteUrl(buildTeamDetailPath(matchedMatchRecord.winnerTeam.id), siteUrl)
+                  : undefined,
+                imageUrl: toAbsoluteUrl(matchedMatchRecord.winnerTeam.logo, siteUrl),
               }
             : undefined,
+          offers: {
+            url: pageUrl,
+            price: 0,
+            priceCurrency: "IDR",
+            availability: eventAvailabilityFromStatus(matchedMatchRecord.tarkam?.status),
+            validFrom: matchStartDate,
+            category: matchedMatchRecord.item.videoUrl ? "Livestream access" : "Event access",
+          },
         }),
       );
       mainEntity = { "@id": eventId };
     }
 
     if (matchedTarkam && !matchedMatchRecord) {
+      const tarkamStartDate = matchedTarkam.male_date || matchedTarkam.female_date;
+      const tarkamPerformers = teams
+        .filter((team) => String(team.tarkam?.id || team.team.tarkam_fk || "") === String(matchedTarkam.id))
+        .slice(0, 8)
+        .map((team) => ({
+          id: `${toAbsoluteUrl(team.teamPath, siteUrl) || pageUrl}#team`,
+          name: team.name,
+          url: toAbsoluteUrl(team.teamPath, siteUrl),
+          imageUrl: toAbsoluteUrl(team.logo, siteUrl),
+        }));
+
       nodes.push(
         buildSportsEventSchema({
           eventId,
@@ -541,10 +647,33 @@ const SEO = ({
             matchedTarkam.title ||
             (matchedTarkam.week ? `Tarkam Week ${matchedTarkam.week}` : pageTitle),
           description: stripHtmlText(matchedTarkam.description) || pageDescription,
-          imageUrl: toAbsoluteUrl(matchedTarkam.thumbnail || matchedTarkam.image || pageImage, siteUrl) || pageImage,
-          startDate: matchedTarkam.male_date || matchedTarkam.female_date,
+          imageUrl:
+            toAbsoluteUrl(matchedTarkam.thumbnail || matchedTarkam.image || pageImage, siteUrl) ||
+            pageImage,
+          startDate: tarkamStartDate,
+          endDate: estimateEventEndDate(tarkamStartDate, 4),
+          eventStatus: eventStatusUrl({ status: matchedTarkam.status }),
           locationName: matchedTarkam.location || meta.address || "Online",
+          locationAddress: meta.address || matchedTarkam.location,
           organizerId: organizationId,
+          performer: tarkamPerformers.length
+            ? tarkamPerformers
+            : [
+                {
+                  id: organizationId,
+                  name: siteDisplayName,
+                  url: siteUrl,
+                  imageUrl: siteLogo,
+                },
+              ],
+          offers: {
+            url: pageUrl,
+            price: 0,
+            priceCurrency: "IDR",
+            availability: eventAvailabilityFromStatus(matchedTarkam.status),
+            validFrom: tarkamStartDate,
+            category: "Tournament access",
+          },
         }),
       );
       mainEntity = { "@id": eventId };

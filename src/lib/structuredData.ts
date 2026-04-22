@@ -23,6 +23,22 @@ type ListEntry = {
   image?: string;
 };
 
+type EventParticipant = {
+  name: string;
+  id: string;
+  url?: string;
+  imageUrl?: string;
+};
+
+type EventOffer = {
+  url?: string;
+  price?: number | string;
+  priceCurrency?: string;
+  availability?: string;
+  validFrom?: string;
+  category?: string;
+};
+
 const PROTOCOL_PATTERN = /^[a-z][a-z\d+.-]*:/i;
 
 export function normalizeSiteUrl(value?: string, fallback = ""): string {
@@ -533,11 +549,16 @@ export function buildSportsEventSchema({
   description,
   imageUrl,
   startDate,
+  endDate,
+  eventStatus,
   locationName,
+  locationAddress,
   organizerId,
   homeTeam,
   awayTeam,
   winnerTeam,
+  performer,
+  offers,
 }: {
   eventId: string;
   pageUrl: string;
@@ -545,12 +566,23 @@ export function buildSportsEventSchema({
   description?: string;
   imageUrl?: string;
   startDate?: string;
+  endDate?: string;
+  eventStatus?: string;
   locationName?: string;
+  locationAddress?: string;
   organizerId: string;
-  homeTeam?: { name: string; id: string };
-  awayTeam?: { name: string; id: string };
-  winnerTeam?: { name: string; id: string };
+  homeTeam?: EventParticipant;
+  awayTeam?: EventParticipant;
+  winnerTeam?: EventParticipant;
+  performer?: EventParticipant[];
+  offers?: EventOffer | EventOffer[];
 }): StructuredDataNode {
+  const competitorTeams = [homeTeam, awayTeam].filter(
+    (team): team is EventParticipant => Boolean(team),
+  );
+  const eventPerformers =
+    performer?.filter((team): team is EventParticipant => Boolean(team)) || competitorTeams;
+
   return {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
@@ -561,10 +593,19 @@ export function buildSportsEventSchema({
     image: imageUrl,
     sport: "Esports",
     startDate: normalizeIsoDate(startDate),
+    endDate: normalizeIsoDate(endDate),
+    eventStatus,
     location: locationName
       ? {
           "@type": "Place",
           name: locationName,
+          address: locationAddress
+            ? {
+                "@type": "PostalAddress",
+                streetAddress: locationAddress,
+                addressCountry: "ID",
+              }
+            : undefined,
         }
       : undefined,
     organizer: {
@@ -584,19 +625,49 @@ export function buildSportsEventSchema({
           name: awayTeam.name,
         }
       : undefined,
-    competitor: [homeTeam, awayTeam]
-      .filter(Boolean)
-      .map((team) => ({
-        "@type": "SportsTeam",
-        "@id": team?.id,
-        name: team?.name,
-      })),
+    competitor: competitorTeams.map((team) => ({
+      "@type": "SportsTeam",
+      "@id": team.id,
+      name: team.name,
+      url: team.url,
+      image: team.imageUrl,
+    })),
+    performer: eventPerformers.map((team) => ({
+      "@type": "SportsTeam",
+      "@id": team.id,
+      name: team.name,
+      url: team.url,
+      image: team.imageUrl,
+    })),
     winner: winnerTeam
       ? {
           "@type": "SportsTeam",
           "@id": winnerTeam.id,
           name: winnerTeam.name,
+          url: winnerTeam.url,
+          image: winnerTeam.imageUrl,
         }
       : undefined,
+    offers: Array.isArray(offers)
+      ? offers.map((offer) => ({
+          "@type": "Offer",
+          url: offer.url || pageUrl,
+          price: offer.price,
+          priceCurrency: offer.priceCurrency || "IDR",
+          availability: offer.availability,
+          validFrom: normalizeIsoDate(offer.validFrom || startDate),
+          category: offer.category,
+        }))
+      : offers
+        ? {
+            "@type": "Offer",
+            url: offers.url || pageUrl,
+            price: offers.price,
+            priceCurrency: offers.priceCurrency || "IDR",
+            availability: offers.availability,
+            validFrom: normalizeIsoDate(offers.validFrom || startDate),
+            category: offers.category,
+          }
+        : undefined,
   };
 }
