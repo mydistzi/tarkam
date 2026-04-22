@@ -524,6 +524,11 @@ body {
   padding-bottom: 0;
 }
 
+.tarkam-list-item--team {
+  display: grid;
+  gap: 12px;
+}
+
 .tarkam-list-item__main,
 .tarkam-list-item__meta {
   display: flex;
@@ -542,6 +547,29 @@ body {
   margin: 8px 0 0;
   color: var(--tarkam-text-soft);
   line-height: 1.7;
+}
+
+.tarkam-team-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tarkam-team-line__logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  border: 1px solid var(--tarkam-border);
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tarkam-team-line__content {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 8px;
 }
 
 .tarkam-player-grid {
@@ -649,18 +677,12 @@ body {
 }
 
 .tarkam-stream-card__body {
-  /* display: grid;
-  gap: 12px; */
-  position: relative; 
-  display: flex;
-  flex-direction: column;
-  /* padding-top: 25px; */
+  display: grid;
+  gap: 12px;
 }
 
 .tarkam-stream-card__body button.dl-video-popup,
 .tarkam-stream-card__body .tarkam-inline-copy {
-  position: absolute;
-  right: 20px;
   background-color: #FF0000 !important;
   color: var(--luxury-text) !important;
   border: none;
@@ -673,7 +695,9 @@ body {
   gap: 6px;
   text-transform: uppercase;
   cursor: pointer;
-  z-index: 10;
+  justify-self: flex-start;
+  position: static;
+  width: fit-content;
 }
 
 .tarkam-stream-card__body button.dl-video-popup i {
@@ -905,6 +929,10 @@ body {
   .tarkam-section-heading {
     flex-direction: column;
   }
+
+  .tarkam-team-line {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 575px) {
@@ -927,5 +955,11 @@ body {
 
   .tarkam-detail-row strong {
     text-align: left;
+  }
+
+  .tarkam-team-line__logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
   }
 }

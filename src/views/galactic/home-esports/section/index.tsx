@@ -27,7 +27,14 @@ const HomeEsportsHeroSection = ({ hero, streams }: { hero?: HeroItem; streams: S
         <h4>{hero?.subtitle || "Nikmati Game-nya"}</h4>
         <h1>{hero?.title || "Game Epik Buat Gamer Sejati!"}</h1>
       </div>
-      <WatchLiveGrid items={streams} />
+      {streams.length ? (
+        <WatchLiveGrid items={streams} />
+      ) : (
+        <div className="tarkam-empty-block" style={{ marginTop: "20px" }}>
+          <h4>Live stream belum tersedia</h4>
+          <p>Konten video akan muncul di sini begitu kanal streaming aktif untuk Tarkam saat ini.</p>
+        </div>
+      )}
     </div>
   </section>
 );

@@ -260,7 +260,13 @@ const ScheduleCard = ({
             ) : null}
           </div>
 
-          {streamUrl ? <VideoStreemButton href={streamUrl} normalizeFacebook /> : null}
+          {streamUrl ? (
+            <VideoStreemButton
+              href={streamUrl}
+              label="Watch Stream"
+              normalizeFacebook
+            />
+          ) : null}
 
           <p style={{ marginTop: "16px", color: "rgba(255,255,255,0.74)", lineHeight: 1.8 }}>
             {tarkam.description || "Rangkuman jadwal Tarkam akan tampil di sini, termasuk sesi dan pembagian bracket berdasarkan gender."}

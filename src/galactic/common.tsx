@@ -980,14 +980,22 @@ const VideoCardButton = ({ href, normalizeFacebook = false }: { href: string; no
   );
 };
 
-const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; normalizeFacebook?: boolean }) => {
+const VideoStreemButton = ({
+  href,
+  normalizeFacebook = false,
+  label = "Watch Stream",
+}: {
+  href: string;
+  normalizeFacebook?: boolean;
+  label?: string;
+}) => {
   const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
   const sourceHref = getExternalVideoUrl(href);
 
   return (
     <button
       className="dl-video-popup vbox-item fb-video"
-      data-video-title="Tarkam Highlight Reel"
+      data-video-title={label}
       data-autoplay="true"
       data-mute="false"
       data-allowfullscreen="true"
@@ -995,7 +1003,7 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
       data-video-source-url={sourceHref}
       type="button"
     >
-      <i className="lab la-youtube"></i> Highlights
+      <i className="lab la-youtube"></i> {label}
     </button>
   );
 };
@@ -1287,7 +1295,7 @@ const LatestMatchesList = ({
                   target="_blank"
                   rel="noreferrer noopener"
                 >
-                  <i className="lab la-youtube"></i>Watch Streem
+                  <i className="lab la-youtube"></i>Watch Stream
                 </a>
               </div>
             </div>

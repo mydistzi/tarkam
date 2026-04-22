@@ -56,6 +56,7 @@ type ApiGroup = {
 type ApiTeam = {
   id?: number | string;
   name?: string;
+  logo?: string;
   gender?: string;
   date?: string;
   time?: string;
@@ -1075,30 +1076,42 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
                           return (
                             <div
-                              className="tarkam-list-item"
+                              className="tarkam-list-item tarkam-list-item--team"
                               key={String(team.id)}
                             >
-                              <div className="tarkam-list-item__main">
-                                <strong>
-                                  {hasValue(team.id) ? (
-                                    <Link
-                                      to={buildTeamDetailPath(team.id || "")}
-                                    >
-                                      {team.name || "Team"}
-                                    </Link>
-                                  ) : (
-                                    team.name || "Team"
-                                  )}
-                                </strong>
-                                <span>
-                                  {team.group?.name ||
-                                    team.gender ||
-                                    "Divisi belum ditetapkan"}
-                                </span>
-                              </div>
-                              <div className="tarkam-list-item__meta">
-                                <span>{formatDate(team.date)}</span>
-                                <span>{team.time || "TBA"}</span>
+                              <div className="tarkam-team-line">
+                                <img
+                                  className="tarkam-team-line__logo"
+                                  src={
+                                    resolveImage(team.logo, placeholderTeam) ||
+                                    placeholderTeam
+                                  }
+                                  alt={team.name || "Team"}
+                                />
+                                <div className="tarkam-team-line__content">
+                                  <div className="tarkam-list-item__main">
+                                    <strong>
+                                      {hasValue(team.id) ? (
+                                        <Link
+                                          to={buildTeamDetailPath(team.id || "")}
+                                        >
+                                          {team.name || "Team"}
+                                        </Link>
+                                      ) : (
+                                        team.name || "Team"
+                                      )}
+                                    </strong>
+                                    <span>
+                                      {team.group?.name ||
+                                        team.gender ||
+                                        "Divisi belum ditetapkan"}
+                                    </span>
+                                  </div>
+                                  <div className="tarkam-list-item__meta">
+                                    <span>{formatDate(team.date)}</span>
+                                    <span>{team.time || "TBA"}</span>
+                                  </div>
+                                </div>
                               </div>
                               <p className="tarkam-inline-copy">
                                 {members || "Belum ada member yang terhubung."}
@@ -1440,6 +1453,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                             {streamUrl ? (
                               <VideoStreemButton
                                 href={streamUrl}
+                                label="Watch Stream"
                                 normalizeFacebook
                               />
                             ) : (
