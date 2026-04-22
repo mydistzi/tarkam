@@ -332,23 +332,23 @@ const formatParticipantSnapshot = (value?: string | null) => {
   return compact || value;
 };
 
-const normalizeProofHref = (value?: string | null) => {
-  const normalized = value?.trim();
-  if (!normalized) {
-    return undefined;
-  }
+// const normalizeProofHref = (value?: string | null) => {
+//   const normalized = value?.trim();
+//   if (!normalized) {
+//     return undefined;
+//   }
 
-  if (/^https?:\/\//i.test(normalized)) {
-    return normalized;
-  }
+//   if (/^https?:\/\//i.test(normalized)) {
+//     return normalized;
+//   }
 
-  const phoneNumber = normalized.replace(/[^\d]/g, "");
-  if (phoneNumber) {
-    return `https://wa.me/${phoneNumber}`;
-  }
+//   const phoneNumber = normalized.replace(/[^\d]/g, "");
+//   if (phoneNumber) {
+//     return `https://wa.me/${phoneNumber}`;
+//   }
 
-  return `https://${normalized.replace(/^\/+/, "")}`;
-};
+//   return `https://${normalized.replace(/^\/+/, "")}`;
+// };
 
 const resolveImage = (...values: Array<string | null | undefined>) =>
   values.map((value) => value?.trim()).find(Boolean);
@@ -653,7 +653,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const pageDescription =
     detail.description ||
     "Lihat detail jadwal, roster, sesi, timeline, pertandingan, dan streaming untuk Tarkam ini.";
-  const proofHref = normalizeProofHref(detail.proof);
+  // const proofHref = normalizeProofHref(detail.proof);
   const heroImage =
     resolveImage(detail.image, detail.thumbnail, placeholderTeam) ||
     placeholderTeam;
@@ -1032,7 +1032,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                   //   Pendaftaran Female Ditutup
                   // </button>
                 )}
-                {proofHref ? (
+                {/* {proofHref ? (
                   <a
                     className="default-btn tarkam-button--ghost"
                     href={proofHref}
@@ -1042,7 +1042,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                   >
                     Hubungi Pembayaran
                   </a>
-                ) : null}
+                ) : null} */}
                 <button
                   className="default-btn"
                   type="button"
@@ -1061,9 +1061,9 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                         ? "Bayar"
                         : "Bayar Sekarang"}
                 </button>
-                <span className="tarkam-pill tarkam-pill--auto-check">
+                {/* <span className="tarkam-pill tarkam-pill--auto-check">
                   Auto check tiap 1 menit
-                </span>
+                </span> */}
               </div>
             </article>
           </div>

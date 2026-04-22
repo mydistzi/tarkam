@@ -404,7 +404,7 @@ const ScheduleCard = ({
             <Link className="default-btn" to={buildTarkamDetailPath(tarkam.id)}>
               Lihat Detail
             </Link>
-            {tarkam.proof ? (
+            {/* {tarkam.proof ? (
               <a
                 className="default-btn"
                 href={`https://wa.me/${tarkam.proof}`}
@@ -414,7 +414,7 @@ const ScheduleCard = ({
               >
                 Proof
               </a>
-            ) : null}
+            ) : null} */}
 
             {Number(tarkam.male_completed ?? 0) === 0 ? (
               <button
@@ -499,9 +499,9 @@ const ScheduleCard = ({
                     : "Bayar Sekarang"}
               <span />
             </button>
-            <span className="tarkam-pill tarkam-pill--auto-check">
+            {/* <span className="tarkam-pill tarkam-pill--auto-check">
               Auto check tiap 1 menit
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
