@@ -2386,7 +2386,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       .map((entry) => {
         const sponsorMessage = resolveSponsorMarqueeMessage(entry);
         const sponsorName =
-          entry.nickname || entry.name || entry.member_nickname || "Sponsor";
+          entry.member_nickname || entry.nickname || entry.name || "Sponsor";
 
         return {
           key: `${entry.tarkam_fk}-${sponsorName}-${sponsorMessage}`,
