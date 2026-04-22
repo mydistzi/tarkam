@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent } from "../shared";
 import MatchDetailsContent from "./section";
 
 const MatchDetailsPage = () => {
   const { contestId } = useParams();
-  const { matchRecords } = useGalacticContent();
+  const { matchRecords } = useGalacticCompetitionContent();
   const record = matchRecords.find((item) => String(item.id) === contestId) || matchRecords[0];
   const relatedRecords = record
     ? matchRecords.filter(

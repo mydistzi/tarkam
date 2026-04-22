@@ -9,7 +9,7 @@ import {
   normalizeSiteUrl,
   toAbsoluteUrl,
 } from "@/lib/structuredData";
-import { useGalacticContent } from "../shared";
+import { useGalacticSiteContent } from "../shared";
 import { ClubsContent } from "./section";
 import type { ClubItem, ClubSessionItem, ClubTimelineItem, MemberItem } from "@/galactic/data";
 
@@ -230,7 +230,7 @@ const ClubDetailsPage = () => {
     { fallbackIntervalMs: 45000 },
   );
   const { slug } = useParams();
-  const { meta } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
   const normalizedSlug = slug?.trim().toLowerCase();
   const invalidSlug = !normalizedSlug;
   const [record, setRecord] = useState<ClubItem | null>(null);

@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
 import { placeholderShop } from "@/galactic/placeholders";
-import { useGalacticContent } from "../shared";
+import { useGalacticCommerceContent } from "../shared";
 import { ShopDetailsContent } from "./section";
 
 const ShopDetailsPage = () => {
   const { slug } = useParams();
   const normalizedSlug = slug?.trim().toLowerCase();
-  const { loading, productRecords } = useGalacticContent();
+  const { loading, productRecords } = useGalacticCommerceContent();
 
   const record = productRecords.find((item) => {
     if (!normalizedSlug) {

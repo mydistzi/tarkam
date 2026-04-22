@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent } from "../shared";
 import { TeamDetailsContent } from "./section";
 
 const TeamDetailsPage = () => {
   const { teamId } = useParams();
-  const { teams } = useGalacticContent();
+  const { teams } = useGalacticCompetitionContent();
   const record = teams.find((item) => String(item.id) === teamId) || teams[0];
   const pageTitle = record?.name ? `${record.name} | Detail Tim` : "Detail Tim";
   const pageDescription = record?.name

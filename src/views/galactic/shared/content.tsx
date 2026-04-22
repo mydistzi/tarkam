@@ -3,6 +3,7 @@ import {
   type ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import Api from "@/api";
@@ -542,6 +543,82 @@ const defaultFooterLinks: FooterLink[] = [
   { label: "Hubungi Kami", path: galacticRoutes.contact },
 ];
 
+type SiteContentValue = {
+  loading: boolean;
+  meta: SiteMeta;
+  menus: GalacticMenuItem[];
+  footerLinks: FooterLink[];
+  heroes: ApiHeader[];
+  usefulLinks: ApiUsefull[];
+};
+
+type CompetitionContentValue = {
+  loading: boolean;
+  matches: MatchItem[];
+  matchRecords: MatchRecord[];
+  streams: StreamItem[];
+  streamings: ApiStreaming[];
+  tarkams: ApiTarkam[];
+  players: PlayerItem[];
+  playerRecords: PlayerRecord[];
+  teams: TeamRecord[];
+  clubs: ApiClub[];
+  sponsors: SponsorItem[];
+  penyawers: ApiPenyawer[];
+};
+
+type NewsContentValue = {
+  loading: boolean;
+  posts: PostItem[];
+  newsRecords: NewsRecord[];
+  newsCategories: string[];
+};
+
+type CommerceContentValue = {
+  loading: boolean;
+  products: ProductItem[];
+  productRecords: ProductRecord[];
+  cartItems: CartRecord[];
+};
+
+const defaultSiteContent: SiteContentValue = {
+  loading: true,
+  meta: defaultMeta,
+  menus: [],
+  footerLinks: [],
+  heroes: [],
+  usefulLinks: [],
+};
+
+const defaultCompetitionContent: CompetitionContentValue = {
+  loading: true,
+  matches: [],
+  matchRecords: [],
+  streams: [],
+  streamings: [],
+  tarkams: [],
+  players: [],
+  playerRecords: [],
+  teams: [],
+  clubs: [],
+  sponsors: [],
+  penyawers: [],
+};
+
+const defaultNewsContent: NewsContentValue = {
+  loading: true,
+  posts: [],
+  newsRecords: [],
+  newsCategories: [],
+};
+
+const defaultCommerceContent: CommerceContentValue = {
+  loading: true,
+  products: [],
+  productRecords: [],
+  cartItems: [],
+};
+
 const defaultContent: GalacticContentValue = {
   loading: true,
   meta: defaultMeta,
@@ -569,6 +646,10 @@ const defaultContent: GalacticContentValue = {
   usefulLinks: [],
 };
 
+const GalacticSiteContext = createContext<SiteContentValue>(defaultSiteContent);
+const GalacticCompetitionContext = createContext<CompetitionContentValue>(defaultCompetitionContent);
+const GalacticNewsContext = createContext<NewsContentValue>(defaultNewsContent);
+const GalacticCommerceContext = createContext<CommerceContentValue>(defaultCommerceContent);
 const GalacticContentContext = createContext<GalacticContentValue>(defaultContent);
 
 const normalizeList = <T,>(payload: ApiEnvelope<T[]> | undefined): T[] =>
@@ -710,27 +791,12 @@ const normalizeId = (value: number | string | null | undefined): number | undefi
 };
 
 
-async function fetchGalacticPayloads() {
-  const cartQuery = getCartQueryString();
+async function fetchSitePayloads() {
   const requests = await Promise.allSettled([
     Api.get("/menus"),
     Api.get("/web-setting"),
     Api.get("/headers"),
-    Api.get("/categories"),
-    Api.get("/blogs", { params: { all: true } }),
-    Api.get("/products", { params: { all: true } }),
-    Api.get(`/carts${cartQuery}`),
-    Api.get("/streamings"),
-    Api.get("/clubs"),
-    Api.get("/members"),
-    Api.get("/players"),
-    Api.get("/teams"),
-    Api.get("/tarkams"),
-    Api.get("/contests"),
-    Api.get("/winners"),
     Api.get("/usefulls"),
-    Api.get("/penyawers"),
-    Api.get("/groups"),
   ]);
 
   const read = <T,>(index: number): T | undefined =>
@@ -740,21 +806,69 @@ async function fetchGalacticPayloads() {
     menus: read<ApiEnvelope<ApiMenuItem[]>>(0),
     webSetting: read<ApiEnvelope<ApiWebSetting>>(1),
     headers: read<ApiEnvelope<ApiHeader[]>>(2),
-    categories: read<ApiEnvelope<ApiCategory[]>>(3),
-    blogs: read<ApiEnvelope<ApiBlog[]>>(4),
-    products: read<ApiEnvelope<ApiProduct[]>>(5),
-    carts: read<ApiEnvelope<ApiCart[]>>(6),
-    streamings: read<ApiEnvelope<ApiStreaming[]>>(7),
-    clubs: read<ApiEnvelope<ApiClub[]>>(8),
-    members: read<ApiEnvelope<ApiMember[]>>(9),
-    players: read<ApiEnvelope<ApiPlayer[]>>(10),
-    teams: read<ApiEnvelope<ApiTeam[]>>(11),
-    tarkams: read<ApiEnvelope<ApiTarkam[]>>(12),
-    contests: read<ApiEnvelope<ApiContest[]>>(13),
-    winners: read<ApiEnvelope<ApiWinner[]>>(14),
-    usefulls: read<ApiEnvelope<ApiUsefull[]>>(15),
-    penyawers: read<ApiEnvelope<ApiPenyawer[]>>(16),
-    groups: read<ApiEnvelope<ApiGroup[]>>(17),
+    usefulls: read<ApiEnvelope<ApiUsefull[]>>(3),
+  };
+}
+
+async function fetchCompetitionPayloads() {
+  const requests = await Promise.allSettled([
+    Api.get("/streamings"),
+    Api.get("/clubs"),
+    Api.get("/members"),
+    Api.get("/players"),
+    Api.get("/teams"),
+    Api.get("/tarkams"),
+    Api.get("/contests"),
+    Api.get("/winners"),
+    Api.get("/penyawers"),
+    Api.get("/groups"),
+  ]);
+
+  const read = <T,>(index: number): T | undefined =>
+    requests[index].status === "fulfilled" ? requests[index].value.data : undefined;
+
+  return {
+    streamings: read<ApiEnvelope<ApiStreaming[]>>(0),
+    clubs: read<ApiEnvelope<ApiClub[]>>(1),
+    members: read<ApiEnvelope<ApiMember[]>>(2),
+    players: read<ApiEnvelope<ApiPlayer[]>>(3),
+    teams: read<ApiEnvelope<ApiTeam[]>>(4),
+    tarkams: read<ApiEnvelope<ApiTarkam[]>>(5),
+    contests: read<ApiEnvelope<ApiContest[]>>(6),
+    winners: read<ApiEnvelope<ApiWinner[]>>(7),
+    penyawers: read<ApiEnvelope<ApiPenyawer[]>>(8),
+    groups: read<ApiEnvelope<ApiGroup[]>>(9),
+  };
+}
+
+async function fetchNewsPayloads() {
+  const requests = await Promise.allSettled([
+    Api.get("/categories"),
+    Api.get("/blogs", { params: { all: true } }),
+  ]);
+
+  const read = <T,>(index: number): T | undefined =>
+    requests[index].status === "fulfilled" ? requests[index].value.data : undefined;
+
+  return {
+    categories: read<ApiEnvelope<ApiCategory[]>>(0),
+    blogs: read<ApiEnvelope<ApiBlog[]>>(1),
+  };
+}
+
+async function fetchCommercePayloads() {
+  const cartQuery = getCartQueryString();
+  const requests = await Promise.allSettled([
+    Api.get("/products", { params: { all: true } }),
+    Api.get(`/carts${cartQuery}`),
+  ]);
+
+  const read = <T,>(index: number): T | undefined =>
+    requests[index].status === "fulfilled" ? requests[index].value.data : undefined;
+
+  return {
+    products: read<ApiEnvelope<ApiProduct[]>>(0),
+    carts: read<ApiEnvelope<ApiCart[]>>(1),
   };
 }
 
@@ -783,402 +897,429 @@ const buildFooterLinks = (_menuTree: GalacticMenuItem[], usefulls: ApiUsefull[])
     .filter((item) => Boolean(item.path));
 };
 
-export function GalacticDataProvider({ children }: { children: ReactNode }) {
-  const liveKey = useLiveUpdate(
-    [
-      "menus",
-      "web-setting",
-      "headers",
-      "categories",
-      "blogs",
-      "products",
-      "carts",
-      "streamings",
-      "clubs",
-      "members",
-      "players",
-      "teams",
-      "tarkams",
-      "contests",
-      "winners",
-      "usefulls",
-      "penyawers",
-      "groups",
+const mapSiteContent = (payloads: Awaited<ReturnType<typeof fetchSitePayloads>>): SiteContentValue => {
+  const menus = normalizeList(payloads.menus);
+  const webSetting = normalizeItem(payloads.webSetting);
+  const headers = normalizeList(payloads.headers);
+  const usefulls = normalizeList(payloads.usefulls);
+  const menuTree = buildMenuTree(menus);
+  const fallbackMenus = menuTree.length ? menuTree : defaultMenus;
+  const fallbackHeroHeaders = headers.length ? headers : [defaultHeader];
+  const footerLinks = usefulls.length
+    ? buildFooterLinks(fallbackMenus, usefulls)
+    : defaultFooterLinks;
+
+  const meta: SiteMeta = {
+    siteName: webSetting?.site_name || webSetting?.first_name || brand.name,
+    siteUrl: webSetting?.site_url || defaultMeta.siteUrl,
+    title: webSetting?.meta_title || webSetting?.site_name || brand.title,
+    description: webSetting?.meta_description || webSetting?.tagline || brand.description,
+    keywords: (webSetting?.meta_keywords || "galactic,tarkam,gaming,esports")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean),
+    tagline: webSetting?.tagline || defaultMeta.tagline,
+    author: webSetting?.author_name || defaultMeta.author,
+    email: webSetting?.email || defaultMeta.email,
+    phone: webSetting?.phone_number || defaultMeta.phone,
+    whatsapp: webSetting?.whatsapp_number || defaultMeta.whatsapp,
+    address: webSetting?.address || defaultMeta.address,
+    aboutDescription: webSetting?.about_description,
+    aboutImage: webSetting?.about_image,
+    aboutImageAlt: webSetting?.about_image_alt,
+    logoUrl: webSetting?.logo || defaultMeta.logoUrl,
+    faviconUrl: webSetting?.favicon,
+    socialLinks: [
+      { icon: "lab la-facebook-f", label: "Facebook", href: webSetting?.facebook_url || "#" },
+      { icon: "lab la-instagram", label: "Instagram", href: webSetting?.instagram_url || "#" },
+      { icon: "lab la-discord", label: "Discord", href: webSetting?.discord_url || "#" },
+      { icon: "lab la-whatsapp", label: "WhatsApp", href: webSetting?.whatsapp_url || "#" },
     ],
+  };
+
+  return {
+    loading: false,
+    meta,
+    menus: fallbackMenus,
+    footerLinks,
+    heroes: fallbackHeroHeaders,
+    usefulLinks: usefulls,
+  };
+};
+
+const mapCompetitionContent = (
+  payloads: Awaited<ReturnType<typeof fetchCompetitionPayloads>>,
+  heroHeaders: ApiHeader[],
+): CompetitionContentValue => {
+  const streamings = normalizeList(payloads.streamings);
+  const clubs = normalizeList(payloads.clubs);
+  const members = normalizeList(payloads.members);
+  const players = normalizeList(payloads.players);
+  const teams = normalizeList(payloads.teams);
+  const tarkams = normalizeList(payloads.tarkams);
+  const contests = normalizeList(payloads.contests);
+  const winners = normalizeList(payloads.winners);
+  const penyawers = normalizeList(payloads.penyawers);
+  const groups = normalizeList(payloads.groups);
+
+  const clubMap = new Map(clubs.map((item) => [item.id, item]));
+  const memberMap = new Map(members.map((item) => [item.id, item]));
+  const teamMap = new Map(teams.flatMap((item) => {
+    const id = normalizeId(item.id);
+    return id != null ? [[id, item] as const] : [];
+  }));
+  const tarkamMap = new Map(tarkams.flatMap((item) => {
+    const id = normalizeId(item.id);
+    return id != null ? [[id, item] as const] : [];
+  }));
+  const groupMap = new Map(groups.flatMap((item) => {
+    const id = normalizeId(item.id);
+    return id != null ? [[id, item] as const] : [];
+  }));
+
+  const playerRecords: PlayerRecord[] = players.map((player) => {
+    const member = player.member || (player.member_fk ? memberMap.get(normalizeId(player.member_fk)!) : undefined);
+    const club = member?.club_fk ? clubMap.get(normalizeId(member.club_fk)!) : undefined;
+    const playerTarkamId = normalizeId(player.tarkam_fk);
+    const tarkam = player.tarkam || (playerTarkamId != null ? tarkamMap.get(playerTarkamId) : undefined);
+    const team = teams.find((item) => extractMemberIds(item).includes(member?.id || -1));
+    const alias = member?.nickname || member?.username || "Aimless";
+    const wins = member?.wins || 0;
+    const losses = member?.losses || 0;
+    const seasonLabel = tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam");
+    const seasonDate = formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "TBD";
+    const timeline = [
+      { label: "Musim", value: seasonLabel },
+      { label: "Sesi", value: tarkam?.week ? `Week ${tarkam.week}` : "Current Season" },
+      { label: "Status", value: tarkam?.status || "Aktif" },
+      { label: "Tanggal", value: seasonDate },
+    ];
+    const item: PlayerItem = {
+      id: player.id,
+      name: member?.nickname || member?.username || "Unknown Player",
+      game: tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam"),
+      image: member?.picture_url?.trim() || placeholderPlayer,
+      speciality: member?.tier || "",
+      role: member?.gender ? `${member.gender} Gender` : "",
+      country: member?.city || "",
+      team: team?.name || club?.name || "",
+      teamLogo: club?.logo || "",
+      about: tarkam?.description || "",
+      path: buildPlayerDetailPath(member?.slug || player.id),
+      teamPath: team ? buildTeamDetailPath(team.id) : undefined,
+    };
+
+    return {
+      id: player.id,
+      player,
+      member,
+      club,
+      team,
+      item,
+      alias,
+      joinLabel: tarkam?.week ? `Week ${tarkam.week}` : "Current Season",
+      ageLabel: "Active Member",
+      timeline,
+      wins,
+      losses,
+      points: member?.points || 0,
+    };
+  });
+
+  const teamRecords: TeamRecord[] = teams.map((team) => {
+    const memberIds = extractMemberIds(team);
+    const membersForTeam = playerRecords.filter((item) => memberIds.includes(item.member?.id || -1));
+    const relatedContests = contests.filter(
+      (item) => normalizeId(item.team1_fk) === team.id || normalizeId(item.team2_fk) === team.id
+    );
+    const wins = relatedContests.filter((item) => normalizeId(item.winner_team_fk) === team.id).length;
+    const losses = relatedContests.filter(
+      (item) => item.winner_team_fk != null && normalizeId(item.winner_team_fk) !== team.id
+    ).length;
+    const draws = relatedContests.filter((item) => item.winner_team_fk == null).length;
+    const firstClub = membersForTeam[0]?.club;
+    const teamTarkamId = normalizeId(team.tarkam_fk);
+    const firstTarkam = teamTarkamId != null ? tarkamMap.get(teamTarkamId) : undefined;
+    const teamGroup = team.group || (() => {
+      const groupId = normalizeId(team.group_fk);
+      return groupId != null ? groupMap.get(groupId) : undefined;
+    })();
+    const points = membersForTeam.reduce((sum, item) => sum + item.points, 0);
+
+    return {
+      id: team.id,
+      team,
+      name: team.name || `Team ${team.id}`,
+      logo: team.logo || firstClub?.logo || placeholderTeam,
+      teamPath: buildTeamDetailPath(team.id),
+      gender: team.gender || "Open",
+      members: membersForTeam.map((item) => item.item),
+      group: teamGroup,
+      description: firstTarkam?.description || "",
+      wins,
+      losses,
+      draws,
+      matches: relatedContests.length,
+      rating: Math.max(3, Math.min(5, wins + 3)),
+      points,
+      tarkamLabel: firstTarkam?.week ? `Week ${firstTarkam.week}` : "Current Split",
+    };
+  });
+
+  const matchRecords: MatchRecord[] = contests.map((contest) => {
+    const team1 = normalizeId(contest.team1_fk) != null ? teamMap.get(normalizeId(contest.team1_fk)!) : undefined;
+    const team2 = normalizeId(contest.team2_fk) != null ? teamMap.get(normalizeId(contest.team2_fk)!) : undefined;
+    const team1Record = teamRecords.find((item) => item.id === team1?.id);
+    const team2Record = teamRecords.find((item) => item.id === team2?.id);
+    const tarkam = normalizeId(contest.tarkam_fk) != null ? tarkamMap.get(normalizeId(contest.tarkam_fk)!) : undefined;
+    const winner = winners.find(
+      (item) => normalizeId(item.team_fk) === normalizeId(contest.winner_team_fk) && normalizeId(item.tarkam_fk) === normalizeId(contest.tarkam_fk)
+    );
+
+    const item: MatchItem = {
+      id: contest.id,
+      leftTeam: team1?.name || `Team ${contest.team1_fk ?? contest.id}`,
+      leftLogo: team1?.logo || team1Record?.logo || "",
+      rightTeam: team2?.name || `Team ${contest.team2_fk ?? contest.id}`,
+      rightLogo: team2?.logo || team2Record?.logo || "",
+      group:
+        tarkam?.title ||
+        (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : (team1?.gender === team2?.gender ? `${team1?.gender} bracket` : "Mixed bracket")),
+      time: formatTimeLabel(contest.time) || "TBA",
+      date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
+      path: buildMatchDetailPath(contest.id),
+      gender: contest.gender as "male" | "female" | "mixed" | undefined || (team1?.gender === team2?.gender ? team1?.gender as "male" | "female" : "mixed"),
+      leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
+      rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
+      videoUrl: contest?.streem || "",
+    };
+
+    return {
+      id: contest.id,
+      item,
+      contest,
+      team1,
+      team2,
+      tarkam,
+      winner,
+      winnerTeam: normalizeId(contest.winner_team_fk) != null ? teamMap.get(normalizeId(contest.winner_team_fk)!) : undefined,
+    };
+  });
+
+  const effectiveHeroes = heroHeaders.length ? heroHeaders : [defaultHeader];
+  const streamItems: StreamItem[] = streamings.map((stream, index) => ({
+    id: stream.id,
+    title: stream.title || "",
+    image: stream.thumbnail || effectiveHeroes[index]?.image || "",
+    category: stream.tags?.[0]?.name || "Live Stream",
+    meta: formatDateLabel(stream.created_at),
+    videoUrl: stream.embed || stream.url || "",
+    path: buildTarkamScheduleAnchorPath(stream.id),
+  }));
+  const fallbackStreams = streamings.length ? streamItems : defaultStreams;
+
+  const sponsors = penyawers.length
+    ? penyawers.map((item) => {
+        const member = item.member || (item.member_fk ? memberMap.get(normalizeId(item.member_fk)!) : undefined);
+        const socialLinks: Array<{ icon: string; href: string }> = [];
+        const facebookLink = member?.facebook;
+        const instagramLink = member?.instagram;
+        const tiktokLink = member?.tiktok;
+
+        if (facebookLink) {
+          socialLinks.push({ icon: "lab la-facebook-f", href: facebookLink });
+        }
+        if (instagramLink) {
+          socialLinks.push({ icon: "lab la-instagram", href: instagramLink });
+        }
+        if (tiktokLink) {
+          socialLinks.push({ icon: "lab la-tiktok", href: tiktokLink });
+        }
+
+        return {
+          image: member?.image_sponsor?.trim() || placeholderSponsor,
+          name: item.name || `Sponsor ${item.id}`,
+          url: item.url || "#",
+          amount: item.amount,
+          message: item.pesan?.trim() || item.description?.trim() || item.detail?.trim() || undefined,
+          memberPicture: member?.picture_url?.trim() || placeholderPlayer,
+          memberImage: member?.image_sponsor?.trim() || placeholderSponsor,
+          memberNickname: member?.nickname || member?.username || "Sponsor Member",
+          detail: item.detail || item.description || member?.tier || undefined,
+          socialLinks: socialLinks.length ? socialLinks : undefined,
+        };
+      })
+    : clubs
+        .filter((club) => Boolean(club.logo))
+        .map((club) => ({
+          image: club.logo!,
+          name: club.name || `Club ${club.id}`,
+          url: "#",
+        }));
+
+  return {
+    loading: false,
+    matches: matchRecords.map((item) => item.item),
+    matchRecords,
+    streams: fallbackStreams,
+    streamings,
+    tarkams,
+    players: playerRecords.map((item) => item.item),
+    playerRecords,
+    teams: teamRecords,
+    clubs,
+    sponsors,
+    penyawers,
+  };
+};
+
+const mapNewsContent = (
+  payloads: Awaited<ReturnType<typeof fetchNewsPayloads>>,
+  authorFallback?: string,
+): NewsContentValue => {
+  const categories = normalizeList(payloads.categories);
+  const blogs = normalizeList(payloads.blogs);
+  const categoryMap = new Map(categories.map((item) => [item.id, item.name || item.title || "Gaming"]));
+
+  const newsRecords: NewsRecord[] = blogs.map((blog) => {
+    const category = categoryMap.get(blog.category_id || -1) || "";
+    const content = splitContent(blog.content);
+    const mappedTags = Array.isArray(blog.tags)
+      ? blog.tags
+          .map((item) => item?.title || item?.name || "")
+          .filter(Boolean)
+      : [category, "Tarkam", "IDM"].filter(Boolean);
+
+    return {
+      id: blog.id,
+      news: blog,
+      item: {
+        id: blog.id,
+        title: blog.title || `News ${blog.id}`,
+        category,
+        image: blog.image || "",
+        date: formatDateLabel(blog.created_at),
+        author: authorFallback || brand.name,
+        excerpt: `${stripHtml(blog.content || "").slice(0, 150)}...`,
+        content,
+        tags: mappedTags,
+        path: buildNewsDetailPath(blog.slug || blog.id),
+        categoryPath: buildNewsCategoryPath(blog.category?.slug || slugify(category)),
+      },
+    };
+  });
+
+  return {
+    loading: false,
+    posts: newsRecords.map((item) => item.item),
+    newsRecords,
+    newsCategories: Array.from(new Set(newsRecords.map((item) => item.item.category))).filter(Boolean),
+  };
+};
+
+const mapCommerceContent = (
+  payloads: Awaited<ReturnType<typeof fetchCommercePayloads>>,
+): CommerceContentValue => {
+  const products = normalizeList(payloads.products);
+  const carts = normalizeList(payloads.carts);
+
+  const productRecords: ProductRecord[] = products.map((product) => {
+    const gallery = product.thumbnails
+      ?.map((item) => item.product_thumbnail_path)
+      .filter((item): item is string => Boolean(item));
+
+    return {
+      id: product.id,
+      product,
+      item: {
+        id: product.id,
+        name: product.title || `Product ${product.id}`,
+        category: product.catprod?.title || product.catprod?.name || "",
+        image: gallery?.[0] || placeholderShop,
+        price: Number(product.price ?? 0),
+        oldPrice: undefined,
+        badge: product.status || "",
+        badgeClass: product.status === "Sold Out" ? "out-stock" : "",
+        description: product.subject || product.description || "",
+        sku: product.sku || `product-${product.id}`,
+        tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
+        path: buildShopDetailPath(product.slug || product.id),
+        gallery: gallery?.length ? gallery : [],
+        additionalInfo: product.additional_info || product.description || "",
+      },
+    };
+  });
+
+  const cartItems: CartRecord[] = carts.map((cart) => {
+    const related = productRecords.find((item) => item.id === cart.product?.id);
+    const relatedItem = related?.item;
+
+    return {
+      id: cart.id,
+      quantity: cart.quantity || 1,
+      product: {
+        id: relatedItem?.id || cart.product?.id || 0,
+        name: relatedItem?.name || cart.product?.title || "Product",
+        category: relatedItem?.category || "",
+        image: relatedItem?.image || placeholderShop,
+        price: Number(cart.unit_price ?? relatedItem?.price ?? 0),
+        oldPrice: relatedItem?.oldPrice,
+        badge: relatedItem?.badge || "",
+        badgeClass: relatedItem?.badgeClass || "",
+        description: relatedItem?.description || "",
+        sku: relatedItem?.sku || `product-${cart.product?.id ?? 0}`,
+        tags: relatedItem?.tags || [],
+        path: relatedItem?.path || galacticRoutes.shop,
+        gallery: relatedItem?.gallery || [],
+        additionalInfo: relatedItem?.additionalInfo || "",
+      },
+    };
+  });
+
+  return {
+    loading: false,
+    products: productRecords.map((item) => item.item),
+    productRecords,
+    cartItems,
+  };
+};
+
+export function GalacticDataProvider({ children }: { children: ReactNode }) {
+  const siteLiveKey = useLiveUpdate(
+    ["menus", "web-setting", "headers", "usefulls"],
     { fallbackIntervalMs: 45000 },
   );
-  const [content, setContent] = useState<GalacticContentValue>(defaultContent);
+  const competitionLiveKey = useLiveUpdate(
+    ["streamings", "clubs", "members", "players", "teams", "tarkams", "contests", "winners", "penyawers", "groups"],
+    { fallbackIntervalMs: 30000 },
+  );
+  const newsLiveKey = useLiveUpdate(
+    ["categories", "blogs"],
+    { fallbackIntervalMs: 45000 },
+  );
+  const commerceLiveKey = useLiveUpdate(
+    ["products", "carts"],
+    { fallbackIntervalMs: 30000 },
+  );
+  const [siteContent, setSiteContent] = useState<SiteContentValue>(defaultSiteContent);
+  const [competitionContent, setCompetitionContent] = useState<CompetitionContentValue>(defaultCompetitionContent);
+  const [newsContent, setNewsContent] = useState<NewsContentValue>(defaultNewsContent);
+  const [commerceContent, setCommerceContent] = useState<CommerceContentValue>(defaultCommerceContent);
 
   useEffect(() => {
     let active = true;
 
     const load = async () => {
       try {
-        const payloads = await fetchGalacticPayloads();
+        const payloads = await fetchSitePayloads();
         if (!active) {
           return;
         }
-
-        const menus = normalizeList(payloads.menus);
-        const webSetting = normalizeItem(payloads.webSetting);
-        const headers = normalizeList(payloads.headers);
-        const categories = normalizeList(payloads.categories);
-        const blogs = normalizeList(payloads.blogs);
-        const products = normalizeList(payloads.products);
-        const carts = normalizeList(payloads.carts);
-        const streamings = normalizeList(payloads.streamings);
-        const clubs = normalizeList(payloads.clubs);
-        const members = normalizeList(payloads.members);
-        const players = normalizeList(payloads.players);
-        const teams = normalizeList(payloads.teams);
-        const tarkams = normalizeList(payloads.tarkams);
-        const contests = normalizeList(payloads.contests);
-        const winners = normalizeList(payloads.winners);
-        const groups = normalizeList(payloads.groups);
-        const usefulls = normalizeList(payloads.usefulls);
-        const penyawers = normalizeList(payloads.penyawers);
-        
-        const clubMap = new Map(clubs.map((item) => [item.id, item]));
-        const memberMap = new Map(members.map((item) => [item.id, item]));
-        const teamMap = new Map(teams.flatMap((item) => {
-          const id = normalizeId(item.id);
-          return id != null ? [[id, item] as const] : [];
-        }));
-        const tarkamMap = new Map(tarkams.flatMap((item) => {
-          const id = normalizeId(item.id);
-          return id != null ? [[id, item] as const] : [];
-        }));
-        const groupMap = new Map(groups.flatMap((item) => {
-          const id = normalizeId(item.id);
-          return id != null ? [[id, item] as const] : [];
-        }));
-        const categoryMap = new Map(categories.map((item) => [item.id, item.name || "Gaming"]));
-        const menuTree = buildMenuTree(menus);
-        const fallbackMenus = menuTree.length ? menuTree : defaultMenus;
-        const fallbackHeroHeaders = headers.length ? headers : [defaultHeader];
-        const footerLinks = usefulls.length
-          ? buildFooterLinks(fallbackMenus, usefulls)
-          : defaultFooterLinks;
-
-        const meta: SiteMeta = {
-          siteName: webSetting?.site_name || webSetting?.first_name || brand.name,
-          siteUrl: webSetting?.site_url || defaultMeta.siteUrl,
-          title: webSetting?.meta_title || webSetting?.site_name || brand.title,
-          description: webSetting?.meta_description || webSetting?.tagline || brand.description,
-          keywords: (webSetting?.meta_keywords || "galactic,tarkam,gaming,esports")
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean),
-          tagline: webSetting?.tagline || defaultMeta.tagline,
-          author: webSetting?.author_name || defaultMeta.author,
-          email: webSetting?.email || defaultMeta.email,
-          phone: webSetting?.phone_number || defaultMeta.phone,
-          whatsapp: webSetting?.whatsapp_number || defaultMeta.whatsapp,
-          address: webSetting?.address || defaultMeta.address,
-          aboutDescription: webSetting?.about_description,
-          aboutImage: webSetting?.about_image,
-          aboutImageAlt: webSetting?.about_image_alt,
-          logoUrl: webSetting?.logo || defaultMeta.logoUrl,
-          faviconUrl: webSetting?.favicon,
-          socialLinks: [
-            { icon: "lab la-facebook-f", label: "Facebook", href: webSetting?.facebook_url || "#" },
-            { icon: "lab la-instagram", label: "Instagram", href: webSetting?.instagram_url || "#" },
-            { icon: "lab la-discord", label: "Discord", href: webSetting?.discord_url || "#" },
-            { icon: "lab la-whatsapp", label: "WhatsApp", href: webSetting?.whatsapp_url || "#" },
-          ],
-        };
-
-        const playerRecords: PlayerRecord[] = players.map((player) => {
-          const member = player.member || (player.member_fk ? memberMap.get(normalizeId(player.member_fk)!) : undefined);
-          const club = member?.club_fk ? clubMap.get(normalizeId(member.club_fk)!) : undefined;
-          const playerTarkamId = normalizeId(player.tarkam_fk);
-          const tarkam = player.tarkam || (playerTarkamId != null ? tarkamMap.get(playerTarkamId) : undefined);
-          const team = teams.find((item) => extractMemberIds(item).includes(member?.id || -1));
-          const alias = member?.nickname || member?.username || "Aimless";
-          const wins = member?.wins || 0;
-          const losses = member?.losses || 0;
-          const seasonLabel = tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam");
-          const seasonDate = formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "TBD";
-          const timeline = [
-            { label: "Musim", value: seasonLabel },
-            { label: "Sesi", value: tarkam?.week ? `Week ${tarkam.week}` : "Current Season" },
-            { label: "Status", value: tarkam?.status || "Aktif" },
-            { label: "Tanggal", value: seasonDate },
-          ];
-          const item: PlayerItem = {
-            id: player.id,
-            name: member?.nickname || member?.username || "Unknown Player",
-            game: tarkam?.title || (tarkam?.week ? `Tarkam Week ${tarkam.week}` : "Tarkam"),
-            image: member?.picture_url?.trim() || placeholderPlayer,
-            speciality: member?.tier || "",
-            role: member?.gender ? `${member.gender} Gender` : "",
-            country: member?.city || "",
-            team: team?.name || club?.name || "",
-            teamLogo: club?.logo || "",
-            about: tarkam?.description || "",
-            path: buildPlayerDetailPath(member?.slug || player.id),
-            teamPath: team ? buildTeamDetailPath(team.id) : undefined,
-          };
-
-          return {
-            id: player.id,
-            player,
-            member,
-            club,
-            team,
-            item,
-            alias,
-            joinLabel: tarkam?.week ? `Week ${tarkam.week}` : "Current Season",
-            ageLabel: "Active Member",
-            timeline,
-            wins,
-            losses,
-            points: member?.points || 0,
-          };
-        });
-
-        const teamRecords: TeamRecord[] = teams.map((team) => {
-          const memberIds = extractMemberIds(team);
-          const membersForTeam = playerRecords.filter((item) => memberIds.includes(item.member?.id || -1));
-          const relatedContests = contests.filter(
-            (item) => normalizeId(item.team1_fk) === team.id || normalizeId(item.team2_fk) === team.id
-          );
-          const wins = relatedContests.filter((item) => normalizeId(item.winner_team_fk) === team.id).length;
-          const losses = relatedContests.filter(
-            (item) => item.winner_team_fk != null && normalizeId(item.winner_team_fk) !== team.id
-          ).length;
-          const draws = relatedContests.filter((item) => item.winner_team_fk == null).length;
-          const firstClub = membersForTeam[0]?.club;
-          const teamTarkamId = normalizeId(team.tarkam_fk);
-          const firstTarkam = teamTarkamId != null ? tarkamMap.get(teamTarkamId) : undefined;
-          const teamGroup = team.group || (() => {
-            const groupId = normalizeId(team.group_fk);
-            return groupId != null ? groupMap.get(groupId) : undefined;
-          })();
-          const points = membersForTeam.reduce((sum, item) => sum + item.points, 0);
-
-          return {
-            id: team.id,
-            team,
-            name: team.name || `Team ${team.id}`,
-            logo: team.logo || firstClub?.logo || placeholderTeam,
-            teamPath: buildTeamDetailPath(team.id),
-            gender: team.gender || "Open",
-            members: membersForTeam.map((item) => item.item),
-            group: teamGroup,
-            description: firstTarkam?.description || "",
-            wins,
-            losses,
-            draws,
-            matches: relatedContests.length,
-            rating: Math.max(3, Math.min(5, wins + 3)),
-            points,
-            tarkamLabel: firstTarkam?.week ? `Week ${firstTarkam.week}` : "Current Split",
-          };
-        });
-
-        const matchRecords: MatchRecord[] = contests.map((contest) => {
-        //   const stream = streamings.find((item) => item.id === contest.id);
-          const team1 = normalizeId(contest.team1_fk) != null ? teamMap.get(normalizeId(contest.team1_fk)!) : undefined;
-          const team2 = normalizeId(contest.team2_fk) != null ? teamMap.get(normalizeId(contest.team2_fk)!) : undefined;
-          const team1Record = teamRecords.find((item) => item.id === team1?.id);
-          const team2Record = teamRecords.find((item) => item.id === team2?.id);
-          const tarkam = normalizeId(contest.tarkam_fk) != null ? tarkamMap.get(normalizeId(contest.tarkam_fk)!) : undefined;
-          const winner = winners.find(
-            (item) => normalizeId(item.team_fk) === normalizeId(contest.winner_team_fk) && normalizeId(item.tarkam_fk) === normalizeId(contest.tarkam_fk)
-          );
-
-          const item: MatchItem = {
-            id: contest.id,
-            leftTeam: team1?.name || `Team ${contest.team1_fk ?? contest.id}`,
-            leftLogo: team1?.logo || team1Record?.logo || "",
-            rightTeam: team2?.name || `Team ${contest.team2_fk ?? contest.id}`,
-            rightLogo: team2?.logo || team2Record?.logo || "",
-            group:
-              tarkam?.title ||
-              (tarkam?.week ? `Tarkam Week ${tarkam.week}` : contest.gender ? `${contest.gender} bracket` : (team1?.gender === team2?.gender ? `${team1?.gender} bracket` : 'Mixed bracket')),
-            time: formatTimeLabel(contest.time) || "TBA",
-            date: formatDateLabel(tarkam?.male_date || tarkam?.female_date) || "",
-            path: buildMatchDetailPath(contest.id),
-            gender: contest.gender as "male" | "female" | "mixed" | undefined || (team1?.gender === team2?.gender ? team1?.gender as "male" | "female" : 'mixed'),
-            leftTeamPath: team1 ? buildTeamDetailPath(team1.id) : galacticRoutes.clubs,
-            rightTeamPath: team2 ? buildTeamDetailPath(team2.id) : galacticRoutes.clubs,
-            videoUrl: contest?.streem || "",
-          };
-
-          return {
-            id: contest.id,
-            item,
-            contest,
-            team1,
-            team2,
-            tarkam,
-            winner,
-            winnerTeam: normalizeId(contest.winner_team_fk) != null ? teamMap.get(normalizeId(contest.winner_team_fk)!) : undefined,
-          };
-        });
-
-        const productRecords: ProductRecord[] = products.map((product) => {
-          const gallery = product.thumbnails
-            ?.map((item) => item.product_thumbnail_path)
-            .filter((item): item is string => Boolean(item));
-
-          return {
-            id: product.id,
-            product,
-            item: {
-              id: product.id,
-              name: product.title || `Product ${product.id}`,
-              category: product.catprod?.title || product.catprod?.name || "",
-              image: gallery?.[0] || placeholderShop,
-              price: Number(product.price ?? 0),
-              oldPrice: undefined,
-              badge: product.status || "",
-              badgeClass: product.status === "Sold Out" ? "out-stock" : "",
-              description: product.subject || product.description || "",
-              sku: product.sku || `product-${product.id}`,
-              tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
-              path: buildShopDetailPath(product.slug || product.id),
-              gallery: gallery?.length ? gallery : [],
-              additionalInfo: product.additional_info || product.description || "",
-            },
-          };
-        });
-
-        const cartItems: CartRecord[] = carts.map((cart) => {
-          const related = productRecords.find((item) => item.id === cart.product?.id);
-          const relatedItem = related?.item;
-
-          return {
-            id: cart.id,
-            quantity: cart.quantity || 1,
-            product: {
-              id: relatedItem?.id || cart.product?.id || 0,
-              name: relatedItem?.name || cart.product?.title || "Product",
-              category: relatedItem?.category || "",
-              image: relatedItem?.image  || placeholderShop,
-              price: Number(cart.unit_price ?? relatedItem?.price ?? 0),
-              oldPrice: relatedItem?.oldPrice,
-              badge: relatedItem?.badge || "",
-              badgeClass: relatedItem?.badgeClass || "",
-              description: relatedItem?.description || "",
-              sku: relatedItem?.sku || `product-${cart.product?.id ?? 0}`,
-              tags: relatedItem?.tags || [],
-              path: relatedItem?.path || galacticRoutes.shop,
-              gallery: relatedItem?.gallery || [],
-              additionalInfo: relatedItem?.additionalInfo || "",
-            },
-          };
-        });
-
-        const newsRecords: NewsRecord[] = blogs.map((blog) => {
-          const category = categoryMap.get(blog.category_id || -1) || "";
-          const content = splitContent(blog.content);
-          const mappedTags = Array.isArray(blog.tags)
-            ? blog.tags
-                .map((item) => item?.title || item?.name || "")
-                .filter(Boolean)
-            : [category, "Tarkam", "IDM"].filter(Boolean);
-
-          return {
-            id: blog.id,
-            news: blog,
-            item: {
-              id: blog.id,
-              title: blog.title || `News ${blog.id}`,
-              category,
-              image: blog.image || "",
-              date: formatDateLabel(blog.created_at),
-              author: meta.author || "",
-              excerpt: `${stripHtml(blog.content || "").slice(0, 150)}...`,
-              content,
-              tags: mappedTags,
-              path: buildNewsDetailPath(blog.slug || blog.id),
-              categoryPath: buildNewsCategoryPath(blog.category?.slug || slugify(category)),
-            },
-          };
-        });
-
-        const streamItems: StreamItem[] = streamings.map((stream, index) => ({
-          id: stream.id,
-          title: stream.title || "",
-          image: stream.thumbnail || headers[index]?.image || "",
-          category: stream.tags?.[0]?.name || "Live Stream",
-          meta: formatDateLabel(stream.created_at),
-          videoUrl: stream.embed || stream.url || "",
-          path: buildTarkamScheduleAnchorPath(stream.id),
-        }));
-        const fallbackStreams = streamings.length ? streamItems : defaultStreams;
-
-        const sponsors = penyawers.length
-          ? penyawers.map((item) => {
-              const member = item.member || (item.member_fk ? memberMap.get(normalizeId(item.member_fk)!) : undefined);
-              const socialLinks: Array<{ icon: string; href: string }> = [];
-              const facebookLink = member?.facebook;
-              const instagramLink = member?.instagram;
-              const tiktokLink = member?.tiktok;
-
-              if (facebookLink) {
-                socialLinks.push({ icon: "lab la-facebook-f", href: facebookLink });
-              }
-              if (instagramLink) {
-                socialLinks.push({ icon: "lab la-instagram", href: instagramLink });
-              }
-              if (tiktokLink) {
-                socialLinks.push({ icon: "lab la-tiktok", href: tiktokLink });
-              }
-
-              return {
-                image: member?.image_sponsor?.trim() || placeholderSponsor,
-                name: item.name || `Sponsor ${item.id}`,
-                url: item.url || "#",
-                amount: item.amount,
-                message: item.pesan?.trim() || item.description?.trim() || item.detail?.trim() || undefined,
-                memberPicture: member?.picture_url?.trim() || placeholderPlayer,
-                memberImage: member?.image_sponsor?.trim() || placeholderSponsor,
-                memberNickname: member?.nickname || member?.username || "Sponsor Member",
-                detail: item.detail || item.description || member?.tier || undefined,
-                socialLinks: socialLinks.length ? socialLinks : undefined,
-              };
-            })
-          : clubs
-              .filter((club) => Boolean(club.logo))
-              .map((club) => ({
-                image: club.logo!,
-                name: club.name || `Club ${club.id}`,
-                url: "#",
-              }));
-
-        setContent({
-          loading: false,
-          meta,
-          menus: fallbackMenus,
-          footerLinks,
-          heroes: fallbackHeroHeaders,
-          matches: matchRecords.map((item) => item.item),
-          matchRecords,
-          streams: fallbackStreams,
-          streamings,
-          tarkams,
-          players: playerRecords.map((item) => item.item),
-          playerRecords,
-          teams: teamRecords,
-          clubs,
-          products: productRecords.map((item) => item.item),
-          productRecords,
-          cartItems,
-          posts: newsRecords.map((item) => item.item),
-          newsRecords,
-          newsCategories: Array.from(new Set(newsRecords.map((item) => item.item.category))).filter(Boolean),
-          sponsors,
-          penyawers,
-          faqs: [],
-          usefulLinks: usefulls,
-        });
+        setSiteContent(mapSiteContent(payloads));
       } catch (error) {
         console.error("Failed to load galactic content", error);
         if (active) {
-          setContent((current) => ({ ...current, loading: false }));
+          setSiteContent((current) => ({ ...current, loading: false }));
         }
       }
     };
@@ -1188,13 +1329,146 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [liveKey]);
+  }, [siteLiveKey]);
 
-  return <GalacticContentContext.Provider value={content}>{children}</GalacticContentContext.Provider>;
+  useEffect(() => {
+    let active = true;
+
+    const load = async () => {
+      try {
+        const payloads = await fetchCompetitionPayloads();
+        if (!active) {
+          return;
+        }
+
+        setCompetitionContent(mapCompetitionContent(payloads, siteContent.heroes));
+      } catch (error) {
+        console.error("Failed to load galactic competition content", error);
+        if (active) {
+          setCompetitionContent((current) => ({ ...current, loading: false }));
+        }
+      }
+    };
+
+    void load();
+
+    return () => {
+      active = false;
+    };
+  }, [competitionLiveKey, siteContent.heroes]);
+
+  useEffect(() => {
+    let active = true;
+
+    const load = async () => {
+      try {
+        const payloads = await fetchNewsPayloads();
+        if (!active) {
+          return;
+        }
+
+        setNewsContent(mapNewsContent(payloads, siteContent.meta.author));
+      } catch (error) {
+        console.error("Failed to load galactic news content", error);
+        if (active) {
+          setNewsContent((current) => ({ ...current, loading: false }));
+        }
+      }
+    };
+
+    void load();
+
+    return () => {
+      active = false;
+    };
+  }, [newsLiveKey, siteContent.meta.author]);
+
+  useEffect(() => {
+    let active = true;
+
+    const load = async () => {
+      try {
+        const payloads = await fetchCommercePayloads();
+        if (!active) {
+          return;
+        }
+
+        setCommerceContent(mapCommerceContent(payloads));
+      } catch (error) {
+        console.error("Failed to load galactic commerce content", error);
+        if (active) {
+          setCommerceContent((current) => ({ ...current, loading: false }));
+        }
+      }
+    };
+
+    void load();
+
+    return () => {
+      active = false;
+    };
+  }, [commerceLiveKey]);
+
+  const content = useMemo<GalacticContentValue>(() => ({
+    loading: siteContent.loading || competitionContent.loading || newsContent.loading || commerceContent.loading,
+    meta: siteContent.meta,
+    menus: siteContent.menus,
+    footerLinks: siteContent.footerLinks,
+    heroes: siteContent.heroes,
+    matches: competitionContent.matches,
+    matchRecords: competitionContent.matchRecords,
+    streams: competitionContent.streams,
+    streamings: competitionContent.streamings,
+    tarkams: competitionContent.tarkams,
+    players: competitionContent.players,
+    playerRecords: competitionContent.playerRecords,
+    teams: competitionContent.teams,
+    clubs: competitionContent.clubs,
+    products: commerceContent.products,
+    productRecords: commerceContent.productRecords,
+    cartItems: commerceContent.cartItems,
+    posts: newsContent.posts,
+    newsRecords: newsContent.newsRecords,
+    newsCategories: newsContent.newsCategories,
+    sponsors: competitionContent.sponsors,
+    penyawers: competitionContent.penyawers,
+    faqs: [],
+    usefulLinks: siteContent.usefulLinks,
+  }), [commerceContent, competitionContent, newsContent, siteContent]);
+
+  return (
+    <GalacticSiteContext.Provider value={siteContent}>
+      <GalacticCompetitionContext.Provider value={competitionContent}>
+        <GalacticNewsContext.Provider value={newsContent}>
+          <GalacticCommerceContext.Provider value={commerceContent}>
+            <GalacticContentContext.Provider value={content}>
+              {children}
+            </GalacticContentContext.Provider>
+          </GalacticCommerceContext.Provider>
+        </GalacticNewsContext.Provider>
+      </GalacticCompetitionContext.Provider>
+    </GalacticSiteContext.Provider>
+  );
 }
 
 export function useGalacticContent() {
   return useContext(GalacticContentContext);
+}
+
+export function useGalacticSiteContent() {
+  return useContext(GalacticSiteContext);
+}
+
+export function useGalacticCompetitionContent() {
+  return useContext(GalacticCompetitionContext);
+}
+
+export function useGalacticNewsContent() {
+  return useContext(GalacticNewsContext);
+}
+
+export function useGalacticCommerceContent() {
+  return useContext(GalacticCommerceContext);
 }
 
 export type {

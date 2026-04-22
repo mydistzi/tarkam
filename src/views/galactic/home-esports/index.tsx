@@ -1,5 +1,5 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent, useGalacticNewsContent, useGalacticSiteContent } from "../shared";
 import {
   HomeEsportsBlogSection,
   HomeEsportsGameplaySection,
@@ -13,7 +13,9 @@ import {
 } from "./section";
 
 const HomeEsportsPage = () => {
-  const { heroes, matches, players, posts, sponsors, streams } = useGalacticContent();
+  const { heroes } = useGalacticSiteContent();
+  const { matches, players, sponsors, streams } = useGalacticCompetitionContent();
+  const { posts } = useGalacticNewsContent();
   const promoItems = matches.slice(0, 3).map((match) => ({
     image: match.leftLogo || match.rightLogo || "",
     title: `${match.leftTeam} vs ${match.rightTeam}`,

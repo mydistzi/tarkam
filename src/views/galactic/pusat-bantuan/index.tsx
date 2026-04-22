@@ -1,9 +1,9 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticSiteContent } from "../shared";
 import { FaqContent } from "./section";
 
 const FaqPage = () => {
-  const { meta } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
 
   return (
     <PageShell title="Pusat Bantuan Tarkam">

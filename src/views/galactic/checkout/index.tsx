@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCommerceContent, useGalacticSiteContent } from "../shared";
 import { getCartQueryString } from "@/galactic/session";
 import { CheckoutContent } from "./section";
 import type { CartRecord } from "../shared";
@@ -12,7 +12,8 @@ const CheckoutPage = () => {
     ["carts", "products", "web-setting"],
     { fallbackIntervalMs: 30000 },
   );
-  const { cartItems, meta } = useGalacticContent();
+  const { cartItems } = useGalacticCommerceContent();
+  const { meta } = useGalacticSiteContent();
   const [items, setItems] = useState<CartRecord[]>(cartItems);
 
   useEffect(() => {

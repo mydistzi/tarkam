@@ -9,7 +9,7 @@ import {
   normalizeSiteUrl,
   toAbsoluteUrl,
 } from "@/lib/structuredData";
-import { useGalacticContent } from "../shared";
+import { useGalacticSiteContent } from "../shared";
 import { PlayerDetailsContent, type MemberDetailPayload } from "./section";
 
 type ApiEnvelope<T> = {
@@ -22,7 +22,7 @@ const PlayerDetailsPage = () => {
     { fallbackIntervalMs: 45000 },
   );
   const { slug } = useParams();
-  const { meta } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
   const hasSlug = Boolean(slug?.trim());
   const [record, setRecord] = useState<MemberDetailPayload | null>(null);
   const [error, setError] = useState<string | null>(null);

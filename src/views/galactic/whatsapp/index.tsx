@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { PageHeader, PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticSiteContent } from "../shared";
 import { useLiveUpdate } from "../socket/SocketProvider";
 
 type WhatsAppSession = {
@@ -30,7 +30,7 @@ const getAuthHeaders = () => {
 };
 
 const WhatsAppPage = () => {
-  const { meta } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
   const liveKey = useLiveUpdate(
     ["whatsapp"],
     { fallbackIntervalMs: 15000 },

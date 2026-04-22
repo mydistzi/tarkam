@@ -1,9 +1,10 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent, useGalacticSiteContent } from "../shared";
 import { AboutContent } from "./section";
 
 const AboutPage = () => {
-  const { matches, meta, players, sponsors } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
+  const { matches, players, sponsors } = useGalacticCompetitionContent();
 
   return (
     <PageShell title="Tentang Kami" image={meta.aboutImage}>

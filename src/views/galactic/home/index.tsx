@@ -1,5 +1,5 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent, useGalacticSiteContent } from "../shared";
 import {
   // HomeBlogSection,
   HomeHeroSection,
@@ -12,8 +12,8 @@ import {
 } from "./section";
 
 const HomeDefaultPage = () => {
-  // const { heroes, matches, streams, players, products, posts, sponsors } = useGalacticContent();
-  const { heroes, matches, streams, players, sponsors } = useGalacticContent();
+  const { heroes } = useGalacticSiteContent();
+  const { matches, streams, players, sponsors } = useGalacticCompetitionContent();
 
   return (
     <PageShell title="Beranda" image={heroes[0]?.image ?? ""}>

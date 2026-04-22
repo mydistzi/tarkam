@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticNewsContent } from "../shared";
 import NewsDetailsContent from "./section";
 
 const NewsDetailsPage = () => {
   const { slug } = useParams();
   const normalizedSlug = slug?.trim().toLowerCase();
-  const { newsRecords } = useGalacticContent();
+  const { newsRecords } = useGalacticNewsContent();
   const currentIndex = newsRecords.findIndex((item) => {
     if (!normalizedSlug) {
       return false;

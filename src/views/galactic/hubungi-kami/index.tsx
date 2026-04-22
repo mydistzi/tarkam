@@ -1,9 +1,9 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticSiteContent } from "../shared";
 import { ContactContent } from "./section";
 
 const ContactPage = () => {
-  const { meta } = useGalacticContent();
+  const { meta } = useGalacticSiteContent();
 
   return (
     <PageShell title="Kontak">

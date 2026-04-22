@@ -1,9 +1,9 @@
 import { PageShell } from "@/galactic/common";
-import { useGalacticContent } from "../shared";
+import { useGalacticCompetitionContent } from "../shared";
 import { OurGamersContent } from "./section";
 
 const OurGamersPage = () => {
-  const { players, sponsors } = useGalacticContent();
+  const { players, sponsors } = useGalacticCompetitionContent();
 
   return (
     <PageShell title="Gamer Kita">

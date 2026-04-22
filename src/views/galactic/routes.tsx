@@ -35,7 +35,7 @@ import {
   UpcomingMatchesPage,
   WhatsAppPage,
 } from "./index";
-import { GalacticDataProvider, useGalacticContent } from "./shared";
+import { GalacticDataProvider, useGalacticSiteContent } from "./shared";
 import { RequireAuth } from "./auth/AuthProvider";
 import AcceptableUsePolicy from "../policies/AcceptableUsePolicy";
 import DataDeletionPolicy from "../policies/DataDeletionPolicy";
@@ -44,7 +44,7 @@ import TermsOfService from "../policies/TermsOfService";
 import CommentPolicy from "../policies/CommentPolicy";
 
 const GalacticLayout = () => {
-  const { footerLinks, menus, meta } = useGalacticContent();
+  const { footerLinks, menus, meta } = useGalacticSiteContent();
 
   return (
     <GalacticChrome menuItems={menus} logoUrl={meta.logoUrl}>
