@@ -295,6 +295,72 @@ const OdometerNumber = ({
   const elementRef = useRef<HTMLSpanElement | null>(null);
   const odometerRef = useRef<OdometerInstance | null>(null);
   const timeoutRef = useRef<number | null>(null);
+  const [canAnimate, setCanAnimate] = useState(false);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element || typeof window === "undefined") {
+      return;
+    }
+
+    let active = true;
+    let isInViewport = !("IntersectionObserver" in window);
+    let isAppReady = document.body.classList.contains("loaded");
+    let intersectionObserver: IntersectionObserver | null = null;
+    let bodyClassObserver: MutationObserver | null = null;
+
+    const tryEnableAnimation = () => {
+      if (!active) {
+        return;
+      }
+
+      if (isAppReady && isInViewport) {
+        setCanAnimate(true);
+      }
+    };
+
+    if ("IntersectionObserver" in window) {
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry) {
+            return;
+          }
+
+          if (entry.isIntersecting || entry.intersectionRatio > 0.25) {
+            isInViewport = true;
+            tryEnableAnimation();
+            intersectionObserver?.disconnect();
+            intersectionObserver = null;
+          }
+        },
+        { threshold: [0.25] },
+      );
+      intersectionObserver.observe(element);
+    }
+
+    bodyClassObserver = new MutationObserver(() => {
+      isAppReady = document.body.classList.contains("loaded");
+      tryEnableAnimation();
+
+      if (isAppReady && isInViewport) {
+        bodyClassObserver?.disconnect();
+        bodyClassObserver = null;
+      }
+    });
+    bodyClassObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    tryEnableAnimation();
+
+    return () => {
+      active = false;
+      intersectionObserver?.disconnect();
+      bodyClassObserver?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -305,6 +371,11 @@ const OdometerNumber = ({
     const initialValue = normalizeOdometerValue(startValue);
     const nextValue = normalizeOdometerValue(value);
     const Odometer = window.Odometer;
+
+    if (!canAnimate) {
+      element.textContent = String(initialValue);
+      return;
+    }
 
     if (!Odometer) {
       element.textContent = String(nextValue);
@@ -337,7 +408,7 @@ const OdometerNumber = ({
         timeoutRef.current = null;
       }
     };
-  }, [animation, delay, duration, format, startValue, theme, value]);
+  }, [animation, canAnimate, delay, duration, format, startValue, theme, value]);
 
   return <span ref={elementRef} className={`odometer ${className}`.trim()} />;
 };
