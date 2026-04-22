@@ -2518,10 +2518,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         );
 
         if (shouldPreferExternalVideoPlayback()) {
-          const popup = window.open(sourceUrl, "_blank", "noopener,noreferrer");
-          if (!popup) {
-            window.location.assign(sourceUrl);
-          }
+          window.location.assign(sourceUrl);
           return;
         }
 

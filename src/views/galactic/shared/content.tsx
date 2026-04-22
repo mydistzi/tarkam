@@ -192,6 +192,7 @@ type ApiStreaming = {
   id: number;
   title?: string;
   slug?: string;
+  streem?: string;
   url?: string;
   thumbnail?: string;
   embed?: string;
@@ -1056,7 +1057,7 @@ const mapCompetitionContent = (
     image: stream.thumbnail || effectiveHeroes[index]?.image || "",
     category: stream.tags?.[0]?.name || "Live Stream",
     meta: formatDateLabel(stream.created_at),
-    videoUrl: stream.embed || stream.url || "",
+    videoUrl: stream.streem || stream.embed || stream.url || "",
     path: buildTarkamScheduleAnchorPath(stream.id),
   }));
   const fallbackStreams = streamings.length ? streamItems : defaultStreams;

@@ -133,6 +133,7 @@ type ApiWinner = {
 type ApiStreaming = {
   id?: number | string;
   title?: string;
+  streem?: string;
   url?: string;
   embed?: string;
   thumbnail?: string;
@@ -370,7 +371,7 @@ const getGenderSnapshot = (detail: ApiTarkamDetail, gender: GenderKey) => {
 };
 
 const getStreamUrl = (stream?: ApiStreaming | null) =>
-  stream?.embed?.trim() || stream?.url?.trim() || "";
+  stream?.streem?.trim() || stream?.embed?.trim() || stream?.url?.trim() || "";
 
 const MiniStat = ({
   label,

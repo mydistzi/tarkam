@@ -46,7 +46,9 @@ const HomeHeroSection = ({ hero }: HeroSectionProps) => {
             <Link className="default-btn" to="https://discord.gg/fnRhRkxTyC" target="_blank" rel="noopener noreferrer">
               Gabung Yuk<span />
             </Link>
-            <VideoCardButton href={heroVideoUrl} normalizeFacebook />
+            {heroVideoUrl.trim() ? (
+              <VideoCardButton href={heroVideoUrl} normalizeFacebook />
+            ) : null}
           </div>
           <div className="hero-element">
             {heroImage ? <img src={heroImage} alt={hero?.image_alt || heroTitle} /> : null}
