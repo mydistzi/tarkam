@@ -9,7 +9,8 @@ import {
   type IRoundProps,
 } from "@sportsgram/brackets";
 import { Link } from "react-router-dom";
-import { DisqusThread, PageHeader, VideoCardButton } from "@/galactic/common";
+import { DisqusThread, PageHeader } from "@/galactic/common";
+import { VideoCardButton } from "@/galactic/media";
 import { placeholderTeam } from "@/galactic/placeholders";
 import type { MatchRecord } from "../../shared";
 

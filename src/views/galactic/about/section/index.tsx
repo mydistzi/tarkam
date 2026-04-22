@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { CtaSection, LatestMatchesList, PageHeader, PlayerCarousel, SponsorCarousel, SectionHeading, aboutCharacters } from "@/galactic/common";
+import { CtaSection, LatestMatchesList, PageHeader, SectionHeading, aboutCharacters } from "@/galactic/common";
+import { PlayerCarousel, SponsorCarousel } from "@/galactic/media";
 import { galacticRoutes, type MatchItem, type PlayerItem, type SponsorItem } from "@/galactic/data";
 
 type AboutSectionProps = {

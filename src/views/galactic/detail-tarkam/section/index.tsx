@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import Swal from "sweetalert2";
-import { DisqusThread, PageHeader, VideoStreemButton } from "@/galactic/common";
+import { DisqusThread, PageHeader } from "@/galactic/common";
+import { VideoStreemButton } from "@/galactic/media";
 import {
   buildPlayerDetailPath,
   buildTeamDetailPath,

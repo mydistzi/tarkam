@@ -2,12 +2,10 @@ import "@/assets/css/detail-club.css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Carousel,
-  CarouselButtonGroup,
   OdometerNumber,
   PageHeader,
-  smoothCarouselTransition,
 } from "@/galactic/common";
+import { Carousel, CarouselButtonGroup, smoothCarouselTransition } from "@/galactic/media";
 import { placeholderPlayer, placeholderSquad } from "@/galactic/placeholders";
 import {
   buildPlayerDetailPath,

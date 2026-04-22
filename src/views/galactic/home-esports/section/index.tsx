@@ -3,14 +3,11 @@ import {
   HomePostGrid,
   JoinMailSection,
   MatchList,
-  PlayerCarousel,
   PromoSection,
   SectionHeading,
-  SponsorCarousel,
-  TestimonialSection,
-  WatchLiveGrid,
   pageBackground,
 } from "@/galactic/common";
+import { PlayerCarousel, SponsorCarousel, TestimonialSection, WatchLiveGrid } from "@/galactic/media";
 import type { MatchItem, PlayerItem, PostItem, SponsorItem, StreamItem } from "@/galactic/data";
 
 type HeroItem = {

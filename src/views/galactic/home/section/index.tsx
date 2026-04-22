@@ -4,13 +4,10 @@ import {
 //   HomePostGrid,
   JoinMailSection,
   MatchList,
-  PlayerCarousel,
 //   ProductCarousel,
   SectionHeading,
-  SponsorCarousel,
-  VideoCardButton,
-  WatchLiveGrid,
 } from "@/galactic/common";
+import { PlayerCarousel, SponsorCarousel, VideoCardButton, WatchLiveGrid } from "@/galactic/media";
 // import type { MatchItem, PlayerItem, PostItem, ProductItem, SponsorItem, StreamItem } from "@/galactic/data";
 import type { MatchItem, PlayerItem, SponsorItem, StreamItem } from "@/galactic/data";
 

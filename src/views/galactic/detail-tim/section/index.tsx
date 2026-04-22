@@ -1,4 +1,5 @@
-import { DisqusThread, OdometerNumber, PageHeader, PlayerCarousel } from "@/galactic/common";
+import { DisqusThread, OdometerNumber, PageHeader } from "@/galactic/common";
+import { PlayerCarousel } from "@/galactic/media";
 import { placeholderTeam } from "@/galactic/placeholders";
 import type { TeamRecord } from "../../shared";
 

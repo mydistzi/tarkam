@@ -1,4 +1,5 @@
-import { CtaSection, PageHeader, PlayerGrid, SponsorCarousel } from "@/galactic/common";
+import { CtaSection, PageHeader } from "@/galactic/common";
+import { PlayerGrid, SponsorCarousel } from "@/galactic/media";
 import type { PlayerItem, SponsorItem } from "@/galactic/data";
 
 const OurGamersContent = ({ players, sponsors }: { players: PlayerItem[]; sponsors: SponsorItem[] }) => (
