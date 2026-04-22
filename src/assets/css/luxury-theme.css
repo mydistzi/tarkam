@@ -426,6 +426,18 @@ body::before {
   border-color: rgba(255, 211, 122, 0.24);
 }
 
+.home-player-filter {
+  margin-bottom: 12px;
+}
+
+.home-player-filter-summary {
+  margin-bottom: 24px;
+  text-align: center;
+  color: rgba(229, 240, 255, 0.68);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .galactic-match-list-toggle {
   text-align: center;
   margin-top: 20px;

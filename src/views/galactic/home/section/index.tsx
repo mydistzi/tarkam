@@ -99,6 +99,11 @@ const HomeStreamsSection = ({ items }: { items: StreamItem[] }) => (
 
 const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
   const [selectedGender, setSelectedGender] = useState<"all" | "male" | "female">("all");
+  const filterOptions: Array<{ value: "all" | "male" | "female"; label: string }> = [
+    { value: "all", label: "Semua" },
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+  ];
 
   const filteredPlayers = useMemo(() => {
     if (selectedGender === "all") {
@@ -119,23 +124,21 @@ const HomePlayersSection = ({ items }: { items: PlayerItem[] }) => {
           title={<><span>Player</span> Minggu Ini</>}
           description={<>Roster aktif dibuat dari player, member, klub, dan tim yang sedang jalan dalam minggu ini.</>}
         />
-        <div className="product-shorting">
-          <div>
-            Menampilkan {filteredPlayers.length} dari {items.length} player
-          </div>
-          <div>
-            <select
-              aria-label="Filter gender player"
-              className="orderby"
-              value={selectedGender}
-              onChange={(event) => setSelectedGender(event.target.value as "all" | "male" | "female")}
-              name="gender"
+        <div className="galactic-match-list-header home-player-filter" role="tablist" aria-label="Filter gender player">
+          {filterOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`galactic-match-card__eyebrow${selectedGender === option.value ? " is-active" : ""}`}
+              onClick={() => setSelectedGender(option.value)}
+              aria-pressed={selectedGender === option.value}
             >
-              <option value="all">Semua</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
+              {option.label}
+            </button>
+          ))}
+        </div>
+        <div className="home-player-filter-summary">
+          Menampilkan {filteredPlayers.length} dari {items.length} player
         </div>
         <PlayerCarousel items={filteredPlayers} />
       </div>
