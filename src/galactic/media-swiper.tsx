@@ -1,15 +1,13 @@
-import { useRef } from "react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Autoplay, EffectCoverflow, Pagination as SwiperPagination } from "swiper/modules";
-import type { Swiper as SwiperInstance } from "swiper";
+import { Autoplay, EffectCoverflow, Navigation, Pagination as SwiperPagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getExternalVideoUrl, getImageSource, getNormalizedVideoUrl, placeholderPlayer, placeholderVideoThumb, PlaySvg } from "@/galactic/media-helpers";
 import { type SponsorItem, type StreamItem } from "@/galactic/data";
 
 const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
-  const swiperRef = useRef<SwiperInstance | null>(null);
   const minLoopSlides = 8;
   const loopItems = items.length === 0
     ? []
@@ -21,7 +19,6 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         className="swiper-nav swiper-prev watch-live-prev"
         type="button"
         aria-label="Previous slide"
-        onClick={() => swiperRef.current?.slidePrev()}
       >
         <i className="las la-long-arrow-alt-left" />
       </button>
@@ -29,14 +26,18 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         className="swiper-nav swiper-next watch-live-next"
         type="button"
         aria-label="Next slide"
-        onClick={() => swiperRef.current?.slideNext()}
       >
         <i className="las la-long-arrow-alt-right" />
       </button>
       <Swiper
-        autoplay={{ delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        autoplay={{ delay: 2000, disableOnInteraction: false }}
+        breakpoints={{
+          0: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          992: { slidesPerView: 2 },
+        }}
         centeredSlides
-        className="watch-carousel swiper-container swiper-coverflow swiper-3d swiper-initialized swiper-horizontal swiper-pointer-events"
+        className="watch-carousel"
         coverflowEffect={{
           depth: 100,
           modifier: 5,
@@ -50,13 +51,14 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
         loop={loopItems.length >= 4}
         loopAdditionalSlides={1}
         loopPreventsSliding={false}
-        slidesPerGroup={1}
-        modules={[Autoplay, EffectCoverflow]}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
+        navigation={{
+          nextEl: ".watch-live-next",
+          prevEl: ".watch-live-prev",
         }}
+        slidesPerGroup={1}
+        modules={[Autoplay, EffectCoverflow, Navigation]}
         slidesPerView={2}
-        spaceBetween={0}
+        spaceBetween={30}
         speed={650}
       >
         {loopItems.map((stream, index) => (
