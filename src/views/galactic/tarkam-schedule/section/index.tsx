@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import Swal from "sweetalert2";
@@ -47,6 +47,7 @@ type ScheduleTarkam = {
 
 type ScheduleStreaming = {
   id: number;
+  streem?: string;
   url?: string;
   embed?: string;
   tarkam_fk?: number | string | null;
@@ -130,7 +131,7 @@ const getGenderRemaining = (tarkam: ScheduleTarkam, gender: GenderKey) => {
 
 const getTarkamStreamingUrl = (tarkam: ScheduleTarkam, streamings: ScheduleStreaming[]) => {
   const stream = streamings.find((item) => normalizeId(item.tarkam_fk) === Number(tarkam.id));
-  return stream?.embed?.trim() || stream?.url?.trim() || "";
+  return stream?.streem?.trim() || stream?.embed?.trim() || stream?.url?.trim() || "";
 };
 
 const StatCard = ({
@@ -365,6 +366,7 @@ const TarkamScheduleContent = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [tarkams, setTarkams] = useState<ScheduleTarkam[]>([]);
   const [streamings, setStreamings] = useState<ScheduleStreaming[]>([]);
+  const hasLoadedRef = useRef(false);
   const liveKey = useLiveUpdate(
     ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "penyawers"],
     { fallbackIntervalMs: 30000 },
@@ -374,7 +376,9 @@ const TarkamScheduleContent = () => {
     let cancelled = false;
 
     const load = async () => {
-      setLoading(true);
+      if (!hasLoadedRef.current) {
+        setLoading(true);
+      }
       setError(null);
 
       const [tarkamsResult, streamingsResult] = await Promise.allSettled([
@@ -399,6 +403,7 @@ const TarkamScheduleContent = () => {
         setStreamings([]);
       }
 
+      hasLoadedRef.current = true;
       setLoading(false);
     };
 

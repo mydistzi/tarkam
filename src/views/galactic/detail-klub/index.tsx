@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
@@ -101,6 +101,7 @@ type ApiClubRecord = {
   slug?: string;
   name?: string;
   logo?: string;
+  slogan?: string;
   level?: string;
   points?: number | string;
   lifetime_points?: number | string;
@@ -204,6 +205,7 @@ const mapClubItem = (
   slug: club.slug,
   name: club.name,
   logo: club.logo,
+  slogan: club.slogan,
   level: club.level,
   points: Number(club.points ?? 0),
   lifetimePoints: Number(club.lifetime_points ?? club.points ?? 0),
@@ -236,8 +238,9 @@ const ClubDetailsPage = () => {
   const [clubWins, setClubWins] = useState(0);
   const [clubLosses, setClubLosses] = useState(0);
   const [clubPoints, setClubPoints] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(normalizedSlug));
   const [error, setError] = useState<string | null>(null);
+  const previousSlugRef = useRef<string | null>(null);
   const siteUrl = normalizeSiteUrl(meta.siteUrl, "https://tarkam.fun");
   const pageUrl =
     toAbsoluteUrl(`/detail-klub/${encodeURIComponent(record?.slug || normalizedSlug || "")}`, siteUrl) ||
@@ -274,13 +277,12 @@ const ClubDetailsPage = () => {
     }
 
     let cancelled = false;
-    const frameId = window.requestAnimationFrame(() => {
-      if (cancelled) {
-        return;
-      }
+    const shouldShowLoading = previousSlugRef.current !== normalizedSlug;
+
+    if (shouldShowLoading) {
       setLoading(true);
-      setError(null);
-    });
+    }
+    setError(null);
 
     Promise.allSettled([
       Api.get(`/clubs/${encodeURIComponent(normalizedSlug)}`),
@@ -316,6 +318,7 @@ const ClubDetailsPage = () => {
           ? club.members.map((member) => mapMemberItem(member))
           : [];
 
+        previousSlugRef.current = normalizedSlug;
         setRecord(mappedClub);
         setMembers(mappedMembers);
         setClubPoints(mappedClub.sessionPoints ?? 0);
@@ -339,9 +342,8 @@ const ClubDetailsPage = () => {
 
     return () => {
       cancelled = true;
-      window.cancelAnimationFrame(frameId);
     };
-  }, [normalizedSlug, liveKey]);
+  }, [liveKey, normalizedSlug]);
 
   return (
     <PageShell

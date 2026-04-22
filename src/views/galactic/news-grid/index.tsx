@@ -80,7 +80,10 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
 };
 
 const NewsGridPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["blogs", "categories", "tags"],
+    { fallbackIntervalMs: 45000 },
+  );
   const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get("page")?.trim() || "1") || 1);

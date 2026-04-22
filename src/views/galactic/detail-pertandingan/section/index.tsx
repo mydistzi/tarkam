@@ -31,6 +31,23 @@ type BracketSeedData = {
   winnerLabel?: string;
 };
 
+const formatCurrency = (value?: number | string | null) => {
+  if (value === undefined || value === null || value === "") {
+    return "Menunggu update";
+  }
+
+  const numeric = Number(value);
+  if (Number.isNaN(numeric)) {
+    return String(value);
+  }
+
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(numeric);
+};
+
 const nextPowerOfTwo = (value: number) => {
   let power = 1;
 
@@ -283,7 +300,7 @@ winner, dan progression round.`}
                 </div>
                 <div className="match-detail-stat">
                   <span>Prize</span>
-                  <strong>{record?.winner?.prize || "Menunggu update"}</strong>
+                  <strong>{formatCurrency(record?.winner?.prize)}</strong>
                 </div>
                 <div className="match-detail-stat">
                   <span>Label</span>

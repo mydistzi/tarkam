@@ -36,7 +36,10 @@ type ClubRegistryRecord = ClubItem & {
 };
 
 const ClubPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["clubs", "members", "sessions", "timelines"],
+    { fallbackIntervalMs: 45000 },
+  );
   const [clubs, setClubs] = useState<ClubRegistryRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,7 +98,7 @@ const ClubPage = () => {
 
   return (
     <PageShell title="Direktori Klub Resmi" image={clubs[0]?.logo}>
-      <ClubsContent key={`${loading}-${clubs.length}`} clubs={clubs} loading={loading} error={error} />
+      <ClubsContent clubs={clubs} loading={loading} error={error} />
     </PageShell>
   );
 };

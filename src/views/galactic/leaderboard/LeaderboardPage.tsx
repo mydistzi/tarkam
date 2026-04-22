@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
@@ -7,7 +7,6 @@ import { PageShell } from "@/galactic/common";
 import { buildClubDetailPath, buildPlayerDetailPath } from "@/galactic/data";
 import {
   placeholderPlayer,
-  placeholderSponsor,
   placeholderSquad,
 } from "@/galactic/placeholders";
 import "@/assets/css/leaderboard.css";
@@ -256,7 +255,7 @@ const resolveAvatar = (variant: LeaderboardVariant, entry: LeaderboardEntry) => 
   }
 
   if (variant === "sponsor") {
-    return entry.picture_url || placeholderSponsor;
+    return entry.picture_url || placeholderPlayer;
   }
 
   return entry.picture_url || placeholderPlayer;
@@ -350,13 +349,16 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasLoadedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
 
     const load = async () => {
       try {
-        setLoading(true);
+        if (!hasLoadedRef.current) {
+          setLoading(true);
+        }
         setError(null);
 
         const leaderboardResponse = await Api.get(config.endpoint, {
@@ -372,12 +374,14 @@ function LeaderboardPage({ variant }: { variant: LeaderboardVariant }) {
 
         if (!cancelled) {
           setEntries(records);
+          hasLoadedRef.current = true;
         }
       } catch (fetchError) {
         if (!cancelled) {
           console.error(fetchError);
           setEntries([]);
           setError("Data leaderboard belum bisa dimuat dari server.");
+          hasLoadedRef.current = true;
         }
       } finally {
         if (!cancelled) {

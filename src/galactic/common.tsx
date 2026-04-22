@@ -1275,7 +1275,7 @@ const SponsorGrid = ({ items = [] }: { items?: SponsorItem[] }) => (
     {items.map((sponsor, index) => (
       <div className="sponsor-item" key={`sponsor-grid-${index + 1}`}>
         <a href={sponsor.url || "#"} rel="noreferrer" target={sponsor.url?.startsWith("http") ? "_blank" : undefined}>
-          <img src={getImageSource(sponsor.memberImage, placeholderSponsor)} alt={sponsor.name} />
+          <img src={getImageSource(sponsor.image, placeholderSponsor)} alt={sponsor.name} />
         </a>
       </div>
     ))}
@@ -1304,13 +1304,12 @@ const SponsorTestimonialSection = ({ items = [] }: { items?: SponsorItem[] }) =>
           breakpoints={{ 767: { slidesPerView: 2, spaceBetween: 30 } }}
         >
           {items.map((sponsor, index) => {
-            const avatarName = sponsor.memberNickname || sponsor.name || "Sponsor Partner";
             return (
               <SwiperSlide key={`sponsor-testimonial-${index + 1}`}>
                 <div className="testimonial-item sponsor-testimonial-card">
                   <div className="testi-thumb">
                     <img
-                      src={getImageSource(sponsor.memberPicture, `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&color=FCFCFC&background=0c0c35`)}
+                      src={getImageSource(sponsor.memberPicture, placeholderPlayer)}
                       alt={sponsor.memberNickname || sponsor.name}
                     />
                     <h3>{sponsor.name}
@@ -2285,9 +2284,8 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     let cancelled = false;
 
     const loadSponsorMessages = async () => {
-      console.log("[GalacticChrome] Reloading sponsor marquee messages (liveKey changed)");
       try {
-        const response = await Api.get("/penyawer-leaderboards");
+        const response = await Api.get("/sponsor-marquee");
         const payload = response.data as
           | ApiEnvelope<SponsorMarqueeEntry[]>
           | SponsorMarqueeEntry[]
@@ -2295,7 +2293,6 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         const records = Array.isArray(payload) ? payload : payload?.data ?? [];
 
         if (!cancelled) {
-          console.log("[GalacticChrome] Sponsor marquee updated:", records.length, "entries");
           setSponsorMarqueeEntries(records);
         }
       } catch (error) {
@@ -2372,15 +2369,19 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       return latest === null ? tarkamId : Math.max(latest, tarkamId);
     }, null);
 
-    if (latestTarkamFk === null) {
-      return [];
-    }
-
     return sponsorMarqueeEntries
       .filter((entry) => {
         const sponsorMessage = resolveSponsorMarqueeMessage(entry);
         const showing = String(entry.showing || "").trim().toLowerCase();
-        return sponsorMessage && showing === "yes" && toNumericId(entry.tarkam_fk) === latestTarkamFk;
+        if (!sponsorMessage || showing !== "yes") {
+          return false;
+        }
+
+        if (latestTarkamFk === null) {
+          return true;
+        }
+
+        return toNumericId(entry.tarkam_fk) === latestTarkamFk;
       })
       .map((entry) => {
         const sponsorMessage = resolveSponsorMarqueeMessage(entry);

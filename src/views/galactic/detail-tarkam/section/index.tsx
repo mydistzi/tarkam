@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Api from "@/api";
 import { DisqusThread, PageHeader, VideoStreemButton } from "@/galactic/common";
@@ -435,6 +435,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
+  const previousTarkamIdRef = useRef<number | null>(null);
   const liveKey = useLiveUpdate(
     ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "timelines", "penyawers"],
     { fallbackIntervalMs: 30000 },
@@ -450,7 +451,10 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     let cancelled = false;
 
     const load = async () => {
-      setLoading(true);
+      const shouldShowLoading = previousTarkamIdRef.current !== tarkamId;
+      if (shouldShowLoading) {
+        setLoading(true);
+      }
       setError(null);
 
       const [
@@ -486,6 +490,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         return;
       }
 
+      previousTarkamIdRef.current = tarkamId;
       setBundle({
         detail: detailResult.value,
         teams: teamsResult.status === "fulfilled" ? teamsResult.value : [],
@@ -1518,7 +1523,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                             <span>{formatDateTime(winner.created_at)}</span>
                           </div>
                           <p className="tarkam-inline-copy">
-                            {winner.prize || "Hadiah belum dicatat."}
+                            {winner.prize ? formatCurrency(winner.prize) : "Hadiah belum dicatat."}
                           </p>
                         </div>
                       ))

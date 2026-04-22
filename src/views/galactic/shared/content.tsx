@@ -12,6 +12,7 @@ import {
   placeholderPlayer,
   placeholderShop,
   placeholderSponsor,
+  placeholderTeam,
 } from "@/galactic/placeholders";
 import {
   buildMatchDetailPath,
@@ -729,7 +730,6 @@ async function fetchGalacticPayloads() {
     Api.get("/winners"),
     Api.get("/usefulls"),
     Api.get("/penyawers"),
-    Api.get("/aliases"),
     Api.get("/groups"),
   ]);
 
@@ -784,7 +784,29 @@ const buildFooterLinks = (_menuTree: GalacticMenuItem[], usefulls: ApiUsefull[])
 };
 
 export function GalacticDataProvider({ children }: { children: ReactNode }) {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    [
+      "menus",
+      "web-setting",
+      "headers",
+      "categories",
+      "blogs",
+      "products",
+      "carts",
+      "streamings",
+      "clubs",
+      "members",
+      "players",
+      "teams",
+      "tarkams",
+      "contests",
+      "winners",
+      "usefulls",
+      "penyawers",
+      "groups",
+    ],
+    { fallbackIntervalMs: 45000 },
+  );
   const [content, setContent] = useState<GalacticContentValue>(defaultContent);
 
   useEffect(() => {
@@ -830,8 +852,6 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
           const id = normalizeId(item.id);
           return id != null ? [[id, item] as const] : [];
         }));
-        console.debug("Galactic groups loaded", groups.map((item) => ({ id: item.id, name: item.name, tarkam_fk: item.tarkam_fk, gender: item.gender })));
-        console.debug("Galactic groupMap keys", Array.from(groupMap.keys()));
         const categoryMap = new Map(categories.map((item) => [item.id, item.name || "Gaming"]));
         const menuTree = buildMenuTree(menus);
         const fallbackMenus = menuTree.length ? menuTree : defaultMenus;
@@ -935,23 +955,13 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
             const groupId = normalizeId(team.group_fk);
             return groupId != null ? groupMap.get(groupId) : undefined;
           })();
-          if (team.tarkam_fk === 9 && team.group_fk && !teamGroup) {
-            const groupId = normalizeId(team.group_fk);
-            console.debug("Missing teamGroup", {
-              teamId: team.id,
-              group_fk: team.group_fk,
-              normalizedGroupId: groupId,
-              groupMapHas: groupId != null ? groupMap.has(groupId) : false,
-              groupMapValue: groupId != null ? groupMap.get(groupId) : undefined,
-            });
-          }
           const points = membersForTeam.reduce((sum, item) => sum + item.points, 0);
 
           return {
             id: team.id,
             team,
             name: team.name || `Team ${team.id}`,
-            logo: firstClub?.logo || "",
+            logo: team.logo || firstClub?.logo || placeholderTeam,
             teamPath: buildTeamDetailPath(team.id),
             gender: team.gender || "Open",
             members: membersForTeam.map((item) => item.item),
@@ -1119,12 +1129,13 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
               }
 
               return {
-                image: item.logo || item.image || member?.picture_url?.trim() || placeholderSponsor,
+                image: member?.image_sponsor?.trim() || placeholderSponsor,
                 name: item.name || `Sponsor ${item.id}`,
                 url: item.url || "#",
                 amount: item.amount,
                 message: item.pesan?.trim() || item.description?.trim() || item.detail?.trim() || undefined,
-                memberImage: member?.picture_url?.trim() || placeholderPlayer,
+                memberPicture: member?.picture_url?.trim() || placeholderPlayer,
+                memberImage: member?.image_sponsor?.trim() || placeholderSponsor,
                 memberNickname: member?.nickname || member?.username || "Sponsor Member",
                 detail: item.detail || item.description || member?.tier || undefined,
                 socialLinks: socialLinks.length ? socialLinks : undefined,

@@ -8,7 +8,10 @@ import { CheckoutContent } from "./section";
 import type { CartRecord } from "../shared";
 
 const CheckoutPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["carts", "products", "web-setting"],
+    { fallbackIntervalMs: 30000 },
+  );
   const { cartItems, meta } = useGalacticContent();
   const [items, setItems] = useState<CartRecord[]>(cartItems);
 

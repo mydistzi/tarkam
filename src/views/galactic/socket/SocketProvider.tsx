@@ -105,14 +105,11 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
     };
 
     const handleResourceChanged = (data?: unknown) => {
-      console.log("[SocketProvider] Received ResourceChanged event:", data);
       handleUpdate(data);
     };
 
     channel.listen("BroadcastChanged", handleUpdate);
     channel.listen("ResourceChanged", handleResourceChanged);
-
-    console.log("[SocketProvider] Echo connected to broadcasts channel");
     setClient(echo);
 
     return () => {
@@ -129,8 +126,6 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
       const resource = typeof payload.resource === "string"
         ? normalizeResourceKey(payload.resource)
         : "";
-
-      console.log("[SocketProvider] Live event received:", { resource, action: payload.action, id: payload.id });
 
       setGlobalTick((current) => current + 1);
       if (resource) {

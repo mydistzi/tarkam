@@ -20,7 +20,10 @@ type ApiCatalogCategory = {
 };
 
 const ShopGridPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["products", "catprods"],
+    { fallbackIntervalMs: 45000 },
+  );
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [categories, setCategories] = useState<CatprodWidgetItem[]>([]);
   const [recentItems, setRecentItems] = useState<ProductItem[]>([]);

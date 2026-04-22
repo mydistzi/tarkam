@@ -81,7 +81,10 @@ const mapApiBlogToNewsItem = (blog: ApiBlogItem): PostItem => {
 };
 
 const NewsPage = () => {
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["blogs", "categories", "tags"],
+    { fallbackIntervalMs: 45000 },
+  );
   const navigate = useNavigate();
   const { categorySlug = "", tagSlug = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();

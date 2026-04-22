@@ -1,5 +1,5 @@
 import { DisqusThread, PageHeader, PlayerCarousel } from "@/galactic/common";
-import { placeholderSquad } from "@/galactic/placeholders";
+import { placeholderTeam } from "@/galactic/placeholders";
 import type { TeamRecord } from "../../shared";
 
 const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
@@ -18,7 +18,7 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
   return (
     <>
       <PageHeader className="team-details" title={record.name}>
-        <img src={record.logo || placeholderSquad} alt={record.name} />
+        <img src={record.logo || placeholderTeam} alt={record.name} />
       </PageHeader>
       <div className="team-details-info">
         <div className="container">

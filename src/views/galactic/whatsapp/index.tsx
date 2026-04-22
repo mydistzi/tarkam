@@ -31,7 +31,10 @@ const getAuthHeaders = () => {
 
 const WhatsAppPage = () => {
   const { meta } = useGalacticContent();
-  const liveKey = useLiveUpdate();
+  const liveKey = useLiveUpdate(
+    ["whatsapp"],
+    { fallbackIntervalMs: 15000 },
+  );
   const [session, setSession] = useState<WhatsAppSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
