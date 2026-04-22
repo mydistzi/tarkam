@@ -72,8 +72,8 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
 
       void Swal.fire({
         icon: "success",
-        title: "QRIS siap dibayar",
-        text: "QRIS checkout berhasil dibuat. Silakan scan atau cetak QRIS untuk menyelesaikan pembayaran.",
+        title: "Pembayaran siap",
+        text: "QRIS checkout berhasil dibuat. Silakan scan atau cetak QRIS untuk menyelesaikan pembayaran pesanan.",
         confirmButtonText: "Tutup",
       });
     } catch (error) {
@@ -88,7 +88,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
       setErrorMessage(message);
       void Swal.fire({
         icon: "error",
-        title: "Checkout gagal",
+        title: "Pembayaran gagal",
         text: message,
         confirmButtonText: "Tutup",
       });
@@ -134,7 +134,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
                 <div className="payment-method">
                   <h2>Pembayaran QRIS</h2>
                   <p style={{ marginBottom: "20px", color: "rgba(255,255,255,0.72)", lineHeight: 1.8 }}>
-                    Invoice Interactive QRIS akan dibuat atas akun yang sedang login. Setelah QRIS dicetak, status pembayaran akan dicek otomatis oleh sistem setiap 1 menit.
+                    QRIS pembayaran akan dibuat atas akun yang sedang login. Setelah QRIS dicetak, status pembayaran akan dicek otomatis oleh sistem setiap 1 menit.
                   </p>
                   <button className="default-btn" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Menyiapkan QRIS...' : 'Cetak QRIS Pembayaran'}<span />

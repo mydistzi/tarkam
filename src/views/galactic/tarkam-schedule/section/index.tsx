@@ -286,8 +286,8 @@ const ScheduleCard = ({
 
       void Swal.fire({
         icon: "success",
-        title: "QRIS pendaftaran siap",
-        text: "QRIS berhasil dibuat. Silakan scan atau cetak untuk membayar biaya pendaftaran.",
+        title: "Pembayaran siap",
+        text: "QRIS pembayaran berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan biaya registrasi.",
         confirmButtonText: "Tutup",
       });
     } catch (error: unknown) {
@@ -322,7 +322,7 @@ const ScheduleCard = ({
         void Swal.fire({
           icon: "success",
           title: "Pendaftaran berhasil",
-          text: `Kategori ${getGenderLabel(gender)} berhasil didaftarkan. Lanjutkan pembayaran untuk menyelesaikan registrasi.`,
+          text: `Kategori ${getGenderLabel(gender)} berhasil didaftarkan. Lanjutkan ke tombol Bayar Sekarang untuk menyelesaikan biaya registrasi.`,
           confirmButtonText: "Tutup",
         });
       }
@@ -429,7 +429,7 @@ const ScheduleCard = ({
                 : printingQris
                   ? "Menyiapkan QRIS..."
                   : !isAuthenticated
-                    ? "Login untuk Daftar / Bayar"
+                    ? "Login untuk Bayar"
                     : "Bayar Sekarang"}
               <span />
             </button>

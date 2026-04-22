@@ -769,8 +769,8 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
       void Swal.fire({
         icon: "success",
-        title: "QRIS pendaftaran siap",
-        text: "QRIS berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan pembayaran.",
+        title: "Pembayaran siap",
+        text: "QRIS pembayaran berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan biaya registrasi.",
         confirmButtonText: "Tutup",
       });
     } catch (error: unknown) {
@@ -782,7 +782,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran.");
       void Swal.fire({
         icon: "error",
-        title: "QRIS gagal dibuat",
+        title: "Pembayaran gagal dibuat",
         text: message,
         confirmButtonText: "Tutup",
       });
@@ -810,7 +810,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         void Swal.fire({
           icon: "success",
           title: "Pendaftaran berhasil",
-          text: `Kategori ${genderLabel(gender)} berhasil didaftarkan. Lanjutkan pembayaran untuk menyelesaikan registrasi.`,
+          text: `Kategori ${genderLabel(gender)} berhasil didaftarkan. Lanjutkan ke tombol Bayar Sekarang untuk menyelesaikan biaya registrasi.`,
           confirmButtonText: "Tutup",
         });
       }
@@ -981,7 +981,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     : printingQris
                       ? "Menyiapkan QRIS..."
                       : !isAuthenticated
-                        ? "Login untuk Daftar / Bayar"
+                        ? "Login untuk Bayar"
                         : "Bayar Sekarang"}
                 </button>
                 <span className="tarkam-pill tarkam-pill--auto-check">
