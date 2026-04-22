@@ -456,17 +456,18 @@ const ScheduleCard = ({
                 <span />
               </button>
             ) : (
-              <button
-                disabled
-                className="default-btn"
-                style={{
-                  background: "rgba(79, 172, 254, 0.08)",
-                  border: "1px solid rgba(79, 172, 254, 0.18)",
-                  color: "rgba(199, 236, 255, 0.58)",
-                }}
-              >
-                Pendaftaran Male Ditutup
-              </button>
+              ""
+              // <button
+              //   disabled
+              //   className="default-btn"
+              //   style={{
+              //     background: "rgba(79, 172, 254, 0.08)",
+              //     border: "1px solid rgba(79, 172, 254, 0.18)",
+              //     color: "rgba(199, 236, 255, 0.58)",
+              //   }}
+              // >
+              //   Pendaftaran Male Ditutup
+              // </button>
             )}
             {Number(tarkam.female_completed ?? 0) === 0 ? (
               <button
@@ -487,17 +488,18 @@ const ScheduleCard = ({
                 <span />
               </button>
             ) : (
-              <button
-                disabled
-                className="default-btn"
-                style={{
-                  background: "rgba(255, 105, 180, 0.08)",
-                  border: "1px solid rgba(255, 105, 180, 0.18)",
-                  color: "rgba(255, 210, 233, 0.58)",
-                }}
-              >
-                Pendaftaran Female Ditutup
-              </button>
+              ""
+              // <button
+              //   disabled
+              //   className="default-btn"
+              //   style={{
+              //     background: "rgba(255, 105, 180, 0.08)",
+              //     border: "1px solid rgba(255, 105, 180, 0.18)",
+              //     color: "rgba(255, 210, 233, 0.58)",
+              //   }}
+              // >
+              //   Pendaftaran Female Ditutup
+              // </button>
             )}
           </div>
         </div>

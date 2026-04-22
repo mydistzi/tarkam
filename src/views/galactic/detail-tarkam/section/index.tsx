@@ -1006,18 +1006,19 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                         : "Daftar Male"}
                   </button>
                 ) : (
-                  <button
-                    className="default-btn"
-                    type="button"
-                    disabled
-                    style={{
-                      background: "rgba(79, 172, 254, 0.08)",
-                      border: "1px solid rgba(79, 172, 254, 0.18)",
-                      color: "rgba(199, 236, 255, 0.58)",
-                    }}
-                  >
-                    Pendaftaran Male Ditutup
-                  </button>
+                  ""
+                  // <button
+                  //   className="default-btn"
+                  //   type="button"
+                  //   disabled
+                  //   style={{
+                  //     background: "rgba(79, 172, 254, 0.08)",
+                  //     border: "1px solid rgba(79, 172, 254, 0.18)",
+                  //     color: "rgba(199, 236, 255, 0.58)",
+                  //   }}
+                  // >
+                  //   Pendaftaran Male Ditutup
+                  // </button>
                 )}
                 {Number(detail.female_completed ?? 0) === 0 ? (
                   <button
@@ -1038,18 +1039,19 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                         : "Daftar Female"}
                   </button>
                 ) : (
-                  <button
-                    className="default-btn"
-                    type="button"
-                    disabled
-                    style={{
-                      background: "rgba(255, 105, 180, 0.08)",
-                      border: "1px solid rgba(255, 105, 180, 0.18)",
-                      color: "rgba(255, 210, 233, 0.58)",
-                    }}
-                  >
-                    Pendaftaran Female Ditutup
-                  </button>
+                  ""
+                  // <button
+                  //   className="default-btn"
+                  //   type="button"
+                  //   disabled
+                  //   style={{
+                  //     background: "rgba(255, 105, 180, 0.08)",
+                  //     border: "1px solid rgba(255, 105, 180, 0.18)",
+                  //     color: "rgba(255, 210, 233, 0.58)",
+                  //   }}
+                  // >
+                  //   Pendaftaran Female Ditutup
+                  // </button>
                 )}
                 {proofHref ? (
                   <a
