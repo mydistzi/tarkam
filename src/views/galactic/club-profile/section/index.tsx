@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
+import { showAlert } from "@/lib/alerts";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { refetchProfileDropdown } from "@/galactic/profileDropdownUtils";
 
@@ -84,9 +84,9 @@ export const ClubProfileContent = () => {
       setMemberProfile(null);
     } catch (error: unknown) {
       if ((error as { response?: { status?: number } })?.response?.status === 404) {
-        Swal.fire("Error", "Profil member tidak ditemukan.", "error");
+        void showAlert({ icon: "error", title: "Error", text: "Profil member tidak ditemukan." });
       } else {
-        Swal.fire("Error", "Gagal memuat data club.", "error");
+        void showAlert({ icon: "error", title: "Error", text: "Gagal memuat data club." });
       }
       navigate("/profile", { replace: true });
     } finally {
@@ -131,7 +131,7 @@ export const ClubProfileContent = () => {
     event.preventDefault();
 
     if (!club?.slug) {
-      Swal.fire("Error", "Club tidak ditemukan.", "error");
+      void showAlert({ icon: "error", title: "Error", text: "Club tidak ditemukan." });
       return;
     }
 
@@ -158,7 +158,7 @@ export const ClubProfileContent = () => {
       }
 
       if (!Array.from(payload.keys()).length) {
-        Swal.fire("Info", "Belum ada perubahan untuk disimpan.", "info");
+        void showAlert({ icon: "info", title: "Info", text: "Belum ada perubahan untuk disimpan." });
         return;
       }
 
@@ -192,16 +192,16 @@ export const ClubProfileContent = () => {
         );
         await refetchProfileDropdown();
         window.dispatchEvent(new Event("profile-sync-complete"));
-        Swal.fire("Sukses", "Profil club berhasil diperbarui.", "success");
+        void showAlert({ icon: "success", title: "Sukses", text: "Profil club berhasil diperbarui." });
         return;
       }
 
-      Swal.fire("Error", response.data?.message || "Update club gagal.", "error");
+      void showAlert({ icon: "error", title: "Error", text: response.data?.message || "Update club gagal." });
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         "Gagal mengupdate club.";
-      Swal.fire("Error", message, "error");
+      void showAlert({ icon: "error", title: "Error", text: message });
     } finally {
       setSubmitting(false);
     }

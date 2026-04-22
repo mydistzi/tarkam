@@ -54,13 +54,20 @@ export default defineConfig({
             return 'react-core';
           }
 
-          if (
-            id.includes('swiper') ||
-            id.includes('react-multi-carousel') ||
-            id.includes('sweetalert2') ||
-            id.includes('qrcode')
-          ) {
-            return 'ui-widgets';
+          if (id.includes('swiper') || id.includes('react-multi-carousel')) {
+            return 'carousel-widgets';
+          }
+
+          if (id.includes('sweetalert2')) {
+            return 'dialogs';
+          }
+
+          if (id.includes('qrcode')) {
+            return 'qrcode-tools';
+          }
+
+          if (id.includes('@sportsgram/brackets')) {
+            return 'brackets';
           }
 
           if (id.includes('pusher-js') || id.includes('laravel-echo')) {

@@ -1,5 +1,3 @@
-import QRCode from "qrcode";
-
 export type QrisInvoicePayload = {
   title: string;
   description?: string;
@@ -37,6 +35,16 @@ const formatDateTime = (value?: string | null) => {
   }).format(date);
 };
 
+let qrcodeLoader: Promise<(typeof import("qrcode"))["default"]> | null = null;
+
+const getQrCode = async () => {
+  if (!qrcodeLoader) {
+    qrcodeLoader = import("qrcode").then((module) => module.default);
+  }
+
+  return qrcodeLoader;
+};
+
 export const prepareQrisPrintWindow = () => {
   if (typeof window === "undefined") {
     return null;
@@ -53,6 +61,7 @@ export async function printQrisInvoice(
     throw new Error("Pop-up diblokir. Izinkan jendela baru untuk mencetak QRIS.");
   }
 
+  const QRCode = await getQrCode();
   const qrisImage = await QRCode.toDataURL(payload.qrisContent, {
     errorCorrectionLevel: "M",
     margin: 1,

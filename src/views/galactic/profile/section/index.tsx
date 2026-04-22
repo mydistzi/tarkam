@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
+import { showAlert } from "@/lib/alerts";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { refetchProfileDropdown } from "@/galactic/profileDropdownUtils";
 
@@ -157,7 +157,7 @@ export const ProfileContent = () => {
   const handleSyncProfile = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!nicknameInput.trim()) {
-      Swal.fire("Error", "Nickname tidak boleh kosong.", "error");
+      void showAlert({ icon: "error", title: "Error", text: "Nickname tidak boleh kosong." });
       return;
     }
 
@@ -174,16 +174,16 @@ export const ProfileContent = () => {
         setPictureFile(null);
         setSponsorFile(null);
         await broadcastProfileRefresh();
-        Swal.fire("Sukses", "Profil berhasil disinkronisasi.", "success");
+        void showAlert({ icon: "success", title: "Sukses", text: "Profil berhasil disinkronisasi." });
         return;
       }
 
-      Swal.fire("Error", response.data?.message || "Sync profil gagal.", "error");
+      void showAlert({ icon: "error", title: "Error", text: response.data?.message || "Sync profil gagal." });
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         "Gagal sinkronisasi profil.";
-      Swal.fire("Error", message, "error");
+      void showAlert({ icon: "error", title: "Error", text: message });
     } finally {
       setLoading(false);
     }
@@ -249,7 +249,7 @@ export const ProfileContent = () => {
       }
 
       if (!Array.from(payload.keys()).length) {
-        Swal.fire("Info", "Belum ada perubahan untuk disimpan.", "info");
+        void showAlert({ icon: "info", title: "Info", text: "Belum ada perubahan untuk disimpan." });
         return;
       }
 
@@ -267,16 +267,16 @@ export const ProfileContent = () => {
         setPictureFile(null);
         setSponsorFile(null);
         await broadcastProfileRefresh();
-        Swal.fire("Sukses", "Profil berhasil diperbarui.", "success");
+        void showAlert({ icon: "success", title: "Sukses", text: "Profil berhasil diperbarui." });
         return;
       }
 
-      Swal.fire("Error", response.data?.message || "Update profil gagal.", "error");
+      void showAlert({ icon: "error", title: "Error", text: response.data?.message || "Update profil gagal." });
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         "Gagal menyimpan perubahan profil.";
-      Swal.fire("Error", message, "error");
+      void showAlert({ icon: "error", title: "Error", text: message });
     } finally {
       setSubmitting(false);
     }

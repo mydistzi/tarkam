@@ -12,6 +12,7 @@ import {
 import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
+import { showAlert } from "@/lib/alerts";
 import type { StructuredDataInput } from "@/lib/structuredData";
 import {
   useGalacticCommerceContent,
@@ -168,27 +169,6 @@ type DisqusThreadProps = {
 };
 
 type DiscussionEmbedComponent = (typeof import("disqus-react"))["DiscussionEmbed"];
-
-type AlertOptions = {
-  icon: "success" | "error" | "info" | "warning" | "question";
-  title: string;
-  text: string;
-};
-
-let sweetAlertLoader: Promise<(typeof import("sweetalert2"))["default"]> | null = null;
-
-const getSweetAlert = async () => {
-  if (!sweetAlertLoader) {
-    sweetAlertLoader = import("sweetalert2").then((module) => module.default);
-  }
-
-  return sweetAlertLoader;
-};
-
-const showAlert = async (options: AlertOptions) => {
-  const sweetAlert = await getSweetAlert();
-  return sweetAlert.fire(options);
-};
 
 const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
   const [DiscussionEmbedComponent, setDiscussionEmbedComponent] = useState<DiscussionEmbedComponent | null>(null);

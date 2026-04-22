@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
-import Swal from "sweetalert2";
 import { DisqusThread, PageHeader } from "@/galactic/common";
 import { VideoStreemButton } from "@/galactic/media";
 import {
@@ -15,6 +14,7 @@ import {
   placeholderTeam,
   placeholderVideoThumb,
 } from "@/galactic/placeholders";
+import { showAlert } from "@/lib/alerts";
 import { useAuth } from "../../auth/AuthProvider";
 import { useLiveUpdate } from "../../socket/SocketProvider";
 
@@ -776,7 +776,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
       await printQrisInvoice(printPayload, printWindow);
 
-      void Swal.fire({
+      void showAlert({
         icon: "success",
         title: "Pembayaran siap",
         text: "QRIS pembayaran berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan biaya registrasi.",
@@ -789,7 +789,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran.");
-      void Swal.fire({
+      void showAlert({
         icon: "error",
         title: "Pembayaran gagal dibuat",
         text: message,
@@ -816,7 +816,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       const response = await Api.post(`/tarkams/${detail.id || tarkamId}/register`, { gender });
 
       if (response.data?.success) {
-        void Swal.fire({
+        void showAlert({
           icon: "success",
           title: "Pendaftaran berhasil",
           text: `Kategori ${genderLabel(gender)} berhasil didaftarkan. Lanjutkan ke tombol Bayar Sekarang untuk menyelesaikan biaya registrasi.`,
@@ -827,7 +827,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         (error instanceof Error ? error.message : "Gagal melakukan pendaftaran Tarkam.");
-      void Swal.fire({
+      void showAlert({
         icon: "error",
         title: "Pendaftaran gagal",
         text: message,

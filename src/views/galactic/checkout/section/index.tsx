@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import Api from "@/api";
 import { getCartRequestPayload } from "@/galactic/session";
 import { PageHeader } from "@/galactic/common";
+import { showAlert } from "@/lib/alerts";
 import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";
 import { useAuth } from "../../auth/AuthProvider";
 import type { CartRecord } from "../../shared";
@@ -70,7 +70,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
 
       await printQrisInvoice(printPayload, paymentWindow);
 
-      void Swal.fire({
+      void showAlert({
         icon: "success",
         title: "Pembayaran siap",
         text: "QRIS checkout berhasil dibuat. Silakan scan atau cetak QRIS untuk menyelesaikan pembayaran pesanan.",
@@ -86,7 +86,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
           ? error.message
           : "Gagal memproses pembayaran. Coba lagi atau periksa data kamu.";
       setErrorMessage(message);
-      void Swal.fire({
+      void showAlert({
         icon: "error",
         title: "Pembayaran gagal",
         text: message,

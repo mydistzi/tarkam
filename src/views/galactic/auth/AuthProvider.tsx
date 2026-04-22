@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import Api from "@/api";
+import { showAlert } from "@/lib/alerts";
 
 type AuthUser = {
   id: number;
@@ -200,7 +200,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isAuthenticated && !didAlertRef.current) {
       didAlertRef.current = true;
-      Swal.fire({
+      showAlert({
         icon: "warning",
         title: "Harus Login Terlebih Dahulu",
         text: "Agar bisa menyelesaikan transaksi pembelian, silakan login atau daftar terlebih dahulu.",

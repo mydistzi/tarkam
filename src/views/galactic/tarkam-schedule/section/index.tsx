@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
-import Swal from "sweetalert2";
 import { PageHeader } from "@/galactic/common";
 import { VideoStreemButton } from "@/galactic/media";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { showAlert } from "@/lib/alerts";
 import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";
 import { useLiveUpdate } from "../../socket/SocketProvider";
 import { useAuth } from "../../auth/AuthProvider";
@@ -294,7 +294,7 @@ const ScheduleCard = ({
 
       await printQrisInvoice(printPayload, printWindow);
 
-      void Swal.fire({
+      void showAlert({
         icon: "success",
         title: "Pembayaran siap",
         text: "QRIS pembayaran berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan biaya registrasi.",
@@ -307,7 +307,7 @@ const ScheduleCard = ({
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran. Silakan coba lagi.");
-      Swal.fire("Error", message, "error");
+      void showAlert({ icon: "error", title: "Error", text: message });
     } finally {
       setPrintingQris(false);
     }
@@ -329,7 +329,7 @@ const ScheduleCard = ({
       const response = await Api.post(`/tarkams/${tarkam.id}/register`, { gender });
 
       if (response.data?.success) {
-        void Swal.fire({
+        void showAlert({
           icon: "success",
           title: "Pendaftaran berhasil",
           text: `Kategori ${getGenderLabel(gender)} berhasil didaftarkan. Lanjutkan ke tombol Bayar Sekarang untuk menyelesaikan biaya registrasi.`,
@@ -340,7 +340,7 @@ const ScheduleCard = ({
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         (error instanceof Error ? error.message : "Gagal melakukan pendaftaran Tarkam.");
-      void Swal.fire({
+      void showAlert({
         icon: "error",
         title: "Pendaftaran gagal",
         text: message,
