@@ -18,8 +18,23 @@ const getImageSource = (src?: string) => {
   return isPlaceholderAsset ? placeholderShop : normalized;
 };
 
+const normalizeSocialUrl = (value?: string | null) => {
+  const normalized = value?.trim();
+
+  if (!normalized) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(normalized)) {
+    return normalized;
+  }
+
+  return `https://${normalized.replace(/^\/+/, "")}`;
+};
+
 const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<"description" | "additional">("description");
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -72,6 +87,13 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
   const images = galleryImages.length > 0
     ? galleryImages
     : [product.image?.trim() || placeholderShop];
+  const hasAdditionalInfo = Boolean(product.additionalInfo?.trim());
+  const member = record?.product.user?.user;
+  const socialLinks = [
+    { icon: "fab fa-facebook-f", label: "Facebook", href: normalizeSocialUrl(member?.facebook) },
+    { icon: "fab fa-instagram", label: "Instagram", href: normalizeSocialUrl(member?.instagram) },
+    { icon: "fab fa-tiktok", label: "TikTok", href: normalizeSocialUrl(member?.tiktok) },
+  ].filter((item): item is { icon: string; label: string; href: string } => Boolean(item.href));
 
   return (
     <>
@@ -126,12 +148,17 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
                     <li>Kategori:<a href="#">{product.category}</a></li>
                     <li>Tag:<a href="#">{product.tags.join(", ")}</a></li>
                   </ul>
-                  <ul className="social-list">
-                    <li><a href="#"><i className="fab fa-facebook-f" /></a></li>
-                    <li><a href="#"><i className="fab fa-twitter" /></a></li>
-                    <li><a href="#"><i className="fab fa-instagram" /></a></li>
-                    <li><a href="#"><i className="fab fa-youtube" /></a></li>
-                  </ul>
+                  {socialLinks.length ? (
+                    <ul className="social-list">
+                      {socialLinks.map((item) => (
+                        <li key={item.label}>
+                          <a href={item.href} target="_blank" rel="noreferrer noopener" aria-label={item.label}>
+                            <i className={item.icon} />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -142,18 +169,64 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
       <section className="product-description padding-top">
         <div className="container">
           <ul className="nav tab-navigation" role="tablist">
-            <li role="presentation"><button className="active" type="button">Deskripsi</button></li>
-            <li role="presentation"><button type="button">Info tambahan</button></li>
+            <li role="presentation">
+              <button
+                className={activeTab === "description" ? "active" : ""}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "description"}
+                aria-controls="shop-tab-description"
+                id="shop-tab-trigger-description"
+                onClick={() => setActiveTab("description")}
+              >
+                Deskripsi
+              </button>
+            </li>
+            <li role="presentation">
+              <button
+                className={activeTab === "additional" ? "active" : ""}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "additional"}
+                aria-controls="shop-tab-additional"
+                id="shop-tab-trigger-additional"
+                onClick={() => setActiveTab("additional")}
+              >
+                Info tambahan
+              </button>
+            </li>
           </ul>
           <div className="tab-content">
-            <div className="tab-pane active">
+            <div
+              className={`tab-pane${activeTab === "description" ? " active" : ""}`}
+              id="shop-tab-description"
+              role="tabpanel"
+              aria-labelledby="shop-tab-trigger-description"
+              hidden={activeTab !== "description"}
+            >
               <div className="description">
                 <p>{product.description}</p>
                 <ul className="description-meta">
                   <li><span>Ketersediaan:</span> {product.badge}</li>
                   <li><span>Kategori:</span> {product.category}</li>
                   <li><span>Tag:</span> {product.tags.join(", ")}</li>
-                  <li><span>Info Tambahan:</span> {product.additionalInfo || "Belum ada info tambahan."}</li>
+                </ul>
+              </div>
+            </div>
+            <div
+              className={`tab-pane${activeTab === "additional" ? " active" : ""}`}
+              id="shop-tab-additional"
+              role="tabpanel"
+              aria-labelledby="shop-tab-trigger-additional"
+              hidden={activeTab !== "additional"}
+            >
+              <div className="description">
+                <p>{hasAdditionalInfo ? product.additionalInfo : "Belum ada info tambahan untuk produk ini."}</p>
+                <ul className="description-meta">
+                  <li><span>SKU:</span> {product.sku}</li>
+                  <li><span>Ketersediaan:</span> {product.badge}</li>
+                  <li><span>Kategori:</span> {product.category}</li>
+                  <li><span>Tag:</span> {product.tags.length ? product.tags.join(", ") : "-"}</li>
                 </ul>
               </div>
             </div>

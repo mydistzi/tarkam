@@ -166,6 +166,12 @@ type ApiProduct = {
   status?: string;
   catprod_id?: number;
   user_id?: number;
+  user?: {
+    id?: number;
+    name?: string;
+    email?: string;
+    user?: ApiMember | null;
+  };
   catprod?: { id?: number; title?: string; name?: string; slug?: string; url?: string; status?: string };
   tags?: Array<{ id?: number; name?: string }>;
   thumbnails?: Array<{ id?: number; product_thumbnail_path?: string }>;
@@ -1189,7 +1195,7 @@ const mapCommerceContent = (
         tags: product.tags?.map((item) => item.name || "").filter(Boolean) || [],
         path: buildShopDetailPath(product.slug || product.id),
         gallery: gallery?.length ? gallery : [],
-        additionalInfo: product.additional_info || product.description || "",
+        additionalInfo: product.additional_info || "",
       },
     };
   });
