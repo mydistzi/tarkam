@@ -139,6 +139,8 @@ type VideoModalState = {
   title: string;
   url: string;
 };
+const GALACTIC_UI_READY_ATTR = "data-galactic-ui-ready";
+const GALACTIC_UI_READY_DELAY_MS = 900;
 type WowInstance = {
   init: () => void;
   sync?: () => void;
@@ -305,9 +307,13 @@ const OdometerNumber = ({
 
     let active = true;
     let isInViewport = !("IntersectionObserver" in window);
-    let isAppReady = document.body.classList.contains("loaded");
+    let isAppReady = document.body.getAttribute(GALACTIC_UI_READY_ATTR) === "true";
     let intersectionObserver: IntersectionObserver | null = null;
     let bodyClassObserver: MutationObserver | null = null;
+    const handleUiReady = () => {
+      isAppReady = true;
+      tryEnableAnimation();
+    };
 
     const tryEnableAnimation = () => {
       if (!active) {
@@ -340,7 +346,7 @@ const OdometerNumber = ({
     }
 
     bodyClassObserver = new MutationObserver(() => {
-      isAppReady = document.body.classList.contains("loaded");
+      isAppReady = document.body.getAttribute(GALACTIC_UI_READY_ATTR) === "true";
       tryEnableAnimation();
 
       if (isAppReady && isInViewport) {
@@ -350,8 +356,9 @@ const OdometerNumber = ({
     });
     bodyClassObserver.observe(document.body, {
       attributes: true,
-      attributeFilter: ["class"],
+      attributeFilter: ["class", GALACTIC_UI_READY_ATTR],
     });
+    window.addEventListener("galactic:ui-ready", handleUiReady);
 
     tryEnableAnimation();
 
@@ -359,6 +366,7 @@ const OdometerNumber = ({
       active = false;
       intersectionObserver?.disconnect();
       bodyClassObserver?.disconnect();
+      window.removeEventListener("galactic:ui-ready", handleUiReady);
     };
   }, []);
 
@@ -2426,6 +2434,7 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
   const [sponsorMarqueeEntries, setSponsorMarqueeEntries] = useState<SponsorMarqueeEntry[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wowRef = useRef<WowInstance | null>(null);
+  const uiReadyTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const updateViewport = () => {
@@ -2454,7 +2463,12 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       window.removeEventListener("resize", updateViewport);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
+      if (uiReadyTimerRef.current !== null) {
+        window.clearTimeout(uiReadyTimerRef.current);
+        uiReadyTimerRef.current = null;
+      }
       document.body.classList.remove("viewport-lg", "viewport-sm", "loaded");
+      document.body.removeAttribute(GALACTIC_UI_READY_ATTR);
     };
   }, []);
 
@@ -2488,11 +2502,29 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     commerceLoading;
 
   useEffect(() => {
+    if (uiReadyTimerRef.current !== null) {
+      window.clearTimeout(uiReadyTimerRef.current);
+      uiReadyTimerRef.current = null;
+    }
+
     if (loading || contentLoading) {
       document.body.classList.remove("loaded");
+      document.body.removeAttribute(GALACTIC_UI_READY_ATTR);
     } else {
       document.body.classList.add("loaded");
+      uiReadyTimerRef.current = window.setTimeout(() => {
+        document.body.setAttribute(GALACTIC_UI_READY_ATTR, "true");
+        window.dispatchEvent(new Event("galactic:ui-ready"));
+        uiReadyTimerRef.current = null;
+      }, GALACTIC_UI_READY_DELAY_MS);
     }
+
+    return () => {
+      if (uiReadyTimerRef.current !== null) {
+        window.clearTimeout(uiReadyTimerRef.current);
+        uiReadyTimerRef.current = null;
+      }
+    };
   }, [loading, contentLoading]);
 
   const isAppReady = !loading && !contentLoading;
