@@ -103,6 +103,18 @@
         padding-top: 80px;
     }
 
+    .footer-payment-support {
+        padding: 24px;
+    }
+
+    .footer-payment-support__logos {
+        justify-content: flex-start;
+    }
+
+    .footer-payment-support__provider {
+        gap: 10px;
+    }
+
     .copyright-wrap:before {
         width: 60%;
     }

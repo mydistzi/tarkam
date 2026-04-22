@@ -1,9 +1,11 @@
-import type { FormEvent } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Api from "@/api";
+import { getCartRequestPayload } from "@/galactic/session";
 import { PageHeader } from "@/galactic/common";
+import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";
+import { useAuth } from "../../auth/AuthProvider";
 import type { CartRecord } from "../../shared";
 
 type CheckoutContentProps = {
@@ -12,35 +14,18 @@ type CheckoutContentProps = {
   phone?: string;
 };
 
-const PAYMENT_CHANNELS = {
-  credit_card: "01",
-  bank_transfer: "02",
-  indomaret: "09",
-  alfamart: "10",
-};
-
-const PAYMENT_METHOD_LABELS: Record<keyof typeof PAYMENT_CHANNELS, string> = {
-  credit_card: "Kartu Kredit",
-  bank_transfer: "Transfer Bank",
-  indomaret: "Indomaret",
-  alfamart: "Alfamart",
-};
-
 const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
-  const [firstName, setFirstName] = useState("Tarkam");
-  const [lastName, setLastName] = useState("Community");
-  const [city, setCity] = useState("Jakarta");
+  const { user } = useAuth();
   const [phoneNumber, setPhoneNumber] = useState(phone || "");
   const [orderNote, setOrderNote] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<keyof typeof PAYMENT_CHANNELS>("credit_card");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const shipping = 10;
+  const shipping = 0;
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const total = subtotal + shipping;
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSubmitting) {
       return;
@@ -54,49 +39,48 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
     setIsSubmitting(true);
     setErrorMessage(null);
 
+    const paymentWindow = prepareQrisPrintWindow();
+
     try {
-      const response = await Api.post(import.meta.env.VITE_DOKU_PAYMENT_PATH || "/payments/doku", {
+      const response = await Api.post("/payments/qris/carts", getCartRequestPayload({
         carts: items.map((item) => item.id),
-        customer_name: `${firstName} ${lastName}`.trim(),
-        customer_phone: phoneNumber,
-        customer_city: city,
-        payment_method: PAYMENT_CHANNELS[paymentMethod],
-        payment_channel: PAYMENT_CHANNELS[paymentMethod],
-        shipping_cost: shipping,
+        phone: phoneNumber,
         order_note: orderNote,
-      });
+      }));
+      const payload = response.data?.data;
+      const transaction = payload?.transaction;
+      const invoice = payload?.invoice;
 
-      const paymentAction = response.data?.payment_action;
-      const paymentPayload = response.data?.payment_payload;
-
-      if (!paymentAction || !paymentPayload) {
-        throw new Error("Cannot build payment request from Doku response.");
+      if (!transaction || !invoice?.qris_content) {
+        throw new Error("QRIS checkout belum berhasil dibuat.");
       }
 
-      const paymentWindow = window.open("", "_blank");
-      if (!paymentWindow) {
-        throw new Error("Pop up diblokir, izinkan jendela baru untuk melanjutkan pembayaran.");
-      }
+      const printPayload: QrisInvoicePayload = {
+        title: "QRIS Checkout Tarkam Store",
+        description: "Pembayaran produk Tarkam Store akan dikonfirmasi otomatis setelah status QRIS dinyatakan paid.",
+        amount: Number(transaction.amount ?? total),
+        transactionCode: String(transaction.transaction_code ?? ""),
+        payerName: transaction.payer_name ?? user?.name ?? "Member Tarkam",
+        payerNickname: transaction.payer_nickname ?? user?.name ?? "Member Tarkam",
+        qrisContent: String(invoice.qris_content),
+        qrisInvoiceId: invoice.qris_invoiceid ?? null,
+        requestDate: invoice.qris_request_date ?? null,
+        expiresAt: invoice.expires_at ?? null,
+      };
 
-      const form = document.createElement("form");
-      form.method = "post";
-      form.action = paymentAction;
-      form.target = paymentWindow.name;
-      form.style.display = "none";
+      await printQrisInvoice(printPayload, paymentWindow);
 
-      Object.entries(paymentPayload).forEach(([key, value]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = String(value ?? "");
-        form.appendChild(input);
+      void Swal.fire({
+        icon: "success",
+        title: "QRIS siap dibayar",
+        text: "QRIS checkout berhasil dibuat. Silakan scan atau cetak QRIS untuk menyelesaikan pembayaran.",
+        confirmButtonText: "Tutup",
       });
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
     } catch (error) {
       console.error("Checkout failed", error);
+      if (paymentWindow && !paymentWindow.closed) {
+        paymentWindow.close();
+      }
       const message =
         error instanceof Error
           ? error.message
@@ -127,9 +111,18 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
               <form className="checkout-form-wrap" onSubmit={handleSubmit}>
                 <h2>Detail Pembayaran</h2>
                 <div className="checkout-form mb-30">
-                  <div className="form-field"><input className="form-control" value={firstName} onChange={(event) => setFirstName(event.target.value)} placeholder="Nama Depan" required type="text" id="firstName" name="firstName" autoComplete="given-name" /></div>
-                  <div className="form-field"><input className="form-control" value={lastName} onChange={(event) => setLastName(event.target.value)} placeholder="Nama Belakang" required type="text" id="lastName" name="lastName" autoComplete="family-name" /></div>
-                  <div className="form-field"><input className="form-control" value={city} onChange={(event) => setCity(event.target.value)} placeholder="Kota" required type="text" id="city" name="city" autoComplete="address-level2" /></div>
+                  <div className="form-field">
+                    <input
+                      className="form-control"
+                      value={user?.name || ""}
+                      placeholder="Akun pembayaran"
+                      type="text"
+                      id="payerName"
+                      name="payerName"
+                      disabled
+                      readOnly
+                    />
+                  </div>
                   <div className="form-field"><input className="form-control" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} placeholder="Telepon" required type="text" id="phoneNumber" name="phoneNumber" autoComplete="tel" /></div>
                 </div>
                 <div className="additional-info mb-30">
@@ -139,24 +132,12 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
                   </div>
                 </div>
                 <div className="payment-method">
-                  <h2>Metode Pembayaran</h2>
-                  <ul className="mb-20">
-                    {Object.entries(PAYMENT_CHANNELS).map(([key]) => (
-                      <li key={key}>
-                        <label>
-                          <input
-                            checked={paymentMethod === key}
-                            name="selector"
-                            onChange={() => setPaymentMethod(key as keyof typeof PAYMENT_CHANNELS)}
-                            type="radio"
-                          />
-                          {PAYMENT_METHOD_LABELS[key as keyof typeof PAYMENT_CHANNELS]}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                  <h2>Pembayaran QRIS</h2>
+                  <p style={{ marginBottom: "20px", color: "rgba(255,255,255,0.72)", lineHeight: 1.8 }}>
+                    Invoice Interactive QRIS akan dibuat atas akun yang sedang login. Setelah QRIS dicetak, status pembayaran akan dicek otomatis oleh sistem setiap 1 menit.
+                  </p>
                   <button className="default-btn" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Memproses...' : 'Bayar Sekarang'}<span />
+                    {isSubmitting ? 'Menyiapkan QRIS...' : 'Cetak QRIS Pembayaran'}<span />
                   </button>
                 </div>
                 {errorMessage ? <p style={{ color: '#d9534f', marginTop: '1rem' }}>{errorMessage}</p> : null}
@@ -165,7 +146,7 @@ const CheckoutContent = ({ items, phone }: CheckoutContentProps) => {
             <div className="col-lg-4 sm-padding">
               <ul className="cart-total">
                 <li><span>Subtotal:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(subtotal)}</li>
-                <li><span>Perkiraan ongkir:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(shipping)}</li>
+                <li><span>Biaya tambahan:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(shipping)}</li>
                 <li><span>Total:</span>{new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(total)}</li>
                 <li>
                   <Link to="/shop">Lanjut Belanja</Link>

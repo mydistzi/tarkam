@@ -4,6 +4,7 @@ import Api from "@/api";
 import Swal from "sweetalert2";
 import { PageHeader, VideoStreemButton } from "@/galactic/common";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
+import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";
 import { useLiveUpdate } from "../../socket/SocketProvider";
 import { useAuth } from "../../auth/AuthProvider";
 
@@ -206,10 +207,10 @@ const ScheduleCard = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const [registering, setRegistering] = useState<"male" | "female" | null>(null);
+  const [printingQris, setPrintingQris] = useState<GenderKey | null>(null);
   const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
 
-  const handleRegister = async (gender: "male" | "female") => {
+  const handlePrintQris = async (gender: GenderKey) => {
     const authData = localStorage.getItem("tarkam_auth_user");
     if (authLoading) {
       return;
@@ -220,27 +221,50 @@ const ScheduleCard = ({
       return;
     }
 
-    try {
-      setRegistering(gender);
-      const response = await Api.post(
-        `/tarkams/${tarkam.id}/register`,
-        {}
-      );
+    const printWindow = prepareQrisPrintWindow();
 
-      if (response.data?.success) {
-        Swal.fire(
-          "Sukses",
-          `Pendaftaran ${gender === "male" ? "male" : "female"} berhasil! Selamat berjuang!`,
-          "success"
-        );
+    try {
+      setPrintingQris(gender);
+      const response = await Api.post(`/payments/qris/tarkams/${tarkam.id}`, {});
+      const payload = response.data?.data;
+      const transaction = payload?.transaction;
+      const invoice = payload?.invoice;
+
+      if (!transaction || !invoice?.qris_content) {
+        throw new Error("QRIS pendaftaran Tarkam belum berhasil dibuat.");
       }
+
+      const printPayload: QrisInvoicePayload = {
+        title: `${tarkam.title || `Pendaftaran Tarkam Week ${tarkam.week || "-"}`} - ${getGenderLabel(gender)}`,
+        description: `Scan QRIS ini untuk menyelesaikan biaya pendaftaran Tarkam kategori ${getGenderLabel(gender)}. Status peserta akan otomatis diperbarui setelah pembayaran sukses.`,
+        amount: Number(transaction.amount ?? 0),
+        transactionCode: String(transaction.transaction_code ?? ""),
+        payerName: transaction.payer_name ?? null,
+        payerNickname: transaction.payer_nickname ?? null,
+        qrisContent: String(invoice.qris_content),
+        qrisInvoiceId: invoice.qris_invoiceid ?? null,
+        requestDate: invoice.qris_request_date ?? null,
+        expiresAt: invoice.expires_at ?? null,
+      };
+
+      await printQrisInvoice(printPayload, printWindow);
+
+      void Swal.fire({
+        icon: "success",
+        title: "QRIS pendaftaran siap",
+        text: `QRIS ${getGenderLabel(gender)} berhasil dibuat. Silakan scan atau cetak untuk membayar biaya pendaftaran.`,
+        confirmButtonText: "Tutup",
+      });
     } catch (error: unknown) {
+      if (printWindow && !printWindow.closed) {
+        printWindow.close();
+      }
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        "Gagal melakukan registrasi. Silakan coba lagi.";
+        (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran. Silakan coba lagi.");
       Swal.fire("Error", message, "error");
     } finally {
-      setRegistering(null);
+      setPrintingQris(null);
     }
   };
 
@@ -321,44 +345,43 @@ const ScheduleCard = ({
               </a>
             ) : null}
 
-            {/* Registration buttons */}
-            {Number(tarkam.male_completed ?? 0) === 0 && (
+            {Number(tarkam.male_completed ?? 0) === 0 ? (
               <button
-                onClick={() => handleRegister("male")}
-                disabled={registering === "male" || authLoading}
+                onClick={() => handlePrintQris("male")}
+                disabled={printingQris !== null || authLoading}
                 className="default-btn"
                 style={{
                   background: "rgba(79, 172, 254, 0.8)",
                   border: "1px solid rgba(79, 172, 254, 0.5)",
                 }}
               >
-                {registering === "male"
-                  ? "Mendaftar..."
+                {printingQris === "male"
+                  ? "Menyiapkan QRIS Male..."
                   : !isAuthenticated
                     ? "Login untuk Daftar Male"
                     : "Daftar Male"}
                 <span />
               </button>
-            )}
+            ) : null}
 
-            {Number(tarkam.female_completed ?? 0) === 0 && (
+            {Number(tarkam.female_completed ?? 0) === 0 ? (
               <button
-                onClick={() => handleRegister("female")}
-                disabled={registering === "female" || authLoading}
+                onClick={() => handlePrintQris("female")}
+                disabled={printingQris !== null || authLoading}
                 className="default-btn"
                 style={{
                   background: "rgba(255, 105, 180, 0.8)",
                   border: "1px solid rgba(255, 105, 180, 0.5)",
                 }}
               >
-                {registering === "female"
-                  ? "Mendaftar..."
+                {printingQris === "female"
+                  ? "Menyiapkan QRIS Female..."
                   : !isAuthenticated
                     ? "Login untuk Daftar Female"
                     : "Daftar Female"}
                 <span />
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

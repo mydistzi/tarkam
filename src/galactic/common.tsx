@@ -135,6 +135,13 @@ type FooterProps = {
     phone?: string;
   };
 };
+const supportedPaymentLogos = [
+  { name: "OVO", src: "/assets/images/ovo.svg" },
+  { name: "GoPay", src: "/assets/images/gopay.svg" },
+  { name: "LinkAja", src: "/assets/images/link-aja.svg" },
+  { name: "DANA", src: "/assets/images/dana.svg" },
+  { name: "ShopeePay", src: "/assets/images/spp.svg" },
+] as const;
 type VideoModalState = {
   title: string;
   url: string;
@@ -1031,6 +1038,26 @@ const Footer = ({
             </div>
             <SubscribeForm />
           </div>
+        </div>
+      </div>
+      <div className="footer-payment-support">
+        <div className="footer-payment-support__copy">
+          <span className="footer-payment-support__eyebrow">Support Pembayaran</span>
+          <div className="footer-payment-support__provider">
+            <span className="footer-payment-support__chip">via Interactive QRIS</span>
+            <span className="footer-payment-support__hint">Scan dari aplikasi yang paling nyaman untuk Anda</span>
+          </div>
+          <h3>Pembayaran cepat lewat e-wallet favorit Anda</h3>
+          <p>
+            QRIS Interactive mendukung pembayaran dari berbagai e-wallet populer. Scan sekali, bayar langsung dari aplikasi pilihan Anda.
+          </p>
+        </div>
+        <div className="footer-payment-support__logos" aria-label="Metode pembayaran QRIS yang didukung">
+          {supportedPaymentLogos.map((item) => (
+            <div className="footer-payment-support__logo" key={item.name}>
+              <img src={item.src} alt={item.name} loading="lazy" />
+            </div>
+          ))}
         </div>
       </div>
     </div>

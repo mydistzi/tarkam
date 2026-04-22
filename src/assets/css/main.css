@@ -1802,6 +1802,109 @@
     margin: 0;
 }
 
+.footer-payment-support {
+    margin-top: 46px;
+    padding: 28px 32px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 210, 120, 0.12), transparent 20%),
+        radial-gradient(circle at 88% 16%, rgba(137, 222, 255, 0.08), transparent 18%),
+        linear-gradient(180deg, rgba(7, 16, 31, 0.84), rgba(5, 12, 22, 0.52));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+.footer-payment-support__copy {
+    flex: 1 1 320px;
+}
+
+.footer-payment-support__provider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.footer-payment-support__eyebrow {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--luxury-cyan);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.footer-payment-support__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(137, 222, 255, 0.14);
+    border: 1px solid rgba(137, 222, 255, 0.2);
+    color: #cff5ff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.footer-payment-support__hint {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 14px;
+}
+
+.footer-payment-support__copy h3 {
+    margin: 0 0 8px;
+    font-size: 24px;
+}
+
+.footer-payment-support__copy p {
+    margin: 0;
+    max-width: 620px;
+}
+
+.footer-payment-support__logos {
+    flex: 1 1 320px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.footer-payment-support__logo {
+    min-height: 58px;
+    padding: 12px 18px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 26px rgba(8, 18, 38, 0.14);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.footer-payment-support__logo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(8, 18, 38, 0.2);
+}
+
+.footer-payment-support__logo img {
+    display: block;
+    height: 30px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+}
+
 .subscribe-form {
     position: relative;
     z-index: 1;

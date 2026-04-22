@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
+import Swal from "sweetalert2";
 import { DisqusThread, PageHeader, VideoStreemButton } from "@/galactic/common";
 import {
   buildPlayerDetailPath,
   buildTeamDetailPath,
   galacticRoutes,
 } from "@/galactic/data";
+import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";
 import {
   placeholderPlayer,
   placeholderTeam,
   placeholderVideoThumb,
 } from "@/galactic/placeholders";
+import { useAuth } from "../../auth/AuthProvider";
 import { useLiveUpdate } from "../../socket/SocketProvider";
 
 type GenderFilter = "all" | "male" | "female";
@@ -432,11 +435,15 @@ const fetchItem = async <T,>(path: string) => {
 };
 
 const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [bundle, setBundle] = useState<TarkamBundle>(emptyBundle);
   const [loading, setLoading] = useState(Boolean(tarkamId));
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
+  const [printingQris, setPrintingQris] = useState<GenderKey | null>(null);
   const previousTarkamIdRef = useRef<number | null>(null);
   const liveKey = useLiveUpdate(
     ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "timelines", "penyawers"],
@@ -686,6 +693,69 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     { key: "competition", label: "Competition" },
   ];
 
+  const handlePrintQris = async (gender: GenderKey) => {
+    const authData = localStorage.getItem("tarkam_auth_user");
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !authData) {
+      navigate("/signin", { state: { from: location }, replace: false });
+      return;
+    }
+
+    const printWindow = prepareQrisPrintWindow();
+
+    try {
+      setPrintingQris(gender);
+      const response = await Api.post(`/payments/qris/tarkams/${detail.id || tarkamId}`, {});
+      const payload = response.data?.data;
+      const transaction = payload?.transaction;
+      const invoice = payload?.invoice;
+
+      if (!transaction || !invoice?.qris_content) {
+        throw new Error("QRIS pendaftaran Tarkam belum berhasil dibuat.");
+      }
+
+      const printPayload: QrisInvoicePayload = {
+        title: `${detail.title || `Pendaftaran Tarkam Week ${detail.week || "-"}`} - ${genderLabel(gender)}`,
+        description: `Gunakan QRIS ini untuk membayar biaya pendaftaran Tarkam kategori ${genderLabel(gender)}. Status peserta akan diperbarui otomatis setelah pembayaran sukses.`,
+        amount: Number(transaction.amount ?? 0),
+        transactionCode: String(transaction.transaction_code ?? ""),
+        payerName: transaction.payer_name ?? null,
+        payerNickname: transaction.payer_nickname ?? null,
+        qrisContent: String(invoice.qris_content),
+        qrisInvoiceId: invoice.qris_invoiceid ?? null,
+        requestDate: invoice.qris_request_date ?? null,
+        expiresAt: invoice.expires_at ?? null,
+      };
+
+      await printQrisInvoice(printPayload, printWindow);
+
+      void Swal.fire({
+        icon: "success",
+        title: "QRIS pendaftaran siap",
+        text: `QRIS ${genderLabel(gender)} berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan pembayaran.`,
+        confirmButtonText: "Tutup",
+      });
+    } catch (error: unknown) {
+      if (printWindow && !printWindow.closed) {
+        printWindow.close();
+      }
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran.");
+      void Swal.fire({
+        icon: "error",
+        title: "QRIS gagal dibuat",
+        text: message,
+        confirmButtonText: "Tutup",
+      });
+    } finally {
+      setPrintingQris(null);
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -825,6 +895,42 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 >
                   Lihat competition
                 </button>
+                {Number(detail.male_completed ?? 0) === 0 ? (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() => handlePrintQris("male")}
+                    disabled={printingQris !== null || authLoading}
+                    style={{
+                      background: "rgba(79, 172, 254, 0.8)",
+                      border: "1px solid rgba(79, 172, 254, 0.5)",
+                    }}
+                  >
+                    {printingQris === "male"
+                      ? "Menyiapkan QRIS Male..."
+                      : !isAuthenticated
+                        ? "Login untuk Daftar Male"
+                        : "Daftar Male"}
+                  </button>
+                ) : null}
+                {Number(detail.female_completed ?? 0) === 0 ? (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() => handlePrintQris("female")}
+                    disabled={printingQris !== null || authLoading}
+                    style={{
+                      background: "rgba(255, 105, 180, 0.8)",
+                      border: "1px solid rgba(255, 105, 180, 0.5)",
+                    }}
+                  >
+                    {printingQris === "female"
+                      ? "Menyiapkan QRIS Female..."
+                      : !isAuthenticated
+                        ? "Login untuk Daftar Female"
+                        : "Daftar Female"}
+                  </button>
+                ) : null}
                 {proofHref ? (
                   <a
                     className="default-btn tarkam-button--ghost"
