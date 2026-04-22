@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import SEO from "@/components/SEO";
 import { placeholderDiscord, placeholderWhatsapp } from "@/galactic/placeholders";
 
@@ -80,7 +81,7 @@ function TermsOfService() {
                 <li>Integrasi dengan layanan atau API eksternal</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Fitur bisa diubah, ditambah, atau dihapus kapan saja tanpa
                 pemberitahuan terlebih dahulu.
                 <span>
@@ -107,7 +108,7 @@ function TermsOfService() {
                 </li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Kalau nggak taat, akses kamu bisa dibatasi atau Bot bisa dicabut
                 dari server.
               </blockquote>
@@ -126,7 +127,7 @@ function TermsOfService() {
                 <li>Mengganggu fungsi normal Bot</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Developer berhak suspend, blokir, atau banned user atau server
                 yang melanggar aturan.
               </blockquote>
@@ -144,7 +145,7 @@ function TermsOfService() {
                 <li>Setelan konfigurasi server</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Data ini hanya dipakai untuk operasional, debugging, dan
                 ningkatin layanan.
                 <span>Kami tidak menjual atau membagikan data pribadi ke pihak ketiga
@@ -182,7 +183,7 @@ function TermsOfService() {
                 <li>Memenuhi harapan semua pengguna</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Developer berhak mengubah, menangguhkan, atau menghentikan
                 layanan kapan saja tanpa pemberitahuan.
               </blockquote>
@@ -198,7 +199,7 @@ function TermsOfService() {
                 </li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Penggunaan Bot adalah risiko kamu sendiri.
               </blockquote>
 
@@ -210,7 +211,7 @@ function TermsOfService() {
                 <li>Menangguhkan atau menghentikan layanan sepenuhnya</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Pengguna bisa berhenti pakai Bot kapan saja dengan menghapusnya
                 dari server Discord.
               </blockquote>

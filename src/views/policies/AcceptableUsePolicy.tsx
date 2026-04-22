@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import SEO from "@/components/SEO";
 import { placeholderDiscord, placeholderWhatsapp } from "@/galactic/placeholders";
 
@@ -67,7 +68,7 @@ function AcceptableUsePolicy() {
                 </li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Pelanggaran dapat mengakibatkan tindakan penegakan oleh
                 developer.
               </blockquote>
@@ -89,7 +90,7 @@ function AcceptableUsePolicy() {
                 pedoman komunitas.
               </p>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Developer berhak menangguhkan atau mencabut akses jika aturan
                 ini dilanggar.
               </blockquote>

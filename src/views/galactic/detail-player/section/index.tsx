@@ -214,9 +214,9 @@ const PlayerDetailsContent = ({ record, loading = false, error = null }: Props) 
   const canLoadMoreTimeline = visibleTimelineCount < timelineEntries.length;
 
   const socialLinks = [
-    { icon: "fab fa-facebook-f", label: "Facebook", href: socialUrl(record?.facebook) },
-    { icon: "fab fa-instagram", label: "Instagram", href: socialUrl(record?.instagram) },
-    { icon: "fab fa-tiktok", label: "TikTok", href: socialUrl(record?.tiktok) },
+    { icon: "lab la-facebook-f", label: "Facebook", href: socialUrl(record?.facebook) },
+    { icon: "lab la-instagram", label: "Instagram", href: socialUrl(record?.instagram) },
+    { icon: "lab la-tiktok", label: "TikTok", href: socialUrl(record?.tiktok) },
   ].filter((item): item is { icon: string; label: string; href: string } => Boolean(item.href));
 
   const totalWins = Number(record?.wins ?? 0);

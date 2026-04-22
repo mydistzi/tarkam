@@ -1,3 +1,4 @@
+import "@/assets/css/shop.css";
 import { PageShell } from "@/galactic/common";
 import { useParams } from "react-router-dom";
 import { TarkamDetailsContent } from "./section";

@@ -144,6 +144,7 @@ type VideoModalState = {
 };
 const GALACTIC_UI_READY_ATTR = "data-galactic-ui-ready";
 const GALACTIC_UI_READY_DELAY_MS = 900;
+const WOW_SCRIPT_SELECTOR = 'script[data-wow-script="true"]';
 type WowInstance = {
   init: () => void;
   sync?: () => void;
@@ -221,6 +222,7 @@ const API_BASE_URL =
   normalizeApiBaseUrl(import.meta.env.VITE_API_BASE_URL) ||
   normalizeApiBaseUrl((import.meta.env as Record<string, string | undefined>).API_BASE_URL) ||
   DEFAULT_API_BASE_URL;
+const aboutCharacters = brand.heroImage;
 const cardResponsive = {
   desktop: { breakpoint: { max: 3000, min: 1200 }, items: 3 },
   tablet: { breakpoint: { max: 1199, min: 768 }, items: 2 },
@@ -248,6 +250,43 @@ const pageBackground = (image = brand.background): CSSProperties => ({
 const formatCurrency = (value: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
 // const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
 const resolveSponsorMarqueeMessage = (entry: SponsorMarqueeEntry) => String(entry.sponsor_message || entry.pesan || "").trim();
+const ensureWowScriptLoaded = async () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (window.WOW) {
+    return true;
+  }
+
+  return new Promise<boolean>((resolve) => {
+    const handleLoaded = () => resolve(Boolean(window.WOW));
+    const handleErrored = () => resolve(false);
+    const existingScript = document.querySelector<HTMLScriptElement>(WOW_SCRIPT_SELECTOR);
+
+    if (existingScript) {
+      if (existingScript.dataset.loaded === "true") {
+        resolve(Boolean(window.WOW));
+        return;
+      }
+
+      existingScript.addEventListener("load", handleLoaded, { once: true });
+      existingScript.addEventListener("error", handleErrored, { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "/assets/js/wow.min.js";
+    script.async = true;
+    script.dataset.wowScript = "true";
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "true";
+      handleLoaded();
+    }, { once: true });
+    script.addEventListener("error", handleErrored, { once: true });
+    document.body.appendChild(script);
+  });
+};
 const normalizeOdometerValue = (value: OdometerValue) => {
   if (typeof value === "number") {
     return Number.isFinite(value) ? value : 0;
@@ -1972,7 +2011,7 @@ const ClassicNewsSidebar = ({
           value={searchValue ?? ""}
           onChange={(event) => onSearch?.(event.target.value)}
         />
-        <button className="search-btn" type="submit"><i className="fa fa-search" /></button>
+        <button className="search-btn" type="submit"><i className="las la-search" /></button>
       </form>
     </div>
     <div className="sidebar-widget">
@@ -2497,14 +2536,14 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
     };
   }, []);
 
-  useEffect(() => {
-    audioRef.current = new Audio(clickAudio);
-    audioRef.current.preload = "auto";
+  const getClickAudio = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(clickAudio);
+      audioRef.current.preload = "none";
+    }
 
-    return () => {
-      audioRef.current = null;
-    };
-  }, []);
+    return audioRef.current;
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -2559,8 +2598,14 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      if (!window.WOW) {
+    if (!document.querySelector(".wow")) {
+      return;
+    }
+
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      const wowLoaded = await ensureWowScriptLoaded();
+      if (cancelled || !wowLoaded || !window.WOW) {
         return;
       }
 
@@ -2576,7 +2621,10 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       wowRef.current.sync?.();
     }, 220);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [isAppReady, location.pathname]);
 
   useEffect(() => {
@@ -2639,9 +2687,10 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
         "a, button, [role='button'], input, textarea, select, .team-item, .product-card, .post-card, .gameplay-card",
       );
 
-      if (interactiveTarget && audioRef.current) {
-        audioRef.current.currentTime = 0;
-        void audioRef.current.play().catch(() => undefined);
+      if (interactiveTarget) {
+        const audio = getClickAudio();
+        audio.currentTime = 0;
+        void audio.play().catch(() => undefined);
       }
 
       const videoTrigger = target.closest<HTMLElement>("[data-video-url]");
@@ -2874,6 +2923,7 @@ export {
   TestimonialSection,
   ContactDetails,
   FaqAccordion,
+  aboutCharacters,
   signImage,
   usaFlag,
   type GalacticMenuItem,

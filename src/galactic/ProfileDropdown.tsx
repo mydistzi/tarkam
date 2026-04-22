@@ -177,13 +177,13 @@ export const ProfileDropdown = () => {
         </div>
 
         <Link to="/profile" onClick={() => setOpen(false)}>
-          <i className="fa fa-user" />
+          <i className="las la-user" />
           Profil Saya
         </Link>
 
         {memberProfile?.guild_position === "leader" && memberProfile.club ? (
           <Link to="/club-profile" onClick={() => setOpen(false)}>
-            <i className="fa fa-users" />
+            <i className="las la-users" />
             Club Profile
           </Link>
         ) : null}

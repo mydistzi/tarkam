@@ -57,7 +57,7 @@ const NewsDetailsContent = ({ record, previousPath, nextPath }: NewsDetailsConte
                   <p key={paragraph}>{paragraph}</p>
                 ))}
                 <blockquote>
-                  <i className="fas fa-quote-right" />
+                  <i className="las la-quote-right" />
                   Artikel ini disajikan dengan konten resmi dan metadata terkini dari arsip berita Tarkam.
                   <span>- Tim Redaksi Tarkam</span>
                 </blockquote>

@@ -7,3 +7,4 @@ export const placeholderSponsor = "/assets/images/placeholder-sponsor.png";
 export const placeholderSquad = "/assets/images/placeholder-squad.png";
 export const placeholderTeam = "/assets/images/placeholder-team.png";
 export const placeholderVideoThumb = "/assets/images/video-thumb.png";
+export const placeholderLogo = "/assets/images/logo.png";

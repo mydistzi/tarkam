@@ -1,3 +1,4 @@
+import "@/assets/css/shop.css";
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
 import { placeholderShop } from "@/galactic/placeholders";

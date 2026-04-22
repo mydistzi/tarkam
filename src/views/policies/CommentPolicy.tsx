@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import SEO from "@/components/SEO";
 import { PageHeader } from "@/galactic/common";
 

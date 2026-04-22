@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import SEO from "@/components/SEO";
 import { placeholderDiscord, placeholderWhatsapp } from "@/galactic/placeholders";
 
@@ -73,7 +74,7 @@ function PrivacyPolicy() {
                 <li>Setelan konfigurasi server</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Kami tidak mengumpulkan informasi pribadi seperti nama asli,
                 alamat, atau password.
               </blockquote>
@@ -86,7 +87,7 @@ function PrivacyPolicy() {
                 <li>Debugging error</li>
               </ul>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Data hanya dipakai untuk operasional dan peningkatan layanan.
               </blockquote>
               <h3 className="comment-title">3. Penyimpanan Data</h3>

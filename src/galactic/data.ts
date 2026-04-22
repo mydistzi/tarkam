@@ -1,8 +1,8 @@
 import gameCharacters from "@/assets/images/game-charecters.png";
-import logo from "@/assets/images/logo.png";
-import videoThumb1 from "@/assets/images/video-thumb-1.jpg";
-import videoThumb2 from "@/assets/images/video-thumb-2.jpg";
-import videoThumb3 from "@/assets/images/video-thumb-3.jpg";
+const logo = "/assets/images/logo.png";
+const videoThumb1 = "/assets/images/video-thumb.png";
+const videoThumb2 = "/assets/images/video-thumb.png";
+const videoThumb3 = "/assets/images/video-thumb.png";
 
 export type GalacticMenuItem = {
   label: string;

@@ -1,3 +1,5 @@
+import "@/assets/css/odometer.min.css";
+import "@/assets/js/odometer.min.js";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Api from "@/api";

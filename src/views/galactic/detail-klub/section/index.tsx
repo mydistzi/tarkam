@@ -260,17 +260,17 @@ const ClubsContent = ({
   );
   const socialLinks = [
     {
-      icon: "fab fa-facebook-f",
+      icon: "lab la-facebook-f",
       label: "Facebook",
       href: normalizeSocialUrl(record.facebook),
     },
     {
-      icon: "fab fa-instagram",
+      icon: "lab la-instagram",
       label: "Instagram",
       href: normalizeSocialUrl(record.instagram),
     },
     {
-      icon: "fab fa-tiktok",
+      icon: "lab la-tiktok",
       label: "TikTok",
       href: normalizeSocialUrl(record.tiktok),
     },

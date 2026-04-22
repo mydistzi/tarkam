@@ -205,7 +205,7 @@ blockquote {
     margin-bottom: 40px;
 }
 
-blockquote i.fas {
+blockquote i.las {
     color: var(--luxury-cyan);
     display: block;
     margin-bottom: 20px;

@@ -1,3 +1,4 @@
+import "@/assets/css/shop.css";
 import { useEffect, useState } from "react";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
+import "@/assets/css/blog.css";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Api from "@/api";

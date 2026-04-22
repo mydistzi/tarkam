@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
+import "@/assets/css/shop.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Api from "@/api";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";

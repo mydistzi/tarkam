@@ -90,9 +90,9 @@ const ShopDetailsContent = ({ record }: { record?: ProductRecord }) => {
   const hasAdditionalInfo = Boolean(product.additionalInfo?.trim());
   const member = record?.product.user?.user;
   const socialLinks = [
-    { icon: "fab fa-facebook-f", label: "Facebook", href: normalizeSocialUrl(member?.facebook) },
-    { icon: "fab fa-instagram", label: "Instagram", href: normalizeSocialUrl(member?.instagram) },
-    { icon: "fab fa-tiktok", label: "TikTok", href: normalizeSocialUrl(member?.tiktok) },
+    { icon: "lab la-facebook-f", label: "Facebook", href: normalizeSocialUrl(member?.facebook) },
+    { icon: "lab la-instagram", label: "Instagram", href: normalizeSocialUrl(member?.instagram) },
+    { icon: "lab la-tiktok", label: "TikTok", href: normalizeSocialUrl(member?.tiktok) },
   ].filter((item): item is { icon: string; label: string; href: string } => Boolean(item.href));
 
   return (

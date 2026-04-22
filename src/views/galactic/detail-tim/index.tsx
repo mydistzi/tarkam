@@ -1,3 +1,6 @@
+import "@/assets/css/blog.css";
+import "@/assets/css/odometer.min.css";
+import "@/assets/js/odometer.min.js";
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
 import { useGalacticCompetitionContent } from "../shared";

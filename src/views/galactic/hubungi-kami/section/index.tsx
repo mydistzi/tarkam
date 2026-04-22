@@ -34,9 +34,9 @@ const ContactContent = ({ address, email, phone }: ContactContentProps) => (
                 <p>Kontak kami buat bahas turnamen, registrasi roster, partnership, atau merchandise.</p>
               </div>
               <ul className="contact-details">
-                <li><i className="fas fa-map-marker-alt" />{address || "Jakarta, Indonesia"}</li>
-                <li><i className="fas fa-envelope" />{email || "hello@tarkam.fun"}</li>
-                <li><i className="fas fa-phone" />{phone || "+62"}</li>
+                <li><i className="las la-map-marker" />{address || "Jakarta, Indonesia"}</li>
+                <li><i className="las la-envelope" />{email || "hello@tarkam.fun"}</li>
+                <li><i className="las la-phone" />{phone || "+62"}</li>
               </ul>
             </div>
           </div>

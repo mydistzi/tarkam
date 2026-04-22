@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import SEO from "@/components/SEO";
 import { placeholderDiscord, placeholderWhatsapp } from "@/galactic/placeholders";
 
@@ -97,7 +98,7 @@ function DataDeletionPolicy() {
                 developer melalui Discord.
               </p>
               <blockquote className="mt-20">
-                <i className="fas fa-quote-right" />
+                <i className="las la-quote-right" />
                 Data akan dihapus sesuai permintaan selama permintaan tersebut
                 sah dan sesuai dengan kapasitas operasional.
               </blockquote>

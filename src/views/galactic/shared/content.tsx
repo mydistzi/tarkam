@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useLocation } from "react-router-dom";
 import Api from "@/api";
 import { getCartQueryString } from "@/galactic/session";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
@@ -570,7 +571,7 @@ const defaultSiteContent: SiteContentValue = {
 };
 
 const defaultCompetitionContent: CompetitionContentValue = {
-  loading: true,
+  loading: false,
   matches: [],
   matchRecords: [],
   streams: [],
@@ -585,14 +586,14 @@ const defaultCompetitionContent: CompetitionContentValue = {
 };
 
 const defaultNewsContent: NewsContentValue = {
-  loading: true,
+  loading: false,
   posts: [],
   newsRecords: [],
   newsCategories: [],
 };
 
 const defaultCommerceContent: CommerceContentValue = {
-  loading: true,
+  loading: false,
   products: [],
   productRecords: [],
   cartItems: [],
@@ -740,6 +741,26 @@ const normalizeId = (value: number | string | null | undefined): number | undefi
   const numeric = Number(value);
   return Number.isInteger(numeric) ? numeric : undefined;
 };
+
+const matchesPath = (pathname: string, basePath: string) =>
+  pathname === basePath || pathname.startsWith(`${basePath}/`);
+
+const needsCompetitionSlice = (pathname: string) =>
+  pathname === "/" ||
+  matchesPath(pathname, "/tarkam-schedule") ||
+  matchesPath(pathname, "/detail-tarkam") ||
+  matchesPath(pathname, "/jadwal-pertandingan") ||
+  matchesPath(pathname, "/detail-pertandingan") ||
+  matchesPath(pathname, "/detail-tim") ||
+  matchesPath(pathname, "/sponsors");
+
+const needsNewsSlice = (pathname: string) =>
+  matchesPath(pathname, "/detail-news");
+
+const needsCommerceSlice = (pathname: string) =>
+  matchesPath(pathname, "/detail-shop") ||
+  matchesPath(pathname, "/cart") ||
+  matchesPath(pathname, "/checkout");
 
 
 async function fetchSitePayloads() {
@@ -1235,21 +1256,26 @@ const mapCommerceContent = (
 };
 
 export function GalacticDataProvider({ children }: { children: ReactNode }) {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const shouldLoadCompetition = needsCompetitionSlice(pathname);
+  const shouldLoadNews = needsNewsSlice(pathname);
+  const shouldLoadCommerce = needsCommerceSlice(pathname);
   const siteLiveKey = useLiveUpdate(
     ["menus", "web-setting", "headers", "usefulls"],
     { fallbackIntervalMs: 45000 },
   );
   const competitionLiveKey = useLiveUpdate(
     ["streamings", "clubs", "members", "players", "teams", "tarkams", "contests", "winners", "penyawers", "groups"],
-    { fallbackIntervalMs: 30000 },
+    { fallbackIntervalMs: 30000, enabled: shouldLoadCompetition },
   );
   const newsLiveKey = useLiveUpdate(
     ["categories", "blogs"],
-    { fallbackIntervalMs: 45000 },
+    { fallbackIntervalMs: 45000, enabled: shouldLoadNews },
   );
   const commerceLiveKey = useLiveUpdate(
     ["products", "carts"],
-    { fallbackIntervalMs: 30000 },
+    { fallbackIntervalMs: 30000, enabled: shouldLoadCommerce },
   );
   const [siteContent, setSiteContent] = useState<SiteContentValue>(defaultSiteContent);
   const [competitionContent, setCompetitionContent] = useState<CompetitionContentValue>(defaultCompetitionContent);
@@ -1285,9 +1311,25 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
   }, [siteLiveKey]);
 
   useEffect(() => {
+    if (!shouldLoadCompetition) {
+      setCompetitionContent((current) => (current.loading ? { ...current, loading: false } : current));
+      return;
+    }
+
     let active = true;
 
     const load = async () => {
+      setCompetitionContent((current) => {
+        const hasCachedData =
+          current.matchRecords.length > 0 ||
+          current.playerRecords.length > 0 ||
+          current.teams.length > 0 ||
+          current.streamings.length > 0 ||
+          current.sponsors.length > 0;
+
+        return hasCachedData ? current : { ...current, loading: true };
+      });
+
       try {
         const payloads = await fetchCompetitionPayloads();
         if (!active) {
@@ -1308,12 +1350,21 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [competitionLiveKey, siteHeroSignature]);
+  }, [competitionLiveKey, shouldLoadCompetition, siteHeroSignature]);
 
   useEffect(() => {
+    if (!shouldLoadNews) {
+      setNewsContent((current) => (current.loading ? { ...current, loading: false } : current));
+      return;
+    }
+
     let active = true;
 
     const load = async () => {
+      setNewsContent((current) =>
+        current.newsRecords.length > 0 ? current : { ...current, loading: true }
+      );
+
       try {
         const payloads = await fetchNewsPayloads();
         if (!active) {
@@ -1334,12 +1385,25 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [newsLiveKey, siteContent.meta.author]);
+  }, [newsLiveKey, shouldLoadNews, siteContent.meta.author]);
 
   useEffect(() => {
+    if (!shouldLoadCommerce) {
+      setCommerceContent((current) => (current.loading ? { ...current, loading: false } : current));
+      return;
+    }
+
     let active = true;
 
     const load = async () => {
+      setCommerceContent((current) => {
+        const hasCachedData =
+          current.productRecords.length > 0 ||
+          current.cartItems.length > 0;
+
+        return hasCachedData ? current : { ...current, loading: true };
+      });
+
       try {
         const payloads = await fetchCommercePayloads();
         if (!active) {
@@ -1360,7 +1424,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [commerceLiveKey]);
+  }, [commerceLiveKey, shouldLoadCommerce]);
 
   useEffect(() => {
     recordSliceUpdate("site", {
