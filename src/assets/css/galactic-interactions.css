@@ -77,7 +77,7 @@
 .global-sponsor-marquee-shell {
   position: fixed;
   left: 50%;
-  top: 99px;
+  top: 92px;
   z-index: 98;
   width: min(calc(100vw - 350px), 1170px);
   transform: translateX(-50%);
