@@ -18,10 +18,6 @@ import {
   placeholderTeam,
   placeholderVideoThumb,
 } from "@/galactic/placeholders";
-import aboutCharacters from "@/assets/images/about-characters.png";
-import comment1 from "@/assets/images/comment-1.png";
-import comment2 from "@/assets/images/comment-2.png";
-import comment3 from "@/assets/images/comment-3.png";
 import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
@@ -2878,12 +2874,8 @@ export {
   TestimonialSection,
   ContactDetails,
   FaqAccordion,
-  comment1,
-  comment2,
-  comment3,
   signImage,
   usaFlag,
-  aboutCharacters,
   type GalacticMenuItem,
   GalacticChrome,
   ProfileDropdown,
