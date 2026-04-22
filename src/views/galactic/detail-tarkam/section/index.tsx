@@ -1044,14 +1044,15 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                   </a>
                 ) : null} */}
                 <button
-                  className="default-btn"
+                  className="default-btn tarkam-button--ghost"
                   type="button"
                   onClick={handlePrintQris}
                   disabled={printingQris || authLoading || registrationClosed}
-                  style={{
-                    background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
-                    border: "1px solid rgba(17, 203, 126, 0.45)",
-                  }}
+                  style={{ color: "#ddd" }}
+                  // style={{
+                  //   background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
+                  //   border: "1px solid rgba(17, 203, 126, 0.45)",
+                  // }}
                 >
                   {registrationClosed
                     ? "Pendaftaran Ditutup"

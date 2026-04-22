@@ -855,7 +855,7 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--tarkam-accent);
+    /* background: var(--tarkam-accent); */
     color: var(--luxury-text);
     padding: 6px 12px;
     border-radius: 4px;
@@ -867,7 +867,7 @@ body {
 
 .tarkam-schedule-card .dl-video-popup:hover {
     transform: scale(1.05);
-    background: var(--tarkam-accent);
+    /* background: var(--tarkam-accent); */
 }
 
 .tarkam-schedule-card .dl-video-popup i {
