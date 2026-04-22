@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
+import { refetchProfileDropdown } from "@/galactic/profileDropdownUtils";
 
 type ClubProfile = {
   id: number;
@@ -34,6 +35,16 @@ type ApiResponse<T> = {
 
 const getClubLogoFallback = (value?: string) =>
   `https://ui-avatars.com/api/?name=${encodeURIComponent(value || "Club")}&background=07122d&color=ffd27a&bold=true`;
+
+type EditableClubField = "slogan" | "facebook" | "instagram" | "tiktok";
+
+const normalizeComparableValue = (value: unknown) => {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value).trim();
+};
 
 export const ClubProfileContent = () => {
   const navigate = useNavigate();
@@ -128,20 +139,36 @@ export const ClubProfileContent = () => {
       setSubmitting(true);
 
       const payload = new FormData();
-      payload.append("code", club.code || "");
-      payload.append("name", club.name || "");
-      payload.append("slogan", clubData.slogan || "");
-      payload.append("facebook", clubData.facebook || "");
-      payload.append("instagram", clubData.instagram || "");
-      payload.append("tiktok", clubData.tiktok || "");
+      const comparableEntries: Array<[EditableClubField, string]> = [
+        ["slogan", clubData.slogan || ""],
+        ["facebook", clubData.facebook || ""],
+        ["instagram", clubData.instagram || ""],
+        ["tiktok", clubData.tiktok || ""],
+      ];
+      const changedEntries = comparableEntries.filter(
+        ([key, nextValue]) => normalizeComparableValue(club[key]) !== normalizeComparableValue(nextValue),
+      );
+
+      changedEntries.forEach(([key, value]) => {
+        payload.append(key, value);
+      });
 
       if (logoFile) {
         payload.append("logo", logoFile);
       }
 
-      const response = await Api.put<ApiResponse<ClubProfile>>(`/clubs/${club.slug}`, payload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (!Array.from(payload.keys()).length) {
+        Swal.fire("Info", "Belum ada perubahan untuk disimpan.", "info");
+        return;
+      }
+
+      const response = await Api.patch<ApiResponse<ClubProfile>>(
+        `/clubs/${encodeURIComponent(club.slug)}`,
+        payload,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       if (response.data?.success && response.data?.data) {
         const nextClub = response.data.data;
@@ -163,6 +190,8 @@ export const ClubProfileContent = () => {
               }
             : current,
         );
+        await refetchProfileDropdown();
+        window.dispatchEvent(new Event("profile-sync-complete"));
         Swal.fire("Sukses", "Profil club berhasil diperbarui.", "success");
         return;
       }

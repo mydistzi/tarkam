@@ -46,6 +46,20 @@ const getSocialValue = (value?: string) => {
   return trimmed || "Belum diisi";
 };
 
+type EditableProfileField = "username" | "gender" | "city" | "facebook" | "instagram" | "tiktok";
+
+const normalizeComparableValue = (value: unknown) => {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (typeof value === "number") {
+    return Number.isNaN(value) ? "" : String(value);
+  }
+
+  return String(value).trim();
+};
+
 export const ProfileContent = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -211,15 +225,21 @@ export const ProfileContent = () => {
     try {
       setSubmitting(true);
       const payload = new FormData();
-      payload.append("username", formData.username || "");
-      payload.append("nickname", profile.nickname);
-      payload.append("gender", formData.gender || "male");
-      payload.append("latitude", String(formData.latitude || 0));
-      payload.append("longitude", String(formData.longitude || 0));
-      payload.append("city", formData.city || "");
-      payload.append("facebook", formData.facebook || "");
-      payload.append("instagram", formData.instagram || "");
-      payload.append("tiktok", formData.tiktok || "");
+      const comparableEntries: Array<[EditableProfileField, string]> = [
+        ["username", formData.username || ""],
+        ["gender", formData.gender || "male"],
+        ["city", formData.city || ""],
+        ["facebook", formData.facebook || ""],
+        ["instagram", formData.instagram || ""],
+        ["tiktok", formData.tiktok || ""],
+      ];
+      const changedEntries = comparableEntries.filter(
+        ([key, nextValue]) => normalizeComparableValue(profile[key]) !== normalizeComparableValue(nextValue),
+      );
+
+      changedEntries.forEach(([key, value]) => {
+        payload.append(key, value);
+      });
 
       if (pictureFile) {
         payload.append("picture_url", pictureFile);
@@ -228,9 +248,18 @@ export const ProfileContent = () => {
         payload.append("image_sponsor", sponsorFile);
       }
 
-      const response = await Api.put<ApiResponse<MemberProfile>>(`/members/${profile.nickname}`, payload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (!Array.from(payload.keys()).length) {
+        Swal.fire("Info", "Belum ada perubahan untuk disimpan.", "info");
+        return;
+      }
+
+      const response = await Api.patch<ApiResponse<MemberProfile>>(
+        `/members/${encodeURIComponent(profile.nickname)}`,
+        payload,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       if (response.data?.success && response.data?.data) {
         setProfile(response.data.data);
@@ -257,11 +286,10 @@ export const ProfileContent = () => {
     setProfile(null);
     setPictureFile(null);
     setSponsorFile(null);
+    setNicknameInput("");
     setFormData({
       username: "",
       gender: "male",
-      latitude: 0,
-      longitude: 0,
       picture_url: "",
       image_sponsor: "",
       city: "",
