@@ -20,10 +20,12 @@ type AuthContextValue = {
 };
 
 const AUTH_STORAGE_KEY = "tarkam_auth_user";
+const APP_BUILD_ID = __APP_BUILD_ID__;
 
 type StoredAuth = {
   token: string;
   user: AuthUser;
+  buildId?: string;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -38,9 +40,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (serialized) {
       try {
         const stored = JSON.parse(serialized) as StoredAuth;
+        if (!stored?.token || !stored?.user || stored.buildId !== APP_BUILD_ID) {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          setIsLoading(false);
+          return;
+        }
         setUser(stored.user);
         setToken(stored.token);
-        // Set isLoading false setelah berhasil load dari localStorage
         setIsLoading(false);
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -72,7 +78,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         setUser(nextUser);
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token, user: nextUser }));
+        localStorage.setItem(
+          AUTH_STORAGE_KEY,
+          JSON.stringify({ token, user: nextUser, buildId: APP_BUILD_ID }),
+        );
         setIsLoading(false);
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -88,7 +97,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const setAuthState = (nextToken: string, nextUser: AuthUser) => {
     setToken(nextToken);
     setUser(nextUser);
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token: nextToken, user: nextUser }));
+    localStorage.setItem(
+      AUTH_STORAGE_KEY,
+      JSON.stringify({ token: nextToken, user: nextUser, buildId: APP_BUILD_ID }),
+    );
   };
 
   const clearAuthState = () => {
