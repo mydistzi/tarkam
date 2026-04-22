@@ -1149,7 +1149,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                         />
                         <MiniStat
                           label="Completed"
-                          value={formatNumber(snapshot.completed)}
+                          value={Number(formatNumber(snapshot.completed ?? 0)) > 0 ? "Yes" : "No"}
                         />
                         <MiniStat
                           label="Pool"
