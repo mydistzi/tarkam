@@ -1,5 +1,6 @@
 import { PageHeader } from "@/galactic/common";
-import { SponsorGrid, SponsorTestimonialSection } from "@/galactic/media";
+import { SponsorGrid } from "@/galactic/media-carousel";
+import { SponsorTestimonialSection } from "@/galactic/media-swiper";
 import { type SponsorItem } from "@/galactic/data";
 
 type SponsorsContentProps = {

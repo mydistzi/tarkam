@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import { DisqusThread, PageHeader } from "@/galactic/common";
-import { VideoStreemButton } from "@/galactic/media";
+import { VideoStreemButton } from "@/galactic/media-video";
 import {
   buildPlayerDetailPath,
   buildTeamDetailPath,

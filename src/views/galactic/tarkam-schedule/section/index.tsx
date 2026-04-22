@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import { PageHeader } from "@/galactic/common";
-import { VideoStreemButton } from "@/galactic/media";
+import { VideoStreemButton } from "@/galactic/media-video";
 import { buildTarkamDetailPath, galacticRoutes } from "@/galactic/data";
 import { showAlert } from "@/lib/alerts";
 import { printQrisInvoice, prepareQrisPrintWindow, type QrisInvoicePayload } from "@/lib/qris";

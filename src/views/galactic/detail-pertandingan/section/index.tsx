@@ -10,7 +10,7 @@ import {
 } from "@sportsgram/brackets";
 import { Link } from "react-router-dom";
 import { DisqusThread, PageHeader } from "@/galactic/common";
-import { VideoCardButton } from "@/galactic/media";
+import { VideoCardButton } from "@/galactic/media-video";
 import { placeholderTeam } from "@/galactic/placeholders";
 import type { MatchRecord } from "../../shared";
 

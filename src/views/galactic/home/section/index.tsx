@@ -7,7 +7,9 @@ import {
 //   ProductCarousel,
   SectionHeading,
 } from "@/galactic/common";
-import { PlayerCarousel, SponsorCarousel, VideoCardButton, WatchLiveGrid } from "@/galactic/media";
+import { PlayerCarousel, SponsorCarousel } from "@/galactic/media-carousel";
+import { VideoCardButton } from "@/galactic/media-video";
+import { WatchLiveGrid } from "@/galactic/media-swiper";
 // import type { MatchItem, PlayerItem, PostItem, ProductItem, SponsorItem, StreamItem } from "@/galactic/data";
 import type { MatchItem, PlayerItem, SponsorItem, StreamItem } from "@/galactic/data";
 

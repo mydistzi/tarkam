@@ -5,7 +5,7 @@ import {
   OdometerNumber,
   PageHeader,
 } from "@/galactic/common";
-import { Carousel, CarouselButtonGroup, smoothCarouselTransition } from "@/galactic/media";
+import { Carousel, CarouselButtonGroup, smoothCarouselTransition } from "@/galactic/media-carousel";
 import { placeholderPlayer, placeholderSquad } from "@/galactic/placeholders";
 import {
   buildPlayerDetailPath,

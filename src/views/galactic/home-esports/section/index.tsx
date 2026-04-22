@@ -7,7 +7,8 @@ import {
   SectionHeading,
   pageBackground,
 } from "@/galactic/common";
-import { PlayerCarousel, SponsorCarousel, TestimonialSection, WatchLiveGrid } from "@/galactic/media";
+import { PlayerCarousel, SponsorCarousel } from "@/galactic/media-carousel";
+import { TestimonialSection, WatchLiveGrid } from "@/galactic/media-swiper";
 import type { MatchItem, PlayerItem, PostItem, SponsorItem, StreamItem } from "@/galactic/data";
 
 type HeroItem = {

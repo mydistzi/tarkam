@@ -54,8 +54,12 @@ export default defineConfig({
             return 'react-core';
           }
 
-          if (id.includes('swiper') || id.includes('react-multi-carousel')) {
+          if (id.includes('react-multi-carousel')) {
             return 'carousel-widgets';
+          }
+
+          if (id.includes('swiper')) {
+            return 'swiper-widgets';
           }
 
           if (id.includes('sweetalert2')) {
