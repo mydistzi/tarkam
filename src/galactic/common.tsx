@@ -26,7 +26,12 @@ import signImage from "@/assets/images/sign.png";
 import usaFlag from "@/assets/images/usa-flag.svg";
 import SEO from "@/components/SEO";
 import type { StructuredDataInput } from "@/lib/structuredData";
-import { useGalacticContent } from "@/views/galactic/shared";
+import {
+  useGalacticCommerceContent,
+  useGalacticCompetitionContent,
+  useGalacticNewsContent,
+  useGalacticSiteContent,
+} from "@/views/galactic/shared";
 import { useAuth } from "@/views/galactic/auth/AuthProvider";
 import { ProfileDropdown } from "@/galactic/ProfileDropdown";
 import { getCartRequestPayload } from "@/galactic/session";
@@ -2153,7 +2158,10 @@ const FaqAccordion = () => {
 
 const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) => {
   const location = useLocation();
-  const { loading: contentLoading } = useGalacticContent();
+  const { loading: siteLoading } = useGalacticSiteContent();
+  const { loading: competitionLoading } = useGalacticCompetitionContent();
+  const { loading: newsLoading } = useGalacticNewsContent();
+  const { loading: commerceLoading } = useGalacticCommerceContent();
   const liveKey = useLiveUpdate(
     ["penyawers", "penyawer-leaderboards"],
     { fallbackIntervalMs: 45000 },
@@ -2225,6 +2233,12 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
 
     return () => window.clearTimeout(timer);
   }, [location.pathname]);
+
+  const contentLoading =
+    siteLoading ||
+    competitionLoading ||
+    newsLoading ||
+    commerceLoading;
 
   useEffect(() => {
     if (loading || contentLoading) {
