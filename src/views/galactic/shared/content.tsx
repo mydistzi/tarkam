@@ -3,12 +3,12 @@ import {
   type ReactNode,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import Api from "@/api";
 import { getCartQueryString } from "@/galactic/session";
 import { useLiveUpdate } from "@/views/galactic/socket/SocketProvider";
+import { recordSliceUpdate } from "./renderAudit";
 import {
   placeholderPlayer,
   placeholderShop,
@@ -28,7 +28,6 @@ import {
   galacticRoutes,
   menus as defaultMenus,
   streams as defaultStreams,
-  type FaqItem,
   type GalacticMenuItem,
   type MatchItem,
   type PlayerItem,
@@ -481,33 +480,6 @@ type CartRecord = {
   product: ProductItem;
 };
 
-type GalacticContentValue = {
-  loading: boolean;
-  meta: SiteMeta;
-  menus: GalacticMenuItem[];
-  footerLinks: FooterLink[];
-  heroes: ApiHeader[];
-  matches: MatchItem[];
-  matchRecords: MatchRecord[];
-  streams: StreamItem[];
-  streamings: ApiStreaming[];
-  tarkams: ApiTarkam[];
-  players: PlayerItem[];
-  playerRecords: PlayerRecord[];
-  teams: TeamRecord[];
-  clubs: ApiClub[];
-  products: ProductItem[];
-  productRecords: ProductRecord[];
-  cartItems: CartRecord[];
-  posts: PostItem[];
-  newsRecords: NewsRecord[];
-  newsCategories: string[];
-  sponsors: SponsorItem[];
-  penyawers: ApiPenyawer[];
-  faqs: FaqItem[];
-  usefulLinks: ApiUsefull[];
-};
-
 const defaultMeta: SiteMeta = {
   siteName: brand.name,
   siteUrl: "http://127.0.0.1:5173",
@@ -619,38 +591,10 @@ const defaultCommerceContent: CommerceContentValue = {
   cartItems: [],
 };
 
-const defaultContent: GalacticContentValue = {
-  loading: true,
-  meta: defaultMeta,
-  menus: [],
-  footerLinks: [],
-  heroes: [],
-  matches: [],
-  matchRecords: [],
-  streams: [],
-  streamings: [],
-  tarkams: [],
-  players: [],
-  playerRecords: [],
-  teams: [],
-  clubs: [],
-  products: [],
-  productRecords: [],
-  cartItems: [],
-  posts: [],
-  newsRecords: [],
-  newsCategories: [],
-  sponsors: [],
-  penyawers: [],
-  faqs: [],
-  usefulLinks: [],
-};
-
 const GalacticSiteContext = createContext<SiteContentValue>(defaultSiteContent);
 const GalacticCompetitionContext = createContext<CompetitionContentValue>(defaultCompetitionContent);
 const GalacticNewsContext = createContext<NewsContentValue>(defaultNewsContent);
 const GalacticCommerceContext = createContext<CommerceContentValue>(defaultCommerceContent);
-const GalacticContentContext = createContext<GalacticContentValue>(defaultContent);
 
 const normalizeList = <T,>(payload: ApiEnvelope<T[]> | undefined): T[] =>
   Array.isArray(payload?.data) ? payload.data : [];
@@ -1037,7 +981,6 @@ const mapCompetitionContent = (
       (item) => item.winner_team_fk != null && normalizeId(item.winner_team_fk) !== team.id
     ).length;
     const draws = relatedContests.filter((item) => item.winner_team_fk == null).length;
-    const firstClub = membersForTeam[0]?.club;
     const teamTarkamId = normalizeId(team.tarkam_fk);
     const firstTarkam = teamTarkamId != null ? tarkamMap.get(teamTarkamId) : undefined;
     const teamGroup = team.group || (() => {
@@ -1050,7 +993,7 @@ const mapCompetitionContent = (
       id: team.id,
       team,
       name: team.name || `Team ${team.id}`,
-      logo: team.logo || firstClub?.logo || placeholderTeam,
+      logo: team.logo || placeholderTeam,
       teamPath: buildTeamDetailPath(team.id),
       gender: team.gender || "Open",
       members: membersForTeam.map((item) => item.item),
@@ -1305,6 +1248,9 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
   const [competitionContent, setCompetitionContent] = useState<CompetitionContentValue>(defaultCompetitionContent);
   const [newsContent, setNewsContent] = useState<NewsContentValue>(defaultNewsContent);
   const [commerceContent, setCommerceContent] = useState<CommerceContentValue>(defaultCommerceContent);
+  const siteHeroSignature = siteContent.heroes
+    .map((hero) => [hero.id, hero.title, hero.image, hero.updated_at].join(":"))
+    .join("|");
 
   useEffect(() => {
     let active = true;
@@ -1355,7 +1301,7 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [competitionLiveKey, siteContent.heroes]);
+  }, [competitionLiveKey, siteHeroSignature]);
 
   useEffect(() => {
     let active = true;
@@ -1409,50 +1355,54 @@ export function GalacticDataProvider({ children }: { children: ReactNode }) {
     };
   }, [commerceLiveKey]);
 
-  const content = useMemo<GalacticContentValue>(() => ({
-    loading: siteContent.loading || competitionContent.loading || newsContent.loading || commerceContent.loading,
-    meta: siteContent.meta,
-    menus: siteContent.menus,
-    footerLinks: siteContent.footerLinks,
-    heroes: siteContent.heroes,
-    matches: competitionContent.matches,
-    matchRecords: competitionContent.matchRecords,
-    streams: competitionContent.streams,
-    streamings: competitionContent.streamings,
-    tarkams: competitionContent.tarkams,
-    players: competitionContent.players,
-    playerRecords: competitionContent.playerRecords,
-    teams: competitionContent.teams,
-    clubs: competitionContent.clubs,
-    products: commerceContent.products,
-    productRecords: commerceContent.productRecords,
-    cartItems: commerceContent.cartItems,
-    posts: newsContent.posts,
-    newsRecords: newsContent.newsRecords,
-    newsCategories: newsContent.newsCategories,
-    sponsors: competitionContent.sponsors,
-    penyawers: competitionContent.penyawers,
-    faqs: [],
-    usefulLinks: siteContent.usefulLinks,
-  }), [commerceContent, competitionContent, newsContent, siteContent]);
+  useEffect(() => {
+    recordSliceUpdate("site", {
+      loading: siteContent.loading,
+      menus: siteContent.menus.length,
+      heroes: siteContent.heroes.length,
+      usefulLinks: siteContent.usefulLinks.length,
+    });
+  }, [siteContent]);
+
+  useEffect(() => {
+    recordSliceUpdate("competition", {
+      loading: competitionContent.loading,
+      matches: competitionContent.matches.length,
+      players: competitionContent.players.length,
+      teams: competitionContent.teams.length,
+      clubs: competitionContent.clubs.length,
+      sponsors: competitionContent.sponsors.length,
+      tarkams: competitionContent.tarkams.length,
+    });
+  }, [competitionContent]);
+
+  useEffect(() => {
+    recordSliceUpdate("news", {
+      loading: newsContent.loading,
+      posts: newsContent.posts.length,
+      categories: newsContent.newsCategories.length,
+    });
+  }, [newsContent]);
+
+  useEffect(() => {
+    recordSliceUpdate("commerce", {
+      loading: commerceContent.loading,
+      products: commerceContent.products.length,
+      cartItems: commerceContent.cartItems.length,
+    });
+  }, [commerceContent]);
 
   return (
     <GalacticSiteContext.Provider value={siteContent}>
       <GalacticCompetitionContext.Provider value={competitionContent}>
         <GalacticNewsContext.Provider value={newsContent}>
           <GalacticCommerceContext.Provider value={commerceContent}>
-            <GalacticContentContext.Provider value={content}>
-              {children}
-            </GalacticContentContext.Provider>
+            {children}
           </GalacticCommerceContext.Provider>
         </GalacticNewsContext.Provider>
       </GalacticCompetitionContext.Provider>
     </GalacticSiteContext.Provider>
   );
-}
-
-export function useGalacticContent() {
-  return useContext(GalacticContentContext);
 }
 
 export function useGalacticSiteContent() {

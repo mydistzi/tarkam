@@ -2,7 +2,6 @@ export {
   GalacticDataProvider,
   useGalacticCommerceContent,
   useGalacticCompetitionContent,
-  useGalacticContent,
   useGalacticNewsContent,
   useGalacticSiteContent,
 } from "./content";

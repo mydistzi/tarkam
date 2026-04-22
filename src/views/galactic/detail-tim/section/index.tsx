@@ -1,4 +1,4 @@
-import { DisqusThread, PageHeader, PlayerCarousel } from "@/galactic/common";
+import { DisqusThread, OdometerNumber, PageHeader, PlayerCarousel } from "@/galactic/common";
 import { placeholderTeam } from "@/galactic/placeholders";
 import type { TeamRecord } from "../../shared";
 
@@ -28,10 +28,10 @@ const TeamDetailsContent = ({ record }: { record?: TeamRecord }) => {
               <li><a href="#">{record.gender}</a></li>
             </ul>
             <ul className="team-counter">
-              <li className="counter-list"><h3><span className="odometer">{record.wins}</span></h3><h4>Menang</h4></li>
-              <li className="counter-list"><h3><span className="odometer">{record.draws}</span></h3><h4>Seri</h4></li>
-              <li className="counter-list"><h3><span className="odometer">{record.losses}</span></h3><h4>Kalah</h4></li>
-              <li className="counter-list"><h3><span className="odometer">{record.members.length}</span></h3><h4>Pemain</h4></li>
+              <li className="counter-list"><h3><OdometerNumber value={record.wins} delay={160} /></h3><h4>Menang</h4></li>
+              <li className="counter-list"><h3><OdometerNumber value={record.draws} delay={220} /></h3><h4>Seri</h4></li>
+              <li className="counter-list"><h3><OdometerNumber value={record.losses} delay={280} /></h3><h4>Kalah</h4></li>
+              <li className="counter-list"><h3><OdometerNumber value={record.members.length} delay={340} /></h3><h4>Pemain</h4></li>
             </ul>
             <ul className="rating">
               <li>Rating:</li>

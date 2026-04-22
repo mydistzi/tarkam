@@ -1,9 +1,10 @@
 import "@/assets/css/detail-club.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Carousel,
   CarouselButtonGroup,
+  OdometerNumber,
   PageHeader,
   smoothCarouselTransition,
 } from "@/galactic/common";
@@ -37,61 +38,6 @@ const memberCarouselResponsive = {
     breakpoint: { max: 767, min: 0 },
     items: 1,
   },
-};
-
-const AnimatedCounter = ({
-  value,
-  delay = 300,
-}: {
-  value: number;
-  delay?: number;
-}) => {
-  const [displayValue, setDisplayValue] = useState(value);
-  const previousValue = useRef(value);
-  const frameId = useRef<number | null>(null);
-  const timeoutId = useRef<number | null>(null);
-  const startTime = useRef(0);
-
-  useEffect(() => {
-    const startValue = previousValue.current;
-    const endValue = value;
-
-    if (startValue === endValue) {
-      previousValue.current = endValue;
-      return;
-    }
-
-    const duration = 800;
-
-    const tick = (now: number) => {
-      const elapsed = Math.min(now - startTime.current, duration);
-      const progress = elapsed / duration;
-      const eased = 1 - Math.pow(1 - progress, 2);
-      setDisplayValue(Math.round(startValue + (endValue - startValue) * eased));
-
-      if (elapsed < duration) {
-        frameId.current = requestAnimationFrame(tick);
-      } else {
-        previousValue.current = endValue;
-      }
-    };
-
-    timeoutId.current = window.setTimeout(() => {
-      startTime.current = performance.now();
-      frameId.current = requestAnimationFrame(tick);
-    }, delay);
-
-    return () => {
-      if (timeoutId.current !== null) {
-        clearTimeout(timeoutId.current);
-      }
-      if (frameId.current !== null) {
-        cancelAnimationFrame(frameId.current);
-      }
-    };
-  }, [value, delay]);
-
-  return <span className="odometer">{displayValue}</span>;
 };
 
 const formatDateLabel = (value?: string) => {
@@ -447,15 +393,15 @@ const ClubsContent = ({
 
           <div className="club-kpi-grid">
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={clubWins} delay={220} /></h3>
+              <h3><OdometerNumber value={clubWins} delay={220} /></h3>
               <p>Total Menang</p>
             </div>
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={clubLosses} delay={280} /></h3>
+              <h3><OdometerNumber value={clubLosses} delay={280} /></h3>
               <p>Total Kalah</p>
             </div>
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={clubPoints} delay={340} /></h3>
+              <h3><OdometerNumber value={clubPoints} delay={340} /></h3>
               <p>Point Session Klub</p>
             </div>
             <div className="club-kpi-card">
@@ -463,15 +409,15 @@ const ClubsContent = ({
               <p>Reward Session</p>
             </div>
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={activeMembers} delay={400} /></h3>
+              <h3><OdometerNumber value={activeMembers} delay={400} /></h3>
               <p>Member Aktif</p>
             </div>
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={maleMembers} delay={460} /></h3>
+              <h3><OdometerNumber value={maleMembers} delay={460} /></h3>
               <p>Roster Male</p>
             </div>
             <div className="club-kpi-card">
-              <h3><AnimatedCounter value={femaleMembers} delay={520} /></h3>
+              <h3><OdometerNumber value={femaleMembers} delay={520} /></h3>
               <p>Roster Female</p>
             </div>
           </div>

@@ -9,7 +9,12 @@ import {
   faqs as fallbackFaqs,
   galacticRoutes,
 } from "@/galactic/data";
-import { useGalacticContent } from "@/views/galactic/shared";
+import {
+  useGalacticCommerceContent,
+  useGalacticCompetitionContent,
+  useGalacticNewsContent,
+  useGalacticSiteContent,
+} from "@/views/galactic/shared";
 import {
   buildArticleSchema,
   buildBreadcrumbSchema,
@@ -119,18 +124,18 @@ const SEO = ({
   structuredData,
 }: SEOProps) => {
   const location = useLocation();
+  const { meta } = useGalacticSiteContent();
+  const { newsRecords } = useGalacticNewsContent();
+  const { productRecords } = useGalacticCommerceContent();
   const {
-    meta,
-    newsRecords,
-    productRecords,
     playerRecords,
     teams,
     matchRecords,
     clubs,
     sponsors,
     tarkams,
-    faqs,
-  } = useGalacticContent();
+  } = useGalacticCompetitionContent();
+  const faqs = fallbackFaqs;
 
   const fallbackSiteUrl =
     typeof window !== "undefined" ? window.location.origin : "https://tarkam.fun";

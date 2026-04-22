@@ -1,5 +1,6 @@
+import { Profiler, type ReactNode } from "react";
 import type { RouteObject } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Footer, GalacticChrome } from "@/galactic/common";
 import {
@@ -42,6 +43,37 @@ import DataDeletionPolicy from "../policies/DataDeletionPolicy";
 import PrivacyPolicy from "../policies/PrivacyPolicy";
 import TermsOfService from "../policies/TermsOfService";
 import CommentPolicy from "../policies/CommentPolicy";
+import { recordPageRender } from "./shared/renderAudit";
+
+const ProfiledRoute = ({
+  name,
+  children,
+}: {
+  name: string;
+  children: ReactNode;
+}) => {
+  const location = useLocation();
+
+  return (
+    <Profiler
+      id={name}
+      onRender={(id, phase, actualDuration) => {
+        recordPageRender({
+          name: String(id),
+          pathname: location.pathname,
+          phase,
+          actualDurationMs: actualDuration,
+        });
+      }}
+    >
+      {children}
+    </Profiler>
+  );
+};
+
+const withAudit = (name: string, element: ReactNode) => (
+  <ProfiledRoute name={name}>{element}</ProfiledRoute>
+);
 
 const GalacticLayout = () => {
   const { footerLinks, menus, meta } = useGalacticSiteContent();
@@ -91,69 +123,75 @@ export const getGalacticRoutes = (): RouteObject[] => [
     element: <GalacticRoot />,
     errorElement: <GalacticErrorRoot />,
     children: [
-      { path: "/", element: <HomeDefaultPage /> },
-      { path: "/tarkam-schedule", element: <TarkamSchedulePage /> },
-      { path: "/detail-tarkam/week-:tarkamId", element: <DetailTarkamPage /> },
-      { path: "/detail-tarkam/:tarkamId", element: <DetailTarkamPage /> },
-      { path: "/jadwal-pertandingan", element: <UpcomingMatchesPage /> },
+      { path: "/", element: withAudit("HomeDefaultPage", <HomeDefaultPage />) },
+      { path: "/tarkam-schedule", element: withAudit("TarkamSchedulePage", <TarkamSchedulePage />) },
+      { path: "/detail-tarkam/week-:tarkamId", element: withAudit("DetailTarkamPage", <DetailTarkamPage />) },
+      { path: "/detail-tarkam/:tarkamId", element: withAudit("DetailTarkamPage", <DetailTarkamPage />) },
+      { path: "/jadwal-pertandingan", element: withAudit("UpcomingMatchesPage", <UpcomingMatchesPage />) },
       {
         path: "/detail-pertandingan/:contestId",
-        element: <MatchDetailsPage />,
+        element: withAudit("MatchDetailsPage", <MatchDetailsPage />),
       },
-      { path: "/detail-player/:slug", element: <PlayerDetailsPage /> },
-      { path: "/detail-tim/:teamId", element: <TeamDetailsPage /> },
-      { path: "/klub", element: <ClubsPage /> },
-      { path: "/detail-klub/:slug", element: <ClubDetailsPage /> },
-      { path: "/news", element: <NewsPage /> },
-      { path: "/news/category/:categorySlug", element: <NewsPage /> },
-      { path: "/news/tag/:tagSlug", element: <NewsPage /> },
-      { path: "/detail-news/:slug", element: <NewsDetailsPage /> },
-      { path: "/shop", element: <ShopGridPage /> },
-      { path: "/detail-shop/:slug", element: <ShopDetailsPage /> },
-      { path: "/sponsors", element: <SponsorsPage /> },
-      { path: "/sponsor-leaderboard", element: <SponsorLeaderboardPage /> },
-      { path: "/global-leaderboard", element: <GlobalLeaderboardPage /> },
-      { path: "/club-leaderboard", element: <ClubLeaderboardPage /> },
-      { path: "/male-leaderboard", element: <MaleLeaderboardPage /> },
-      { path: "/female-leaderboard", element: <FemaleLeaderboardPage /> },
-      { path: "/pusat-bantuan", element: <FaqPage /> },
-      { path: "/kebijakan-privasi", element: <PrivacyPolicy /> },
-      { path: "/comment-policy", element: <CommentPolicy /> },
-      { path: "/syarat-dan-ketentuan", element: <TermsOfService /> },
-      { path: "/ketentuan-penggunaan", element: <AcceptableUsePolicy /> },
-      { path: "/ketentuan-penghapusan-data", element: <DataDeletionPolicy /> },
-      { path: "/hubungi-kami", element: <ContactPage /> },
-      { path: "/cart", element: <CartPage /> },
+      { path: "/detail-player/:slug", element: withAudit("PlayerDetailsPage", <PlayerDetailsPage />) },
+      { path: "/detail-tim/:teamId", element: withAudit("TeamDetailsPage", <TeamDetailsPage />) },
+      { path: "/klub", element: withAudit("ClubsPage", <ClubsPage />) },
+      { path: "/detail-klub/:slug", element: withAudit("ClubDetailsPage", <ClubDetailsPage />) },
+      { path: "/news", element: withAudit("NewsPage", <NewsPage />) },
+      { path: "/news/category/:categorySlug", element: withAudit("NewsPage", <NewsPage />) },
+      { path: "/news/tag/:tagSlug", element: withAudit("NewsPage", <NewsPage />) },
+      { path: "/detail-news/:slug", element: withAudit("NewsDetailsPage", <NewsDetailsPage />) },
+      { path: "/shop", element: withAudit("ShopGridPage", <ShopGridPage />) },
+      { path: "/detail-shop/:slug", element: withAudit("ShopDetailsPage", <ShopDetailsPage />) },
+      { path: "/sponsors", element: withAudit("SponsorsPage", <SponsorsPage />) },
+      { path: "/sponsor-leaderboard", element: withAudit("SponsorLeaderboardPage", <SponsorLeaderboardPage />) },
+      { path: "/global-leaderboard", element: withAudit("GlobalLeaderboardPage", <GlobalLeaderboardPage />) },
+      { path: "/club-leaderboard", element: withAudit("ClubLeaderboardPage", <ClubLeaderboardPage />) },
+      { path: "/male-leaderboard", element: withAudit("MaleLeaderboardPage", <MaleLeaderboardPage />) },
+      { path: "/female-leaderboard", element: withAudit("FemaleLeaderboardPage", <FemaleLeaderboardPage />) },
+      { path: "/pusat-bantuan", element: withAudit("FaqPage", <FaqPage />) },
+      { path: "/kebijakan-privasi", element: withAudit("PrivacyPolicy", <PrivacyPolicy />) },
+      { path: "/comment-policy", element: withAudit("CommentPolicy", <CommentPolicy />) },
+      { path: "/syarat-dan-ketentuan", element: withAudit("TermsOfService", <TermsOfService />) },
+      { path: "/ketentuan-penggunaan", element: withAudit("AcceptableUsePolicy", <AcceptableUsePolicy />) },
+      { path: "/ketentuan-penghapusan-data", element: withAudit("DataDeletionPolicy", <DataDeletionPolicy />) },
+      { path: "/hubungi-kami", element: withAudit("ContactPage", <ContactPage />) },
+      { path: "/cart", element: withAudit("CartPage", <CartPage />) },
       {
         path: "/profile",
         element: (
-          <RequireAuth>
-            <ProfilePage />
-          </RequireAuth>
+          <ProfiledRoute name="ProfilePage">
+            <RequireAuth>
+              <ProfilePage />
+            </RequireAuth>
+          </ProfiledRoute>
         ),
       },
       {
         path: "/club-profile",
         element: (
-          <RequireAuth>
-            <ClubProfilePage />
-          </RequireAuth>
+          <ProfiledRoute name="ClubProfilePage">
+            <RequireAuth>
+              <ClubProfilePage />
+            </RequireAuth>
+          </ProfiledRoute>
         ),
       },
       {
         path: "/checkout",
         element: (
-          <RequireAuth>
-            <CheckoutPage />
-          </RequireAuth>
+          <ProfiledRoute name="CheckoutPage">
+            <RequireAuth>
+              <CheckoutPage />
+            </RequireAuth>
+          </ProfiledRoute>
         ),
       },
-      { path: "/signin", element: <SignInPage /> },
-      { path: "/register", element: <RegisterPage /> },
-      { path: "/logout", element: <LogoutPage /> },
-      { path: "/404", element: <Error404Page /> },
-      { path: "/whatsapp", element: <WhatsAppPage /> },
-      { path: "*", element: <Error404Page /> },
+      { path: "/signin", element: withAudit("SignInPage", <SignInPage />) },
+      { path: "/register", element: withAudit("RegisterPage", <RegisterPage />) },
+      { path: "/logout", element: withAudit("LogoutPage", <LogoutPage />) },
+      { path: "/404", element: withAudit("Error404Page", <Error404Page />) },
+      { path: "/whatsapp", element: withAudit("WhatsAppPage", <WhatsAppPage />) },
+      { path: "*", element: withAudit("Error404Page", <Error404Page />) },
     ],
   },
 ];

@@ -143,9 +143,22 @@ type WowInstance = {
   init: () => void;
   sync?: () => void;
 };
+type OdometerValue = number | string;
+type OdometerInstance = {
+  update: (value: OdometerValue) => void;
+};
+type OdometerConstructor = new (options: {
+  el: HTMLElement;
+  value?: OdometerValue;
+  duration?: number;
+  format?: string;
+  theme?: string;
+  animation?: "count" | "slide";
+}) => OdometerInstance;
 declare global {
   interface Window {
     WOW?: new (options?: Record<string, unknown>) => WowInstance;
+    Odometer?: OdometerConstructor;
     FB?: {
       XFBML?: {
         parse: (element?: HTMLElement) => void;
@@ -228,6 +241,19 @@ const pageBackground = (image = brand.background): CSSProperties => ({
 const formatCurrency = (value: number) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
 // const formatCurrency = (value: number) => `$Rp. ${value.toFixed(2)}`;
 const resolveSponsorMarqueeMessage = (entry: SponsorMarqueeEntry) => String(entry.sponsor_message || entry.pesan || "").trim();
+const normalizeOdometerValue = (value: OdometerValue) => {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return 0;
+  }
+
+  const numeric = Number(trimmed.replace(/,/g, ""));
+  return Number.isFinite(numeric) ? numeric : trimmed;
+};
 const toNumericId = (value?: number | string | null) => {
   if (value === undefined || value === null || value === "") {
     return null;
@@ -245,6 +271,75 @@ const isMenuActive = (item: GalacticMenuItem, pathname: string) =>
   getMenuPaths(item).some((path) => path === pathname);
 const preventSubmit = (event: FormEvent<HTMLFormElement>) => {
   event.preventDefault();
+};
+type OdometerNumberProps = {
+  value: OdometerValue;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  format?: string;
+  theme?: string;
+  animation?: "count" | "slide";
+  startValue?: OdometerValue;
+};
+const OdometerNumber = ({
+  value,
+  className = "",
+  delay = 0,
+  duration = 1200,
+  format,
+  theme,
+  animation = "count",
+  startValue = 0,
+}: OdometerNumberProps) => {
+  const elementRef = useRef<HTMLSpanElement | null>(null);
+  const odometerRef = useRef<OdometerInstance | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) {
+      return;
+    }
+
+    const initialValue = normalizeOdometerValue(startValue);
+    const nextValue = normalizeOdometerValue(value);
+    const Odometer = window.Odometer;
+
+    if (!Odometer) {
+      element.textContent = String(nextValue);
+      return;
+    }
+
+    if (!odometerRef.current) {
+      element.textContent = String(initialValue);
+      odometerRef.current = new Odometer({
+        el: element,
+        value: initialValue,
+        duration,
+        format,
+        theme,
+        animation,
+      });
+    }
+
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      odometerRef.current?.update(nextValue);
+    }, delay);
+
+    return () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [animation, delay, duration, format, startValue, theme, value]);
+
+  return <span ref={elementRef} className={`odometer ${className}`.trim()} />;
 };
 const PlaySvg = () => (
   <svg enableBackground="new 0 0 41.999 41.999" version="1.1" viewBox="0 0 41.999 41.999" xmlSpace="preserve">
@@ -293,7 +388,59 @@ const getFacebookVideoPostUrl = (url: string) => {
 };
 const getFacebookEmbedUrl = (url: string) => {
   const postUrl = getFacebookVideoPostUrl(url);
-  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}`;
+  return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(postUrl)}&show_text=0&autoplay=1`;
+};
+const getYouTubeVideoId = (url: string) => {
+  const normalized = String(url || "").trim();
+  if (!normalized) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(
+      normalized.startsWith("http") ? normalized : `https://${normalized.replace(/^\/+/u, "")}`,
+    );
+    const hostname = parsed.hostname.toLowerCase();
+
+    if (hostname.includes("youtu.be")) {
+      return parsed.pathname.split("/").filter(Boolean)[0] || "";
+    }
+
+    if (hostname.includes("youtube.com")) {
+      if (parsed.pathname === "/watch") {
+        return parsed.searchParams.get("v") || "";
+      }
+
+      if (parsed.pathname.startsWith("/embed/")) {
+        return parsed.pathname.split("/embed/")[1]?.split("/")[0] || "";
+      }
+
+      if (parsed.pathname.startsWith("/shorts/")) {
+        return parsed.pathname.split("/shorts/")[1]?.split("/")[0] || "";
+      }
+    }
+  } catch {
+    // ignore invalid URL and fallback below
+  }
+
+  return "";
+};
+const getExternalVideoUrl = (url: string) => {
+  const normalized = String(url || "").trim();
+  if (!normalized) {
+    return normalized;
+  }
+
+  if (isFacebookVideoUrl(normalized)) {
+    return getFacebookVideoPostUrl(normalized);
+  }
+
+  const youtubeId = getYouTubeVideoId(normalized);
+  if (youtubeId) {
+    return `https://www.youtube.com/watch?v=${youtubeId}`;
+  }
+
+  return normalized;
 };
 const getNormalizedVideoUrl = (url: string) => {
   const normalized = String(url || "").trim();
@@ -305,7 +452,23 @@ const getNormalizedVideoUrl = (url: string) => {
     return getFacebookEmbedUrl(normalized);
   }
 
+  const youtubeId = getYouTubeVideoId(normalized);
+  if (youtubeId) {
+    return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&playsinline=1`;
+  }
+
   return normalized;
+};
+const shouldPreferExternalVideoPlayback = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return (
+    window.matchMedia?.("(pointer: coarse)").matches ||
+    window.matchMedia?.("(max-width: 991px)").matches ||
+    navigator.maxTouchPoints > 0
+  );
 };
 const CarouselButtonGroup = ({
   next,
@@ -801,12 +964,14 @@ const Footer = ({
 );
 const VideoCardButton = ({ href, normalizeFacebook = false }: { href: string; normalizeFacebook?: boolean }) => {
   const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
+  const sourceHref = getExternalVideoUrl(href);
 
   return (
     <button
       className="dl-video-popup play-btn vbox-item"
       data-video-title="Tarkam Highlight Reel"
       data-video-url={normalizedHref}
+      data-video-source-url={sourceHref}
       type="button"
     >
       <PlaySvg />
@@ -817,11 +982,9 @@ const VideoCardButton = ({ href, normalizeFacebook = false }: { href: string; no
 
 const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; normalizeFacebook?: boolean }) => {
   const normalizedHref = normalizeFacebook ? getNormalizedVideoUrl(href) : href;
+  const sourceHref = getExternalVideoUrl(href);
 
   return (
-    <>
-    <div id="fb-root"></div>
-    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
     <button
       className="dl-video-popup vbox-item fb-video"
       data-video-title="Tarkam Highlight Reel"
@@ -829,11 +992,11 @@ const VideoStreemButton = ({ href, normalizeFacebook = false }: { href: string; 
       data-mute="false"
       data-allowfullscreen="true"
       data-video-url={normalizedHref}
+      data-video-source-url={sourceHref}
       type="button"
     >
       <i className="lab la-youtube"></i> Highlights
     </button>
-    </>
   );
 };
 const MatchList = ({ items }: { items: MatchItem[] }) => {
@@ -965,6 +1128,7 @@ const MatchList = ({ items }: { items: MatchItem[] }) => {
                       className="galactic-match-card__video galactic-play-trigger"
                       data-video-title={`${match.leftTeam} vs ${match.rightTeam}`}
                       data-video-url={getNormalizedVideoUrl(match.videoUrl || videoHref)}
+                      data-video-source-url={getExternalVideoUrl(match.videoUrl || videoHref)}
                       type="button"
                     >
                       <i className="lab la-youtube" />
@@ -1118,7 +1282,10 @@ const LatestMatchesList = ({
                   data-vbtype="video"
                   data-video-title={stream?.title || "Watch Stream"}
                   data-video-url={getNormalizedVideoUrl(stream?.videoUrl || videoHref)}
-                  href={getNormalizedVideoUrl(stream?.videoUrl || videoHref)}
+                  data-video-source-url={getExternalVideoUrl(stream?.videoUrl || videoHref)}
+                  href={getExternalVideoUrl(stream?.videoUrl || videoHref)}
+                  target="_blank"
+                  rel="noreferrer noopener"
                 >
                   <i className="lab la-youtube"></i>Watch Streem
                 </a>
@@ -1187,6 +1354,7 @@ const WatchLiveGrid = ({ items }: { items: StreamItem[] }) => {
               className="dl-video-popup play-btn vbox-item galactic-play-trigger"
               data-video-title={stream.title}
               data-video-url={getNormalizedVideoUrl(stream.videoUrl)}
+              data-video-source-url={getExternalVideoUrl(stream.videoUrl)}
               type="button"
             >
               <PlaySvg />
@@ -2053,10 +2221,10 @@ const GameplaySection = ({
       </div>
       <div className="row">
         {items.map((item, index) => (
-          <div className="col-lg-4 col-md-6 sm-padding wow fade-in-bottom" data-wow-delay={`${200 + index * 200}ms`} key={`gameplay-${item.title}-${index}`}>
-            <div className="gameplay-card">
-              <img src={getImageSource(item.image)} alt={item.title} />
-              <button className="play-btn galactic-play-trigger" data-video-title={item.title} data-video-url={getNormalizedVideoUrl(item.videoUrl || videoHref)} type="button">
+            <div className="col-lg-4 col-md-6 sm-padding wow fade-in-bottom" data-wow-delay={`${200 + index * 200}ms`} key={`gameplay-${item.title}-${index}`}>
+              <div className="gameplay-card">
+                <img src={getImageSource(item.image)} alt={item.title} />
+              <button className="play-btn galactic-play-trigger" data-video-title={item.title} data-video-url={getNormalizedVideoUrl(item.videoUrl || videoHref)} data-video-source-url={getExternalVideoUrl(item.videoUrl || videoHref)} type="button">
                 <i className="las la-play" />
               </button>
               <div className="gameplay-info">
@@ -2343,6 +2511,20 @@ const GalacticChrome = ({ children, menuItems, logoUrl }: GalacticChromeProps) =
       const videoTrigger = target.closest<HTMLElement>("[data-video-url]");
       if (videoTrigger) {
         event.preventDefault();
+        const sourceUrl = getExternalVideoUrl(
+          videoTrigger.dataset.videoSourceUrl ??
+            videoTrigger.dataset.videoUrl ??
+            videoHref,
+        );
+
+        if (shouldPreferExternalVideoPlayback()) {
+          const popup = window.open(sourceUrl, "_blank", "noopener,noreferrer");
+          if (!popup) {
+            window.location.assign(sourceUrl);
+          }
+          return;
+        }
+
         setActiveVideo({
           title: videoTrigger.dataset.videoTitle ?? "Galactic Video",
           url: getNormalizedVideoUrl(videoTrigger.dataset.videoUrl ?? videoHref),
@@ -2517,6 +2699,7 @@ export {
   getMenuPaths,
   isMenuActive,
   preventSubmit,
+  OdometerNumber,
   PlaySvg,
   toEmbedUrl,
   CarouselButtonGroup,
