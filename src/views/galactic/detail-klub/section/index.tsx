@@ -400,7 +400,7 @@ const ClubsContent = ({
                 </div>
               </div>
               <div className="club-orbit-card__copy">
-                {record.slogan ? `<p>${record.slogan}</p>` : `<p> Basis komando <code>${record.name || "klub ini"}</code> menampilkan seluruh identitas klub, performa roster, relasi sesi, dan history timeline dalam satu layar.</p>`}
+                {record.slogan ? <p>{record.slogan}</p> : <p> Basis komando <code>{record.name || "klub ini"}</code> menampilkan seluruh identitas klub, performa roster, relasi sesi, dan history timeline dalam satu layar.</p>}
               </div>
               <div className="club-orbit-card__footer">
                 <span className="club-chip">{getStatusLabel(activeMembers > 0 ? "active" : "inactive")}</span>
