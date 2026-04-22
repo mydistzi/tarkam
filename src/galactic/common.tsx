@@ -1,11 +1,9 @@
 ﻿import { type CSSProperties, type FormEvent, type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-import Swal from "sweetalert2";
 import Api from "@/api";
 import CarouselLib, { type ButtonGroupProps } from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { DiscussionEmbed } from "disqus-react";
 import { Autoplay, EffectCoverflow, Pagination as SwiperPagination } from "swiper/modules";
 import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -180,7 +178,52 @@ type DisqusThreadProps = {
   url?: string;
 };
 
+type DiscussionEmbedComponent = (typeof import("disqus-react"))["DiscussionEmbed"];
+
+type AlertOptions = {
+  icon: "success" | "error" | "info" | "warning" | "question";
+  title: string;
+  text: string;
+};
+
+let sweetAlertLoader: Promise<(typeof import("sweetalert2"))["default"]> | null = null;
+
+const getSweetAlert = async () => {
+  if (!sweetAlertLoader) {
+    sweetAlertLoader = import("sweetalert2").then((module) => module.default);
+  }
+
+  return sweetAlertLoader;
+};
+
+const showAlert = async (options: AlertOptions) => {
+  const sweetAlert = await getSweetAlert();
+  return sweetAlert.fire(options);
+};
+
 const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
+  const [DiscussionEmbedComponent, setDiscussionEmbedComponent] = useState<DiscussionEmbedComponent | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    if (!DISQUS_SHORTNAME || typeof window === "undefined") {
+      return () => {
+        active = false;
+      };
+    }
+
+    void import("disqus-react").then((module) => {
+      if (active) {
+        setDiscussionEmbedComponent(() => module.DiscussionEmbed);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   if (!DISQUS_SHORTNAME || typeof window === "undefined") {
     return null;
   }
@@ -189,14 +232,16 @@ const DisqusThread = ({ identifier, title, url }: DisqusThreadProps) => {
 
   return (
     <div className="disqus-thread">
-      <DiscussionEmbed
-        shortname={DISQUS_SHORTNAME}
-        config={{
-          url: pageUrl,
-          identifier,
-          title,
-        }}
-      />
+      {DiscussionEmbedComponent ? (
+        <DiscussionEmbedComponent
+          shortname={DISQUS_SHORTNAME}
+          config={{
+            url: pageUrl,
+            identifier,
+            title,
+          }}
+        />
+      ) : null}
     </div>
   );
 };
@@ -2100,7 +2145,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
     if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       const errorMessage = "Semua kolom harus diisi.";
       setStatus({ type: "error", message: errorMessage });
-      await Swal.fire({
+      await showAlert({
         icon: "error",
         title: "Form tidak lengkap",
         text: errorMessage,
@@ -2112,7 +2157,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
     if (!emailPattern.test(trimmedEmail)) {
       const errorMessage = "Alamat email tidak valid.";
       setStatus({ type: "error", message: errorMessage });
-      await Swal.fire({
+      await showAlert({
         icon: "error",
         title: "Email tidak valid",
         text: errorMessage,
@@ -2154,7 +2199,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
       setEmail("");
       setMessage("");
       setStatus({ type: "success", message: "Pesan berhasil dikirim. Terima kasih!" });
-      await Swal.fire({
+      await showAlert({
         icon: "success",
         title: "Pesan dikirim",
         text: "Terima kasih, pesan Anda telah berhasil dikirim ke tim kami.",
@@ -2166,7 +2211,7 @@ const ContactForm = ({ className = "" }: { className?: string }) => {
           ? error.message
           : "Gagal mengirim pesan. Silakan coba lagi nanti.";
       setStatus({ type: "error", message: errorMessage });
-      await Swal.fire({
+      await showAlert({
         icon: "error",
         title: "Gagal mengirim",
         text: errorMessage,
@@ -2255,7 +2300,7 @@ const SubscribeForm = () => {
     if (!trimmedEmail) {
       const message = "Email harus diisi.";
       setStatus({ type: "error", message });
-      await Swal.fire({ icon: "error", title: "Email kosong", text: message });
+      await showAlert({ icon: "error", title: "Email kosong", text: message });
       return;
     }
 
@@ -2263,7 +2308,7 @@ const SubscribeForm = () => {
     if (!emailPattern.test(trimmedEmail)) {
       const message = "Alamat email tidak valid.";
       setStatus({ type: "error", message });
-      await Swal.fire({ icon: "error", title: "Email tidak valid", text: message });
+      await showAlert({ icon: "error", title: "Email tidak valid", text: message });
       return;
     }
 
@@ -2286,7 +2331,7 @@ const SubscribeForm = () => {
 
       setEmail("");
       setStatus({ type: "success", message: "Berhasil berlangganan." });
-      await Swal.fire({
+      await showAlert({
         icon: "success",
         title: "Terima kasih",
         text: "Email Anda berhasil didaftarkan untuk newsletter.",
@@ -2295,7 +2340,7 @@ const SubscribeForm = () => {
       console.error(error);
       const message = "Gagal mendaftar. Silakan coba lagi nanti.";
       setStatus({ type: "error", message });
-      await Swal.fire({ icon: "error", title: "Gagal", text: message });
+      await showAlert({ icon: "error", title: "Gagal", text: message });
     } finally {
       setSubmitting(false);
     }
