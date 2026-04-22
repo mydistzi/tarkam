@@ -475,6 +475,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
   const [printingQris, setPrintingQris] = useState(false);
+  const [registering, setRegistering] = useState<GenderKey | null>(null);
   const previousTarkamIdRef = useRef<number | null>(null);
   const liveKey = useLiveUpdate(
     ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "timelines", "penyawers"],
@@ -622,7 +623,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
           <div className="tarkam-empty-state">
             <h2>Memuat detail Tarkam...</h2>
             <p>
-              Menarik overview dan relasi spesifik dari route nested `/tarkams/
+              Menarik overview dan relasi spesifik dari route nested API
               {tarkamId}/*`.
             </p>
           </div>
@@ -790,6 +791,44 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     }
   };
 
+  const handleRegister = async (gender: GenderKey) => {
+    const authData = localStorage.getItem("tarkam_auth_user");
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !authData) {
+      navigate("/signin", { state: { from: location }, replace: false });
+      return;
+    }
+
+    try {
+      setRegistering(gender);
+      const response = await Api.post(`/tarkams/${detail.id || tarkamId}/register`, { gender });
+
+      if (response.data?.success) {
+        void Swal.fire({
+          icon: "success",
+          title: "Pendaftaran berhasil",
+          text: `Kategori ${genderLabel(gender)} berhasil didaftarkan. Lanjutkan pembayaran untuk menyelesaikan registrasi.`,
+          confirmButtonText: "Tutup",
+        });
+      }
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        (error instanceof Error ? error.message : "Gagal melakukan pendaftaran Tarkam.");
+      void Swal.fire({
+        icon: "error",
+        title: "Pendaftaran gagal",
+        text: message,
+        confirmButtonText: "Tutup",
+      });
+    } finally {
+      setRegistering(null);
+    }
+  };
+
   return (
     <>
       <PageHeader
@@ -942,12 +981,76 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     : printingQris
                       ? "Menyiapkan QRIS..."
                       : !isAuthenticated
-                        ? "Login untuk Bayar"
+                        ? "Login untuk Daftar / Bayar"
                         : "Bayar Sekarang"}
                 </button>
                 <span className="tarkam-pill tarkam-pill--auto-check">
                   Auto check tiap 1 menit
                 </span>
+                {Number(detail.male_completed ?? 0) === 0 ? (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() => handleRegister("male")}
+                    disabled={registering !== null || authLoading}
+                    style={{
+                      background: "rgba(79, 172, 254, 0.15)",
+                      border: "1px solid rgba(79, 172, 254, 0.4)",
+                      color: "#c7ecff",
+                    }}
+                  >
+                    {registering === "male"
+                      ? "Memproses Male..."
+                      : !isAuthenticated
+                        ? "Login untuk Daftar Male"
+                        : "Daftar Male"}
+                  </button>
+                ) : (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    disabled
+                    style={{
+                      background: "rgba(79, 172, 254, 0.08)",
+                      border: "1px solid rgba(79, 172, 254, 0.18)",
+                      color: "rgba(199, 236, 255, 0.58)",
+                    }}
+                  >
+                    Pendaftaran Male Ditutup
+                  </button>
+                )}
+                {Number(detail.female_completed ?? 0) === 0 ? (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() => handleRegister("female")}
+                    disabled={registering !== null || authLoading}
+                    style={{
+                      background: "rgba(255, 105, 180, 0.15)",
+                      border: "1px solid rgba(255, 105, 180, 0.4)",
+                      color: "#ffd2e9",
+                    }}
+                  >
+                    {registering === "female"
+                      ? "Memproses Female..."
+                      : !isAuthenticated
+                        ? "Login untuk Daftar Female"
+                        : "Daftar Female"}
+                  </button>
+                ) : (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    disabled
+                    style={{
+                      background: "rgba(255, 105, 180, 0.08)",
+                      border: "1px solid rgba(255, 105, 180, 0.18)",
+                      color: "rgba(255, 210, 233, 0.58)",
+                    }}
+                  >
+                    Pendaftaran Female Ditutup
+                  </button>
+                )}
                 {proofHref ? (
                   <a
                     className="default-btn tarkam-button--ghost"
