@@ -1740,6 +1740,42 @@ app.post("/api/whatsapp/groups/:groupId/leave", requireApiToken, async (req, res
   }
 });
 
+app.post("/api/whatsapp/groups/accept-invite", requireApiToken, async (req, res) => {
+  try {
+    const activeSocket = ensureSocketReady();
+    const inviteCode = String(
+      req.body?.code
+      || req.body?.inviteCode
+      || req.body?.invite_code
+      || ""
+    ).trim();
+
+    if (!inviteCode) {
+      res.status(400).json({
+        success: false,
+        error: "Invite code is required.",
+      });
+      return;
+    }
+
+    const groupId = await activeSocket.groupAcceptInvite(inviteCode);
+
+    res.json({
+      success: true,
+      data: {
+        provider: "baileys",
+        code: inviteCode,
+        groupId: String(groupId || "").trim() || null,
+      },
+    });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      success: false,
+      error: error.message || "Failed to accept WhatsApp group invite.",
+    });
+  }
+});
+
 app.get("/api/whatsapp/groups/:groupId", requireApiToken, async (req, res) => {
   try {
     const activeSocket = ensureSocketReady();
