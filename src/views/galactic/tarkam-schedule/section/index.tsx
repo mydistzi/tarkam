@@ -55,6 +55,8 @@ type ScheduleStreaming = {
 };
 
 type GenderKey = "male" | "female";
+const DEFAULT_TARKAM_REGISTRATION_FEE_MALE = 20000;
+const DEFAULT_TARKAM_REGISTRATION_FEE_FEMALE = 20000;
 const supportedPaymentMerchants = [
   { name: "OVO", src: "/assets/images/ovo.svg" },
   { name: "GoPay", src: "/assets/images/gopay.svg" },
@@ -93,6 +95,11 @@ const formatCurrency = (value?: number) =>
     maximumFractionDigits: 0,
   }).format(Number(value ?? 0));
 
+const getRegistrationFee = (gender: GenderKey) =>
+  gender === "female"
+    ? DEFAULT_TARKAM_REGISTRATION_FEE_FEMALE
+    : DEFAULT_TARKAM_REGISTRATION_FEE_MALE;
+
 const normalizeId = (value?: number | string | null) => {
   if (value === undefined || value === null || value === "") {
     return NaN;
@@ -122,6 +129,7 @@ const getGenderValue = (tarkam: ScheduleTarkam, gender: GenderKey) => ({
   slot: gender === "male" ? tarkam.male_slot : tarkam.female_slot,
   completed: gender === "male" ? tarkam.male_completed : tarkam.female_completed,
   poolPrice: gender === "male" ? tarkam.pool_price_m : tarkam.pool_price_f,
+  registrationFee: getRegistrationFee(gender),
   mvp: gender === "male" ? tarkam.mvp_m : tarkam.mvp_f,
 });
 
@@ -222,6 +230,7 @@ const ScheduleGenderPanel = ({
 
       <div className="tarkam-meta-grid" style={{ marginBottom: "16px" }}>
         <StatCard label="Pool Price" value={formatCurrency(values.poolPrice)} />
+        <StatCard label="Biaya Daftar" value={formatCurrency(values.registrationFee)} />
         <StatCard label="MVP" value={values.mvp || "TBA"} />
       </div>
     </div>
@@ -397,7 +406,7 @@ const ScheduleCard = ({
 
           <div style={{ marginTop: "18px" }}>
             {/* <PaymentSupportPanel note={tarkam.transfer_info || undefined} /> */}
-            <PaymentSupportPanel note="" />
+            <PaymentSupportPanel note="Biaya registrasi default saat ini Rp 20.000 untuk Male dan Female." />
           </div>
 
           <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center", gap: "12px" }}>

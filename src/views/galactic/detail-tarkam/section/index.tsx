@@ -36,6 +36,8 @@ const supportedPaymentMerchants = [
   { name: "DANA", src: "/assets/images/dana.svg" },
   { name: "ShopeePay", src: "/assets/images/spp.svg" },
 ] as const;
+const DEFAULT_TARKAM_REGISTRATION_FEE_MALE = 20000;
+const DEFAULT_TARKAM_REGISTRATION_FEE_FEMALE = 20000;
 
 type ApiClub = {
   id?: number | string;
@@ -286,6 +288,11 @@ const formatCurrency = (value?: number | string | null) => {
   }).format(numeric);
 };
 
+const getRegistrationFee = (gender: GenderKey) =>
+  gender === "female"
+    ? DEFAULT_TARKAM_REGISTRATION_FEE_FEMALE
+    : DEFAULT_TARKAM_REGISTRATION_FEE_MALE;
+
 const statusLabel = (value?: string | null) => {
   const normalized = String(value || "").toLowerCase();
   if (normalized === "active") return "Aktif";
@@ -377,6 +384,7 @@ const getGenderSnapshot = (detail: ApiTarkamDetail, gender: GenderKey) => {
     completed,
     remaining: Math.max(0, slot - used),
     poolPrice: gender === "male" ? detail.pool_price_m : detail.pool_price_f,
+    registrationFee: getRegistrationFee(gender),
     mvp: gender === "male" ? detail.mvp_m : detail.mvp_f,
   };
 };
@@ -1147,6 +1155,10 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                           label="Pool"
                           value={formatCurrency(snapshot.poolPrice)}
                         />
+                        <MiniStat
+                          label="Biaya Daftar"
+                          value={formatCurrency(snapshot.registrationFee)}
+                        />
                         <MiniStat label="MVP" value={snapshot.mvp || "-"} />
                         <MiniStat
                           label="Status"
@@ -1165,7 +1177,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       summary=""
                     />
                     {/* <PaymentSupportPanel note={detail.transfer_info || undefined} /> */}
-                    <PaymentSupportPanel note="" />
+                    <PaymentSupportPanel note="Biaya registrasi default saat ini Rp 20.000 untuk Male dan Female." />
                     <div className="tarkam-detail-stack" style={{ marginTop: "18px" }}>
                       {/* <div className="tarkam-detail-row">
                         <span>Kontak pembayaran</span>
