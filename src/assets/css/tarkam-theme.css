@@ -306,6 +306,16 @@ body {
   color: var(--tarkam-text-soft);
 }
 
+.tarkam-pill--auto-check {
+  min-height: 44px;
+  padding: 0 16px;
+  border-color: rgba(17, 203, 126, 0.28);
+  background: rgba(17, 203, 126, 0.1);
+  color: #bff8df;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
 .tarkam-kpi-grid,
 .tarkam-meta-grid,
 .tarkam-card-grid {
@@ -381,6 +391,63 @@ body {
   display: block;
   color: var(--tarkam-text-strong);
   line-height: 1.6;
+}
+
+.tarkam-payment-support {
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(8, 18, 38, 0.88), rgba(8, 18, 38, 0.54));
+  border: 1px solid var(--tarkam-border-bright);
+}
+
+.tarkam-payment-support__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tarkam-payment-support__head strong {
+  color: var(--tarkam-text-strong);
+  font-size: 1rem;
+}
+
+.tarkam-payment-support__head span {
+  color: var(--tarkam-text-soft);
+  font-size: 0.92rem;
+}
+
+.tarkam-payment-support__logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.tarkam-payment-support__logo {
+  min-height: 54px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tarkam-payment-support__logo img {
+  display: block;
+  height: 30px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+.tarkam-payment-support__copy {
+  margin: 14px 0 0;
+  color: var(--tarkam-text-soft);
+  line-height: 1.7;
 }
 
 .tarkam-tab-nav,
@@ -942,6 +1009,10 @@ body {
   .tarkam-player-grid,
   .tarkam-hero-media__footer {
     grid-template-columns: 1fr;
+  }
+
+  .tarkam-payment-support__head {
+    flex-direction: column;
   }
 
   .tarkam-panel,

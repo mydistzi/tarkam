@@ -55,6 +55,13 @@ type ScheduleStreaming = {
 };
 
 type GenderKey = "male" | "female";
+const supportedPaymentMerchants = [
+  { name: "OVO", src: "/assets/images/ovo.svg" },
+  { name: "GoPay", src: "/assets/images/gopay.svg" },
+  { name: "LinkAja", src: "/assets/images/link-aja.svg" },
+  { name: "DANA", src: "/assets/images/dana.svg" },
+  { name: "ShopeePay", src: "/assets/images/spp.svg" },
+] as const;
 
 const asList = <T,>(payload?: ApiEnvelope<T[]>): T[] =>
   Array.isArray(payload?.data) ? payload.data : [];
@@ -134,6 +141,30 @@ const getTarkamStreamingUrl = (tarkam: ScheduleTarkam, streamings: ScheduleStrea
   const stream = streamings.find((item) => normalizeId(item.tarkam_fk) === Number(tarkam.id));
   return stream?.streem?.trim() || stream?.embed?.trim() || stream?.url?.trim() || "";
 };
+const PaymentSupportPanel = ({
+  title = "Support Pembayaran QRIS",
+  note,
+}: {
+  title?: string;
+  note?: string;
+}) => (
+  <div className="tarkam-payment-support">
+    <div className="tarkam-payment-support__head">
+      <strong>{title}</strong>
+      <span>Bayar langsung dari e-wallet favorit Anda</span>
+    </div>
+    <div className="tarkam-payment-support__logos" aria-label="Merchant pembayaran yang didukung">
+      {supportedPaymentMerchants.map((item) => (
+        <div className="tarkam-payment-support__logo" key={item.name}>
+          <img src={item.src} alt={item.name} loading="lazy" />
+        </div>
+      ))}
+    </div>
+    <p className="tarkam-payment-support__copy">
+      {note || "Setelah QRIS dicetak, scan dengan OVO, GoPay, LinkAja, DANA, atau ShopeePay lalu tunggu konfirmasi otomatis dari sistem."}
+    </p>
+  </div>
+);
 
 const StatCard = ({
   label,
@@ -207,10 +238,13 @@ const ScheduleCard = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const [printingQris, setPrintingQris] = useState<GenderKey | null>(null);
+  const [printingQris, setPrintingQris] = useState(false);
   const streamUrl = getTarkamStreamingUrl(tarkam, streamings);
+  const registrationClosed =
+    Number(tarkam.male_completed ?? 0) !== 0 &&
+    Number(tarkam.female_completed ?? 0) !== 0;
 
-  const handlePrintQris = async (gender: GenderKey) => {
+  const handlePrintQris = async () => {
     const authData = localStorage.getItem("tarkam_auth_user");
     if (authLoading) {
       return;
@@ -224,7 +258,7 @@ const ScheduleCard = ({
     const printWindow = prepareQrisPrintWindow();
 
     try {
-      setPrintingQris(gender);
+      setPrintingQris(true);
       const response = await Api.post(`/payments/qris/tarkams/${tarkam.id}`, {});
       const payload = response.data?.data;
       const transaction = payload?.transaction;
@@ -235,8 +269,8 @@ const ScheduleCard = ({
       }
 
       const printPayload: QrisInvoicePayload = {
-        title: `${tarkam.title || `Pendaftaran Tarkam Week ${tarkam.week || "-"}`} - ${getGenderLabel(gender)}`,
-        description: `Scan QRIS ini untuk menyelesaikan biaya pendaftaran Tarkam kategori ${getGenderLabel(gender)}. Status peserta akan otomatis diperbarui setelah pembayaran sukses.`,
+        title: tarkam.title || `Pendaftaran Tarkam Week ${tarkam.week || "-"}`,
+        description: "Scan QRIS ini untuk menyelesaikan biaya pendaftaran Tarkam. Sistem akan menyesuaikan kategori berdasarkan profil member yang sedang login dan memperbarui status pembayaran secara otomatis.",
         amount: Number(transaction.amount ?? 0),
         transactionCode: String(transaction.transaction_code ?? ""),
         payerName: transaction.payer_name ?? null,
@@ -252,7 +286,7 @@ const ScheduleCard = ({
       void Swal.fire({
         icon: "success",
         title: "QRIS pendaftaran siap",
-        text: `QRIS ${getGenderLabel(gender)} berhasil dibuat. Silakan scan atau cetak untuk membayar biaya pendaftaran.`,
+        text: "QRIS berhasil dibuat. Silakan scan atau cetak untuk membayar biaya pendaftaran.",
         confirmButtonText: "Tutup",
       });
     } catch (error: unknown) {
@@ -264,7 +298,7 @@ const ScheduleCard = ({
         (error instanceof Error ? error.message : "Gagal membuat QRIS pendaftaran. Silakan coba lagi.");
       Swal.fire("Error", message, "error");
     } finally {
-      setPrintingQris(null);
+      setPrintingQris(false);
     }
   };
 
@@ -322,12 +356,9 @@ const ScheduleCard = ({
             </div>
           ) : null}
 
-          {tarkam.transfer_info ? (
-            <div className="tarkam-mini-stat" style={{ marginTop: "18px", color: "rgba(255,255,255,0.74)" }}>
-              <strong style={{ display: "block", marginBottom: "6px", color: "#fff" }}>Transfer Info</strong>
-              <span>{tarkam.transfer_info}</span>
-            </div>
-          ) : null}
+          <div style={{ marginTop: "18px" }}>
+            <PaymentSupportPanel note={tarkam.transfer_info || undefined} />
+          </div>
 
           <div className="tarkam-action-row" style={{ marginTop: "22px", alignItems: "center", gap: "12px" }}>
             <Link className="default-btn" to={buildTarkamDetailPath(tarkam.id)}>
@@ -345,43 +376,27 @@ const ScheduleCard = ({
               </a>
             ) : null}
 
-            {Number(tarkam.male_completed ?? 0) === 0 ? (
-              <button
-                onClick={() => handlePrintQris("male")}
-                disabled={printingQris !== null || authLoading}
-                className="default-btn"
-                style={{
-                  background: "rgba(79, 172, 254, 0.8)",
-                  border: "1px solid rgba(79, 172, 254, 0.5)",
-                }}
-              >
-                {printingQris === "male"
-                  ? "Menyiapkan QRIS Male..."
+            <button
+              onClick={handlePrintQris}
+              disabled={printingQris || authLoading || registrationClosed}
+              className="default-btn"
+              style={{
+                background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
+                border: "1px solid rgba(17, 203, 126, 0.45)",
+              }}
+            >
+              {registrationClosed
+                ? "Pendaftaran Ditutup"
+                : printingQris
+                  ? "Menyiapkan QRIS..."
                   : !isAuthenticated
-                    ? "Login untuk Daftar Male"
-                    : "Daftar Male"}
-                <span />
-              </button>
-            ) : null}
-
-            {Number(tarkam.female_completed ?? 0) === 0 ? (
-              <button
-                onClick={() => handlePrintQris("female")}
-                disabled={printingQris !== null || authLoading}
-                className="default-btn"
-                style={{
-                  background: "rgba(255, 105, 180, 0.8)",
-                  border: "1px solid rgba(255, 105, 180, 0.5)",
-                }}
-              >
-                {printingQris === "female"
-                  ? "Menyiapkan QRIS Female..."
-                  : !isAuthenticated
-                    ? "Login untuk Daftar Female"
-                    : "Daftar Female"}
-                <span />
-              </button>
-            ) : null}
+                    ? "Login untuk Bayar"
+                    : "Bayar Sekarang"}
+              <span />
+            </button>
+            <span className="tarkam-pill tarkam-pill--auto-check">
+              Auto check tiap 1 menit
+            </span>
           </div>
         </div>
       </div>

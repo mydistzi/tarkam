@@ -29,6 +29,13 @@ type DetailTab =
 type ApiEnvelope<T> = {
   data?: T;
 };
+const supportedPaymentMerchants = [
+  { name: "OVO", src: "/assets/images/ovo.svg" },
+  { name: "GoPay", src: "/assets/images/gopay.svg" },
+  { name: "LinkAja", src: "/assets/images/link-aja.svg" },
+  { name: "DANA", src: "/assets/images/dana.svg" },
+  { name: "ShopeePay", src: "/assets/images/spp.svg" },
+] as const;
 
 type ApiClub = {
   id?: number | string;
@@ -376,6 +383,30 @@ const getGenderSnapshot = (detail: ApiTarkamDetail, gender: GenderKey) => {
 
 const getStreamUrl = (stream?: ApiStreaming | null) =>
   stream?.streem?.trim() || stream?.embed?.trim() || stream?.url?.trim() || "";
+const PaymentSupportPanel = ({
+  title = "Support Pembayaran QRIS",
+  note,
+}: {
+  title?: string;
+  note?: string;
+}) => (
+  <div className="tarkam-payment-support">
+    <div className="tarkam-payment-support__head">
+      <strong>{title}</strong>
+      <span>Bayar langsung dari e-wallet favorit Anda</span>
+    </div>
+    <div className="tarkam-payment-support__logos" aria-label="Merchant pembayaran yang didukung">
+      {supportedPaymentMerchants.map((item) => (
+        <div className="tarkam-payment-support__logo" key={item.name}>
+          <img src={item.src} alt={item.name} loading="lazy" />
+        </div>
+      ))}
+    </div>
+    <p className="tarkam-payment-support__copy">
+      {note || "Cetak QRIS lalu scan dari OVO, GoPay, LinkAja, DANA, atau ShopeePay. Status pembayaran akan diperbarui otomatis setelah sukses."}
+    </p>
+  </div>
+);
 
 const MiniStat = ({
   label,
@@ -443,7 +474,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<DetailTab>("overview");
   const [activeGender, setActiveGender] = useState<GenderFilter>("all");
-  const [printingQris, setPrintingQris] = useState<GenderKey | null>(null);
+  const [printingQris, setPrintingQris] = useState(false);
   const previousTarkamIdRef = useRef<number | null>(null);
   const liveKey = useLiveUpdate(
     ["tarkams", "teams", "players", "groups", "contests", "winners", "streamings", "sessions", "timelines", "penyawers"],
@@ -676,6 +707,9 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
   ];
   const maleSnapshot = getGenderSnapshot(detail, "male");
   const femaleSnapshot = getGenderSnapshot(detail, "female");
+  const registrationClosed =
+    Number(detail.male_completed ?? 0) !== 0 &&
+    Number(detail.female_completed ?? 0) !== 0;
   const currentMvpText =
     activeGender === "male"
       ? detail.mvp_m || "Belum ada MVP "
@@ -693,7 +727,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     { key: "competition", label: "Competition" },
   ];
 
-  const handlePrintQris = async (gender: GenderKey) => {
+  const handlePrintQris = async () => {
     const authData = localStorage.getItem("tarkam_auth_user");
     if (authLoading) {
       return;
@@ -707,7 +741,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
     const printWindow = prepareQrisPrintWindow();
 
     try {
-      setPrintingQris(gender);
+      setPrintingQris(true);
       const response = await Api.post(`/payments/qris/tarkams/${detail.id || tarkamId}`, {});
       const payload = response.data?.data;
       const transaction = payload?.transaction;
@@ -718,8 +752,8 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       }
 
       const printPayload: QrisInvoicePayload = {
-        title: `${detail.title || `Pendaftaran Tarkam Week ${detail.week || "-"}`} - ${genderLabel(gender)}`,
-        description: `Gunakan QRIS ini untuk membayar biaya pendaftaran Tarkam kategori ${genderLabel(gender)}. Status peserta akan diperbarui otomatis setelah pembayaran sukses.`,
+        title: detail.title || `Pendaftaran Tarkam Week ${detail.week || "-"}`,
+        description: "Gunakan QRIS ini untuk membayar biaya pendaftaran Tarkam. Sistem akan menyesuaikan kategori berdasarkan profil member yang sedang login dan memperbarui status pembayaran otomatis setelah sukses.",
         amount: Number(transaction.amount ?? 0),
         transactionCode: String(transaction.transaction_code ?? ""),
         payerName: transaction.payer_name ?? null,
@@ -735,7 +769,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
       void Swal.fire({
         icon: "success",
         title: "QRIS pendaftaran siap",
-        text: `QRIS ${genderLabel(gender)} berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan pembayaran.`,
+        text: "QRIS berhasil dibuat. Silakan scan atau cetak untuk menyelesaikan pembayaran.",
         confirmButtonText: "Tutup",
       });
     } catch (error: unknown) {
@@ -752,7 +786,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
         confirmButtonText: "Tutup",
       });
     } finally {
-      setPrintingQris(null);
+      setPrintingQris(false);
     }
   };
 
@@ -860,14 +894,12 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
 
               <div className="tarkam-inline-meta">
                 <div className="tarkam-inline-meta__item">
-                  <span>Transfer</span>
-                  <strong>
-                    {detail.transfer_info || "Belum ada instruksi transfer."}
-                  </strong>
+                  <span>Pembayaran</span>
+                  <strong>Interactive QRIS</strong>
                 </div>
                 <div className="tarkam-inline-meta__item">
-                  <span>Kontak Bukti</span>
-                  <strong>{detail.proof || "Belum disediakan"}</strong>
+                  <span>Merchant Support</span>
+                  <strong>OVO, GoPay, LinkAja, DANA, ShopeePay</strong>
                 </div>
                 {detail.mvp_m && (
                   <div className="tarkam-inline-meta__item">
@@ -895,42 +927,27 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                 >
                   Lihat competition
                 </button>
-                {Number(detail.male_completed ?? 0) === 0 ? (
-                  <button
-                    className="default-btn"
-                    type="button"
-                    onClick={() => handlePrintQris("male")}
-                    disabled={printingQris !== null || authLoading}
-                    style={{
-                      background: "rgba(79, 172, 254, 0.8)",
-                      border: "1px solid rgba(79, 172, 254, 0.5)",
-                    }}
-                  >
-                    {printingQris === "male"
-                      ? "Menyiapkan QRIS Male..."
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={handlePrintQris}
+                  disabled={printingQris || authLoading || registrationClosed}
+                  style={{
+                    background: "linear-gradient(135deg, rgba(17, 203, 126, 0.96), rgba(10, 160, 112, 0.88))",
+                    border: "1px solid rgba(17, 203, 126, 0.45)",
+                  }}
+                >
+                  {registrationClosed
+                    ? "Pendaftaran Ditutup"
+                    : printingQris
+                      ? "Menyiapkan QRIS..."
                       : !isAuthenticated
-                        ? "Login untuk Daftar Male"
-                        : "Daftar Male"}
-                  </button>
-                ) : null}
-                {Number(detail.female_completed ?? 0) === 0 ? (
-                  <button
-                    className="default-btn"
-                    type="button"
-                    onClick={() => handlePrintQris("female")}
-                    disabled={printingQris !== null || authLoading}
-                    style={{
-                      background: "rgba(255, 105, 180, 0.8)",
-                      border: "1px solid rgba(255, 105, 180, 0.5)",
-                    }}
-                  >
-                    {printingQris === "female"
-                      ? "Menyiapkan QRIS Female..."
-                      : !isAuthenticated
-                        ? "Login untuk Daftar Female"
-                        : "Daftar Female"}
-                  </button>
-                ) : null}
+                        ? "Login untuk Bayar"
+                        : "Bayar Sekarang"}
+                </button>
+                <span className="tarkam-pill tarkam-pill--auto-check">
+                  Auto check tiap 1 menit
+                </span>
                 {proofHref ? (
                   <a
                     className="default-btn tarkam-button--ghost"
@@ -939,7 +956,7 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                     rel="noreferrer"
                     style={{ color: "#ddd" }}
                   >
-                    Kirim bukti transfer
+                    Hubungi Pembayaran
                   </a>
                 ) : null}
               </div>
@@ -1041,16 +1058,10 @@ const TarkamDetailsContent = ({ tarkamId }: { tarkamId?: number }) => {
                       title="Informasi pembayaran"
                       summary=""
                     />
-                    <div className="tarkam-detail-stack">
+                    <PaymentSupportPanel note={detail.transfer_info || undefined} />
+                    <div className="tarkam-detail-stack" style={{ marginTop: "18px" }}>
                       <div className="tarkam-detail-row">
-                        <span>Transfer info</span>
-                        <strong>
-                          {detail.transfer_info ||
-                            "Belum ada instruksi transfer."}
-                        </strong>
-                      </div>
-                      <div className="tarkam-detail-row">
-                        <span>Kontak bukti</span>
+                        <span>Kontak pembayaran</span>
                         <strong>{detail.proof || "Belum ada kontak."}</strong>
                       </div>
                       <div className="tarkam-detail-row">
