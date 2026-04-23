@@ -1,3 +1,4 @@
+import "@/assets/css/blog.css";
 import "@/assets/css/shop.css";
 import { useParams } from "react-router-dom";
 import { PageShell } from "@/galactic/common";
